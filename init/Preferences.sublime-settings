@@ -1,41 +1,39 @@
 {
-	"color_scheme": "Packages/Color Scheme - Default/Solarized (Dark).tmTheme",
-	"default_encoding": "UTF-8",
-	"default_line_ending": "unix",
-	"detect_indentation": false,
-	"draw_white_space": "all",
-	"ensure_newline_at_eof_on_save": false,
-	"file_exclude_patterns":
-	[
-		".DS_Store",
-		"Desktop.ini",
-		"*.pyc",
-		"._*",
-		"Thumbs.db",
-		".Spotlight-V100",
-		".Trashes"
-	],
+	"auto_complete": false,
+	"color_scheme": "Packages/Color Scheme - Default/iPlastic.tmTheme",
+	"dictionary": "Packages/Language - English/en_GB.dic",
+	"find_selected_text": true,
 	"folder_exclude_patterns":
 	[
+		"dist",
+		"coverage",
+		".svn",
 		".git",
-		"node_modules"
+		".hg",
+		"CVS",
+		"nbproject",
+		".scssc"
 	],
-	"font_face": "Monaco",
-	"font_size": 13,
+	"font_size": 12.0,
+	"highlight_line": true,
 	"highlight_modified_tabs": true,
-	"hot_exit": false,
-	"line_padding_bottom": 5,
-	"match_brackets": true,
-	"match_brackets_angle": true,
-	"remember_open_files": false,
-	"rulers":
+	"ignored_packages":
 	[
-		80
+		"Vintage"
 	],
-	"show_encoding": true,
-	"show_line_endings": true,
-	"tab_size": 2,
-	"translate_tabs_to_spaces": false,
+	"indent_guide_options":
+	[
+		"draw_active"
+	],
+	"overlay_scroll_bars": "enabled",
+	"remember_open_files": false,
+	"scroll_past_end": true,
+	"show_tab_close_buttons": false,
+	"tab_completion": false,
+	"tab_size": 4,
+	"theme": "Soda Light.sublime-theme",
+	"translate_tabs_to_spaces": true,
+	"tree_animation_enabled": true,
 	"trim_trailing_white_space_on_save": true,
-	"word_wrap": true
+	"word_wrap": false
 }

@@ -32,3 +32,8 @@ export MANPAGER='less -X';
 # Avoid issues with `gpg` as installed via Homebrew.
 # https://stackoverflow.com/a/42265848/96656
 export GPG_TTY=$(tty);
+
+# Always enable colored `grep` output.
+export GREP_OPTIONS='--color=auto';
+
+export NODE_ENV="dev"
