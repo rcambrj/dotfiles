@@ -1,0 +1,53 @@
+name: Deploy to cloud machine
+
+on:
+  workflow_dispatch:
+    inputs:
+      MACHINE_NAME:
+        type: choice
+        description: Machine
+        required: true
+        options:
+          - coconut
+          - apple
+          - orange
+
+jobs:
+  deploy:
+    name: "Deploy: ${{ inputs.MACHINE_NAME }}"
+    runs-on: ubuntu-latest
+    env:
+        MACHINE_SSH_STRING: root@${{inputs.MACHINE_NAME}}.cambridge.me
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v27
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          enable_kvm: true
+          extra_nix_config: |
+            system-features = kvm
+            extra-platforms = aarch64-linux
+            extra-substituters = https://cache.garnix.io https://nix-community.cachix.org https://numtide.cachix.org
+            extra-trusted-public-keys = cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE
+
+      - name: Run the Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+        with:
+          diagnostic-endpoint: ""
+
+      - uses: webfactory/ssh-agent@v0.9.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # TODO: set host keys and consume here
+      - name: Test SSH connection
+        run: ssh -o StrictHostKeyChecking=no -v ${{env.MACHINE_SSH_STRING}} exit
+
+      - name: Deploy to cloud machine
+        run: |
+            NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
+            --flake .#${{inputs.MACHINE_NAME}} \
+            --target-host ${{env.MACHINE_SSH_STRING}}

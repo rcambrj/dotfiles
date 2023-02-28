@@ -1,0 +1,5 @@
+{ ... }: {
+  imports = [
+    ./photoprism-backup.nix
+  ];
+}

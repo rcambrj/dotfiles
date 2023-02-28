@@ -1,0 +1,52 @@
+name: Build machine
+
+on:
+  workflow_dispatch:
+    inputs:
+      MACHINE_NAME:
+        type: choice
+        description: Machine
+        required: true
+        options:
+          - minimal-intel
+          - minimal-raspi
+
+jobs:
+  build:
+    name: "Build: ${{ inputs.MACHINE_NAME }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v27
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          enable_kvm: true
+          extra_nix_config: |
+            system-features = kvm big-parallel
+            extra-platforms = aarch64-linux
+            extra-substituters = https://cache.garnix.io https://nix-community.cachix.org https://numtide.cachix.org
+            extra-trusted-public-keys = cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE
+
+      - name: Run the Magic Nix Cache
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+        with:
+          diagnostic-endpoint: ""
+
+      - name: Build image
+        run: make build-image machine=${{ inputs.MACHINE_NAME }}
+
+      - name: Compress image
+        run: zip -qq -r ${{ inputs.MACHINE_NAME }}.zip `find -L ./result -iname "*nixos*"`
+
+      - name: Upload artifact to release
+        run: gh release upload release "${{ inputs.MACHINE_NAME }}.zip" --clobber --repo "$OWNER/$REPO"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}

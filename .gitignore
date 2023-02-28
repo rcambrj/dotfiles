@@ -1,0 +1,8 @@
+# the symlink which `nix build` creates
+result
+
+# the directory where SSH keys and other secrets are stored
+ssh-keys
+
+# MacOS artifacts
+.DS_Store

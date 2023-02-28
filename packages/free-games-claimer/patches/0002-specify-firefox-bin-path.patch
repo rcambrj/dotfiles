@@ -1,0 +1,12 @@
+diff --git a/epic-games.js b/epic-games.js
+index f853380..a872ac4 100644
+--- a/epic-games.js
++++ b/epic-games.js
+@@ -26,6 +26,7 @@ if (existsSync(browserPrefs)) {
+ 
+ // https://playwright.dev/docs/auth#multi-factor-authentication
+ const context = await firefox.launchPersistentContext(cfg.dir.browser, {
++  executablePath: process.env.FIREFOX_BIN_PATH,
+   headless: cfg.headless,
+   viewport: { width: cfg.width, height: cfg.height },
+   userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0', // see replace of Headless in util.newStealthContext. TODO Windows UA enough to avoid 'device not supported'? update if browser is updated?
