@@ -26,4 +26,10 @@
       driver = pkgs.libfprint-2-tod1-elan;
     };
   };
+
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "rcambrj" ];
+  };
 }

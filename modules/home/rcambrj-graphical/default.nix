@@ -5,7 +5,6 @@
   ];
 
   home.packages = with pkgs; [
-    _1password-gui
     firefox
     google-chrome
     slack
@@ -15,7 +14,7 @@
     whatsapp-for-linux
     signal-desktop
     element-desktop
-    # orca-slicer
+    # orca-slicer # doesnt build
     # TODO: pia vpn
     netbird
     rustdesk
