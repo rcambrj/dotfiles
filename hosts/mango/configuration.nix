@@ -16,4 +16,5 @@
 
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
+  networking.networkmanager.enable = true;
 }
