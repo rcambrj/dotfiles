@@ -1,9 +1,22 @@
 {
-  description = "rcambrj's home nix config";
+  description = "rcambrj's dotfiles";
 
-  # Add all your dependencies here
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.garnix.io"
+      "https://nix-community.cachix.org"
+      "https://numtide.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
+    ];
+  };
+
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    systems.url = "github:nix-systems/default";
 
     blueprint.url = "github:numtide/blueprint";
     blueprint.inputs.nixpkgs.follows = "nixpkgs";
@@ -23,24 +36,53 @@
     tacxble.inputs.blueprint.follows = "blueprint";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  # Load the blueprint
-  outputs = inputs: inputs.blueprint {
-    inherit inputs;
-    nixpkgs.config.allowUnfree = true;
-  };
+  outputs = inputs:
+    let
+      lib = inputs.nixpkgs.lib;
+      homeConfigurations =
+        usersPath:
+        let
+          usersPathStr = toString usersPath;
 
-  nixConfig = {
-    extra-substituters = [
-      "https://cache.garnix.io"
-      "https://nix-community.cachix.org"
-      "https://numtide.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE"
-    ];
-  };
+          userDirs = builtins.attrNames (
+            lib.filterAttrs (_: type: type == "directory") (builtins.readDir usersPathStr)
+          );
+        in
+        {
+          homeConfigurations = lib.genAttrs (import inputs.systems) (system: lib.genAttrs userDirs (
+              user:
+              inputs.home-manager.lib.homeManagerConfiguration {
+                pkgs = import inputs.nixpkgs {
+                  inherit system;
+
+                  config.allowUnfree = true;
+                };
+
+                modules = [
+                  "${usersPathStr}/${user}/home.nix"
+                ];
+
+                extraSpecialArgs = {
+                  inherit inputs system;
+                  flake = inputs.self;
+                  perSystem = lib.mapAttrs (
+                    _: flake: flake.legacyPackages.${system} or { } // flake.packages.${system} or { }
+                  ) inputs;
+                };
+              }
+            )
+          );
+        };
+    in
+    lib.recursiveUpdate (inputs.blueprint {
+      inherit inputs;
+
+      nixpkgs.config = {
+        allowUnfree = true;
+      };
+    }) (homeConfigurations ./users);
 }
