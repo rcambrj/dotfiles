@@ -1,6 +1,6 @@
 { flake, inputs, perSystem, ... }: {
   imports = [
-    inputs.home-manager.darwinModules.home-manager
+    inputs.home-manager.nixosModules.home-manager
   ];
 
   programs.zsh.enable = true;
