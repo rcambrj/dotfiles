@@ -13,4 +13,6 @@
   networking.hostName = "mango";
   nixpkgs.hostPlatform = "x86_64-linux";
 
+  disko.devices.disk.disk1.device = "/dev/nvme0n1";
+
 }
