@@ -40,49 +40,11 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs:
-    let
-      lib = inputs.nixpkgs.lib;
-      homeConfigurations =
-        usersPath:
-        let
-          usersPathStr = toString usersPath;
+  outputs = inputs: (inputs.blueprint {
+    inherit inputs;
 
-          userDirs = builtins.attrNames (
-            lib.filterAttrs (_: type: type == "directory") (builtins.readDir usersPathStr)
-          );
-        in
-        {
-          homeConfigurations = lib.genAttrs (import inputs.systems) (system: lib.genAttrs userDirs (
-              user:
-              inputs.home-manager.lib.homeManagerConfiguration {
-                pkgs = import inputs.nixpkgs {
-                  inherit system;
-
-                  config.allowUnfree = true;
-                };
-
-                modules = [
-                  "${usersPathStr}/${user}/home.nix"
-                ];
-
-                extraSpecialArgs = {
-                  inherit inputs system;
-                  flake = inputs.self;
-                  perSystem = lib.mapAttrs (
-                    _: flake: flake.legacyPackages.${system} or { } // flake.packages.${system} or { }
-                  ) inputs;
-                };
-              }
-            )
-          );
-        };
-    in
-    lib.recursiveUpdate (inputs.blueprint {
-      inherit inputs;
-
-      nixpkgs.config = {
-        allowUnfree = true;
-      };
-    }) (homeConfigurations ./users);
+    nixpkgs.config = {
+      allowUnfree = true;
+    };
+  });
 }
