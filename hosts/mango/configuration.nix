@@ -1,7 +1,6 @@
 # ThinkPad T14S workstation laptop
 { flake, inputs, perSystem, pkgs, ... }: {
   imports = [
-    # inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14s
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
     flake.nixosModules.base
@@ -10,7 +9,7 @@
     flake.nixosModules.access-workstation
     flake.nixosModules.standard-disk
     ./graphical.nix
-    ./home.nix
+    ./home-manager.nix
   ];
 
   networking.hostName = "mango";

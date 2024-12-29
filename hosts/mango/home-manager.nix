@@ -6,7 +6,7 @@
   programs.zsh.enable = true;
 
   home-manager.users.rcambrj.imports = [
-    flake.homeModules.rcambrj
+    flake.homeModules.rcambrj-graphical
     { home.stateVersion = "23.11"; }
   ];
   home-manager.useGlobalPkgs = true;
