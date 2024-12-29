@@ -15,7 +15,7 @@
     whatsapp-for-linux
     signal-desktop
     element-desktop
-    orca-slicer
+    # orca-slicer
     # TODO: pia vpn
     netbird
     rustdesk
