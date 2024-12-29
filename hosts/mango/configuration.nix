@@ -1,7 +1,9 @@
 # ThinkPad T14S workstation laptop
 { flake, inputs, perSystem, ... }: {
   imports = [
-    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14s
+    # inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14s
+    inputs.nixos-facter-modules.nixosModules.facter
+    { config.facter.reportPath = ./facter.json; }
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.access-server # TODO: remove this
