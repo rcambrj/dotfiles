@@ -7,7 +7,7 @@ Configures images for and provides updates to home servers
 > Requires two USB sticks.
 
 1. Run the Github action to build minimal-intel or minimal-raspi
-1. Burn [the resulting image](https://github.com/rcambrj/home/releases/tag/release) to a USB stick
+1. Burn [the resulting image](https://github.com/rcambrj/dotfiles/releases/tag/release) to a USB stick
 1. Create `/hosts/{hostname}/configuration.nix`
 1. Add minimum configuration to `configuration.nix`:
     ```
@@ -26,7 +26,7 @@ Configures images for and provides updates to home servers
 1. Put the resulting public key into Github repository deploy keys
 1. Plug both USB sticks into a machine and switch it on
 1. SSH to `minimal-intel-nomad` or `minimal-raspi-nomad`
-1. Run `sudo nixos-rebuild switch --flake github:rcambrj/home#{hostname}`
+1. Run `sudo nixos-rebuild switch --flake github:rcambrj/dotfiles#{hostname}`
 
 ## Building locally on MacOS
 

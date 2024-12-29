@@ -1,6 +1,6 @@
 { config, flake, lib, inputs, pkgs, ... }: with lib; let
   sshKeyLocation = "/mnt/conf/id_ed25519"; # ensure that this is persisted across boots
-  repositoryLocation = "git+ssh://git@github.com/rcambrj/home?ref=main";
+  repositoryLocation = "git+ssh://git@github.com/rcambrj/dotfiles?ref=main";
   defaultFlakePath = config.networking.hostName;
 
   updateScript = pkgs.writeShellScriptBin "update" ''
@@ -16,7 +16,7 @@
     REPO_DIR="/flake"
     # ensure this is persisted across boots
     SSH_KEY="/mnt/conf/id_ed25519"
-    REPOSITORY="ssh://git@github.com/rcambrj/home"
+    REPOSITORY="ssh://git@github.com/rcambrj/dotfiles"
     # path within the flake
     MACHINE="''${1:-${defaultFlakePath}}"
 
