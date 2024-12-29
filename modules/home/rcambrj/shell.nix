@@ -30,9 +30,9 @@
     };
     plugins = [];
     shellAliases = {
-      dwu = "darwin-rebuild switch --flake ~/projects/nix/macbook/#macbook";
-      dwa = "/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u";
+      nup = if pkgs.stdenv.isDarwin then "darwin-rebuild switch --flake ~/projects/nix/macbook/#macbook" else "nixos-rebuild switch";
       ngc = "sudo nix-collect-garbage -d";
+      dwa = "/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u";
 
       l = "ls -lah";
       vim = "nvim";
