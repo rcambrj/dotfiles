@@ -50,15 +50,17 @@ in {
 
   fonts.fontconfig.enable = true;
 
-  programs.awscli = {
-    enable = true;
-    settings = {
-      "default" = {
-        region = "eu-central-1";
-        output = "json";
-      };
-    };
-  };
+  # temporarily disable awscli until this makes it to nixos-unstable
+  # https://github.com/NixOS/nixpkgs/issues/367876
+  # programs.awscli = {
+  #   enable = true;
+  #   settings = {
+  #     "default" = {
+  #       region = "eu-central-1";
+  #       output = "json";
+  #     };
+  #   };
+  # };
 
   programs.direnv = {
     enable = true;
