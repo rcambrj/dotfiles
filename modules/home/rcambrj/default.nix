@@ -1,4 +1,5 @@
-{ config, inputs, perSystem, pkgs, ... }:
+# this would be best split into separately-importable modules
+{ config, inputs, lib, perSystem, pkgs, ... }:
 let
   me = import ./me.nix;
 in {
@@ -8,10 +9,10 @@ in {
     ./git.nix
   ];
 
-  programs.home-manager.enable = true;
-  home.stateVersion = "23.11";
-  home.username = me.user;
-  home.homeDirectory = pkgs.lib.mkForce (if pkgs.stdenv.isDarwin then "/Users/${me.user}" else "/home/${me.user}");
+  programs.home-manager.enable = lib.mkDefault true;
+  home.username = lib.mkDefault me.user;
+  # override with 75 so that mkForce can still be used to change the value
+  home.homeDirectory = pkgs.lib.mkOverride 75 (if pkgs.stdenv.isDarwin then "/Users/${me.user}" else "/home/${me.user}");
 
   home.packages = with pkgs; [
     asciinema
