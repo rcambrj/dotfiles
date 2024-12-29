@@ -1,5 +1,5 @@
 # ThinkPad T14S workstation laptop
-{ flake, inputs, perSystem, ... }: {
+{ flake, inputs, perSystem, pkgs, ... }: {
   imports = [
     # inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14s
     inputs.nixos-facter-modules.nixosModules.facter
@@ -19,4 +19,12 @@
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
   networking.networkmanager.enable = true;
+
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-elan;
+    };
+  };
 }
