@@ -44,7 +44,7 @@ in {
 
     # fonts
     # for iTerm2
-    fira-code-nerdfont # FiraCodeNFM-Reg
+    nerd-fonts.fira-code # FiraCodeNFM-Reg
     # TODO: which pkgs contains HackNFM-Regular ?
   ];
 

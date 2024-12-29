@@ -2,7 +2,7 @@
 
 Records configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
 
-## To set up a machine (bare metal)
+## To set up a headless bare metal machine
 
 > Requires two USB sticks.
 
@@ -12,6 +12,8 @@ Records configuration for nix machines, builds images for bare metal machines an
 1. Add minimum configuration to `configuration.nix`:
     ```
     imports = [
+        flake.nixosModules.base
+        flake.nixosModules.access-server
         flake.nixosModules.common
         flake.nixosModules.config-intel
         # or

@@ -2,7 +2,7 @@
   home.packages = with pkgs; [
     # for language servers
     biome
-    dotnet-sdk_8
+    # dotnet-sdk_8
     go
     nil
     nixd

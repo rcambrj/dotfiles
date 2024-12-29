@@ -1,10 +1,6 @@
 { config, lib, pkgs, ... }:
 with lib;
 {
-  imports = [
-    ./base.nix
-  ];
-
   environment.systemPackages = with pkgs; [
     # some basic utilities
     curl

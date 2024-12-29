@@ -4,7 +4,7 @@
     useACMEHost = "home.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://localhost:${toString config.services.grafana.port}";
+      proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
     };
   };
 

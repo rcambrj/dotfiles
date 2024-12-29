@@ -80,7 +80,6 @@ in {
 
 
   # minimal profile is too minimal, but steal these tricks
-  environment.noXlibs = mkDefault false;
   xdg.autostart.enable = mkDefault false;
   xdg.icons.enable = mkDefault false;
   xdg.mime.enable = mkDefault false;

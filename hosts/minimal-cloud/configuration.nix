@@ -3,7 +3,8 @@
     "${toString modulesPath}/profiles/qemu-guest.nix"
 
     flake.nixosModules.base
-    flake.nixosModules.cloud-vps-initial
+    flake.nixosModules.standard-disk
+    flake.nixosModules.root-keys
     inputs.disko.nixosModules.disko
   ];
   networking.hostName = "minimal-cloud";

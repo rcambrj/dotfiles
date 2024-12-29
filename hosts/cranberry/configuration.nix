@@ -17,6 +17,8 @@ in {
     "${toString modulesPath}/profiles/all-hardware.nix"
 
     inputs.nix-pia-vpn.nixosModules.default
+    flake.nixosModules.base
+    flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel

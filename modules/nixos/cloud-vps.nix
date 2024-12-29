@@ -1,6 +1,5 @@
 { flake, inputs, ... }: {
   imports = [
-    ./cloud-vps-initial.nix
     inputs.agenix.nixosModules.default
   ];
 

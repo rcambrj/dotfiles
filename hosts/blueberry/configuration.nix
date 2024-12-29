@@ -7,6 +7,8 @@
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
+    flake.nixosModules.base
+    flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel

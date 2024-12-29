@@ -1,5 +1,7 @@
 { config, flake, inputs, lib, modulesPath, options, perSystem, pkgs, ... }: {
   imports = [
+    flake.nixosModules.base
+    flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-raspi

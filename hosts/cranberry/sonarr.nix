@@ -6,6 +6,12 @@ in {
     group = group;
   };
 
+  # TODO: fix this once sonarr upgrades to dotnet 8 https://discourse.nixos.org/t/-/56828
+  nixpkgs.config.permittedInsecurePackages = [
+    "dotnet-sdk-6.0.428"
+    "aspnetcore-runtime-6.0.36"
+  ];
+
   services.nginx.virtualHosts."sonarr.media.cambridge.me" = {
     forceSSL = true;
     useACMEHost = "media.cambridge.me";
