@@ -3,6 +3,8 @@
     inputs.home-manager.darwinModules.home-manager
   ];
 
+  programs.zsh.enable = true;
+
   home-manager.users.rcambrj.imports = [
     flake.homeModules.rcambrj
     { home.stateVersion = "23.11"; }
