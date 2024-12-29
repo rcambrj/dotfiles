@@ -1,6 +1,7 @@
 # ThinkPad T14S workstation laptop
 { flake, inputs, perSystem, ... }: {
   imports = [
+    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-t14s
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.access-server # TODO: remove this
