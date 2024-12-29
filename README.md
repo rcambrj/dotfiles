@@ -1,6 +1,6 @@
-# Home
+# dotfiles
 
-Configures images for and provides updates to home servers
+Records configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
 
 ## To set up a machine (bare metal)
 
