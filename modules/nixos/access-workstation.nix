@@ -1,10 +1,11 @@
-{ flake, ... }: {
+{ flake, pkgs, ... }: {
   nix.settings.trusted-users = [ "rcambrj" ];
   users.users.rcambrj = {
     isNormalUser = true;
     uid = 1001;
     group = "staff";
     home = "/home/rcambrj";
+    shell = pkgs.zsh;
     extraGroups = [ "wheel" "docker" "networkmanager" ];
     openssh.authorizedKeys.keys = [ flake.lib.ssh-keys.rcambrj ];
     hashedPassword = "$y$j9T$BAm5JP1cEarfWQ0R5Fmhr.$Ne1D9ChTvXEGKzJGcO9xtk7yeSKrkYwASHxhmbw8PtB";
