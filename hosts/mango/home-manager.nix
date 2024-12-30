@@ -3,8 +3,6 @@
     inputs.home-manager.nixosModules.home-manager
   ];
 
-  programs.zsh.enable = true;
-
   home-manager.users.rcambrj.imports = [
     flake.homeModules.rcambrj-graphical
     { home.stateVersion = "23.11"; }

@@ -1,11 +1,10 @@
 # ThinkPad T14S workstation laptop
-{ flake, inputs, perSystem, pkgs, ... }: {
+{ flake, inputs, lib, perSystem, pkgs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
     flake.nixosModules.base
     flake.nixosModules.common
-    flake.nixosModules.access-server # TODO: remove this
     flake.nixosModules.access-workstation
     flake.nixosModules.standard-disk
     ./graphical.nix
@@ -17,6 +16,7 @@
 
   disko.devices.disk.disk1.device = "/dev/nvme0n1";
 
+  systemd.network.enable = lib.mkForce false;
   networking.networkmanager.enable = true;
 
   services.fprintd = {
@@ -32,4 +32,6 @@
     enable = true;
     polkitPolicyOwners = [ "rcambrj" ];
   };
+
+  services.thinkfan.enable = true;
 }

@@ -9,10 +9,6 @@
     terraform
   ];
 
-  # programs.zsh.shellAliases = {
-  #   c = "codium";
-  # };
-
   programs.vscode = {
     enable = true;
     # package = pkgs.vscodium; # want liveshare goddamnit
