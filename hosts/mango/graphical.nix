@@ -3,11 +3,11 @@
     loader.timeout = 1;
     plymouth = {
       enable = true;
-      theme = "rings";
+      theme = "flame";
       themePackages = with pkgs; [
         # By default we would install all themes
         (adi1090x-plymouth-themes.override {
-          selected_themes = [ "rings" ];
+          selected_themes = [ "flame" ];
         })
       ];
     };
@@ -74,6 +74,11 @@
           tap-and-drag-lock = true;
         };
 
+        "org/gnome/nautilus/preferences".default-folder-viewer = "list-view";
+        "org/gnome/nautilus/list-view" = {
+          use-tree-view = true;
+          default-zoom-level = "small";
+        };
         "org/gtk/gtk4/settings/file-chooser" = {
           sort-directories-first = true;
           show-hidden = true;
