@@ -9,6 +9,7 @@
     flake.nixosModules.standard-disk
     ./graphical.nix
     ./home-manager.nix
+    ./keyboard.nix
   ];
 
   networking.hostName = "mango";
@@ -34,4 +35,7 @@
   };
 
   services.thinkfan.enable = true;
+
+  # required for any user to use zsh
+  programs.zsh.enable = true;
 }
