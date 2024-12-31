@@ -38,4 +38,6 @@
 
   # required for any user to use zsh
   programs.zsh.enable = true;
+
+  zramSwap.enable = true;
 }
