@@ -9,7 +9,7 @@
     flake.nixosModules.standard-disk
     ./graphical.nix
     ./home-manager.nix
-    ./keyboard.nix
+    ./input.nix
   ];
 
   networking.hostName = "mango";

@@ -1,7 +1,5 @@
 { ... }: {
 
-  # - `gsettings set org.gnome.mutter overlay-key ''`
-
   services.keyd = {
     enable = true;
     keyboards = {
@@ -20,4 +18,6 @@
     MatchName=keyd virtual keyboard
     AttrKeyboardIntegration=internal
   '';
+
+
 }

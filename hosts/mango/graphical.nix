@@ -58,22 +58,17 @@
           clock-show-weekday = true;
           show-battery-percentage = true;
         };
-
         "org/gnome/desktop/wm/preferences" = {
           num-workspaces = lib.gvariant.mkInt32 1;
           audible-bell = false;
         };
-
-
         "org/gnome/shell".enabled-extensions = [
           "display-brightness-ddcutil@themightydeity.github.com"
         ];
-
         "org/gnome/desktop/peripherals/touchpad" = {
           tap-and-drag = false;
           tap-and-drag-lock = true;
         };
-
         "org/gnome/nautilus/preferences".default-folder-viewer = "list-view";
         "org/gnome/nautilus/list-view" = {
           use-tree-view = true;
@@ -83,6 +78,9 @@
           sort-directories-first = true;
           show-hidden = true;
           view-type = "list";
+        };
+        "org/gnome/shell/keybindings" = {
+          toggle-overview = [ "<Control>Space" ];
         };
       };
     }];
