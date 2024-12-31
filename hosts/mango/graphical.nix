@@ -5,7 +5,6 @@
       enable = true;
       theme = "flame";
       themePackages = with pkgs; [
-        # By default we would install all themes
         (adi1090x-plymouth-themes.override {
           selected_themes = [ "flame" ];
         })
@@ -16,11 +15,6 @@
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-
-  fonts.fontconfig = {
-    enable = true;
-    hinting.style = "none";
-  };
 
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.gdm-password.enableGnomeKeyring = true;
@@ -81,6 +75,9 @@
         };
         "org/gnome/shell/keybindings" = {
           toggle-overview = [ "<Control>Space" ];
+        };
+        "org/gnome/desktop/interface" = {
+          font-hinting = "full";
         };
       };
     }];
