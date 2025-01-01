@@ -1,9 +1,14 @@
 {
   github = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGIweOXWdW8rVkm5mncIDpha2FiDK43qPIbv9tvspXFR";
-  rcambrj = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMurhQdqzc/mEE24+yhoCXwtwszxlEr6AeIxqyIIrnJ9";
+
+  # workstations
+  mbp2024  = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMurhQdqzc/mEE24+yhoCXwtwszxlEr6AeIxqyIIrnJ9";
   linux-vm = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKlpavfmE1rncrI5DuNPHNNYyqj4Mp3vzVopLm//sx8H";
-  minimal = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4DhzorLI3FRDt+yB84Ot1bUJJrP+XYUvFwIPOPIaHo";
+  mango    = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFCu6ZuPqVDGTUVMQNXxKaWBaNiiNdgM/pd3FzA6RF3r";
+
+  # servers
+  minimal   = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID4DhzorLI3FRDt+yB84Ot1bUJJrP+XYUvFwIPOPIaHo";
   blueberry = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL99rilU8WPp75Q5Jo/B5GLtZ7y8a39erwej+agpHsWl";
   cranberry = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG4SStEVtyvAw4v5ZNyuTKBw4TK6HJ2F/ypTi2cBrQkT";
-  coconut = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9IafOazC6/EvU0NjnILzlocjoUsUBBB9S3q2PPRVth";
+  coconut   = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA9IafOazC6/EvU0NjnILzlocjoUsUBBB9S3q2PPRVth";
 }

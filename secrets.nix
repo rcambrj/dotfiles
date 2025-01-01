@@ -1,6 +1,6 @@
 let
   sshKeys = import ./lib/ssh-keys.nix;
-  defaults = [ sshKeys.rcambrj sshKeys.linux-vm ];
+  defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
 in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
