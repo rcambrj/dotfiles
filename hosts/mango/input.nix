@@ -1,4 +1,4 @@
-{ ... }: {
+{ perSystem, ... }: {
 
   services.keyd = {
     enable = true;
@@ -18,6 +18,4 @@
     MatchName=keyd virtual keyboard
     AttrKeyboardIntegration=internal
   '';
-
-
 }

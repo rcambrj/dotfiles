@@ -25,11 +25,13 @@ in {
     gnutar zstd
     htop
     iftop
+    lm_sensors
     nodePackages.localtunnel
     ncdu
     nix-output-monitor
     openocd
     openssh
+    pciutils
     qemu
     ripgrep
     sysz

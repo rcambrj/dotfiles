@@ -40,6 +40,8 @@
       tf = "terraform";
 
       etch = "sudo dd status=progress bs=4M conv=fsync"; # if=foo.img of=/dev/disk69 && sync
+
+      cpufreq = "watch -n.1 \"grep \\\"^[c]pu MHz\\\" /proc/cpuinfo\"";
     };
   };
 
