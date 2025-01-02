@@ -7,9 +7,9 @@
     flake.nixosModules.common
     flake.nixosModules.access-workstation
     flake.nixosModules.standard-disk
-    ./graphical.nix
     ./home-manager.nix
-    ./input.nix
+    ./keyboard.nix
+    ./graphical
   ];
 
   networking.hostName = "mango";

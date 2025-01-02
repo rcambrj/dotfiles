@@ -47,11 +47,55 @@
     "blueprint_2": {
       "inputs": {
         "nixpkgs": [
+          "fusuma",
+          "nixpkgs"
+        ],
+        "systems": "systems_3"
+      },
+      "locked": {
+        "lastModified": 1724053269,
+        "narHash": "sha256-DinmPyxmUSLjBUYMe3eK0GKykwe33vWbVTmp7++P4Ng=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "766302be9063650ca6578e5ba09cc4260b0da29c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
+    "blueprint_3": {
+      "inputs": {
+        "nixpkgs": [
+          "fusuma-plugin-appmatcher",
+          "nixpkgs"
+        ],
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1724053269,
+        "narHash": "sha256-DinmPyxmUSLjBUYMe3eK0GKykwe33vWbVTmp7++P4Ng=",
+        "owner": "numtide",
+        "repo": "blueprint",
+        "rev": "766302be9063650ca6578e5ba09cc4260b0da29c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "blueprint",
+        "type": "github"
+      }
+    },
+    "blueprint_4": {
+      "inputs": {
+        "nixpkgs": [
           "tacxble",
           "nix-pi-loader",
           "nixpkgs"
         ],
-        "systems": "systems_6"
+        "systems": "systems_8"
       },
       "locked": {
         "lastModified": 1724053269,
@@ -141,7 +185,7 @@
     },
     "flake-utils": {
       "inputs": {
-        "systems": "systems_3"
+        "systems": "systems_5"
       },
       "locked": {
         "lastModified": 1710146030,
@@ -159,7 +203,7 @@
     },
     "flake-utils_2": {
       "inputs": {
-        "systems": "systems_5"
+        "systems": "systems_7"
       },
       "locked": {
         "lastModified": 1694529238,
@@ -177,7 +221,7 @@
     },
     "flake-utils_3": {
       "inputs": {
-        "systems": "systems_7"
+        "systems": "systems_9"
       },
       "locked": {
         "lastModified": 1681202837,
@@ -190,6 +234,48 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "fusuma": {
+      "inputs": {
+        "blueprint": "blueprint_2",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1735836307,
+        "narHash": "sha256-/d0klIoFoDbVz3dMQwrQJrn6jFSoouzxDqlEBHrmX5A=",
+        "owner": "rcambrj",
+        "repo": "fusuma",
+        "rev": "3ffa39141cf8165f4ec2f6cbc89b866e25e1fb05",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rcambrj",
+        "repo": "fusuma",
+        "type": "github"
+      }
+    },
+    "fusuma-plugin-appmatcher": {
+      "inputs": {
+        "blueprint": "blueprint_3",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1735815483,
+        "narHash": "sha256-Gf+BpBaf/lHWBcWGUUR99YNNRWkuWvLeev4e3TGL88g=",
+        "owner": "rcambrj",
+        "repo": "fusuma-plugin-appmatcher",
+        "rev": "696ab740a4875643fe2bd1090665f0597fa122c2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rcambrj",
+        "repo": "fusuma-plugin-appmatcher",
         "type": "github"
       }
     },
@@ -279,7 +365,7 @@
     },
     "nix-pi-loader_2": {
       "inputs": {
-        "blueprint": "blueprint_2",
+        "blueprint": "blueprint_4",
         "nixos-hardware": "nixos-hardware_3",
         "nixpkgs": [
           "tacxble",
@@ -459,6 +545,8 @@
         "agenix": "agenix",
         "blueprint": "blueprint",
         "disko": "disko",
+        "fusuma": "fusuma",
+        "fusuma-plugin-appmatcher": "fusuma-plugin-appmatcher",
         "home-manager": "home-manager_2",
         "nix-pi-loader": "nix-pi-loader",
         "nix-pia-vpn": "nix-pia-vpn",
@@ -466,7 +554,7 @@
         "nixos-facter-modules": "nixos-facter-modules",
         "nixos-hardware": "nixos-hardware_2",
         "nixpkgs": "nixpkgs",
-        "systems": "systems_4",
+        "systems": "systems_6",
         "tacxble": "tacxble",
         "vscode-server": "vscode-server"
       }
@@ -562,6 +650,36 @@
       }
     },
     "systems_7": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_8": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_9": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

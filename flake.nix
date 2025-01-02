@@ -40,6 +40,10 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
     nix-vscode-extensions.inputs.nixpkgs.follows = "nixpkgs";
+    fusuma.url = "github:rcambrj/fusuma";
+    fusuma.inputs.nixpkgs.follows = "nixpkgs";
+    fusuma-plugin-appmatcher.url = "github:rcambrj/fusuma-plugin-appmatcher";
+    fusuma-plugin-appmatcher.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs: (inputs.blueprint {

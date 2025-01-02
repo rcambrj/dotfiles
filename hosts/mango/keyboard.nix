@@ -1,4 +1,4 @@
-{ perSystem, ... }: {
+{ config, perSystem, pkgs, ... }: {
 
   services.keyd = {
     enable = true;

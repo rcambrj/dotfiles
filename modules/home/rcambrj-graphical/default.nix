@@ -1,7 +1,9 @@
-{ flake, pkgs, ... }: {
+{ flake, lib, pkgs, ... }: {
   imports = [
     ../rcambrj-console
     ../vscode
+    ./gnome.nix
+    ./touchpad.nix
   ];
 
   home.packages = with pkgs; [
