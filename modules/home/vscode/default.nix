@@ -32,7 +32,7 @@
       "editor.rulers" = [ 80 100 120 ];
       "editor.acceptSuggestionOnEnter" = "off";
       "editor.acceptSuggestionOnCommitCharacter" = false;
-      "editor.fontSize" = 13;
+      "editor.fontSize" = 14;
       "telemetry.telemetryLevel" = "off";
       "telemetry.enableCrashReporter" = false;
       "telemetry.enableTelemetry" = false;

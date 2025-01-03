@@ -1,27 +1,8 @@
 { lib, pkgs, ... }: {
   home.packages = with pkgs; [
     gnomeExtensions.dash-to-panel
-    gnomeExtensions.disable-3-finger-gestures
   ];
 
-  # gsettings list-recursively
-  # gsettings range org.gnome.desktop.wm.preferences num-workspaces
-  # arrayOf
-  # maybeOf
-  # tupleOf
-  # dictionaryEntryOf
-  # string = "s";
-  # boolean = "b";
-  # uchar = "y";
-  # int16 = "n";
-  # uint16 = "q";
-  # int32 = "i";
-  # uint32 = "u";
-  # int64 = "x";
-  # uint64 = "t";
-  # double = "d";
-  # variant = "v";
-  #
   # inspired by:
   # https://github.com/Electrostasy/dots/blob/c62895040a8474bba8c4d48828665cfc1791c711/profiles/system/gnome/default.nix
   dconf = {
@@ -35,10 +16,6 @@
       "org/gnome/desktop/wm/preferences" = {
         num-workspaces = lib.gvariant.mkInt32 1;
         audible-bell = false;
-      };
-      "org/gnome/desktop/peripherals/touchpad" = {
-        tap-and-drag = false;
-        tap-and-drag-lock = true;
       };
       "org/gnome/nautilus/preferences" = {
         default-folder-viewer = "list-view";
@@ -83,30 +60,16 @@
           # "apps-menu@gnome-shell-extensions.gcampax.github.com"
           # "auto-move-windows@gnome-shell-extensions.gcampax.github.com"
           "dash-to-panel@jderose9.github.com"
-          "display-brightness-ddcutil@themightydeity.github.com"
           "drive-menu@gnome-shell-extensions.gcampax.github.com"
           # "light-style@gnome-shell-extensions.gcampax.github.com"
           # "screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com"
           # "status-icons@gnome-shell-extensions.gcampax.github.com"
-          "disable-three-finger@lxp-git.github.com"
           "system-monitor@gnome-shell-extensions.gcampax.github.com"
           # "user-theme@gnome-shell-extensions.gcampax.github.com"
           # "window-list@gnome-shell-extensions.gcampax.github.com'"
           # "windowsNavigator@gnome-shell-extensions.gcampax.github.com"
           # "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
         ];
-      };
-      "org/gnome/shell/extensions/display-brightness-ddcutil" = {
-        show-all-slider = true;
-        show-internal-slider = true;
-        only-all-slider = false;
-        show-value-label = false;
-        show-display-name = false;
-        show-osd = true;
-        show-sliders-in-submenu = false;
-        button-location = lib.gvariant.mkInt32 1; # 0=menu bar, 1=system menu
-        step-change-keyboard = lib.gvariant.mkDouble (5.0);
-        disable-display-state-check = true;
       };
       "org/gnome/shell/extensions/dash-to-panel" = {
         # https://github.com/home-sweet-gnome/dash-to-panel/blob/cccbdcdaa23cb718fa5b72094c2f46420adcfabf/schemas/org.gnome.shell.extensions.dash-to-panel.gschema.xml

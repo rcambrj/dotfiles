@@ -4,6 +4,7 @@
     ../vscode
     ./gnome.nix
     ./touchpad.nix
+    ./brightness.nix
   ];
 
   home.packages = with pkgs; [
