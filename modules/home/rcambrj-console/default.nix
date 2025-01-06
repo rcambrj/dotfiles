@@ -25,7 +25,6 @@ in {
     gnutar zstd
     htop
     iftop
-    lm_sensors
     nodePackages.localtunnel
     ncdu
     nix-output-monitor
@@ -48,7 +47,10 @@ in {
     # for iTerm2
     nerd-fonts.fira-code # FiraCodeNFM-Reg
     # TODO: which pkgs contains HackNFM-Regular ?
-  ];
+  ] ++
+  (if pkgs.stdenv.isLinux then [
+     lm_sensors
+  ] else []);
 
   fonts.fontconfig.enable = true;
 
