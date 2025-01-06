@@ -14,7 +14,7 @@
       # this value depends on the udev hack for scroll speed in system touchpad.nix
       # but is there some clever maths? this number seems to suit for now
       # without hack => 0.0
-      speed = lib.gvariant.mkDouble (1.0);
+      speed = lib.gvariant.mkDouble (0.0);
     };
   };
 
@@ -40,7 +40,7 @@
             # this value depends on the udev hack for scroll speed in system touchpad.nix
             # but is there some clever maths? this number seems to suit for now
             # without hack => 1.20
-            accel = "2.00";
+            accel = "1.20";
           };
           end = {
             command = "${pkgs.ydotool}/bin/ydotool click 80";

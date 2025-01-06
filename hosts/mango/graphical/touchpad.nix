@@ -1,12 +1,12 @@
 { config, perSystem, pkgs, ... }: let
   originalAbsX = 30;
   originalAbsY = 30;
-  scrollFactor = 0.33;
+  # set to 1, because I think actually that the only application with bad
+  # scroll sensitivity is firefox. why is scrolling inconsistent anyway?!
+  scrollFactor = 1;
 in {
   programs.ydotool.enable = true;
   users.users.rcambrj.extraGroups = [ config.programs.ydotool.group "input" ];
-
-  # services.libinput.touchpad = {};
 
   services.udev.extraHwdb = ''
 evdev:name:ELAN0676:00 04F3:3195 Touchpad:dmi:*svnLENOVO:*pvrThinkPadT14sGen2i**

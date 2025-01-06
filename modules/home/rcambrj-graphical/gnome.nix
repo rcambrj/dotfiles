@@ -3,6 +3,7 @@
     gnomeExtensions.dash-to-panel
   ];
 
+  # https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas/-/tree/master/schemas
   # inspired by:
   # https://github.com/Electrostasy/dots/blob/c62895040a8474bba8c4d48828665cfc1791c711/profiles/system/gnome/default.nix
   dconf = {
@@ -32,6 +33,11 @@
       "org/gnome/shell/keybindings" = {
         toggle-overview = [ "<Control>Space" ];
       };
+      "org/gnome/desktop/wm/keybindings" = {
+        toggle-maximized = [ "<Control><Alt>Home" ];
+        move-to-monitor-up = [ "<Control><Alt>Page_Up" ];
+        move-to-monitor-down = [ "<Control><Alt>Page_Down" ];
+      };
       "org/gnome/desktop/interface" = {
         # TODO: these have no impact
         # https://github.com/GNOME/gsettings-desktop-schemas/blob/3115114430dbef644294f4818fe6a4512fb4e43d/headers/gdesktop-enums.h#L245
@@ -54,6 +60,7 @@
           "slack.desktop"
           "com.github.xeco23.WasIstLos.desktop"
           "org.telegram.desktop.desktop"
+          "element-desktop.desktop"
         ];
         enabled-extensions = [
           "appmatcher45@iberianpig.dev"

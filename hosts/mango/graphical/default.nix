@@ -23,8 +23,10 @@
   services.xserver.desktopManager.gnome.enable = true;
 
   services.gnome.gnome-keyring.enable = true;
+  security.pam.services.login.enableGnomeKeyring = true;
   security.pam.services.gdm-password.enableGnomeKeyring = true;
-  # security.pam.services.gdm-fingerprint.enableGnomeKeyring = true;
-  # security.pam.services.gdm.enableGnomeKeyring = true;
-  # environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID";
+  security.pam.services.gdm-fingerprint.enableGnomeKeyring = true;
+
+  # hint electron apps to use wayland:
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 }
