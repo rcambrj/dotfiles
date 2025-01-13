@@ -107,6 +107,11 @@ in {
         hostname = "orange.cambridge.me";
         user = "ubuntu";
       };
+      "lancache" = {
+        # lan party lancache
+        hostname = "lancache.local";
+        user = "pi";
+      };
     };
   };
 }
