@@ -99,7 +99,7 @@
         "orsenkucher.vscode-graphql"
         "tamasfe.even-better-toml"
         "pinage404.rust-extension-pack"
-        "biomejs.biome"
+        # "biomejs.biome" # pkg needs installing on remote host
         "ms-python.python"
         "dingzhaojie.bit-peek"
       ];
