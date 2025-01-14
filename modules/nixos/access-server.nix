@@ -1,7 +1,6 @@
 { flake, ... }: {
   security.sudo.wheelNeedsPassword = false;
   services.openssh.enable = true;
-  networking.firewall.enable = true;
 
   nix.settings.trusted-users = [ "root" "nixos" ];
   users.users.nixos = {

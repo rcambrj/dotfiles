@@ -5,7 +5,6 @@
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.standard-disk
-    flake.nixosModules.root-keys
     inputs.disko.nixosModules.disko
   ];
   networking.hostName = "minimal-cloud";

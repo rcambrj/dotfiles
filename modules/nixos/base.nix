@@ -31,4 +31,5 @@ with lib;
     Storage=volatile
   '';
   systemd.extraConfig = "DefaultLimitNOFILE=4096";
+  networking.firewall.enable = true;
 }
