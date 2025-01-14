@@ -1,7 +1,7 @@
-{ flake, inputs, ... }: {
+{ flake, inputs, modulesPath, ... }: {
   imports = [
-    inputs.nixos-facter-modules.nixosModules.facter
-    { config.facter.reportPath = ./facter.json; }
+    "${toString modulesPath}/profiles/qemu-guest.nix"
+
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.standard-disk
@@ -9,8 +9,10 @@
     flake.nixosModules.cloud-vps
   ];
 
-  nixpkgs.hostPlatform = "aarch64-linux";
   networking.hostName = "orange";
+
+
+  nixpkgs.hostPlatform = "aarch64-linux";
 
   disko.devices.disk.disk1.device = "/dev/sda";
 }

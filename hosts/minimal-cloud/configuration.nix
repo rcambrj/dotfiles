@@ -6,6 +6,9 @@
     flake.nixosModules.access-server
     flake.nixosModules.standard-disk
   ];
+
+
+
   networking.hostName = "minimal-cloud";
 
   # nixpkgs.hostPlatform = "x86_64-linux";
