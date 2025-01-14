@@ -97,11 +97,6 @@ in {
         user = "root";
         port = 15120;
       };
-      "apple" = {
-        # oracle cloud free x86_64
-        hostname = "apple.cambridge.me";
-        user = "root";
-      };
       "orange" = {
         # oracle cloud free aarch64
         hostname = "orange.cambridge.me";
