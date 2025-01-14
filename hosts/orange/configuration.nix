@@ -4,8 +4,8 @@
     { config.facter.reportPath = ./facter.json; }
     flake.nixosModules.base
     flake.nixosModules.access-server
-    flake.nixosModules.common
     flake.nixosModules.standard-disk
+    flake.nixosModules.common
     flake.nixosModules.cloud-vps
   ];
 

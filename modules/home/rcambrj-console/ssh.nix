@@ -100,7 +100,7 @@ in {
       "orange" = {
         # oracle cloud free aarch64
         hostname = "orange.cambridge.me";
-        user = "ubuntu";
+        user = "nixos";
       };
       "lancache" = {
         # lan party lancache
