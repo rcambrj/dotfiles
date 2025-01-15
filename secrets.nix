@@ -35,9 +35,9 @@ in {
   "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
 
-  # coconut
-  "secrets/photoprism-sftp-password.age".publicKeys = defaults ++ [ sshKeys.coconut ];
-  "secrets/photoprism-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.coconut ];
-  "secrets/photoprism-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.coconut ];
-  "secrets/photoprism-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.coconut ];
+  # orange
+  "secrets/photoprism-sftp-password.age".publicKeys = defaults ++ [ sshKeys.orange ];
+  "secrets/photoprism-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.orange ];
+  "secrets/photoprism-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.orange ];
+  "secrets/photoprism-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.orange ];
 }
