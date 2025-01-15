@@ -3,7 +3,7 @@ let
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
 in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
-  "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
+  "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
   "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
 
   # oauth2 apps
@@ -25,7 +25,6 @@ in {
   "secrets/lldap-env.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/free-games-claimer-vnc.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 

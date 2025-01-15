@@ -12,7 +12,6 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel
-    flake.nixosModules.free-games-claimer
     flake.lib.template
     ./backup.nix
     ./esphome.nix
@@ -81,11 +80,6 @@
       file = ../../secrets/grafana-secret.age;
       owner = "grafana";
       group = "grafana";
-    };
-    free-games-claimer-vnc = {
-      file = ../../secrets/free-games-claimer-vnc.age;
-      owner = "free-games-claimer";
-      group = "free-games-claimer";
     };
     influxdb-admin-password = {
       file = ../../secrets/influxdb-admin-password.age;
