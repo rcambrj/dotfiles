@@ -31,9 +31,6 @@
     nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
     nix-pi-loader.inputs.blueprint.follows = "blueprint";
-    tacxble.url = "github:rcambrj/tacxble";
-    tacxble.inputs.nixpkgs.follows = "nixpkgs";
-    tacxble.inputs.blueprint.follows = "blueprint";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     vscode-server.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
