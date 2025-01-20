@@ -1,5 +1,6 @@
 { config, ... }: {
-  networking.firewall.allowedTCPPorts = [
+  # only permit on wt0
+  networking.firewall.interfaces.wt0.allowedTCPPorts = [
     config.services.prometheus.exporters.node.port
   ];
 
@@ -7,7 +8,6 @@
     exporters = {
       node = {
         enable = true;
-        listenAddress = "192.168.142.200";
         enabledCollectors = [
           "systemd"
           "processes"
