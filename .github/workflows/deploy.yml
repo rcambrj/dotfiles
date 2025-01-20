@@ -48,6 +48,8 @@ jobs:
         run: |
             NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
             --flake .#${{inputs.MACHINE_NAME}} \
-            # --build-host ${{env.MACHINE_SSH_STRING}} \ # /nix/store/xxx-coreutils-9.5/bin/mktemp: cannot execute binary file: Exec format error
+            # https://github.com/NixOS/nixpkgs/issues/200398
+            --max-jobs 0
+            --build-host ${{env.MACHINE_SSH_STRING}} \
             --target-host ${{env.MACHINE_SSH_STRING}} \
             --use-remote-sudo
