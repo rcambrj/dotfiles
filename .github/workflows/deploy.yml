@@ -48,7 +48,5 @@ jobs:
         run: |
             NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
             --flake .#${{inputs.MACHINE_NAME}} \
-            --max-jobs 0
-            --build-host ${{env.MACHINE_SSH_STRING}} \
             --target-host ${{env.MACHINE_SSH_STRING}} \
             --use-remote-sudo
