@@ -23,7 +23,7 @@
               "openwrt.cambridge.me:9100"
               "blueberry.cambridge.me:9100"
               "cranberry.cambridge.me:9100"
-              "coconut.cambridge.me:9100"
+              "orange.cambridge.me:9100"
             ];
           }
         ];

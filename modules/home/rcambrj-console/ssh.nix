@@ -86,11 +86,6 @@ in {
         hostname =  "tomato.cambridge.me";
         user = "root";
       };
-      "coconut" = {
-        # serverhost shitbox
-        hostname = "coconut.cambridge.me";
-        user = "root";
-      };
       "lime" = {
         # gullo's shitbox
         hostname = "51.255.83.152";

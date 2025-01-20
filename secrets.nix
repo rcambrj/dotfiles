@@ -2,9 +2,9 @@ let
   sshKeys = import ./lib/ssh-keys.nix;
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
 in {
-  "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
+  "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry ];
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
-  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.coconut ];
+  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry ];
 
   # oauth2 apps
   "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
