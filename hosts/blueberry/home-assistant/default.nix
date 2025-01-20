@@ -7,7 +7,7 @@
     ./scenes.nix
     ./ventilation.nix
     ./webos-dev-mode.nix
-    ./fix-bathroom-mirror-light.nix
+    ./fix-quirky-lidl-lights.nix
     ./lovelace.nix
   ];
 }
