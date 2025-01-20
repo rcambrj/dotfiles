@@ -15,7 +15,7 @@ jobs:
     name: "Deploy: ${{ inputs.MACHINE_NAME }}"
     runs-on: ubuntu-latest
     env:
-        MACHINE_SSH_STRING: root@${{inputs.MACHINE_NAME}}.cambridge.me
+        MACHINE_SSH_STRING: nixos@${{inputs.MACHINE_NAME}}.cambridge.me
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -48,4 +48,6 @@ jobs:
         run: |
             NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
             --flake .#${{inputs.MACHINE_NAME}} \
-            --target-host ${{env.MACHINE_SSH_STRING}}
+            --build-host ${{env.MACHINE_SSH_STRING}} \
+            --target-host ${{env.MACHINE_SSH_STRING}} \
+            --use-remote-sudo
