@@ -49,19 +49,8 @@ jobs:
 
       - name: Deploy to cloud machine
         run: |
-          # NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
-          # --flake .#${{inputs.MACHINE_NAME}} \
-          # --target-host ${{env.MACHINE_SSH_STRING}} \
-          # --use-remote-sudo
-          #
-          # workaround bin/mktemp: cannot execute binary file: Exec format error
-          # https://discourse.nixos.org/t/deploy-nixos-configurations-on-other-machines/22940/2
-          #
-          echo "Building toplevel..."
-          nix build -L .#nixosConfigurations.${{inputs.MACHINE_NAME}}.config.system.build.toplevel
-          echo "Copying to target..."
-          nix copy --to ssh-ng://${{env.MACHINE_SSH_STRING}} ./result
-          echo "Linking generation..."
-          ssh ${{env.MACHINE_SSH_STRING}} sudo nix-env -p /nix/var/nix/profiles/system --set $(readlink ./result)
-          echo "Switching to generation..."
-          ssh ${{env.MACHINE_SSH_STRING}} sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+          NIX_SSHOPTS="-o StrictHostKeyChecking=no" nix run nixpkgs#nixos-rebuild switch -- \
+          --flake .#${{inputs.MACHINE_NAME}} \
+          --build-host ${{env.MACHINE_SSH_STRING}} \
+          --target-host ${{env.MACHINE_SSH_STRING}} \
+          --use-remote-sudo
