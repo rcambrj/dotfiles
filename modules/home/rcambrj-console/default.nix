@@ -16,6 +16,7 @@ in {
 
   home.packages = with pkgs; [
     asciinema
+    balena-cli
     binwalk
     coreutils
     curl

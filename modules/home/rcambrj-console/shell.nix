@@ -38,6 +38,7 @@
       vim = "nvim";
       ip = "curl ifconfig.co";
       tf = "terraform";
+      sshn = "ssh -o StrictHostKeychecking=no -o UserKnownHostsFile=/dev/null";
 
       etch = "sudo dd status=progress bs=4M conv=fsync"; # if=foo.img of=/dev/disk69 && sync
 
