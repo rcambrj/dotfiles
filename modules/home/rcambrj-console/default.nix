@@ -16,7 +16,7 @@ in {
 
   home.packages = with pkgs; [
     asciinema
-    balena-cli
+    # balena-cli # doesn't build on darwin
     binwalk
     coreutils
     curl
