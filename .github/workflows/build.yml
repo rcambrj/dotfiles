@@ -9,7 +9,6 @@ on:
         required: true
         options:
           - minimal-intel
-          - minimal-raspi
 
 jobs:
   build:

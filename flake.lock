@@ -279,30 +279,6 @@
         "type": "github"
       }
     },
-    "nix-pi-loader": {
-      "inputs": {
-        "blueprint": [
-          "blueprint"
-        ],
-        "nixos-hardware": "nixos-hardware",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1733314855,
-        "narHash": "sha256-8n9TRf79zTUpK7tlZ3CyTz+xd7WU5xKa7MUHcI4QRmE=",
-        "owner": "rcambrj",
-        "repo": "nix-pi-loader",
-        "rev": "34989d9a4ad17b20c2d41fb6b34d607e2c4b3cd9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rcambrj",
-        "repo": "nix-pi-loader",
-        "type": "github"
-      }
-    },
     "nix-pia-vpn": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -363,22 +339,6 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1729333370,
-        "narHash": "sha256-NU+tYe3QWzDNpB8RagpqR3hNQXn4BNuBd7ZGosMHLL8=",
-        "owner": "NixOS",
-        "repo": "nixos-hardware",
-        "rev": "38279034170b1e2929b2be33bdaedbf14a57bfeb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "master",
-        "repo": "nixos-hardware",
-        "type": "github"
-      }
-    },
-    "nixos-hardware_2": {
-      "locked": {
         "lastModified": 1737359802,
         "narHash": "sha256-utplyRM6pqnN940gfaLFBb9oUCSzkan86IvmkhsVlN8=",
         "owner": "NixOS",
@@ -417,11 +377,10 @@
         "fusuma": "fusuma",
         "fusuma-plugin-appmatcher": "fusuma-plugin-appmatcher",
         "home-manager": "home-manager_2",
-        "nix-pi-loader": "nix-pi-loader",
         "nix-pia-vpn": "nix-pia-vpn",
         "nix-vscode-extensions": "nix-vscode-extensions",
         "nixos-facter-modules": "nixos-facter-modules",
-        "nixos-hardware": "nixos-hardware_2",
+        "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "systems": "systems_6",
         "vscode-server": "vscode-server"
