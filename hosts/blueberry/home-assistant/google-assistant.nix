@@ -9,13 +9,16 @@ in {
     };
     exposed_domains = [ "scene" ];
     expose_by_default = true;
-    entity_config = builtins.listToAttrs (lib.lists.flatten (
+    entity_config = (builtins.listToAttrs (lib.lists.flatten (
       map (group:
         map (target: {
           name = target;
           value = { expose = true; room = group.name; };
         }) (group.light_targets ++ group.switch_targets)
       ) groups
-    ));
+    ))) // {
+        "cover.bedroom_blind" = { expose = true; room = "Bedroom"; };
+        "cover.office_blind" = { expose = true; room = "Office"; };
+    };
   };
 }
