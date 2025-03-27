@@ -16,7 +16,7 @@
 
   networking.hostName = "minimal-raspi";
 
-  boot.binfmt.emulatedSystems = [ "armv6l-linux" "armv7l-linux" "x86-64-linux" ];
+  boot.binfmt.emulatedSystems = [ "armv6l-linux" "armv7l-linux" "x86_64-linux" ];
 
   # since this machine config will be plugged into machines which potentially
   # have static routes and NS configurations already, enable avahi so that the
