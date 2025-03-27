@@ -4,7 +4,7 @@
 # * a minimal build to be converted to another machine
 # * a makeshift nix builder
 #
-{ flake, modulesPath, ... }: {
+{ flake, inputs, modulesPath, ... }: {
   imports = [
     inputs.nixos-hardware.nixosModules.raspberry-pi-3
     flake.nixosModules.base
