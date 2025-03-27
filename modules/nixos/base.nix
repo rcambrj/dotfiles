@@ -31,4 +31,5 @@ with lib;
   '';
   systemd.extraConfig = "DefaultLimitNOFILE=4096";
   networking.firewall.enable = true;
+  nixpkgs.config.allowUnfree = true;
 }
