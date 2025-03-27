@@ -39,6 +39,8 @@
     fusuma.inputs.nixpkgs.follows = "nixpkgs";
     fusuma-plugin-appmatcher.url = "github:rcambrj/fusuma-plugin-appmatcher";
     fusuma-plugin-appmatcher.inputs.nixpkgs.follows = "nixpkgs";
+    nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
+    nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs: (inputs.blueprint {

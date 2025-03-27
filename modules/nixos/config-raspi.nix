@@ -1,38 +1,38 @@
-{ config, lib, modulesPath, pkgs, ... }: {
+# Raspberry Pi 3 and Z2W for now
+{ config, inputs, lib, modulesPath, pkgs, ... }: {
+
   imports = [
+    inputs.nixos-hardware.nixosModules.raspberry-pi-3
+    inputs.nix-pi-loader.nixosModules.default
     ./grow-partition.nix
   ];
 
-  nixpkgs.hostPlatform = "x86_64-linux";
+  nixpkgs.hostPlatform = "aarch64-linux";
 
-  system.build.image = (import "${toString modulesPath}/../lib/make-disk-image.nix" {
+  system.build.image = (import inputs.nix-pi-loader.nixosModules.make-disk-image {
     inherit lib config pkgs;
     format = "raw";
-    partitionTableType = "efi";
+    partitionTableType = "legacy+boot";
     copyChannel = false;
     diskSize = "auto";
     additionalSpace = "64M";
-    bootSize = "1G";
+    bootSize = "128M";
+    touchEFIVars = false;
+    installBootLoader = true;
+    label = "nixos";
   });
-
-  boot.loader.grub = {
+  boot.pi-loader = {
     enable = true;
-    device = "nodev";
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    timeout = lib.mkForce 1;
+    bootMode = "direct";
   };
-  boot.initrd.availableKernelModules = [ "uas" ];
-  boot.kernelParams = [
-    "console=tty0"
-    "boot.shell_on_fail"
-    "root=LABEL=nixos" # see iso-image.nix for why this is useful
-  ];
 
-  boot.growPartitionCustom.enable = true;
+  boot.growPartitionCustom = {
+    enable = true;
+    device = "/dev/disk/by-label/nixos";
+  };
   fileSystems = {
     "/boot" = {
-      device = "/dev/disk/by-label/ESP";
+      device = "/dev/disk/by-label/BOOT";
       fsType = "vfat";
     };
     "/" = {
@@ -40,7 +40,7 @@
       options = [ "mode=0755" ];
     };
     "/mnt/root" = {
-      device = "/dev/root";
+      device = "/dev/disk/by-label/nixos";
       neededForBoot = true;
       autoResize = true; # resizes filesystem to occupy whole partition
       fsType = "ext4";
