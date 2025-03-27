@@ -1,4 +1,4 @@
-{ config, flake, lib, inputs, modulesPath, pkgs, ... }: with lib; let
+{ inputs, ... }: { config, lib, modulesPath, pkgs, ... }: with lib; let
   sshKeyLocation = "/mnt/conf/id_ed25519"; # ensure that this is persisted across boots
   repositoryLocation = "git+ssh://git@github.com/rcambrj/dotfiles?ref=main";
   defaultFlakePath = config.networking.hostName;

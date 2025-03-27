@@ -1,4 +1,4 @@
-{ flake, inputs, ... }: {
+{ inputs, ... }: _: {
   imports = [
     inputs.agenix.nixosModules.default
   ];

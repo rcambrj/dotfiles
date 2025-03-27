@@ -1,7 +1,10 @@
-{ flake, lib, pkgs, ... }: {
+{ inputs, ... }: args@{ flake, lib, pkgs, ... }:
+let
+  vscode = import ../vscode { inherit inputs; } args;
+in vscode // {
   imports = [
     ../rcambrj-console
-    ../vscode
+    # ../vscode # requires inputs (see blueprint docs)
     ./gnome.nix
     ./touchpad.nix
     ./brightness.nix

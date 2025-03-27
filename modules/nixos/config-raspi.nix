@@ -1,5 +1,5 @@
 # Raspberry Pi 3 and Z2W for now
-{ config, inputs, lib, modulesPath, pkgs, ... }: {
+{ inputs, ... }: { config, lib, modulesPath, pkgs, ... }: {
 
   imports = [
     inputs.nix-pi-loader.nixosModules.default

@@ -15,7 +15,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:numtide/nixpkgs-unfree?ref=nixos-unstable";
     systems.url = "github:nix-systems/default";
 
     blueprint.url = "github:numtide/blueprint";
@@ -45,9 +45,5 @@
 
   outputs = inputs: (inputs.blueprint {
     inherit inputs;
-
-    nixpkgs.config = {
-      allowUnfree = true;
-    };
   });
 }

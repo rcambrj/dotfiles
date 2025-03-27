@@ -1,4 +1,4 @@
-{ config, flake, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 {
   system.stateVersion = "23.11";
@@ -26,7 +26,6 @@ with lib;
   '';
 
   time.timeZone = "Europe/Amsterdam";
-  nixpkgs.config.allowUnfree = true;
   services.journald.extraConfig = ''
     Storage=volatile
   '';

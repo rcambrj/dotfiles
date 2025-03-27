@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }: {
+{ inputs, ... }: { lib, pkgs, ... }: {
   home.packages = with pkgs; [
     # for language servers
     biome
@@ -110,7 +110,7 @@
         with inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system}; [
         # general
         vscode-marketplace.ms-vsliveshare.vsliveshare
-        vscode-marketplace.ms-vscode-remote.remote-ssh
+        (vscode-marketplace.ms-vscode-remote.remote-ssh.override { meta.licence = []; })
         vscode-marketplace.k3a.theme-dark-plus-contrast
         vscode-marketplace.mkhl.direnv
         vscode-marketplace.stkb.rewrap # alt+q to wrap
