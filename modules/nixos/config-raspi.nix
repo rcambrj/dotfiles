@@ -2,7 +2,6 @@
 { config, inputs, lib, modulesPath, pkgs, ... }: {
 
   imports = [
-    inputs.nixos-hardware.nixosModules.raspberry-pi-3
     inputs.nix-pi-loader.nixosModules.default
     ./grow-partition.nix
   ];
@@ -23,7 +22,6 @@
   });
   boot.pi-loader = {
     enable = true;
-    bootMode = "direct";
   };
 
   boot.growPartitionCustom = {

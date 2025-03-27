@@ -6,25 +6,24 @@
 #
 { flake, modulesPath, ... }: {
   imports = [
+    inputs.nixos-hardware.nixosModules.raspberry-pi-3
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
-    flake.nixosModules.config-intel
-    # minimal needs to be able to run on anything
-    "${toString modulesPath}/profiles/all-hardware.nix"
+    flake.nixosModules.config-raspi
   ];
 
-  networking.hostName = "minimal-intel";
+  networking.hostName = "minimal-raspi";
 
-  boot.binfmt.emulatedSystems = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = [ "armv6l-linux" "armv7l-linux" "x86-64-linux" ];
 
   # since this machine config will be plugged into machines which potentially
   # have static routes and NS configurations already, enable avahi so that the
   # hostname can be broadcast via zeroconf name resolution.
   services.avahi = {
     enable = true;
-    hostName = "minimal-intel-nomad"; # minimal-intel-nomad.local
+    hostName = "minimal-raspi-nomad"; # minimal-raspi-nomad.local
     nssmdns4 = true;
     wideArea = false;
     publish = {
