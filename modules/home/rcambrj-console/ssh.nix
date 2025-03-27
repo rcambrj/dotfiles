@@ -53,12 +53,12 @@ in {
         };
       };
       "gooseberry" = {
-        # 3d printer (nanopi neo)
+        # 3d printer (raspi 3)
         hostname =  "gooseberry.cambridge.me";
-        user = "gooseberry";
+        user = "nixos";
       };
       "lingonberry" = {
-        # tacx (raspi 3)
+        # ?? (nanopi neo)
         hostname =  "lingonberry.cambridge.me";
         user = "pi";
       };
