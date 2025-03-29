@@ -23,7 +23,10 @@
   boot.pi-loader = {
     enable = true;
   };
-
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
   boot.growPartitionCustom = {
     enable = true;
     device = "/dev/disk/by-label/nixos";
@@ -56,4 +59,5 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
   };
+  environment.systemPackages = with pkgs; [ libraspberrypi ];
 }
