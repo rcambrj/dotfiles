@@ -12,6 +12,9 @@
     flake.lib.template
     ./http
     ./klipper.nix
+    ./moonraker.nix
+    ./ustreamer.nix
+    ./fluidd.nix
   ];
 
   networking.hostName = "gooseberry";
