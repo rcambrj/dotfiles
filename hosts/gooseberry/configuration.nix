@@ -45,17 +45,15 @@
     };
   };
 
-  # https://github.com/NixOS/nixpkgs/issues/392278
-  # services.auto-cpufreq = {
-  #   enable = true;
-  #   settings = {
-  #     charger = {
-  #       governor = "ondemand";
-  #       energy_performance_preference = "performance";
-  #       turbo = "auto";
-  #     };
-  #   };
-  # };
+  services.auto-cpufreq = {
+    enable = true;
+    settings = {
+      charger = {
+        governor = "ondemand";
+        turbo = "auto";
+      };
+    };
+  };
 
   fileSystems = {
     "/var/lib" = {
