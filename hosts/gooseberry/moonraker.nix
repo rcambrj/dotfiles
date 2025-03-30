@@ -38,4 +38,6 @@
     };
   };
 
+  # disable logging to disk, rely on journald
+  systemd.services.moonraker.environment.MOONRAKER_LOG_PATH = "/dev/null";
 }
