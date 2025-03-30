@@ -8,7 +8,7 @@
     };
   };
 
-  template.files.oauth2-proxy-env = {
+  age-template.files.oauth2-proxy-env = {
     vars = {
       oauth2_proxy_client_secret = config.age.secrets.blueberry-oauth2-proxy-client-secret.path;
       oauth2_proxy_cookie_secret = config.age.secrets.blueberry-oauth2-proxy-cookie-secret.path;
@@ -23,8 +23,8 @@
   services.oauth2-proxy = {
     enable = true;
     provider = "oidc";
-    keyFile = config.template.files.oauth2-proxy-env.path;
-    # clientID = "";     # see keyFile. this gets clobbered https://github.com/NixOS/nixpkgs/blob/7100415/nixos/modules/services/security/oauth2-proxy.nix#L567
+    keyFile = config.age-template.files.oauth2-proxy-env.path;
+    # clientID = "";     # see keyFile. this gets clobbered https://github.com/NixOS/nixpkgs/blob/4f0dadbf38ee4cf4cc38cbc232b7708fddf965bc/nixos/modules/services/security/oauth2-proxy.nix#L602
     # clientSecret = ""; # see keyFile.
     # secret = "";       # see keyFile. cookie-secret. must be exactly 16, 24 or 32 chars.
     reverseProxy = true;

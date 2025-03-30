@@ -6,6 +6,7 @@
 #
 { flake, inputs, ... }: {
   imports = [
+    inputs.agenix-template.nixosModules.default
     # inputs.nixos-facter-modules.nixosModules.facter
     # { config.facter.reportPath = ./facter.json; }
     flake.nixosModules.base
@@ -13,7 +14,6 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel
-    flake.lib.template
     ./interfaces.nix
   ];
 

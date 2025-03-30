@@ -32,7 +32,7 @@
     portForward = {
       enable = true;
       script = ''
-        export $(cat ${config.template.files.transmission-rpc-env-auth.path} | xargs)
+        export $(cat ${config.age-template.files.transmission-rpc-env-auth.path} | xargs)
         ${config.services.transmission.package}/bin/transmission-remote --authenv --port $port || true
       '';
     };

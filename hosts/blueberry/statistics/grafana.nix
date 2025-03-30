@@ -8,7 +8,7 @@
     };
   };
 
-  template.files.grafana-ldap-password = {
+  age-template.files.grafana-ldap-password = {
     vars = {
       ldap_admin_password = config.age.secrets.ldap-admin-ro-password.path;
     };
@@ -17,7 +17,7 @@
     group = "grafana";
   };
 
-  template.files.grafana-influxdb-secure-data = {
+  age-template.files.grafana-influxdb-secure-data = {
     vars = {
       influxdb_token = config.age.secrets.influxdb-admin-token.path;
     };
@@ -49,7 +49,7 @@
             use_ssl = true;
             root_ca_cert = flake.lib.ldap-cert;
             bind_dn = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
-            bind_password = "$__file{${config.template.files.grafana-ldap-password.path}}";
+            bind_password = "$__file{${config.age-template.files.grafana-ldap-password.path}}";
             search_filter = "(&(uid=%s)(memberof=cn=grafana,ou=groups,dc=cambridge,dc=me))";
             search_base_dns = ["dc=cambridge,dc=me"];
             attributes = {
@@ -101,7 +101,7 @@
             organization = "main";
           };
           secureJsonData = {
-            token = "$__file{${config.template.files.grafana-influxdb-secure-data.path}}";
+            token = "$__file{${config.age-template.files.grafana-influxdb-secure-data.path}}";
           };
         }
       ];

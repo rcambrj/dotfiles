@@ -4,12 +4,12 @@
     # but without UART console:
     ./hardware-raspberry-pi-3.nix
 
+    inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-raspi
-    flake.lib.template
     ./http
     ./klipper.nix
     ./moonraker.nix

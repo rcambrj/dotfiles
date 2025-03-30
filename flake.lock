@@ -23,6 +23,21 @@
         "type": "github"
       }
     },
+    "agenix-template": {
+      "locked": {
+        "lastModified": 1728762971,
+        "narHash": "sha256-9aTWaQ9VYECCb+oySlBnxMJaSTQ+hfuB2SuAH1Duc+I=",
+        "owner": "jhillyerd",
+        "repo": "agenix-template",
+        "rev": "77cd55731e15d98edec7b9d47650bdd7f977ba5f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jhillyerd",
+        "repo": "agenix-template",
+        "type": "github"
+      }
+    },
     "blueprint": {
       "inputs": {
         "nixpkgs": [
@@ -432,6 +447,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "agenix-template": "agenix-template",
         "blueprint": "blueprint",
         "disko": "disko",
         "fusuma": "fusuma",

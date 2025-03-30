@@ -12,7 +12,7 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel
-    flake.lib.template
+    inputs.agenix-template.nixosModules.default
     ./backup.nix
     ./esphome.nix
     ./downloads-enabled.nix

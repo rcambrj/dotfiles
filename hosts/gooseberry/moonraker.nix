@@ -2,7 +2,7 @@
   # to allow moonraker to reboot, etc.
   security.polkit.enable = true;
 
-  template.files.moonraker-secrets = {
+  age-template.files.moonraker-secrets = {
     owner = config.services.moonraker.user;
     group = config.services.moonraker.group;
     # docs say secrets.ini or secrets.json, but they're wrong

@@ -8,7 +8,7 @@
     };
   };
 
-  template.files.dex-env = {
+  age-template.files.dex-env = {
     vars = {
       ldap_admin_password = config.age.secrets.ldap-admin-ro-password.path;
     };
@@ -19,7 +19,7 @@
 
   services.dex = {
     enable = true;
-    environmentFile = config.template.files.dex-env.path;
+    environmentFile = config.age-template.files.dex-env.path;
     settings = {
       # logger = {
       #   level = "debug";
@@ -86,7 +86,7 @@
   };
 
   systemd.services.dex.restartTriggers = [
-    config.template.files.dex-env.path
+    config.age-template.files.dex-env.path
     config.age.secrets.blueberry-oauth2-proxy-client-secret.path
     config.age.secrets.cranberry-oauth2-proxy-client-secret.path
   ];

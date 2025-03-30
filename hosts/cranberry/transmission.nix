@@ -60,7 +60,7 @@ in {
     locations."/" = {
       proxyWebsockets = true;
       proxyPass = "http://127.0.0.1:9091";
-      # basicAuthFile = config.template.files.transmission-htpasswd.path;
+      # basicAuthFile = config.age-template.files.transmission-htpasswd.path;
       extraConfig = ''
         proxy_set_header Authorization "Basic ${base64-username-password}";
       '';
@@ -69,7 +69,7 @@ in {
 
   services.oauth2-proxy.nginx.virtualHosts."transmission.media.cambridge.me" = {};
 
-  template.files.transmission-rpc-env-auth = {
+  age-template.files.transmission-rpc-env-auth = {
     vars = {
       # this doesnt need to be secure
     };

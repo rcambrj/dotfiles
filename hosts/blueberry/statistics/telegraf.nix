@@ -52,7 +52,7 @@ let
     };
   }];
 in {
-  template.files.telegraf-env = {
+  age-template.files.telegraf-env = {
     vars = {
       influxdb_token = config.age.secrets.influxdb-admin-token.path;
     };
@@ -120,6 +120,6 @@ in {
         }];
       };
     };
-    environmentFiles = [config.template.files.telegraf-env.path];
+    environmentFiles = [config.age-template.files.telegraf-env.path];
   };
 }

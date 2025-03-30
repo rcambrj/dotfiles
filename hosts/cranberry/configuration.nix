@@ -17,12 +17,12 @@ in {
     "${toString modulesPath}/profiles/all-hardware.nix"
 
     inputs.nix-pia-vpn.nixosModules.default
+    inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel
-    flake.lib.template
     ./vpn
     ./http
     ./auth
