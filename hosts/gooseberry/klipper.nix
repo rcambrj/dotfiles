@@ -1,14 +1,4 @@
 { perSystem, config, ... }: {
-  users.users.klipper = {
-    # use a UID not likely to conflict with this machine's services
-    uid = config.ids.uids.sickbeard;
-    group = "klipper";
-  };
-  users.groups.klipper = {
-    # use the moonraker GID since klipper doesnt have one
-    gid = config.ids.gids.moonraker;
-  };
-
   environment.etc = {
     fluidd-config = {
       source = perSystem.self.fluidd-config.overrideAttrs (attrs: {
@@ -23,9 +13,10 @@
 
   services.klipper = {
     enable = true;
-    user = "klipper";
-    group = "klipper";
+    user = config.services.moonraker.user;
+    group = config.services.moonraker.group;
     logFile = "/dev/null"; # rely on journald
+    configDir = "${config.services.moonraker.stateDir}/config"; # use the same dir so that fluidd shows printer.cfg
     settings = {
       "include /etc/fluidd-config/client.cfg" = {};
     } // import ./printer.cfg.nix;

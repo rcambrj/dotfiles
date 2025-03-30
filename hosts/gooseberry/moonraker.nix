@@ -4,6 +4,7 @@
 
   template.files.moonraker-secrets = {
     owner = config.services.moonraker.user;
+    group = config.services.moonraker.group;
     # docs say secrets.ini or secrets.json, but they're wrong
     path = "${config.services.moonraker.stateDir}/moonraker.secrets";
     vars = {
@@ -18,7 +19,7 @@
   services.moonraker = {
     enable = true;
     allowSystemControl = true;
-    group = config.services.klipper.group;
+    stateDir = "/var/lib/printer_data";
     settings = {
       ldap = {
         ldap_host = "ldap.home.cambridge.me";
