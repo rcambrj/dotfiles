@@ -15,12 +15,14 @@
     bootSize = "1G";
   });
 
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    timeout = lib.mkForce 1;
+  boot.loader = {
+    timeout = 1;
+    grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+      efiInstallAsRemovable = true;
+    };
   };
   boot.initrd.availableKernelModules = [ "uas" ];
   boot.kernelParams = [
