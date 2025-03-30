@@ -34,7 +34,7 @@ in {
     "/webcam/snapshot" = {
       proxyPass = "http://localhost:${builtins.toString port}/snapshot";
     };
-    # this is very CPU-intensive on nginx, probably due to HTTPS encryption
+    # very CPU intensive because raspi3 lacks aes hardware for fast https encryption
     # "/webcam/stream" = {
     #   proxyPass = "http://localhost:${builtins.toString port}/stream";
     # };
