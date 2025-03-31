@@ -38,24 +38,23 @@
     };
   };
 
-  # restart the VPN once per day because the region.json file becomes outdated
-  # which makes the port forwarder fail as it tries to connect an address
-  # from where PIA is no longer serving.
-  # systemd.timers.pia-vpn-restart = {
-  #   timerConfig = {
-  #     OnCalendar = "*-*-* 02:00:00";
-  #     # OnCalendar = "minutely";
-  #     Unit = "pia-vpn-restart.service";
-  #   };
-  # };
-  # systemd.services.pia-vpn-restart = {
-  #   description = "Restart the PIA VPN";
-  #   requisite = [ "pia-vpn.service" ];
-  #   serviceConfig = {
-  #     Type = "oneshot";
-  #   };
-  #   script = ''
-  #     ${pkgs.systemd}/bin/systemctl restart pia-vpn.service
-  #   '';
-  # };
+  # restart the VPN once per day because it seems to just die occasionally
+  # TODO: monitor connection and use sd_notify to kill service for restart
+  systemd.timers.pia-vpn-restart = {
+    timerConfig = {
+      OnCalendar = "*-*-* 02:00:00";
+      # OnCalendar = "minutely";
+      Unit = "pia-vpn-restart.service";
+    };
+  };
+  systemd.services.pia-vpn-restart = {
+    description = "Restart the PIA VPN";
+    requisite = [ "pia-vpn.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+    };
+    script = ''
+      ${pkgs.systemd}/bin/systemctl restart pia-vpn.service
+    '';
+  };
 }
