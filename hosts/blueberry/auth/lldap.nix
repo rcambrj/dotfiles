@@ -33,7 +33,7 @@
     environment = {
       LLDAP_JWT_SECRET_FILE = config.age.secrets.lldap-jwt-secret.path;
       LLDAP_LDAPS_OPTIONS__ENABLED = "true";
-      LLDAP_LDAPS_OPTIONS__CERT_FILE = "" + flake.lib.ldap-cert;
+      LLDAP_LDAPS_OPTIONS__CERT_FILE = "${flake.lib.ldap-cert}";
       LLDAP_LDAPS_OPTIONS__KEY_FILE = config.age.secrets.lldap-cert-key.path;
       LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET = "true";
       LLDAP_SMTP_OPTIONS__FROM = "ldap@cambridge.me";
