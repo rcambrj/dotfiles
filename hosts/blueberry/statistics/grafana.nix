@@ -42,7 +42,7 @@
       };
       "auth.ldap" = {
         enabled = true;
-        config_file = toString ((pkgs.formats.toml { }).generate "grafana-ldap.toml" {
+        config_file = "" + ((pkgs.formats.toml { }).generate "grafana-ldap.toml" {
           servers = [{
             host = "ldap.home.cambridge.me";
             port = 6360;

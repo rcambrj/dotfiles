@@ -46,7 +46,7 @@
           host = "ldap.home.cambridge.me:6360";
           insecureNoSSL = false;
           insecureSkipVerify = false;
-          rootCA = builtins.toString flake.lib.ldap-cert;
+          rootCA = "" + flake.lib.ldap-cert;
           bindDN = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
           bindPW = "$LDAP_ADMIN_PASSWORD";
           userSearch = {
