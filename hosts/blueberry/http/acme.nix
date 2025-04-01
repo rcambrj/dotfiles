@@ -13,5 +13,11 @@
       dnsProvider = "cloudflare";
       environmentFile = config.age.secrets.acme-cloudflare.path;
     };
+    certs."fdm.cambridge.me" = {
+      domain = "fdm.cambridge.me";
+      extraDomainNames = [ "*.fdm.cambridge.me" ];
+      dnsProvider = "cloudflare";
+      environmentFile = config.age.secrets.acme-cloudflare.path;
+    };
   };
 }

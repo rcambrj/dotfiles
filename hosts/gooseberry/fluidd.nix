@@ -1,11 +1,11 @@
 { ... }: {
   services.fluidd = {
     enable = true;
-    hostName = "fdm.cambridge.me";
+    hostName = "gooseberry.cambridge.me";
     nginx = {
-      serverAliases = ["www.fdm.cambridge.me"];
+      serverAliases = ["www.gooseberry.cambridge.me"];
       forceSSL = true;
-      useACMEHost = "fdm.cambridge.me";
+      useACMEHost = "gooseberry.cambridge.me";
     };
   };
 }
