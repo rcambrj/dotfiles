@@ -28,11 +28,14 @@
         base_dn = "dc=cambridge,dc=me";
         bind_dn = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
         bind_password = "{secrets.ldap.bind_password}";
-        # group_dn = "cn=fdm,ou=groups,dc=cambridge,dc=me";
+        group_dn = "cn=fdm,ou=groups,dc=cambridge,dc=me";
       };
       authorization = {
         cors_domains = [ "https://fdm.cambridge.me" ];
-        force_logins = true;
+        force_logins = false;
+        trusted_clients = [
+          "127.0.0.1" # allow mobileraker-companion to connect without a key
+        ];
         default_source = "ldap";
       };
     };
@@ -40,4 +43,9 @@
 
   # disable logging to disk, rely on journald
   systemd.services.moonraker.environment.MOONRAKER_LOG_PATH = "/dev/null";
+
+  # restart moonraker when config changes (excludes secrets)
+  systemd.services.moonraker.restartTriggers = [
+    "${config.environment.etc."moonraker.cfg".source}"
+  ];
 }

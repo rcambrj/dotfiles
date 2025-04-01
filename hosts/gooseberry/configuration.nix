@@ -11,10 +11,11 @@
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-raspi
     ./http
+    ./fluidd.nix
     ./klipper.nix
+    ./mobileraker.nix
     ./moonraker.nix
     ./ustreamer.nix
-    ./fluidd.nix
   ];
 
   networking.hostName = "gooseberry";
