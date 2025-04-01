@@ -8,6 +8,7 @@ with lib;
     git
     htop
     iftop
+    iotop
     ncdu
     ripgrep
     tmate
@@ -15,6 +16,7 @@ with lib;
     tree
     unrar
     unzip
+    sysstat
     sysz
     vim
     wget
