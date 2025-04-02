@@ -38,6 +38,9 @@
         ];
         default_source = "ldap";
       };
+      octoprint_compat = {
+        # used by slicers, eg. OrcaSlicer
+      };
     };
   };
 

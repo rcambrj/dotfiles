@@ -1,4 +1,8 @@
 {
+  force_move = {
+    enable_force_move = true;
+  };
+
   "mcu" = {
     serial = "/dev/ttyAMA0";
     baud = 115200;
@@ -113,10 +117,11 @@
     min_temp = 0;
     max_temp = 250;
     # mandatory, but replaced with SAVE_CONFIG
-    control = "pid";
-    pid_Kp = "1";
-    pid_Ki = "1";
-    pid_Kd = "1";
+    # comment once calibrated to avoid SAVE_CONFIG breaking
+    # control = "pid";
+    # pid_Kp = "1";
+    # pid_Ki = "1";
+    # pid_Kd = "1";
   };
 
   "tmc2209 extruder" = {
@@ -137,10 +142,11 @@
     min_temp = 0;
     max_temp = 130;
     # mandatory, but replaced with SAVE_CONFIG
-    control = "pid";
-    pid_Kp = "1";
-    pid_Ki = "1";
-    pid_Kd = "1";
+    # comment once calibrated to avoid SAVE_CONFIG breaking
+    # control = "pid";
+    # pid_Kp = "1";
+    # pid_Ki = "1";
+    # pid_Kd = "1";
   };
 
   "heater_fan heatbreak_cooling_fan" = {
@@ -180,7 +186,7 @@
     # it'll do 300 but it sounds a bit ropey, go 200 max
     max_velocity = 200;
     max_accel = 3000;
-    max_z_velocity = 5;
+    max_z_velocity = 10;
     max_z_accel = 100;
   };
 
@@ -230,11 +236,10 @@
     deactivate_on_each_sample = false;
     x_offset = 2;
     y_offset = -41;
-    # z_offset = 1.45;
-    speed = 5;
+    speed = 5; # probing speed
+    # there is no non-probing speed config
     lift_speed = 5;
-    # don't use >1 samples https://github.com/Klipper3d/klipper/issues/6711
-    samples = 1;
+    samples = 2;
     samples_tolerance = 0.01;
     samples_tolerance_retries = 3;
     activate_gcode = [
@@ -246,7 +251,8 @@
       "PROBE_UP"
     ];
     # mandatory, but replaced with SAVE_CONFIG
-    z_offset = 0;
+    # comment once calibrated to avoid SAVE_CONFIG breaking
+    # z_offset = 0;
   };
 
   bed_mesh = {
@@ -283,8 +289,9 @@
   #   switch_pin = "^PC2";
   # };
 
-  input_shaper = {
-    shaper_freq_x = 29.6;
-    shaper_freq_y = 32.3;
-  };
+  # TODO: calibrate this
+  # input_shaper = {
+  #   shaper_freq_x = 29.6;
+  #   shaper_freq_y = 32.3;
+  # };
 }

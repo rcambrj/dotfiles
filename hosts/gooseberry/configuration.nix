@@ -1,4 +1,4 @@
-{ flake, inputs, ... }: {
+{ flake, inputs, pkgs, ... }: {
   imports = [
     # inputs.nixos-hardware.nixosModules.raspberry-pi-3
     # but without UART console:
@@ -84,4 +84,18 @@
       };
     };
   };
+
+  systemd.services.can-net-txqueuelen = {
+    serviceConfig = {
+      Type = "oneshot";
+    };
+    wantedBy = [ "sys-subsystem-net-devices-can0.device" ];
+    script = ''
+      ${pkgs.nettools}/bin/ifconfig can0 txqueuelen 128
+    '';
+  };
+
+  environment.systemPackages = with pkgs; [
+    dfu-util
+  ];
 }
