@@ -50,8 +50,8 @@
     enable = true;
     settings = {
       charger = {
-        governor = "ondemand";
-        turbo = "auto";
+        governor = "powersave";
+        turbo = "never";
       };
     };
   };
@@ -91,11 +91,9 @@
     };
     wantedBy = [ "sys-subsystem-net-devices-can0.device" ];
     script = ''
-      ${pkgs.nettools}/bin/ifconfig can0 txqueuelen 128
+      ${pkgs.nettools}/bin/ifconfig can0 txqueuelen 1024
     '';
   };
 
-  environment.systemPackages = with pkgs; [
-    dfu-util
-  ];
+  boot.consoleLogLevel = pkgs.lib.mkDefault 7;
 }
