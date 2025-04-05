@@ -1,6 +1,6 @@
-{ config, perSystem, pkgs, ... }: let
+{ config, flake, perSystem, pkgs, ... }: let
   # flash with:
-  # sudo dfu-util -a 0 -s 0x08000000:mass-erase:force:leave -D /etc/klipper-firmwares/
+  # sudo dfu-util -a 0 -s 0x08000000:mass-erase:force:leave -D /etc/klipper/firmwares/
   firmwares = {
     btt-skr = pkgs.klipper-firmware.override {
       mcu = "btt-skr";
@@ -15,14 +15,20 @@
       firmwareConfig = ./klipper-ucan.config;
     };
   };
+
+  format = flake.lib.format-klipper pkgs;
 in {
   environment.systemPackages = with pkgs; [
     dfu-util
     klipper-genconf
+    can-utils
   ];
 
   environment.etc = {
-    fluidd-config = {
+    "klipper/firmwares/btt-skr".source = firmwares.btt-skr;
+    "klipper/firmwares/btt-ebb".source = firmwares.btt-ebb;
+    "klipper/firmwares/ucan".source = firmwares.ucan;
+    "klipper/fluidd-config" = {
       source = perSystem.self.fluidd-config.overrideAttrs (attrs: {
         installPhase = attrs.installPhase + ''
 
@@ -31,9 +37,9 @@ in {
           '';
       });
     };
-    "klipper-firmwares/btt-skr".source = firmwares.btt-skr;
-    "klipper-firmwares/btt-ebb".source = firmwares.btt-ebb;
-    "klipper-firmwares/ucan".source = firmwares.ucan;
+    "klipper/printer.cfg" = {
+      source = format.generate "klipper/printer.cfg" (import ./printer.cfg.nix);
+    };
   };
 
   services.klipper = {
@@ -43,8 +49,9 @@ in {
     logFile = null; # log to stdout, rely on journald
     configDir = "${config.services.moonraker.stateDir}/config"; # use the same dir so that fluidd shows printer.cfg
     settings = {
-      "include /etc/fluidd-config/client.cfg" = {};
-    } // import ./printer.cfg.nix;
+      "include /etc/klipper/fluidd-config/client.cfg" = {};
+      "include /etc/klipper/printer.cfg" = {};
+    };
     firmwares = {
       # don't use this because it wants all MCUs to have a serial attr in services.klipper.settings
       # so not suitable for canbus or usb-to-can devices
