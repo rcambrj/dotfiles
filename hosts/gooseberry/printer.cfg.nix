@@ -9,8 +9,6 @@
     restart_method = "command";
   };
 
-  # U2C: d6f23cc8ba5b
-  # EBB: 463a079eacd1
   "mcu EBB" = {
     canbus_uuid = "463a079eacd1";
   };
