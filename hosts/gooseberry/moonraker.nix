@@ -44,11 +44,15 @@
     };
   };
 
-  # disable logging to disk, rely on journald
-  systemd.services.moonraker.environment.MOONRAKER_LOG_PATH = "/dev/null";
+  systemd.services.moonraker = {
+    # disable logging to disk, rely on journald
+    environment.MOONRAKER_LOG_PATH = "/dev/null";
 
-  # restart moonraker when config changes (excludes secrets)
-  systemd.services.moonraker.restartTriggers = [
-    "${config.environment.etc."moonraker.cfg".source}"
-  ];
+    # restart moonraker when config changes (excludes secrets)
+    restartTriggers = [
+      "${config.environment.etc."moonraker.cfg".source}"
+    ];
+
+    serviceConfig.Restart = "always";
+  };
 }

@@ -1,5 +1,6 @@
 { config, flake, perSystem, pkgs, ... }: let
   # flash with:
+  # sudo dfu-util -l
   # sudo dfu-util -a 0 -s 0x08000000:mass-erase:force:leave -D /etc/klipper/firmwares/
   firmwares = {
     btt-skr = pkgs.klipper-firmware.override {
@@ -57,4 +58,6 @@ in {
       # so not suitable for canbus or usb-to-can devices
     };
   };
+
+  systemd.services.klipper.serviceConfig.Restart = "always";
 }
