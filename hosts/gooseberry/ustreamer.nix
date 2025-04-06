@@ -19,13 +19,13 @@ in {
     extraArgs = [
       "--resolution=2560x1440"
       "--desired-fps=15"
-      "--device-timeout=2"
       "--format=MJPEG"
 
       # hardware offloading
       # "--encoder=M2M-VIDEO" # GPU-accelerated MJPEG encoding
       "--encoder=HW" # Use pre-encoded MJPEG frames directly from camera hardware
 
+      # "--slowdown" # no effect because minimum framerate is 15
       # "--quality=80" # not supported by this camera
     ];
   };
