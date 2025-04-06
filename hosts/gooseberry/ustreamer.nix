@@ -21,6 +21,7 @@ in {
       "--desired-fps=15"
       "--device-timeout=2"
       "--format=MJPEG"
+      "--drop-same-frames"
 
       # hardware offloading
       # "--encoder=M2M-VIDEO" # GPU-accelerated MJPEG encoding
