@@ -18,6 +18,8 @@ with lib;
     unzip
     sysstat
     sysz
+    usbtop
+    usbutils
     vim
     wget
   ];
