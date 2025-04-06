@@ -27,9 +27,9 @@
         "light.hallway_1_light" = "off";
         "light.hallway_2_light" = "off";
         "light.living_room_west_light" = "off";
-        "switch.living_room_east_light" = "off";
+        "light.living_room_east_light" = "off";
         "light.living_room_west_lamp" = "off";
-        "light.living_room_east_lamp" = "off";
+        "switch.living_room_east_lamp" = "off";
         "light.kitchen_light" = "off";
         "light.bathroom_light" = "off";
         "light.bathroom_mirror_light" = "off";
@@ -42,9 +42,9 @@
       name = "movie";
       entities = {
         "light.living_room_west_light" = "off";
-        "switch.living_room_east_light" = "off";
+        "light.living_room_east_light" = "off";
         "light.living_room_west_lamp" = "on";
-        "light.living_room_east_lamp" = "on";
+        "switch.living_room_east_lamp" = "on";
         "light.kitchen_light" = "off";
       };
     }
