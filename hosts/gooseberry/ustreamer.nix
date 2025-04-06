@@ -21,7 +21,6 @@ in {
       "--desired-fps=15"
       "--device-timeout=2"
       "--format=MJPEG"
-      "--drop-same-frames"
 
       # hardware offloading
       # "--encoder=M2M-VIDEO" # GPU-accelerated MJPEG encoding
@@ -30,6 +29,8 @@ in {
       # "--quality=80" # not supported by this camera
     ];
   };
+
+  systemd.services.ustreamer.serviceConfig.Restart = "always";
 
   services.fluidd.nginx.locations = {
     "/webcam/snapshot" = {
