@@ -15,4 +15,6 @@
       };
     };
   };
+
+  systemd.services.mobileraker-companion.serviceConfig.Restart = "always";
 }
