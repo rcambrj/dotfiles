@@ -23,6 +23,7 @@ in {
     dfu-util
     klipper-genconf
     can-utils
+    uhubctl # sudo uhubctl -a cycle -l 1-1 -p `grep "CAN adapter" | sed -En 's/^Bus [0-9]+ Device 0*([0-9]+):.*/\1/p'`
   ];
 
   environment.etc = {
