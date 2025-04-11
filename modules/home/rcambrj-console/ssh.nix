@@ -53,7 +53,7 @@ in {
         };
       };
       "gooseberry" = {
-        # 3d printer (raspi 3)
+        # ?? (raspi 3)
         hostname =  "gooseberry.cambridge.me";
         user = "nixos";
       };
@@ -62,9 +62,10 @@ in {
         hostname =  "lingonberry.cambridge.me";
         user = "pi";
       };
-      "chromebook" = {
-        hostname =  "chromebook.cambridge.me";
-        user = "chromebook";
+      "elderberry" = {
+        # 3d printer (dell wyse)
+        hostname = "elderberry.cambridge.me";
+        user = "nixos";
       };
       "blackberry" = {
         # paper printer (raspi zero w)

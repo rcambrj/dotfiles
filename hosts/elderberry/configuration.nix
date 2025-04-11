@@ -1,15 +1,13 @@
 { flake, inputs, pkgs, ... }: {
   imports = [
-    # inputs.nixos-hardware.nixosModules.raspberry-pi-3
-    # but without UART console:
-    ./hardware-raspberry-pi-3.nix
+    "${toString modulesPath}/profiles/all-hardware.nix"
 
     inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
-    flake.nixosModules.config-raspi
+    flake.nixosModules.config-intel
     ./http
     ./fluidd.nix
     ./klipper.nix
@@ -18,7 +16,7 @@
     ./ustreamer.nix
   ];
 
-  networking.hostName = "gooseberry";
+  networking.hostName = "elderberry";
   age.secrets = {
     acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
     ldap-admin-ro-password.file = ../../secrets/ldap-admin-ro-password.age;
