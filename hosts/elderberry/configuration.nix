@@ -21,28 +21,6 @@
     acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
     ldap-admin-ro-password.file = ../../secrets/ldap-admin-ro-password.age;
   };
-  boot.pi-loader = {
-    bootMode = "direct";
-    configTxt = {
-      all = {
-        gpu_mem = 16;
-      };
-      pi3 = {
-        dtoverlay = [
-          # need the full UART on GPIO 14+15 for the BTT SKR
-          # https://www.raspberrypi.com/documentation/computers/configuration.html#uarts-and-device-tree
-          # https://raspberrypi.stackexchange.com/questions/45570/-/45571#45571
-          # https://github.com/Ysurac/raspberry_kernel_mptcp/blob/master/arch/arm/boot/dts/overlays/pi3-disable-bt-overlay.dts
-          # https://github.com/Ysurac/raspberry_kernel_mptcp/blob/master/arch/arm/boot/dts/overlays/pi3-miniuart-bt-overlay.dts
-          # weird behaviour:
-          # * "disable-bt" does not remove ttyS0
-          # * "miniuart-bt" removes ttyS0
-          # don't need bluetooth, so moving on.
-          "disable-bt"
-        ];
-      };
-    };
-  };
 
   services.auto-cpufreq = {
     enable = true;
