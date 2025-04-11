@@ -1,4 +1,4 @@
-{ flake, inputs, pkgs, ... }: {
+{ flake, inputs, modulesPath, pkgs, ... }: {
   imports = [
     "${toString modulesPath}/profiles/all-hardware.nix"
 
