@@ -42,26 +42,6 @@
     install dw_dmac_core /bin/true
   '';
 
-  fileSystems = {
-    # this machine will not have valuable persistent data,
-    # so mount the persistent directories from the sdcard.
-    # saves using a usb stick for the agenix secret which
-    # consumes valuable usb bandwidth.
-    # rest of the configuration can remain identical.
-    "/var/lib" = {
-      device = pkgs.lib.mkForce "/mnt/root/var/lib";
-      fsType = pkgs.lib.mkForce "auto";
-      options = pkgs.lib.mkForce [ "defaults" "bind" ];
-      depends = [ "/mnt/root" ];
-    };
-    "/mnt/conf" = {
-      device = pkgs.lib.mkForce "/mnt/root/var/conf";
-      fsType = pkgs.lib.mkForce "auto";
-      options = pkgs.lib.mkForce [ "defaults" "bind" ];
-      depends = [ "/mnt/root" ];
-    };
-  };
-
   systemd.tmpfiles.settings = {
     "10-var-conf"."/var/conf".d = {
       # this is important during image creation.
@@ -70,7 +50,6 @@
       mode = "0700";
     };
   };
-
 
   systemd.network.enable = true;
   networking.useDHCP = false;
