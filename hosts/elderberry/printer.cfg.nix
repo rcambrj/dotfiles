@@ -4,7 +4,7 @@
   };
 
   "mcu" = {
-    serial = "/dev/ttyAMA0";
+    serial = "/dev/serial/by-id/usb-Klipper_stm32g0b0xx_11002C000D50415833323520-if00";
     baud = 115200;
     restart_method = "command";
   };
@@ -159,8 +159,9 @@
     pin = "EBB: PA0";
   };
 
-  "temperature_sensor Pi" = {
+  "temperature_sensor Host" = {
     sensor_type = "temperature_host";
+    sensor_path = "/sys/class/thermal/thermal_zone3/temp";
     min_temp = 10;
     max_temp = 100;
   };

@@ -12,7 +12,7 @@
     copyChannel = false;
     diskSize = "auto";
     additionalSpace = "64M";
-    bootSize = "1G";
+    bootSize = "256M";
   });
 
   boot.loader = {
@@ -60,4 +60,8 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    lm_sensors
+  ];
 }
