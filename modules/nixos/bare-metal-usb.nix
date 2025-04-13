@@ -58,6 +58,8 @@ in {
   xdg.icons.enable = mkDefault false;
   xdg.mime.enable = mkDefault false;
   xdg.sounds.enable = mkDefault false;
+  fonts.fontconfig.enable = mkDefault false;
+  documentation.man.enable = mkDefault false;
 
   services.openssh.hostKeys = [{
     type = "ed25519";
