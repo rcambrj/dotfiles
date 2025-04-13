@@ -13,7 +13,7 @@
 
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "https://gooseberry.cambridge.me";
+      proxyPass = "https://elderberry.cambridge.me";
     };
 
     locations."/webcam/" = {
@@ -24,7 +24,7 @@
       # https://user:<password>@fdm.cambridge.me/webcam/stream
       # https://user:<password>@fdm.cambridge.me/webcam/snapshot
       proxyWebsockets = true;
-      proxyPass = "http://gooseberry.cambridge.me:22678/";
+      proxyPass = "http://elderberry.cambridge.me:22678/";
       basicAuthFile = "/etc/fdm-camera-basic-auth";
     };
   };
