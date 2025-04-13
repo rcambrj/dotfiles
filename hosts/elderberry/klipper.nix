@@ -1,12 +1,14 @@
 { config, flake, perSystem, pkgs, ... }: let
-  # flash with:
-  # sudo dfu-util -l
-  # sudo dfu-util -a 0 -s 0x08000000:mass-erase:force:leave -D /etc/klipper/firmwares/
   firmwares = {
+    # flash with firmware.bin on sd card
     btt-skr = pkgs.klipper-firmware.override {
       mcu = "btt-skr";
       firmwareConfig = ./klipper-btt-skr.config;
     };
+
+    # flash with:
+    # sudo dfu-util -l
+    # sudo dfu-util -a 0 -s 0x08000000:mass-erase:force:leave -D /etc/klipper/firmwares/
     btt-ebb = pkgs.klipper-firmware.override {
       mcu = "btt-ebb";
       firmwareConfig = ./klipper-btt-ebb.config;
@@ -21,7 +23,7 @@
 in {
   environment.systemPackages = with pkgs; [
     dfu-util
-    klipper-genconf
+    klipper-genconf # make menuconfig
     can-utils
     uhubctl # sudo uhubctl -a cycle -l 1-1 -p `grep "CAN adapter" | sed -En 's/^Bus [0-9]+ Device 0*([0-9]+):.*/\1/p'`
   ];
