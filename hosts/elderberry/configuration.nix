@@ -32,6 +32,16 @@
     };
   };
 
+  boot.extraModprobeConfig = ''
+    # fix Dell Wyse 3040 hanging on reboot
+    # https://github.com/up-board/up-community/wiki/Ubuntu_20.04#hang-on-shutdown-or-reboot-for-up-board
+    # https://www.reddit.com/r/Atomic_Pi/wiki/ubuntu/
+    blacklist dw_dmac
+    blacklist dw_dmac_core
+    install dw_dmac /bin/true
+    install dw_dmac_core /bin/true
+  '';
+
   fileSystems = {
     # this machine will not have valuable persistent data,
     # so mount the persistent directories from the sdcard.
