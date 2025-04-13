@@ -71,4 +71,7 @@ in {
   environment.systemPackages = [
     updateScript
   ];
+  boot.initrd.availableKernelModules = [
+    "mmc_block" "sdhci_acpi"
+  ];
 }
