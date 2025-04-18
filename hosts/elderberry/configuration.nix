@@ -22,6 +22,14 @@
     ldap-admin-ro-password.file = ../../secrets/ldap-admin-ro-password.age;
   };
 
+  fileSystems = {
+    "/var/lib" = {
+      device = "/dev/disk/by-label/NIXOSSTATE";
+      fsType = "ext4";
+      # neededForBoot = true;
+    };
+  };
+
   services.auto-cpufreq = {
     enable = true;
     settings = {
