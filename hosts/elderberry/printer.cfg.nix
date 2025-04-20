@@ -79,14 +79,33 @@
     tx_pin = "PC10";
     uart_address = 1;
     # single Z
-    # run_current = 0.580;
+    run_current = 0.580;
     # dual Z
-    run_current = 1.16;
+    # run_current = 1.16;
+    stealthchop_threshold = 999999;
+  };
+
+  stepper_z1 = {
+    step_pin = "PB3";
+    dir_pin = "PB4";
+    enable_pin = "!PD1";
+    microsteps = 16;
+    rotation_distance = 8;
+  };
+
+  "tmc2209 stepper_z1" = {
+    uart_pin = "PC11";
+    tx_pin = "PC10";
+    uart_address = 3;
+    # single Z
+    run_current = 0.580;
+    # dual Z
+    # run_current = 1.16;
     stealthchop_threshold = 999999;
   };
 
   safe_z_home = {
-  # 220 / 2 - x/y offset
+    # 220 / 2 - x/y offset
     home_xy_position = "110, 152";
     speed = 200;
     z_hop = 5;
@@ -94,13 +113,6 @@
   };
 
   extruder = {
-    # SKR
-    # step_pin = "PB3";
-    # dir_pin = "!PB4";
-    # enable_pin = "!PD1";
-    # heater_pin = "PC8";
-    # sensor_pin = "PA0";
-    # EBB
     step_pin = "EBB: PD0";
     dir_pin = "!EBB: PD1";
     enable_pin = "!EBB: PD2";
@@ -123,11 +135,6 @@
   };
 
   "tmc2209 extruder" = {
-    # SKR
-    # uart_pin = "PC11";
-    # tx_pin = "PC10";
-    # uart_address = 3;
-    # EBB
     uart_pin = "EBB: PA15";
     run_current = 0.650;
     stealthchop_threshold = 999999;
@@ -202,9 +209,6 @@
   };
 
   "output_pin probe_enable" = {
-    # SKR
-    # pin = "PA1";
-    # EBB
     pin = "EBB: PB9";
     value = 0;
   };

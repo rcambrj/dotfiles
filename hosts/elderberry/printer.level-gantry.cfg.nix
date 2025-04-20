@@ -3,10 +3,10 @@
   "gcode_macro MECHANICAL_GANTRY_CALIBRATION" = {
     gcode = [
       ### config
-      "{% set low_current        = 0.1 %}"     # set this very low
-      "{% set low_current_travel = 10.0 %}"    # distance to travel beyond z_max
-      "{% set low_current_speed  = 6 * 60 %}"  # z travel speed
-      "{% set return_to_z        = 50 %}"      # fast return to this z before homing slowly
+      "{% set low_current        = 0.09 %}" # set this very low
+      "{% set low_current_travel = 10 %}"   # distance to travel beyond z_max
+      "{% set low_current_speed  = 3 %}"    # z travel speed
+      "{% set return_to_z        = 10 %}"   # fast return to this z before homing slowly
       ### config
 
       "{% set oldcurrent = printer.configfile.settings[\"tmc2209 stepper_z\"].run_current %}"
@@ -34,9 +34,9 @@
       "G4 P200" # wait
       "SET_KINEMATIC_POSITION Z={z_max - 2 - low_current_travel}" # force the low-level kinematic code to believe the toolhead is lower than it is
       "G4 P200" # wait
-      "G1 Z{z_max - 2} F{low_current_speed}" # move up by low_current_travel
+      "G1 Z{z_max - 2} F{low_current_speed * 60}" # move up by low_current_travel
       "G4 P200" # wait
-      "G1 Z{z_max - 2 - low_current_travel} F{low_current_speed}" # move back down before reverting current
+      "G1 Z{z_max - 2 - low_current_travel} F{low_current_speed * 60}" # move back down before reverting current
       "G4 P200" # wait
 
       # reset Z current
