@@ -17,6 +17,8 @@ in {
     # https://github.com/pikvm/ustreamer/blob/afd305e87dd2927d8e65da77f5ccfd0c7c119bd3/man/ustreamer.1
     # https://github.com/mainsail-crew/crowsnest/blob/d0c2ca5d1613d81cdb17cded1438d4bc5d6b0995/libs/ustreamer.sh#L59
     extraArgs = [
+      "--device=/dev/video0"
+
       # speeds measured with `usbtop`
       # "--resolution=640x360"   # ~6Mb/s
       # "--resolution=1024x576"  # ~12Mb/s
