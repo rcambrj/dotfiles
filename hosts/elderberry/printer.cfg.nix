@@ -71,7 +71,7 @@
     rotation_distance = 8;
     endstop_pin = "probe:z_virtual_endstop";
     position_min = -5;
-    position_max = 300;
+    position_max = 235;
   };
 
   "tmc2209 stepper_z" = {
@@ -274,6 +274,14 @@
     ];
   };
 
+  # make these macros appear in fluidd
+  "gcode_macro MACRO_SCREWS_TILT_CALCULATE".gcode = ["SCREWS_TILT_CALCULATE"];
+  "gcode_macro MACRO_PROBE_CALIBRATE".gcode = ["PROBE_CALIBRATE"];
+  "gcode_macro MACRO_AXIS_TWIST_COMPENSATION_CALIBRATE".gcode = ["AXIS_TWIST_COMPENSATION_CALIBRATE"];
+
+  # other macros
+  "gcode_macro CALIBRATE_PID_EXTRUDER".gcode = ["PID_CALIBRATE HEATER=extruder TARGET=220"];
+  "gcode_macro CALIBRATE_PID_BED".gcode = ["PID_CALIBRATE HEATER=heater_bed TARGET=65"];
 
   # TODO: put this back on
   # "filament_switch_sensor runout" = {

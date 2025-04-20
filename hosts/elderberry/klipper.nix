@@ -32,18 +32,18 @@ in {
     "klipper/firmwares/btt-skr".source = firmwares.btt-skr;
     "klipper/firmwares/btt-ebb".source = firmwares.btt-ebb;
     "klipper/firmwares/ucan".source = firmwares.ucan;
-    "klipper/fluidd-config" = {
-      source = perSystem.self.fluidd-config.overrideAttrs (attrs: {
-        installPhase = attrs.installPhase + ''
+    "klipper/fluidd-config".source = perSystem.self.fluidd-config.overrideAttrs (attrs: {
+      installPhase = attrs.installPhase + ''
 
-            substituteInPlace $out/client.cfg \
-            --replace-fail 'path: ~/printer_data/gcodes' 'path: ${config.services.moonraker.stateDir}/gcodes'
-          '';
-      });
-    };
-    "klipper/printer.cfg" = {
-      source = format.generate "klipper/printer.cfg" (import ./printer.cfg.nix);
-    };
+          substituteInPlace $out/client.cfg \
+          --replace-fail 'path: ~/printer_data/gcodes' 'path: ${config.services.moonraker.stateDir}/gcodes'
+        '';
+    });
+    "klipper/printer.level-gantry.cfg".source = format.generate "klipper/printer.level-gantry.cfg" (import ./printer.level-gantry.cfg.nix);
+    "klipper/printer.cfg".source = format.generate "klipper/printer.cfg" ((import ./printer.cfg.nix) // {
+      "include /etc/klipper/fluidd-config/client.cfg" = {};
+      "include /etc/klipper/printer.level-gantry.cfg" = {};
+    });
   };
 
   services.klipper = {
@@ -53,7 +53,6 @@ in {
     logFile = null; # log to stdout, rely on journald
     configDir = "${config.services.moonraker.stateDir}/config"; # use the same dir so that fluidd shows printer.cfg
     settings = {
-      "include /etc/klipper/fluidd-config/client.cfg" = {};
       "include /etc/klipper/printer.cfg" = {};
     };
     firmwares = {
