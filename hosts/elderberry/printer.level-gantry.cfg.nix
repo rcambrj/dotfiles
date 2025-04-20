@@ -1,6 +1,6 @@
 # based on https://github.com/strayr/strayr-k-macros/blob/fc6dc939ab97481086aa1fb9d96f093ee63775c8/mechanical_level_tmc2209.cfg
 {
-  "gcode_macro MECHANICAL_GANTRY_CALIBRATION" = {
+  "gcode_macro CALIBRATE_GANTRY" = {
     gcode = [
       ### config
       "{% set low_current        = 0.09 %}" # set this very low

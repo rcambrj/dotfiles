@@ -39,11 +39,13 @@ in {
           --replace-fail 'path: ~/printer_data/gcodes' 'path: ${config.services.moonraker.stateDir}/gcodes'
         '';
     });
-    "klipper/printer.level-gantry.cfg".source = format.generate "klipper/printer.level-gantry.cfg" (import ./printer.level-gantry.cfg.nix);
-    "klipper/printer.cfg".source = format.generate "klipper/printer.cfg" ((import ./printer.cfg.nix) // {
-      "include /etc/klipper/fluidd-config/client.cfg" = {};
-      "include /etc/klipper/printer.level-gantry.cfg" = {};
-    });
+    "klipper/printer.cfg".source = format.generate "klipper/printer.cfg" (
+      (import ./printer.cfg.nix) //
+      (import ./printer.level-gantry.cfg.nix) //
+      {
+        "include /etc/klipper/fluidd-config/client.cfg" = {};
+      }
+    );
   };
 
   services.klipper = {
