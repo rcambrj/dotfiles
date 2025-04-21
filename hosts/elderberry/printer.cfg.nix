@@ -235,8 +235,9 @@ in {
 
   axis_twist_compensation = {
     speed = 100;
-    calibrate_start_x = 0;
-    calibrate_end_x = 220;
+    # move the nozzle to the correct location and record coordinates
+    calibrate_start_x = 0 + probe_offset_x; # cannot be zero
+    calibrate_end_x = 225;
     calibrate_y = 110;
   };
 
@@ -269,7 +270,7 @@ in {
     # speed = 25;
     # probe_count = 3;
     speed = 150;
-    probe_count = 15;
+    probe_count = 9;
     horizontal_move_z = 2;
     algorithm = "bicubic";
     # move the nozzle to the correct location and record coordinates
