@@ -1,4 +1,11 @@
-{
+let
+  # bed spec: 235x235
+  max_x = 225; # will go to 245 beyond the bed
+  max_y = 225; # artificially high to permit the probe to go as far as possible, nozzle hits bed edge at 214
+  max_z = 235;
+  probe_offset_x = 2;
+  probe_offset_y = -41;
+in {
   force_move = {
     enable_force_move = true;
   };
@@ -29,7 +36,7 @@
     rotation_distance = 40;
     endstop_pin = "^PC0";
     position_endstop = 0;
-    position_max = 245;
+    position_max = max_x;
     homing_speed = 50;
     second_homing_speed = 10;
   };
@@ -50,8 +57,8 @@
     rotation_distance = 40;
     endstop_pin = "^PC1";
     position_endstop = 0;
-    position_max = 230;
-    homing_speed = 50;
+    position_max = max_y;
+    homing_speed = 30; # go slowly because the switch is attached with t-slots
     second_homing_speed = 10;
   };
 
@@ -71,7 +78,7 @@
     rotation_distance = 8;
     endstop_pin = "probe:z_virtual_endstop";
     position_min = -5;
-    position_max = 235;
+    position_max = max_z;
   };
 
   "tmc2209 stepper_z" = {
@@ -105,8 +112,7 @@
   };
 
   safe_z_home = {
-    # 220 / 2 - x/y offset
-    home_xy_position = "110, 152";
+    home_xy_position = "${toString (max_x / 2)}, ${toString (max_y / 2)}";
     speed = 200;
     z_hop = 5;
     z_hop_speed = 5;
@@ -214,31 +220,31 @@
   };
 
   screws_tilt_adjust = {
-    # toolhead cannot go back far enough to reach rear screws, go max instead.
+    # move the probe to the correct location and record coordinates
     screw1_name = "rear left";
-    screw1 = "28, 230";
+    screw1 = "28, 221";
     screw2_name = "front left";
-    screw2 = "28, 77";
+    screw2 = "28, 51";
     screw3_name = "front right";
-    screw3 = "197, 77";
+    screw3 = "197, 51";
     screw4_name = "rear right";
-    screw4 = "197, 230";
+    screw4 = "197, 221";
     speed = 200;
     screw_thread = "CW-M4";
   };
 
   axis_twist_compensation = {
     speed = 100;
-    calibrate_start_x = 20;
-    calibrate_end_x = 210;
-    calibrate_y = 112.5;
+    calibrate_start_x = 0;
+    calibrate_end_x = 220;
+    calibrate_y = 110;
   };
 
   probe = {
     pin = "^!EBB: PB8";
     deactivate_on_each_sample = false;
-    x_offset = 2;
-    y_offset = -41;
+    x_offset = probe_offset_x;
+    y_offset = probe_offset_y;
     speed = 5; # probing speed
     # there is no non-probing speed config
     lift_speed = 5;
@@ -262,13 +268,13 @@
     # debug slowly
     # speed = 25;
     # probe_count = 3;
-    speed = 200;
-    probe_count = 9;
+    speed = 150;
+    probe_count = 15;
     horizontal_move_z = 2;
     algorithm = "bicubic";
-    # this is probe position (gets automatically adjusted by probe offset)
-    mesh_min = "10,20";
-    mesh_max = "220,189";
+    # move the nozzle to the correct location and record coordinates
+    mesh_min = "${toString (0 + probe_offset_x)},0";
+    mesh_max = "225,${toString (max_y + probe_offset_y)}";
   };
 
   "delayed_gcode bed_mesh_init" = {

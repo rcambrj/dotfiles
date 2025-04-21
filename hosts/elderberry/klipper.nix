@@ -25,7 +25,11 @@ in {
     dfu-util
     klipper-genconf # make menuconfig
     can-utils
-    uhubctl # sudo uhubctl -a cycle -l 1-1 -p `grep "CAN adapter" | sed -En 's/^Bus [0-9]+ Device 0*([0-9]+):.*/\1/p'`
+    uhubctl
+    # reset mcu
+    # sudo uhubctl -a cycle -l 1-1 -p `grep "stm32g0b0xx" | sed -En 's/^Bus [0-9]+ Device 0*([0-9]+):.*/\1/p'`
+    # reset can
+    # sudo uhubctl -a cycle -l 1-1 -p `grep "CAN adapter" | sed -En 's/^Bus [0-9]+ Device 0*([0-9]+):.*/\1/p'`
   ];
 
   environment.etc = {
