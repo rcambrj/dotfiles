@@ -5,26 +5,27 @@
     autosuggestion.enable = false;
     syntaxHighlighting.enable = true;
     enableCompletion = true;
-    # initExtraFirst = "";
-    initExtraBeforeCompInit = builtins.readFile ./autocomplete.zsh;
-    initExtra = ''
-      bindkey -e
-      bindkey "^[[3~" delete-char                    # Key Del
-      bindkey "^[[5~" beginning-of-buffer-or-history # Key Page Up
-      bindkey "^[[6~" end-of-buffer-or-history       # Key Page Down
-      bindkey "^[[H" beginning-of-line               # Key Home
-      bindkey "^[[F" end-of-line                     # Key End
-      bindkey "^[^[[C" forward-word                  # Key Alt + Right
-      bindkey "^[^[[D" backward-word                 # Key Alt + Left
+    initContent = pkgs.lib.mkMerge [
+      (pkgs.lib.mkOrder 550 (builtins.readFile ./autocomplete.zsh))
+      (pkgs.lib.mkOrder 1000 ''
+        bindkey -e
+        bindkey "^[[3~" delete-char                    # Key Del
+        bindkey "^[[5~" beginning-of-buffer-or-history # Key Page Up
+        bindkey "^[[6~" end-of-buffer-or-history       # Key Page Down
+        bindkey "^[[H" beginning-of-line               # Key Home
+        bindkey "^[[F" end-of-line                     # Key End
+        bindkey "^[^[[C" forward-word                  # Key Alt + Right
+        bindkey "^[^[[D" backward-word                 # Key Alt + Left
 
-      set-window-title() {
-        window_title="\e]0;''${''${PWD/#"$HOME"/~}/projects/p}\a"
-        echo -ne "$window_title"
-      }
+        set-window-title() {
+          window_title="\e]0;''${''${PWD/#"$HOME"/~}/projects/p}\a"
+          echo -ne "$window_title"
+        }
 
-      set-window-title
-      add-zsh-hook precmd set-window-title
-    '';
+        set-window-title
+        add-zsh-hook precmd set-window-title
+      '')
+    ];
     history = {
       ignoreAllDups = true;
     };
