@@ -172,7 +172,23 @@ in {
     pin = "EBB: PA0";
   };
 
-  "temperature_sensor Host" = {
+  "temperature_sensor Host-CPU" = {
+    sensor_type = "temperature_host";
+    sensor_path = "/sys/class/thermal/thermal_zone1/temp";
+    min_temp = 10;
+    max_temp = 100;
+  };
+
+  "temperature_sensor Host-DTS0" = {
+    # TODO: where is this sensor?
+    sensor_type = "temperature_host";
+    sensor_path = "/sys/class/thermal/thermal_zone2/temp";
+    min_temp = 10;
+    max_temp = 100;
+  };
+
+  "temperature_sensor Host-DTS1" = {
+    # TODO: where is this sensor?
     sensor_type = "temperature_host";
     sensor_path = "/sys/class/thermal/thermal_zone3/temp";
     min_temp = 10;
