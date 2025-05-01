@@ -26,6 +26,8 @@ in {
     gnutar zstd
     htop
     iftop
+    k9s
+    kubectl
     nodePackages.localtunnel
     ncdu
     nix-output-monitor
