@@ -11,7 +11,9 @@
   services.oauth2-proxy.nginx.virtualHosts."prometheus.home.cambridge.me" = {};
 
   services.prometheus = {
-    enable = true;
+    # fails to build.
+    # TODO: reenable when stats are meaningful
+    enable = false;
 
     scrapeConfigs = [
       {
