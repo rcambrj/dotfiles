@@ -5,6 +5,9 @@
     autosuggestion.enable = false;
     syntaxHighlighting.enable = true;
     enableCompletion = true;
+    envExtra = ''
+      KUBECTL_NS=default
+    '';
     initContent = pkgs.lib.mkMerge [
       (pkgs.lib.mkOrder 550 (builtins.readFile ./autocomplete.zsh))
       (pkgs.lib.mkOrder 1000 ''
@@ -44,6 +47,9 @@
       etch = "sudo dd status=progress bs=4M conv=fsync"; # if=foo.img of=/dev/disk69 && sync
 
       cpufreq = "watch -n.1 \"grep \\\"^[c]pu MHz\\\" /proc/cpuinfo\"";
+
+      k = "kubectl";
+      kk = "k -n $KUBECTL_NS";
     };
   };
 
