@@ -20,12 +20,26 @@ in {
     canbus_uuid = "463a079eacd1";
   };
 
-  adxl345 = {
+  "adxl345 x" = {
     cs_pin = "EBB: PB12";
     spi_software_sclk_pin = "EBB: PB10";
     spi_software_mosi_pin = "EBB: PB11";
     spi_software_miso_pin = "EBB: PB2";
-    axes_map = "x,y,z";
+    axes_map = "z,-y,x";
+  };
+
+  "adxl345 y" = {
+    cs_pin                = "PD2"; # CS
+    spi_software_miso_pin = "PD3"; # SDO
+    spi_software_mosi_pin = "PD4"; # SDA
+    spi_software_sclk_pin = "PD5"; # SCL
+    axes_map = "y,x,z"; # TODO
+  };
+
+  resonance_tester = {
+    accel_chip_x = "adxl345 x";
+    accel_chip_y = "adxl345 y";
+    probe_points = "${toString (max_x / 2)}, ${toString (max_y / 2)}, 25";
   };
 
   stepper_x = {
@@ -165,32 +179,17 @@ in {
   };
 
   "controller_fan mainboard_fan" = {
-    pin = "PC7";
+    pin = "PB15";
   };
 
   fan = { # part fan
     pin = "EBB: PA0";
   };
 
-  "temperature_sensor Host-CPU" = {
+  "temperature_sensor Host" = {
     sensor_type = "temperature_host";
-    sensor_path = "/sys/class/thermal/thermal_zone1/temp";
-    min_temp = 10;
-    max_temp = 100;
-  };
-
-  "temperature_sensor Host-DTS0" = {
-    # TODO: where is this sensor?
-    sensor_type = "temperature_host";
+    # seems to follow the hottest core
     sensor_path = "/sys/class/thermal/thermal_zone2/temp";
-    min_temp = 10;
-    max_temp = 100;
-  };
-
-  "temperature_sensor Host-DTS1" = {
-    # TODO: where is this sensor?
-    sensor_type = "temperature_host";
-    sensor_path = "/sys/class/thermal/thermal_zone3/temp";
     min_temp = 10;
     max_temp = 100;
   };
@@ -301,10 +300,13 @@ in {
     ];
   };
 
+  exclude_object = {};
+
   # make these macros appear in fluidd
-  "gcode_macro MACRO_SCREWS_TILT_CALCULATE".gcode = ["SCREWS_TILT_CALCULATE"];
-  "gcode_macro MACRO_PROBE_CALIBRATE".gcode = ["PROBE_CALIBRATE"];
-  "gcode_macro MACRO_AXIS_TWIST_COMPENSATION_CALIBRATE".gcode = ["AXIS_TWIST_COMPENSATION_CALIBRATE"];
+  "gcode_macro SCREWS_TILT_CALCULATE_".gcode = ["SCREWS_TILT_CALCULATE"];
+  "gcode_macro PROBE_CALIBRATE_".gcode = ["PROBE_CALIBRATE"];
+  "gcode_macro AXIS_TWIST_COMPENSATION_CALIBRATE_".gcode = ["AXIS_TWIST_COMPENSATION_CALIBRATE"];
+  "gcode_macro SHAPER_CALIBRATE_".gcode = ["SHAPER_CALIBRATE"];
 
   # other macros
   "gcode_macro CALIBRATE_PID_EXTRUDER".gcode = ["PID_CALIBRATE HEATER=extruder TARGET=220"];
@@ -321,11 +323,5 @@ in {
   #   #   '';
   #   event_delay = 1.0;
   #   switch_pin = "^PC2";
-  # };
-
-  # TODO: calibrate this
-  # input_shaper = {
-  #   shaper_freq_x = 29.6;
-  #   shaper_freq_y = 32.3;
   # };
 }

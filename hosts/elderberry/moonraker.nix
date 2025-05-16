@@ -41,6 +41,9 @@
       octoprint_compat = {
         # used by slicers, eg. OrcaSlicer
       };
+      file_manager = {
+        enable_object_processing = true; # for exclude_object
+      };
     };
   };
 
