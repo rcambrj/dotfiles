@@ -180,6 +180,7 @@ in {
 
   "controller_fan mainboard_fan" = {
     pin = "PB15";
+    fan_speed = 0.6;
   };
 
   fan = { # part fan
