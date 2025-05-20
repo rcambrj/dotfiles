@@ -1,10 +1,16 @@
 let
   # bed spec: 235x235
-  max_x = 225; # will go to 245 beyond the bed
-  max_y = 225; # artificially high to permit the probe to go as far as possible, nozzle hits bed edge at 214
+  max_x = 249;
+  min_x_printable = 0;
+  max_x_printable = max_x + probe_offset_x; # edge of bed is 230, but probe can't reach
+  center_x = (max_x_printable - min_x_printable) / 2 + min_x_printable;
+  max_y = 235;
+  min_y_printable = 10;
+  max_y_printable = max_y + probe_offset_y; # edge of bed is 235, but probe can't reach
+  center_y = (max_y_printable - min_y_printable) / 2 + min_y_printable;
   max_z = 235;
-  probe_offset_x = 2;
-  probe_offset_y = -41;
+  probe_offset_x = -39;
+  probe_offset_y = -9;
 in {
   force_move = {
     enable_force_move = true;
@@ -39,7 +45,7 @@ in {
   resonance_tester = {
     accel_chip_x = "adxl345 x";
     accel_chip_y = "adxl345 y";
-    probe_points = "${toString (max_x / 2)}, ${toString (max_y / 2)}, 25";
+    probe_points = "${toString center_x}, ${toString center_y}, 25";
   };
 
   stepper_x = {
@@ -72,7 +78,7 @@ in {
     endstop_pin = "^PC1";
     position_endstop = 0;
     position_max = max_y;
-    homing_speed = 30; # go slowly because the switch is attached with t-slots
+    homing_speed = 50;
     second_homing_speed = 10;
   };
 
@@ -126,7 +132,7 @@ in {
   };
 
   safe_z_home = {
-    home_xy_position = "${toString (max_x / 2)}, ${toString (max_y / 2)}";
+    home_xy_position = "${toString (center_x - probe_offset_x)}, ${toString (center_y - probe_offset_y)}";
     speed = 200;
     z_hop = 5;
     z_hop_speed = 5;
@@ -218,34 +224,18 @@ in {
     max_z_accel = 100;
   };
 
-  "gcode_macro PROBE_DOWN" = {
-    gcode = [
-      "SET_PIN PIN=probe_enable VALUE=1"
-    ];
-  };
-
-  "gcode_macro PROBE_UP" = {
-    gcode = [
-      "SET_PIN PIN=probe_enable VALUE=0"
-    ];
-  };
-
-  "output_pin probe_enable" = {
-    pin = "EBB: PB9";
-    value = 0;
-  };
-
   screws_tilt_adjust = {
     # move the probe to the correct location and record coordinates
     screw1_name = "rear left";
-    screw1 = "28, 221";
+    screw1 = "68, 219";
     screw2_name = "front left";
-    screw2 = "28, 51";
+    screw2 = "68, 49";
     screw3_name = "front right";
-    screw3 = "197, 51";
+    screw3 = "239, 49";
     screw4_name = "rear right";
-    screw4 = "197, 221";
+    screw4 = "239, 219";
     speed = 200;
+    horizontal_move_z = 15;
     screw_thread = "CW-M4";
   };
 
@@ -257,28 +247,21 @@ in {
     calibrate_y = 110;
   };
 
-  probe = {
-    pin = "^!EBB: PB8";
-    deactivate_on_each_sample = false;
-    x_offset = probe_offset_x;
-    y_offset = probe_offset_y;
+  bltouch = {
+    sensor_pin = "^EBB: PB8";
+    control_pin = "EBB: PB9";
+    stow_on_each_sample = false;
+    # probe_with_touch_mode = true; # breaks bltouch clone
     speed = 5; # probing speed
     # there is no non-probing speed config
     lift_speed = 5;
     samples = 2;
-    samples_tolerance = 0.01;
+    sample_retract_dist = 3;
+    samples_tolerance = 0.02; # biqu microprobe is more accurate at 0.01
     samples_tolerance_retries = 3;
-    activate_gcode = [
-      "PROBE_UP"
-      "PROBE_DOWN"
-      "G4 P500"
-    ];
-    deactivate_gcode = [
-      "PROBE_UP"
-    ];
     # mandatory, but replaced with SAVE_CONFIG
     # comment once calibrated to avoid SAVE_CONFIG breaking
-    # z_offset = 0;
+    z_offset = 0;
   };
 
   bed_mesh = {
@@ -287,11 +270,11 @@ in {
     # probe_count = 3;
     speed = 150;
     probe_count = 9;
-    horizontal_move_z = 2;
+    horizontal_move_z = 15;
     algorithm = "bicubic";
-    # move the nozzle to the correct location and record coordinates
-    mesh_min = "${toString (0 + probe_offset_x)},0";
-    mesh_max = "225,${toString (max_y + probe_offset_y)}";
+    # move the probe to the correct location and record coordinates
+    mesh_min = "${toString (min_x_printable - probe_offset_x)},${toString (min_y_printable - probe_offset_y)}";
+    mesh_max = "${toString (max_x_printable - probe_offset_x)},${toString (max_y_printable - probe_offset_y)}";
   };
 
   "delayed_gcode bed_mesh_init" = {

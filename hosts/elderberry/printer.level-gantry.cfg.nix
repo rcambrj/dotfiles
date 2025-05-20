@@ -16,12 +16,8 @@
       "{% set z_max = printer.toolhead.axis_maximum.z %}"
       "{% set fast_move_z = printer.configfile.settings[\"printer\"].max_z_velocity %}"
       "{% set fast_move = printer.configfile.settings[\"printer\"].max_velocity %}"
-      "{% if printer.homed_axes != 'xyz' %}"
-        # home All Axes
-        "G28"
-      "{% endif %}"
+      "G28" # must put toolhead in a safe spot
       "G90" # absolute
-      "G0 X{x_max / 2} Y{y_max / 2} F{fast_move * 30 }" # put toolhead in the center of the gantry
 
       "G0 Z{z_max -1} F{fast_move_z * 60}" # go to the Z-max at speed max z speed
 
