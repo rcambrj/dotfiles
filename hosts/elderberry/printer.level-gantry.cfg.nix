@@ -11,8 +11,6 @@
 
       "{% set oldcurrent = printer.configfile.settings[\"tmc2209 stepper_z\"].run_current %}"
       "{% set oldhold = printer.configfile.settings[\"tmc2209 stepper_z\"].hold_current %}"
-      "{% set x_max = printer.toolhead.axis_maximum.x %}"
-      "{% set y_max = printer.toolhead.axis_maximum.y %}"
       "{% set z_max = printer.toolhead.axis_maximum.z %}"
       "{% set fast_move_z = printer.configfile.settings[\"printer\"].max_z_velocity %}"
       "{% set fast_move = printer.configfile.settings[\"printer\"].max_velocity %}"

@@ -1,16 +1,16 @@
 let
   # bed spec: 235x235
   max_x = 249;
-  min_x_printable = 0;
+  min_x_printable = 0; # edge of bed is -2 (unreachable)
   max_x_printable = max_x + probe_offset_x; # edge of bed is 230, but probe can't reach
   center_x = (max_x_printable - min_x_printable) / 2 + min_x_printable;
   max_y = 235;
-  min_y_printable = 10;
+  min_y_printable = 10; # edge of bed is 8
   max_y_printable = max_y + probe_offset_y; # edge of bed is 235, but probe can't reach
   center_y = (max_y_printable - min_y_printable) / 2 + min_y_printable;
   max_z = 235;
-  probe_offset_x = -39;
-  probe_offset_y = -9;
+  probe_offset_x = -40;
+  probe_offset_y = -7;
 in {
   force_move = {
     enable_force_move = true;
@@ -226,14 +226,15 @@ in {
 
   screws_tilt_adjust = {
     # move the probe to the correct location and record coordinates
+    # adjust these values when the probe offset changes
     screw1_name = "rear left";
-    screw1 = "68, 219";
+    screw1 = "${toString (30 - probe_offset_x)}, ${toString (210 - probe_offset_y)}";
     screw2_name = "front left";
-    screw2 = "68, 49";
+    screw2 = "${toString (30 - probe_offset_x)}, ${toString (40 - probe_offset_y)}";
     screw3_name = "front right";
-    screw3 = "239, 49";
+    screw3 = "${toString (200 - probe_offset_x)}, ${toString (40 - probe_offset_y)}";
     screw4_name = "rear right";
-    screw4 = "239, 219";
+    screw4 = "${toString (200 - probe_offset_x)}, ${toString (210 - probe_offset_y)}";
     speed = 200;
     horizontal_move_z = 15;
     screw_thread = "CW-M4";
@@ -242,26 +243,51 @@ in {
   axis_twist_compensation = {
     speed = 100;
     # move the nozzle to the correct location and record coordinates
-    calibrate_start_x = 0 + probe_offset_x; # cannot be zero
-    calibrate_end_x = 225;
-    calibrate_y = 110;
+    calibrate_start_x = min_x_printable + 1; # cannot be zero
+    calibrate_end_x = max_x_printable;
+    calibrate_y = center_y;
   };
 
-  bltouch = {
-    sensor_pin = "^EBB: PB8";
-    control_pin = "EBB: PB9";
-    stow_on_each_sample = false;
-    # probe_with_touch_mode = true; # breaks bltouch clone
+  "output_pin probe_enable" = {
+    pin = "EBB: PB9";
+    value = 0;
+  };
+
+  "gcode_macro PROBE_DOWN" = {
+    gcode = [
+      "SET_PIN PIN=probe_enable VALUE=1"
+    ];
+  };
+
+  "gcode_macro PROBE_UP" = {
+    gcode = [
+      "SET_PIN PIN=probe_enable VALUE=0"
+    ];
+  };
+
+  probe = {
+    pin = "^!EBB: PB8";
+    activate_gcode = [
+      "PROBE_UP"
+      "PROBE_DOWN"
+      "G4 P500" # wait
+    ];
+    deactivate_gcode = [
+      "PROBE_UP"
+    ];
+    x_offset = probe_offset_x;
+    y_offset = probe_offset_y;
+    deactivate_on_each_sample = false;
     speed = 5; # probing speed
     # there is no non-probing speed config
     lift_speed = 5;
     samples = 2;
-    sample_retract_dist = 3;
-    samples_tolerance = 0.02; # biqu microprobe is more accurate at 0.01
+    sample_retract_dist = 2;
+    samples_tolerance = 0.01;
     samples_tolerance_retries = 3;
     # mandatory, but replaced with SAVE_CONFIG
     # comment once calibrated to avoid SAVE_CONFIG breaking
-    z_offset = 0;
+    # z_offset = 0;
   };
 
   bed_mesh = {
@@ -270,11 +296,11 @@ in {
     # probe_count = 3;
     speed = 150;
     probe_count = 9;
-    horizontal_move_z = 15;
+    horizontal_move_z = 4;
     algorithm = "bicubic";
-    # move the probe to the correct location and record coordinates
-    mesh_min = "${toString (min_x_printable - probe_offset_x)},${toString (min_y_printable - probe_offset_y)}";
-    mesh_max = "${toString (max_x_printable - probe_offset_x)},${toString (max_y_printable - probe_offset_y)}";
+    # move the nozzle to the correct location and record coordinates
+    mesh_min = "${toString min_x_printable},${toString min_y_printable}";
+    mesh_max = "${toString max_x_printable},${toString max_y_printable}";
   };
 
   "delayed_gcode bed_mesh_init" = {
