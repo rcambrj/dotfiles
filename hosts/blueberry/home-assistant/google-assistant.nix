@@ -2,7 +2,7 @@
   groups = import ./light-groups.nix;
 in {
   services.home-assistant.config.google_assistant = {
-    project_id = "home-assistant-250512";
+    project_id = "dynamic-dreamers-06ff7";
     service_account = {
       client_email = "!secret google_assistant_client_email";
       private_key = "!secret google_assistant_private_key";
