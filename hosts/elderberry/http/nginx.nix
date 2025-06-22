@@ -7,6 +7,8 @@
   services.nginx = {
     enable = true;
 
+    clientMaxBodySize = "200M";
+
     # Use recommended settings
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
