@@ -23,4 +23,6 @@ with lib;
     vim
     wget
   ];
+
+  programs.direnv.enable = true;
 }
