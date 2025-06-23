@@ -4,7 +4,7 @@
     useACMEHost = "home.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://localhost:5556";
+      proxyPass = "http://127.0.0.1:5556";
     };
   };
 

@@ -4,7 +4,7 @@
     useACMEHost = "home.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://localhost:${toString config.services.prometheus.port}";
+      proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
     };
   };
 
@@ -37,7 +37,7 @@
           {
             targets = [
               "dsmr.cambridge.me:80"
-              "localhost:9126"
+              "127.0.0.1:9126"
             ];
           }
         ];

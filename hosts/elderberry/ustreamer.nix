@@ -41,11 +41,11 @@ in {
 
   services.fluidd.nginx.locations = {
     "/webcam/snapshot" = {
-      proxyPass = "http://localhost:${builtins.toString port}/snapshot";
+      proxyPass = "http://127.0.0.1:${builtins.toString port}/snapshot";
     };
     # very CPU intensive because raspi3 lacks aes hardware for fast https encryption
     # "/webcam/stream" = {
-    #   proxyPass = "http://localhost:${builtins.toString port}/stream";
+    #   proxyPass = "http://127.0.0.1:${builtins.toString port}/stream";
     # };
   };
 }

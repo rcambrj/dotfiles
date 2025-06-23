@@ -4,7 +4,7 @@
     useACMEHost = "home.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://localhost:${toString config.services.grafana.settings.server.http_port}";
+      proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
     };
   };
 
@@ -84,18 +84,18 @@
         {
           name = "Prometheus";
           type = "prometheus";
-          url = "http://localhost:${toString config.services.prometheus.port}";
+          url = "http://127.0.0.1:${toString config.services.prometheus.port}";
         }
         # {
         #   name = "Loki";
         #   type = "loki";
-        #   url = "http://localhost:${toString config.services.loki.configuration.server.http_listen_port}";
+        #   url = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}";
         # }
         {
           default = true;
           name = "InfluxDB-Flux";
           type = "influxdb";
-          url = "http://localhost:8086";
+          url = "http://127.0.0.1:8086";
           jsonData = {
             version = "Flux";
             organization = "main";
