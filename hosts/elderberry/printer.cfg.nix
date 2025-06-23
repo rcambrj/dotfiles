@@ -217,9 +217,8 @@ in {
 
   printer = {
     kinematics = "cartesian";
-    # it'll do 300 but it sounds a bit ropey, go 200 max
-    max_velocity = 200;
-    max_accel = 3000;
+    max_velocity = 500; # starts skipping at 600. speed test succeeds at 550
+    max_accel = 9000; # starts skipping at 11000. speed test succeeds at 10000
     max_z_velocity = 10;
     max_z_accel = 100;
   };

@@ -46,6 +46,7 @@ in {
     "klipper/printer.cfg".source = format.generate "klipper/printer.cfg" (
       (import ./printer.cfg.nix) //
       (import ./printer.level-gantry.cfg.nix) //
+      (import ./printer.speed-test.cfg.nix) //
       {
         "include /etc/klipper/fluidd-config/client.cfg" = {};
       }

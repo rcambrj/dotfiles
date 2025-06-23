@@ -8,6 +8,7 @@
     enable = true;
 
     clientMaxBodySize = "200M";
+    proxyTimeout = "300s";
 
     # Use recommended settings
     recommendedGzipSettings = true;
