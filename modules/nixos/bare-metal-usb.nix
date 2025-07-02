@@ -1,6 +1,6 @@
 { inputs, ... }: { config, lib, modulesPath, pkgs, ... }: with lib; let
   sshKeyLocation = "/mnt/conf/id_ed25519"; # ensure that this is persisted across boots
-  repositoryLocation = "git+ssh://git@github.com/rcambrj/dotfiles?ref=main";
+  repositoryLocation = "git@github.com:rcambrj/dotfiles.git";
   defaultFlakePath = config.networking.hostName;
 
   updateScript = pkgs.writeShellScriptBin "update" ''
