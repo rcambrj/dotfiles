@@ -47,7 +47,7 @@
     environmentFile = config.age.secrets.lldap-env.path;
     settings = {
       # verbose = true;
-      http_host = "::1";
+      http_host = "127.0.0.1";
       http_port = 5324;
       http_url = "https://ldap.home.cambridge.me";
       ldap_host = "0.0.0.0";
