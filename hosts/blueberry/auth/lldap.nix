@@ -42,7 +42,6 @@
       LLDAP_SMTP_OPTIONS__PORT = "465";
       LLDAP_SMTP_OPTIONS__USER = "postmaster@mailgun.cambridge.me";
       # LLDAP_SMTP_OPTIONS__PASSWORD = see environmentFile
-      LLDAP_SMTP_OPTIONS__TLS_REQUIRED = "true";
       LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION = "TLS";
     };
     environmentFile = config.age.secrets.lldap-env.path;
