@@ -1,7 +1,5 @@
 # TODO: once stable, make a reusable module of this
-{ config, ... }: let
-  host = "blueberry";
-in {
+{ config, ... }: {
   networking.firewall.allowedTCPPorts = [
     config.services.prometheus.exporters.node.port
   ];
@@ -62,7 +60,7 @@ in {
         ]
         relabel_rules = loki.relabel.journal.rules
         labels = {
-          "host" = "${host}",
+          "host" = "${config.networking.hostName}",
         }
       }
     '';
