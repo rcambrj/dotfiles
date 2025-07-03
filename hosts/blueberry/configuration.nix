@@ -20,7 +20,8 @@
     ./http
     ./auth
     ./postgres.nix
-    ./statistics
+    ./telemetry
+    ./telemetry.nix
   ];
 
   networking.hostName = "blueberry";

@@ -14,6 +14,7 @@
     ./mobileraker.nix
     ./moonraker.nix
     ./ustreamer.nix
+    ./telemetry.nix
   ];
 
   networking.hostName = "elderberry";

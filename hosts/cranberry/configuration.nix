@@ -35,7 +35,7 @@ in {
     ./radarr.nix
     ./sonarr.nix
     ./transmission.nix
-    ./statistics.nix
+    ./telemetry.nix
   ];
 
   networking.hostName = "cranberry";

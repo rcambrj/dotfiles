@@ -1,8 +1,9 @@
 { ... }: {
   imports = [
-    ./prometheus.nix
     ./grafana.nix
-    ./telegraf.nix
     ./influxdb.nix
+    ./loki.nix
+    ./prometheus.nix
+    ./telegraf.nix
   ];
 }
