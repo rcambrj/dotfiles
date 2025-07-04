@@ -36,6 +36,7 @@ in {
     ./sonarr.nix
     ./transmission.nix
     ./telemetry.nix
+    ./kubernetes.nix
   ];
 
   networking.hostName = "cranberry";
@@ -56,6 +57,12 @@ in {
     };
     cranberry-oauth2-proxy-cookie-secret = {
       file = ../../secrets/cranberry-oauth2-proxy-cookie-secret.age;
+    };
+    k3s-token = {
+      file = ../../secrets/k3s-token.age;
+    };
+    argo-cd-client-secret-base64 = {
+      file = ../../secrets/argo-cd-client-secret-base64.age;
     };
   };
 

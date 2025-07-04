@@ -78,8 +78,14 @@
         {
           id = "cranberry-oauth2-proxy";
           redirectURIs = [ "https://oauth2-proxy.media.cambridge.me/oauth2/callback" ];
-          name = "Cranberrry";
+          name = "Cranberry";
           secretFile = config.age.secrets.cranberry-oauth2-proxy-client-secret.path;
+        }
+        {
+          id = "argo-cd";
+          redirectURIs = [ "https://argo-cd.media.cambridge.me/auth/callback" ];
+          name = "Argo CD";
+          secretFile = config.age.secrets.argo-cd-client-secret.path;
         }
       ];
     };
@@ -89,5 +95,6 @@
     config.age-template.files.dex-env.path
     config.age.secrets.blueberry-oauth2-proxy-client-secret.path
     config.age.secrets.cranberry-oauth2-proxy-client-secret.path
+    config.age.secrets.argo-cd-client-secret.path
   ];
 }

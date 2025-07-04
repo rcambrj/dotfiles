@@ -24,7 +24,7 @@ in {
     gnupg
     gnumake
     gnutar zstd
-    htop
+    htop btop
     iftop
     k9s
     kubectl

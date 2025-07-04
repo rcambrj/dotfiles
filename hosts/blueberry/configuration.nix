@@ -77,6 +77,9 @@
     blueberry-oauth2-proxy-cookie-secret = {
       file = ../../secrets/blueberry-oauth2-proxy-cookie-secret.age;
     };
+    argo-cd-client-secret = {
+      file = ../../secrets/argo-cd-client-secret.age;
+    };
     grafana-secret = {
       file = ../../secrets/grafana-secret.age;
       owner = "grafana";

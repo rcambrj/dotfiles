@@ -10,6 +10,11 @@ in {
   "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/cranberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
 
+  # kubernetes
+  "secrets/k3s-token.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/argo-cd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/argo-cd-client-secret-base64.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/authelia-jwt.age".publicKeys = defaults ++ [ sshKeys.blueberry ];

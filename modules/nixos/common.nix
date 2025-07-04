@@ -6,7 +6,7 @@ with lib;
     curl
     dig
     git
-    htop
+    htop btop
     iftop
     iotop
     ncdu
