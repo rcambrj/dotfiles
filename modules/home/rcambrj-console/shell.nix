@@ -1,4 +1,4 @@
-{ pkgs, perSystem, ... }: {
+{ config, pkgs, perSystem, hostname, ... }: {
   programs.zsh = {
     enable = true;
     autocd = false;
@@ -34,7 +34,14 @@
     };
     plugins = [];
     shellAliases = {
-      nup = if pkgs.stdenv.isDarwin then "darwin-rebuild switch --flake ~/projects/nix/macbook/#macbook" else "nixos-rebuild switch";
+      nup = let
+        cmd = if pkgs.stdenv.isDarwin then "darwin-rebuild" else "nixos-rebuild";
+        targets = {
+          rcambrj = "macbook/#macbook";
+          vm = "macbook/#vm";
+        };
+        target = targets.${hostname};
+      in "sudo ${cmd} switch --flake ~/projects/nix/${target}";
       ngc = "sudo nix-collect-garbage -d";
       dwa = "/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u";
 
