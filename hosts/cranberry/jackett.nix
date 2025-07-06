@@ -4,21 +4,21 @@
     useACMEHost = "media.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:9117";
+      proxyPass = "http://127.0.0.1:31117";
     };
   };
 
-  services.jackett = {
-    enable = true;
-    group = "media";
-  };
+  # services.jackett = {
+  #   enable = true;
+  #   group = "media";
+  # };
 
-  systemd.services.jackett = {
-    after = [ "pia-vpn.service" ];
-    bindsTo = [ "pia-vpn.service" ];
-    requires = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-  };
+  # systemd.services.jackett = {
+  #   after = [ "pia-vpn.service" ];
+  #   bindsTo = [ "pia-vpn.service" ];
+  #   requires = [ "network.target" ];
+  #   wantedBy = [ "multi-user.target" ];
+  # };
 
   services.oauth2-proxy.nginx.virtualHosts."jackett.media.cambridge.me" = {};
 }
