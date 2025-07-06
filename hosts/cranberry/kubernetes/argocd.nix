@@ -1,4 +1,6 @@
-{ pkgs, ... }: let
+{ config, pkgs, ... }: let
+  port = 30276;
+
   # argoVersion should equal the one provided by the chart
   chartVersion = "v8.1.2";
   argoVersion = "v3.0.6";
@@ -7,15 +9,25 @@
     owner = "argoproj";
     repo = "argo-cd";
     tag = argoVersion;
+    hash = "sha256-I5xO66ZDinEoljT18kXukEW+rmcXaKui/Ha9nvEjxgA";
   };
+  allNamespaces = pkgs.runCommand "argocd-all-namespaces" {} ''
+    ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
+  '';
 in {
   services.nginx.virtualHosts."argocd.media.cambridge.me" = {
     forceSSL = true;
     useACMEHost = "media.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:${toString argoPort}";
+      proxyPass = "http://127.0.0.1:${toString port}";
     };
+  };
+
+  services.k3s.manifests."10-argocd-ns".content = {
+    apiVersion = "v1";
+    kind = "Namespace";
+    metadata.name = "argocd";
   };
 
   age-template.files.argocd-secret = {
@@ -40,8 +52,8 @@ in {
     '';
   };
 
-  age-template.files.argocd-repo-creds = {
-    path = "/var/lib/rancher/k3s/server/manifests/argocd-repo-creds.yaml";
+  age-template.files.argocd-dotfiles-repo = {
+    path = "/var/lib/rancher/k3s/server/manifests/argocd-dotfiles-repo.yaml";
     vars = {
       ssh_key = config.age.secrets.argocd-ssh-key.path;
     };
@@ -49,17 +61,18 @@ in {
       apiVersion: v1
       kind: Secret
       metadata:
-        name: argocd-repo-creds
+        name: dotfiles-repo
         namespace: argocd
         labels:
-          argocd.argoproj.io/secret-type: repo-creds
+          argocd.argoproj.io/secret-type: repository
       stringData:
-        url: git@github.com:rcambrj/home
-        type: helm
+        url: git@github.com:rcambrj/dotfiles
         sshPrivateKey: "$ssh_key"
     '';
   };
 
+  # services.k3s.autoDeployCharts breaks when building on arm64
+  # so just use K3s' HelmChart resource in an Addon manifest
   services.k3s.manifests.argocd.content = {
     apiVersion = "helm.cattle.io/v1";
     kind = "HelmChart";
@@ -69,7 +82,7 @@ in {
     };
     spec = {
       targetNamespace = "argocd";
-      createNamespace = true;
+      # createNamespace = true; # created in 01-argocd-ns.yaml
       version = chartVersion;
       chart = "argo-cd";
       repo = "https://argoproj.github.io/argo-helm";
@@ -79,7 +92,7 @@ in {
         };
         server.service = {
           type = "NodePort";
-          nodePortHttp = argoPort;
+          nodePortHttp = port;
         };
         dex.enabled = false;
         configs.secret.createSecret = false;
@@ -100,5 +113,39 @@ in {
       };
     };
   };
-  # services.k3s.manifests.argocd-clusterrole.source = builtins.fetchUrl "https://raw.githubusercontent.com/argoproj/argo-cd/refs/tags/${argoVersion}/examples/k8s-rbac/argocd-server-applications/argocd-server-rbac-clusterrole.yaml"
+
+  services.k3s.manifests.argocd-all-namespaces = {
+    target = "argocd-all-namespaces.yaml";
+    source = allNamespaces;
+  };
+
+  services.k3s.manifests.argocd-dotfiles-application.content = {
+    apiVersion =  "argoproj.io/v1alpha1";
+    kind = "Application";
+    metadata = {
+      name = "dotfiles";
+      namespace = "argocd";
+      finalizers = [
+        "resources-finalizer.argocd.argoproj.io"
+      ];
+    };
+    spec = {
+      project = "default";
+      source = {
+        repoURL = "git@github.com:rcambrj/dotfiles";
+        targetRevision = "HEAD";
+        path = "kubernetes/bootstrap";
+      };
+      destination = {
+        server =  "https://kubernetes.default.svc";
+        namespace = "argocd";
+      };
+      syncPolicy = {
+        automated = {
+          prune = true;
+          selfHeal = true;
+        };
+      };
+    };
+  };
 }

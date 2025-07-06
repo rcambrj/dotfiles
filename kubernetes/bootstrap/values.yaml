@@ -1,0 +1,11 @@
+config:
+  spec:
+    destination:
+      server: https://kubernetes.default.svc
+    source:
+      repoURL: git@github.com:rcambrj/dotfiles
+      path: kubernetes
+      targetRevision: HEAD
+
+applications:
+  - name: test

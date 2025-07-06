@@ -1,6 +1,6 @@
 {...}: {
   imports = [
     ./kubernetes.nix
-    # ./argocd.nix
+    ./argocd.nix
   ];
 }

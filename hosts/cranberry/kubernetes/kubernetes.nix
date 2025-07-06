@@ -1,6 +1,4 @@
-{ config, ... }: let
-  argoPort = 30276;
-in {
+{ config, ... }: {
   networking.firewall = {
       # https://docs.k3s.io/installation/requirements#networking
     allowedTCPPorts = [
