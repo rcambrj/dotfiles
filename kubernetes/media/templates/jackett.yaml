@@ -13,8 +13,12 @@ spec:
       labels:
         app: jackett
     spec:
+      # TODO: do distributed storage then unlink workload from node
       nodeSelector:
         kubernetes.io/hostname: cranberry
+      volumes:
+        - name: jackett
+          hostPath: /var/lib/jackett/.config
       initContainers:
       {{- with .Values.vpnsidecar }}
       {{- . | toYaml | nindent 6 }}
@@ -22,6 +26,9 @@ spec:
       containers:
         - name: jackett
           image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
+          volumeMounts:
+          - name: jackett
+            mountPath: /config
           ports:
             - name: http
               containerPort: 9117
