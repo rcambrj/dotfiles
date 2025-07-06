@@ -12,8 +12,9 @@ in {
 
   # kubernetes
   "secrets/k3s-token.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/argo-cd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/argo-cd-client-secret-base64.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/argocd-session-key.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/argocd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/argocd-ssh-key.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];

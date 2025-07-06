@@ -82,10 +82,10 @@
           secretFile = config.age.secrets.cranberry-oauth2-proxy-client-secret.path;
         }
         {
-          id = "argo-cd";
-          redirectURIs = [ "https://argo-cd.media.cambridge.me/auth/callback" ];
+          id = "argocd";
+          redirectURIs = [ "https://argocd.media.cambridge.me/auth/callback" ];
           name = "Argo CD";
-          secretFile = config.age.secrets.argo-cd-client-secret.path;
+          secretFile = config.age.secrets.argocd-client-secret.path;
         }
       ];
     };
@@ -95,6 +95,6 @@
     config.age-template.files.dex-env.path
     config.age.secrets.blueberry-oauth2-proxy-client-secret.path
     config.age.secrets.cranberry-oauth2-proxy-client-secret.path
-    config.age.secrets.argo-cd-client-secret.path
+    config.age.secrets.argocd-client-secret.path
   ];
 }
