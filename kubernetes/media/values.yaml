@@ -1,0 +1,38 @@
+vpnsidecar:
+- name: vpn
+  image: ghcr.io/qdm12/gluetun:v3.40.0
+  restartPolicy: Always
+  securityContext:
+    capabilities:
+      add: ["NET_ADMIN"]
+  ports:
+    - containerPort: 8888 # HTTP proxy
+      protocol: TCP
+    - containerPort: 8388 # Shadowsocks
+      protocol: TCP
+    - containerPort: 8388 # Shadowsocks
+      protocol: UDP
+  env:
+    # https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/private-internet-access.md
+    - name: VPN_SERVICE_PROVIDER
+      value: private internet access
+    - name: VPN_TYPE
+      value: openvpn
+    - name: TZ
+      value: Europe/Amsterdam
+    - name: PORT_FORWARD_ONLY
+      value: "true"
+    - name: VPN_PORT_FORWARDING
+      value: "on"
+    - name: SERVER_HOSTNAMES
+      value: nl-amsterdam.privacy.network
+    - name: OPENVPN_USER
+      valueFrom:
+        secretKeyRef:
+          name: vpn
+          key: user
+    - name: OPENVPN_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: vpn
+          key: pass

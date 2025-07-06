@@ -8,4 +8,4 @@ config:
       targetRevision: HEAD
 
 applications:
-  - name: test
+  - name: media

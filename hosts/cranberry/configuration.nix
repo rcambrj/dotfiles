@@ -43,6 +43,8 @@ in {
   age.secrets = {
     acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
     pia-vpn.file = ../../secrets/pia-vpn.age;
+    pia-vpn-user.file = ../../secrets/pia-vpn-user.age;
+    pia-vpn-pass.file = ../../secrets/pia-vpn-pass.age;
     backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;
     backup-credentials.file = ../../secrets/cranberry-backup-credentials.age;
     backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;

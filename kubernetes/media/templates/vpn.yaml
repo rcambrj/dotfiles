@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpn
+  namespace: media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vpn
+  template:
+    metadata:
+      labels:
+        app: vpn
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: cranberry
+      initContainers:
+      {{- with .Values.vpnsidecar }}
+      {{- . | toYaml | nindent 6 }}
+      {{- end }}
+      containers:
+        - name: test
+          image: nginx:alpine
+          command: ["sleep", "infinity"]

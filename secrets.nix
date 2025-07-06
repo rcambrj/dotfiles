@@ -36,6 +36,8 @@ in {
 
   # cranberry
   "secrets/pia-vpn.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/pia-vpn-user.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/pia-vpn-pass.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
