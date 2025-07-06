@@ -36,3 +36,12 @@ vpnsidecar:
         secretKeyRef:
           name: vpn
           key: pass
+  livenessProbe:
+    exec:
+      command:
+      - ping
+      - 1.1.1.1
+      - -c 1
+      - -W 3
+    initialDelaySeconds: 60
+    periodSeconds: 60
