@@ -5,6 +5,10 @@ vpnsidecar:
   securityContext:
     capabilities:
       add: ["NET_ADMIN"]
+  resources:
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
   ports:
     - containerPort: 8888 # HTTP proxy
       protocol: TCP
