@@ -57,6 +57,7 @@
 
       k = "kubectl";
       kk = "k -n $KUBECTL_NS";
+      kga = "kubectl api-resources --verbs=list --namespaced -o name | xargs -n 1 kubectl get --show-kind --ignore-not-found";
     };
   };
 
