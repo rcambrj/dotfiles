@@ -35,6 +35,13 @@ spec:
         - name: http
           containerPort: 9117
         # TODO: fix Startup probe failed: Get "http://10.42.0.105:9117/": dial tcp 10.42.0.105:9117: connect: connection refused
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "50m"
+          limits:
+            memory: "200Mi"
+            cpu: "200m"
         startupProbe:
           httpGet:
             path: /health

@@ -13,11 +13,11 @@ vpnsidecar:
       add: ["NET_ADMIN"]
   resources:
     requests:
-      memory: "200Mi"
-      cpu: "100m"
+      memory: "50Mi"
+      cpu: "50m"
     limits:
       memory: "200Mi"
-      cpu: "100m"
+      cpu: "200m"
   ports:
   - containerPort: 8888 # HTTP proxy
     protocol: TCP
