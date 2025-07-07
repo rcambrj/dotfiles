@@ -4,6 +4,7 @@ metadata:
   name: jackett
   namespace: media
 spec:
+  revisionHistoryLimit: 1
   replicas: 1
   selector:
     matchLabels:

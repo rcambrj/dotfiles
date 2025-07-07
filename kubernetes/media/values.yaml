@@ -1,4 +1,10 @@
 vpnsidecar:
+# - name: update-vpn-servers
+#   image: ghcr.io/qdm12/gluetun:v3.40.0
+#   args: ["update", "-enduser", "-minratio", "0.01", "-providers", "private internet access"]
+#   volumeMounts:
+#   - name: gluetun
+#     mountPath: /gluetun
 - name: vpn
   image: ghcr.io/qdm12/gluetun:v3.40.0
   restartPolicy: Always
@@ -6,49 +12,55 @@ vpnsidecar:
     capabilities:
       add: ["NET_ADMIN"]
   resources:
+    requests:
+      memory: "200Mi"
+      cpu: "100m"
     limits:
       memory: "200Mi"
-      cpu: "200m"
+      cpu: "100m"
   ports:
-    - containerPort: 8888 # HTTP proxy
-      protocol: TCP
-    - containerPort: 8388 # Shadowsocks
-      protocol: TCP
-    - containerPort: 8388 # Shadowsocks
-      protocol: UDP
+  - containerPort: 8888 # HTTP proxy
+    protocol: TCP
+  - containerPort: 8388 # Shadowsocks
+    protocol: TCP
+  - containerPort: 8388 # Shadowsocks
+    protocol: UDP
   env:
-    # https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/private-internet-access.md
-    - name: VPN_SERVICE_PROVIDER
-      value: private internet access
-    - name: VPN_TYPE
-      value: openvpn
-    - name: TZ
-      value: Europe/Amsterdam
-    - name: PORT_FORWARD_ONLY
-      value: "true"
-    - name: VPN_PORT_FORWARDING
-      value: "on"
-    - name: SERVER_HOSTNAMES
-      value: nl-amsterdam.privacy.network
-    - name: OPENVPN_USER
-      valueFrom:
-        secretKeyRef:
-          name: vpn
-          key: user
-    - name: OPENVPN_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: vpn
-          key: pass
-  livenessProbe:
+  # https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/private-internet-access.md
+  - name: VPN_SERVICE_PROVIDER
+    value: private internet access
+  - name: VPN_TYPE
+    value: openvpn
+  - name: TZ
+    value: Europe/Amsterdam
+  - name: VPN_PORT_FORWARDING
+    value: "on"
+  - name: SERVER_HOSTNAMES
+    value: nl-amsterdam.privacy.network
+  - name: OPENVPN_USER
+    valueFrom:
+      secretKeyRef:
+        name: vpn
+        key: user
+  - name: OPENVPN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: vpn
+        key: pass
+  # workaround DNS problems in 3.40.0
+  # https://github.com/qdm12/gluetun/issues/2832
+  - name: DOT
+    value: "off"
+  - name: DNS_ADDRESS
+    value: "10.43.0.10"
+  - name: FIREWALL_OUTBOUND_SUBNETS
+    value: 192.168.142.0/24,10.42.0.0/16,10.43.0.0/16
+  startupProbe:
     exec:
       command:
-      - ping
-      - "1.1.1.1"
-      - "-c"
-      - "1"
-      - "-W"
-      - "3"
-    initialDelaySeconds: 60
-    periodSeconds: 60
-    timeoutSeconds: 5
+      - /bin/sh
+      - -c
+      - cat /tmp/gluetun/ip
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 12
