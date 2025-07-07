@@ -17,10 +17,13 @@ spec:
       # TODO: do distributed storage then unlink workload from node
       nodeSelector:
         kubernetes.io/hostname: cranberry
-      # volumes:
-      # - name: transmission
-      #   hostPath:
-      #     path: /var/lib/transmission/
+      volumes:
+      - name: transmission-config
+        hostPath:
+          path: /var/lib/transmission/.config/transmission-daemon
+      - name: transmission-downloads
+        hostPath:
+          path: /var/lib/media/downloads/transmission
       initContainers:
       {{- with .Values.vpnsidecar }}
       {{- . | toYaml | nindent 6 }}
@@ -28,12 +31,22 @@ spec:
       containers:
       - name: transmission
         image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
-        # volumeMounts:
-        # - name: transmission
-        #   mountPath: /config
+        volumeMounts:
+        - name: transmission-config
+          mountPath: /config
+        - name: transmission-downloads
+          mountPath: /downloads
         ports:
         - name: http
           containerPort: 9091
+        resources:
+          # TODO: check resource usage when under heavy load
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 ---
 apiVersion: v1
 kind: Service
