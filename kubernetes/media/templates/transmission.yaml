@@ -18,6 +18,8 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: cranberry
       volumes:
+      - name: gluetun-port-forwarding
+        emptyDir:
       - name: transmission-config
         hostPath:
           path: /var/lib/transmission/.config/transmission-daemon
@@ -29,6 +31,34 @@ spec:
       {{- . | toYaml | nindent 6 }}
       {{- end }}
       containers:
+      - name: sync-forwarded-port
+        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
+        env:
+        - name: TR_AUTH
+          value: "transmission:password"
+        command: ["/bin/sh", "-c"]
+        args:
+        - |-
+          set -e
+          while true; do
+            sleep 60;
+            port=$(cat /gluetun-port-forwarding/port || echo 0)
+            if [[ "$port" == 0 ]]; then
+              continue
+            fi
+            transmission-remote --authenv --port $port
+            echo "Updated with port: $port"
+          done;
+        volumeMounts:
+        - name: gluetun-port-forwarding
+          mountPath: /gluetun-port-forwarding
+        resources:
+          requests:
+            memory: "2Mi"
+            cpu: "10m"
+          limits:
+            memory: "10Mi"
+            cpu: "100m"
       - name: transmission
         image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
         volumeMounts:
@@ -47,6 +77,19 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "1"
+        startupProbe:
+          httpGet:
+            path: /
+            port: http
+          failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
 ---
 apiVersion: v1
 kind: Service

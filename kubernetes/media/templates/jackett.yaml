@@ -21,6 +21,8 @@ spec:
       - name: jackett
         hostPath:
           path: /var/lib/jackett/.config
+      - name: gluetun-port-forwarding
+        emptyDir:
       initContainers:
       {{- with .Values.vpnsidecar }}
       {{- . | toYaml | nindent 6 }}
@@ -46,7 +48,7 @@ spec:
           httpGet:
             path: /health
             port: http
-          failureThreshold: 12
+          failureThreshold: 20
         readinessProbe:
           httpGet:
             path: /health

@@ -1,3 +1,7 @@
+# volumes:
+# - name: gluetun-port-forwarding
+#   emptyDir:
+
 vpnsidecar:
 # - name: update-vpn-servers
 #   image: ghcr.io/qdm12/gluetun:v3.40.0
@@ -25,6 +29,22 @@ vpnsidecar:
     protocol: TCP
   - containerPort: 8388 # Shadowsocks
     protocol: UDP
+  startupProbe:
+    exec:
+      command:
+      - /bin/sh
+      - -c
+      - cat /tmp/gluetun/ip
+    failureThreshold: 12
+  livenessProbe:
+    exec:
+      command:
+      - /bin/sh
+      - -c
+      - ping -c 1 -W 5 1.1.1.1 && cat /gluetun-port-forwarding/port
+  volumeMounts:
+  - name: gluetun-port-forwarding
+    mountPath: /gluetun-port-forwarding
   env:
   # https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/private-internet-access.md
   - name: VPN_SERVICE_PROVIDER
@@ -33,8 +53,6 @@ vpnsidecar:
     value: openvpn
   - name: TZ
     value: Europe/Amsterdam
-  - name: VPN_PORT_FORWARDING
-    value: "on"
   - name: SERVER_HOSTNAMES
     value: nl-amsterdam.privacy.network
   - name: OPENVPN_USER
@@ -55,12 +73,7 @@ vpnsidecar:
     value: "10.43.0.10"
   - name: FIREWALL_OUTBOUND_SUBNETS
     value: 192.168.142.0/24,10.42.0.0/16,10.43.0.0/16
-  startupProbe:
-    exec:
-      command:
-      - /bin/sh
-      - -c
-      - cat /tmp/gluetun/ip
-    initialDelaySeconds: 10
-    periodSeconds: 10
-    failureThreshold: 12
+  - name: VPN_PORT_FORWARDING
+    value: "on"
+  - name: VPN_PORT_FORWARDING_STATUS_FILE
+    value: /gluetun-port-forwarding/port
