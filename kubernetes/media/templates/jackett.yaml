@@ -35,21 +35,19 @@ spec:
         - name: http
           containerPort: 9117
         # TODO: fix Startup probe failed: Get "http://10.42.0.105:9117/": dial tcp 10.42.0.105:9117: connect: connection refused
-        # startupProbe:
-        #   httpGet:
-        #     path: /
-        #     port: http
-        #   failureThreshold: 12
-        # readinessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: http
-        #   initialDelaySeconds: 60
-        # livenessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: http
-        #   initialDelaySeconds: 60
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          failureThreshold: 12
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
 ---
 apiVersion: v1
 kind: Service
