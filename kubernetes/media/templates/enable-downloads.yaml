@@ -23,61 +23,69 @@ roleRef:
   kind: Role
   name: enable-downloads
 ---
-apiVersion: batch/v1
-kind: CronJob
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: enable-downloads
 spec:
-  schedule: "* * * * *"
-  jobTemplate:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: enable-downloads
+  template:
+    metadata:
+      labels:
+        app: enable-downloads
     spec:
-      completions: 1
-      backoffLimit: 1
-      template:
-        spec:
-          serviceAccountName: enable-downloads
-          restartPolicy: Never
-          containers:
-          - name: enable-downloads
-            image: nixery.dev/shell/curl/gnugrep/jq
-            command:
-            - /bin/bash
-            - -c
-            - |-
-              set -e
+      serviceAccountName: enable-downloads
+      containers:
+      - name: enable-downloads
+        image: nixery.dev/shell/curl/gnugrep/jq
+        command:
+        - /bin/bash
+        - -c
+        - |-
+          while true; do
+            set -e
 
-              APISERVER=https://kubernetes.default.svc
-              SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
-              NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
-              TOKEN=$(cat ${SERVICEACCOUNT}/token)
-              CACERT=${SERVICEACCOUNT}/ca.crt
+            APISERVER=https://kubernetes.default.svc
+            SERVICEACCOUNT=/var/run/secrets/kubernetes.io/serviceaccount
+            NAMESPACE=$(cat ${SERVICEACCOUNT}/namespace)
+            TOKEN=$(cat ${SERVICEACCOUNT}/token)
+            CACERT=${SERVICEACCOUNT}/ca.crt
 
-              STATUSES=$(curl --no-progress-meter -m 5 http://192.168.142.1:6926/interfaces || true)
-              echo "$STATUSES"
+            STATUSES=$(curl --no-progress-meter -m 5 http://192.168.142.1:6926/interfaces || true)
+            echo "$STATUSES"
 
-              # Interface status:
-              #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
-              #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
+            # Interface status:
+            #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
+            #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
 
-              WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
-              if [ "${WANONLINE}" == "1" ]; then
-                echo "WAN is up." >&2
-                REPLICAS=1
-              else
-                echo "WAN is not up." >&2
-                REPLICAS=0
-              fi
+            if [[ $(echo "$STATUSES" | grep "Interface status" | wc -l) != "1" ]] then;
+              echo Unable to determine WAN status.
+              exit 1
+            fi
 
-              echo Setting replicas to $REPLICAS
+            WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
+            if [ "${WANONLINE}" == "1" ]; then
+              echo "WAN is up." >&2
+              REPLICAS=1
+            else
+              echo "WAN is not up." >&2
+              REPLICAS=0
+            fi
 
-              curl ${APISERVER}/apis/apps/v1/namespaces/${NAMESPACE}/deployments/transmission \
-                -X PATCH --fail-with-body --no-progress-meter -m 5 \
-                --cacert ${CACERT} \
-                --header "Authorization: Bearer ${TOKEN}" \
-                --header "Content-Type: application/strategic-merge-patch+json" \
-                --data "{ \
-                  \"apiVersion\": \"apps/v1\", \
-                  \"kind\": \"Deployment\", \
-                  \"metadata\": { \"name\": \"transmission\" }, \
-                  \"spec\": { \"replicas\": ${REPLICAS} } \
-                }" | jq ".status"
+            echo Setting replicas to $REPLICAS
+
+            curl ${APISERVER}/apis/apps/v1/namespaces/${NAMESPACE}/deployments/transmission \
+              -X PATCH --fail-with-body --no-progress-meter -m 5 \
+              --cacert ${CACERT} \
+              --header "Authorization: Bearer ${TOKEN}" \
+              --header "Content-Type: application/strategic-merge-patch+json" \
+              --data "{ \
+                \"apiVersion\": \"apps/v1\", \
+                \"kind\": \"Deployment\", \
+                \"metadata\": { \"name\": \"transmission\" }, \
+                \"spec\": { \"replicas\": ${REPLICAS} } \
+              }" | jq ".status"
+            done
