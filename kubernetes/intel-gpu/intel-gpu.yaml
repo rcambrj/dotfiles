@@ -1,0 +1,21 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: intel-device-plugins-operator
+spec:
+  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-operator
+  repo: https://intel.github.io/helm-charts/
+  chart: intel-device-plugins-operator
+  version: 0.32.1
+  targetNamespace: intel-gpu
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: intel-device-plugins-gpu
+spec:
+  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-gpu
+  repo: https://intel.github.io/helm-charts/
+  chart: intel-device-plugins-gpu
+  version: 0.32.1
+  targetNamespace: intel-gpu

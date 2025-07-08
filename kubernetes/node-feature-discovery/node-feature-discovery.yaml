@@ -1,0 +1,10 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: node-feature-discovery
+spec:
+  # https://artifacthub.io/packages/helm/node-feature-discovery/node-feature-discovery
+  repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
+  chart: node-feature-discovery
+  version: v0.17.3
+  targetNamespace: node-feature-discovery

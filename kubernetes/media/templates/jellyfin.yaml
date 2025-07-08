@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      # TODO: do distributed storage then unlink workload from node
+      nodeSelector:
+        kubernetes.io/hostname: cranberry
+      volumes:
+      - name: jellyfin-config
+        hostPath:
+          path: /var/lib/jellyfin/
+      - name: jellyfin-movies
+        hostPath:
+          path: /var/lib/media/movies
+      - name: jellyfin-tvshows
+        hostPath:
+          path: /var/lib/media/tvshows
+      containers:
+      - name: jellyfin
+        image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
+        # securityContext:
+        #   runAsUser: 998
+        #   runAsGroup: 998
+        env:
+        - name: PUID
+          value: "998"
+        - name: PGID
+          value: "998"
+        volumeMounts:
+        - name: jellyfin-config
+          mountPath: /config
+        - name: jellyfin-movies
+          mountPath: /data/movies
+        - name: jellyfin-tvshows
+          mountPath: /data/tvshows
+        ports:
+        - name: http
+          containerPort: 8096
+        resources:
+          # requests:
+          #   memory: "100Mi"
+          #   cpu: "50m"
+          limits:
+            gpu.intel.com/i915: "1"
+            # memory: "300Mi"
+            # cpu: "200m"
+        # startupProbe:
+        #   httpGet:
+        #     path: /ping
+        #     port: http
+        #   failureThreshold: 20
+        # readinessProbe:
+        #   httpGet:
+        #     path: /ping
+        #     port: http
+        # livenessProbe:
+        #   httpGet:
+        #     path: /ping
+        #     port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+spec:
+  type: NodePort
+  selector:
+    app: jellyfin
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8096
+    nodePort: 30096

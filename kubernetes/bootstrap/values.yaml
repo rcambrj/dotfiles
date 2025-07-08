@@ -9,3 +9,6 @@ config:
 
 applications:
   - name: media
+  - name: cert-manager
+  - name: node-feature-discovery
+  - name: intel-gpu

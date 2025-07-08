@@ -82,7 +82,7 @@ in {
     };
     spec = {
       targetNamespace = "argocd";
-      # createNamespace = true; # created in 01-argocd-ns.yaml
+      createNamespace = true;
       version = chartVersion;
       chart = "argo-cd";
       repo = "https://argoproj.github.io/argo-helm";
