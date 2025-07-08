@@ -65,7 +65,14 @@ in {
   };
 
   # this group should be able to manipulate media files
-  users.groups.media = {};
+  users.users.media = {
+    uid = 998;
+    isSystemUser = true;
+    group = "media";
+  };
+  users.groups.media = {
+    gid = 998;
+  };
 
   services.auto-cpufreq = {
     enable = true;

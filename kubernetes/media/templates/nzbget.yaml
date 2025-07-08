@@ -1,73 +1,75 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jackett
+  name: nzbget
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
+  # do not specify replicas because cronjobs/enable-downloads changes this value
+  # if this value is set then argocd will want to set it back after it drifts
+  # replicas: 1
   selector:
     matchLabels:
-      app: jackett
+      app: nzbget
   template:
     metadata:
       labels:
-        app: jackett
+        app: nzbget
     spec:
       # TODO: do distributed storage then unlink workload from node
       nodeSelector:
         kubernetes.io/hostname: cranberry
       volumes:
-      - name: jackett
+      - name: nzbget-config
         hostPath:
-          path: /var/lib/jackett/.config
-      - name: gluetun-port-forwarding
-        emptyDir:
-      initContainers:
-      {{- with .Values.vpnsidecar }}
-      {{- . | toYaml | nindent 6 }}
-      {{- end }}
+          path: /var/lib/nzbget
+      - name: nzbget-downloads
+        hostPath:
+          path: /var/lib/media/downloads/nzbget
       containers:
-      - name: jackett
-        image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
+      - name: nzbget
+        image: lscr.io/linuxserver/nzbget:v25.2-ls204
         securityContext:
           runAsUser: 998
           runAsGroup: 998
         volumeMounts:
-        - name: jackett
+        - name: nzbget-config
           mountPath: /config
+        - name: nzbget-downloads
+          mountPath: /downloads
         ports:
         - name: http
-          containerPort: 9117
+          containerPort: 6789
+        # TODO: check resource usage when under heavy load
         resources:
           requests:
-            memory: "200Mi"
-            cpu: "50m"
+            memory: "100Mi"
+            cpu: "100m"
           limits:
-            memory: "300Mi"
-            cpu: "200m"
+            memory: "1Gi"
+            cpu: "1"
         startupProbe:
           httpGet:
-            path: /health
+            path: /
             port: http
           failureThreshold: 20
         readinessProbe:
           httpGet:
-            path: /health
+            path: /
             port: http
         livenessProbe:
           httpGet:
-            path: /health
+            path: /
             port: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: jackett
+  name: nzbget
 spec:
   type: NodePort
   selector:
-    app: jackett
+    app: nzbget
   ports:
   - protocol: TCP
-    port: 9117
-    nodePort: 31117
+    port: 6789
+    nodePort: 30789
