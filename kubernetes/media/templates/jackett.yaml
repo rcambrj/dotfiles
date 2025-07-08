@@ -2,10 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jackett
-  namespace: media
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
+  # do not specify replicas because cronjobs/enable-downloads changes this value
+  # if this value is set then argocd will want to set it back after it drifts
+  # replicas: 1
   selector:
     matchLabels:
       app: jackett
