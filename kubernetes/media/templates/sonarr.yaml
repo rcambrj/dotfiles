@@ -1,43 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jackett
+  name: sonarr
 spec:
   revisionHistoryLimit: 1
   replicas: 1
   selector:
     matchLabels:
-      app: jackett
+      app: sonarr
   template:
     metadata:
       labels:
-        app: jackett
+        app: sonarr
     spec:
       # TODO: do distributed storage then unlink workload from node
       nodeSelector:
         kubernetes.io/hostname: cranberry
       volumes:
-      - name: jackett
+      - name: sonarr-config
         hostPath:
-          path: /var/lib/jackett/.config
-      - name: gluetun-port-forwarding
-        emptyDir:
-      initContainers:
-      {{- with .Values.vpnsidecar }}
-      {{- . | toYaml | nindent 6 }}
-      {{- end }}
+          path: /var/lib/sonarr/.config/NzbDrone
+      - name: sonarr-tvshows
+        hostPath:
+          path: /var/lib/media/tvshows
+      - name: sonarr-downloads
+        hostPath:
+          path: /var/lib/media/downloads
       containers:
-      - name: jackett
-        image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
+      - name: sonarr
+        image: lscr.io/linuxserver/sonarr:4.0.15.2941-ls287
         securityContext:
           runAsUser: 998
           runAsGroup: 998
         volumeMounts:
-        - name: jackett
+        - name: sonarr-config
           mountPath: /config
+        - name: sonarr-tvshows
+          mountPath: /tvshows
+        - name: sonarr-downloads
+          mountPath: /downloads
         ports:
         - name: http
-          containerPort: 9117
+          containerPort: 8989
         resources:
           requests:
             memory: "200Mi"
@@ -47,28 +51,28 @@ spec:
             cpu: "200m"
         startupProbe:
           httpGet:
-            path: /health
+            path: /ping
             port: http
-          failureThreshold: 20
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /health
+            path: /ping
             port: http
         livenessProbe:
           httpGet:
-            path: /health
+            path: /ping
             port: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: jackett
+  name: sonarr
 spec:
   type: NodePort
   selector:
-    app: jackett
+    app: sonarr
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 9117
-    nodePort: 31117
+    targetPort: 8989
+    nodePort: 30989

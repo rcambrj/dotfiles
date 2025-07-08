@@ -1,10 +1,10 @@
 { ... }: let
   group = import ./group.nix;
 in {
-  services.sonarr = {
-    enable = true;
-    group = group;
-  };
+  # services.sonarr = {
+  #   enable = true;
+  #   group = group;
+  # };
 
   # TODO: fix this once sonarr upgrades to dotnet 8 https://discourse.nixos.org/t/-/56828
   nixpkgs.config.permittedInsecurePackages = [
@@ -17,7 +17,7 @@ in {
     useACMEHost = "media.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:8989";
+      proxyPass = "http://127.0.0.1:30989";
     };
   };
 

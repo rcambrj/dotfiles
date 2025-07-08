@@ -105,5 +105,6 @@ spec:
     app: transmission
   ports:
   - protocol: TCP
-    port: 9091
+    port: 80
+    targetPort: 9091
     nodePort: 31091

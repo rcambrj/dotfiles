@@ -71,5 +71,6 @@ spec:
     app: nzbget
   ports:
   - protocol: TCP
-    port: 6789
+    port: 80
+    targetPort: 6789
     nodePort: 30789
