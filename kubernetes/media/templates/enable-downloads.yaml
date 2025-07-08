@@ -28,6 +28,7 @@ kind: Deployment
 metadata:
   name: enable-downloads
 spec:
+  revisionHistoryLimit: 1
   replicas: 1
   selector:
     matchLabels:
@@ -61,13 +62,13 @@ spec:
             #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
             #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
 
-            if [[ $(echo "$STATUSES" | grep "Interface status" | wc -l) != "1" ]] then;
+            if [[ $(echo "$STATUSES" | grep "Interface status" | wc -l) != "1" ]]; then
               echo Unable to determine WAN status.
               exit 1
             fi
 
             WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
-            if [ "${WANONLINE}" == "1" ]; then
+            if [[ "${WANONLINE}" == "1" ]]; then
               echo "WAN is up." >&2
               REPLICAS=1
             else
@@ -88,4 +89,5 @@ spec:
                 \"metadata\": { \"name\": \"transmission\" }, \
                 \"spec\": { \"replicas\": ${REPLICAS} } \
               }" | jq ".status"
-            done
+            sleep 60
+          done
