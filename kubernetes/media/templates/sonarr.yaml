@@ -5,6 +5,8 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: 1
+  strategy:
+    type: Recreate # because hostPath volume
   selector:
     matchLabels:
       app: sonarr

@@ -6,7 +6,7 @@ spec:
   revisionHistoryLimit: 1
   replicas: 1
   strategy:
-    type: Recreate
+    type: Recreate # because hostPath volume & GPU
   selector:
     matchLabels:
       app: jellyfin
@@ -57,19 +57,19 @@ spec:
             cpu: "2000m"
             memory: "500Mi"
             gpu.intel.com/i915: "1"
-        # startupProbe:
-        #   httpGet:
-        #     path: /ping
-        #     port: http
-        #   failureThreshold: 20
-        # readinessProbe:
-        #   httpGet:
-        #     path: /ping
-        #     port: http
-        # livenessProbe:
-        #   httpGet:
-        #     path: /ping
-        #     port: http
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          failureThreshold: 20
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
 ---
 apiVersion: v1
 kind: Service

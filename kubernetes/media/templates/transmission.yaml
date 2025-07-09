@@ -7,6 +7,8 @@ spec:
   # do not specify replicas because cronjobs/enable-downloads changes this value
   # if this value is set then argocd will want to set it back after it drifts
   # replicas: 1
+  strategy:
+    type: Recreate # because hostPath volume
   selector:
     matchLabels:
       app: transmission
