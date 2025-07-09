@@ -29,6 +29,7 @@ in {
 
     ./downloads-enabled.nix
     ./backup.nix
+    ./gpu.nix
     ./jackett.nix
     ./jellyfin.nix
     ./nzbget.nix

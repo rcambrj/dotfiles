@@ -10,24 +10,11 @@ in {
     };
   };
 
-  boot.kernelParams = [ "i915.enable_guc=2" ];
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver
-      libvdpau-va-gl
-    ];
-  };
-  environment.systemPackages = with pkgs; [
-    # jellyfin
-    # jellyfin-web
-    # jellyfin-ffmpeg
-    intel-gpu-tools
-    intel-media-sdk
-    intel-compute-runtime
-    libva-utils
-  ];
+  # environment.systemPackages = with pkgs; [
+  #   jellyfin
+  #   jellyfin-web
+  #   jellyfin-ffmpeg
+  # ];
 
   # services.jellyfin = {
   #   enable = true;
