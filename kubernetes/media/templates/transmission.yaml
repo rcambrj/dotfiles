@@ -55,11 +55,11 @@ spec:
           mountPath: /gluetun-port-forwarding
         resources:
           requests:
-            memory: "2Mi"
             cpu: "10m"
+            memory: "2Mi"
           limits:
-            memory: "10Mi"
             cpu: "100m"
+            memory: "10Mi"
       - name: transmission
         image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
         securityContext:
@@ -76,11 +76,11 @@ spec:
         resources:
           # TODO: check resource usage when under heavy load
           requests:
-            memory: "100Mi"
             cpu: "100m"
+            memory: "100Mi"
           limits:
-            memory: "1Gi"
             cpu: "1"
+            memory: "200Mi"
         startupProbe:
           httpGet:
             path: /

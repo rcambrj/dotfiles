@@ -44,11 +44,11 @@ spec:
           containerPort: 7878
         resources:
           requests:
-            memory: "100Mi"
             cpu: "50m"
+            memory: "200Mi"
           limits:
-            memory: "300Mi"
             cpu: "200m"
+            memory: "300Mi"
         startupProbe:
           httpGet:
             path: /ping

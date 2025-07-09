@@ -42,11 +42,11 @@ spec:
         # TODO: check resource usage when under heavy load
         resources:
           requests:
-            memory: "100Mi"
             cpu: "100m"
+            memory: "100Mi"
           limits:
-            memory: "1Gi"
-            cpu: "1"
+            cpu: "2000m"
+            memory: "1000Mi"
         startupProbe:
           httpGet:
             path: /
