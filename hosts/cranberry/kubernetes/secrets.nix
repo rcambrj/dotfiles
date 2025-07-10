@@ -5,11 +5,6 @@
       kind = "Namespace";
       metadata.name = "media";
     }
-    {
-      apiVersion = "v1";
-      kind = "Namespace";
-      metadata.name = "cert-manager";
-    }
   ];
 
   age-template.files."20-media-vpn-secret" = {
@@ -41,7 +36,7 @@
       kind: Secret
       metadata:
         name: cloudflare-token
-        namespace: cert-manager
+        namespace: kube-system
       type: Opaque
       stringData:
         token: $token

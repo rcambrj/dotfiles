@@ -16,26 +16,15 @@ in {
     # { config.facter.reportPath = ./facter.json; }
     "${toString modulesPath}/profiles/all-hardware.nix"
 
-    inputs.nix-pia-vpn.nixosModules.default
     inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
     flake.nixosModules.bare-metal-usb
     flake.nixosModules.config-intel
-    ./vpn
-    ./http
-    ./auth
 
-    ./downloads-enabled.nix
     ./backup.nix
     ./gpu.nix
-    ./jackett.nix
-    ./jellyfin.nix
-    ./nzbget.nix
-    ./radarr.nix
-    ./sonarr.nix
-    ./transmission.nix
     ./telemetry.nix
     ./kubernetes
   ];
@@ -43,7 +32,6 @@ in {
   networking.hostName = "cranberry";
   age.secrets = {
     acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
-    pia-vpn.file = ../../secrets/pia-vpn.age;
     pia-vpn-user.file = ../../secrets/pia-vpn-user.age;
     pia-vpn-pass.file = ../../secrets/pia-vpn-pass.age;
     backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;

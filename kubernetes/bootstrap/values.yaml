@@ -8,7 +8,5 @@ config:
       targetRevision: HEAD
 
 applications:
+  - name: kube-system
   - name: media
-  - name: cert-manager
-  - name: node-feature-discovery
-  - name: intel-gpu

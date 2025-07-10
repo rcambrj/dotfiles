@@ -35,7 +35,6 @@ in {
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # cranberry
-  "secrets/pia-vpn.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];

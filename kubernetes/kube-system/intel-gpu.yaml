@@ -7,7 +7,7 @@ spec:
   repo: https://intel.github.io/helm-charts/
   chart: intel-device-plugins-operator
   version: 0.32.1
-  targetNamespace: intel-gpu
+  targetNamespace: kube-system
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -18,4 +18,6 @@ spec:
   repo: https://intel.github.io/helm-charts/
   chart: intel-device-plugins-gpu
   version: 0.32.1
-  targetNamespace: intel-gpu
+  targetNamespace: kube-system
+  valuesContent: |-
+    sharedDevNum: 99

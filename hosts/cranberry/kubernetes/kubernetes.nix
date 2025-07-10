@@ -14,7 +14,7 @@
     enable = true;
     role = "server";
     extraFlags = [
-      "--disable=traefik"
+      # "--disable=traefik"
     ];
     # https://docs.k3s.io/cli/token
     tokenFile = config.age.secrets.k3s-token.path;
