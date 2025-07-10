@@ -1,6 +1,15 @@
 { config, ... }: {
   users.groups.acme.members = ["nginx"];
 
+  age-template.files.acme-env-cloudflare = {
+    vars = {
+      token = config.age.secrets.acme-cloudflare.path;
+    };
+    content = ''
+      CLOUDFLARE_DNS_API_TOKEN=$token
+    '';
+  };
+
   security.acme = {
     acceptTerms = true;
     defaults.email = "robert@cambridge.me";
@@ -11,7 +20,7 @@
       domain = "media.cambridge.me";
       extraDomainNames = [ "*.media.cambridge.me" ];
       dnsProvider = "cloudflare";
-      environmentFile = config.age.secrets.acme-cloudflare.path;
+      environmentFile = config.age-template.files.acme-env-cloudflare.path;
     };
   };
 }
