@@ -37,6 +37,7 @@ vpnsidecar:
       - cat /tmp/gluetun/ip
     failureThreshold: 12
   livenessProbe:
+    timeoutSeconds: 6
     exec:
       command:
       - /bin/sh
