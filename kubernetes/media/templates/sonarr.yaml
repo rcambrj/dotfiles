@@ -70,11 +70,28 @@ kind: Service
 metadata:
   name: sonarr
 spec:
-  type: NodePort
   selector:
     app: sonarr
   ports:
   - protocol: TCP
     port: 80
     targetPort: 8989
-    nodePort: 30989
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sonarr
+spec:
+  parentRefs:
+    - namespace: kube-system
+      name: traefik-gateway
+  hostnames:
+    - "sonarr.media.cambridge.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: sonarr
+          port: 80

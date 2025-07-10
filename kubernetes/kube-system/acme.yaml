@@ -17,3 +17,23 @@ spec:
             # refers to the resource with the given name in the configured ‘cluster resource namespace’, which is set as a flag on the controller component (and defaults to the namespace that cert-manager runs in).
             name: cloudflare-token
             key: token
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    email: robert@cambridge.me
+    profile: tlsserver
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # populated with data automatically
+      name: letsencrypt-key
+    solvers:
+    - dns01:
+        cloudflare:
+          apiTokenSecretRef:
+            # refers to the resource with the given name in the configured ‘cluster resource namespace’, which is set as a flag on the controller component (and defaults to the namespace that cert-manager runs in).
+            name: cloudflare-token
+            key: token
