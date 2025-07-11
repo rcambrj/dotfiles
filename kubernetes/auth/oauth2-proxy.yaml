@@ -20,14 +20,14 @@ spec:
           name: oauth2-proxy
       containers:
       - name: oauth2-proxy
-        image: quay.io/oauth2-proxy/oauth2-proxy:v7.9.0-s390x
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.9.0-amd64
         ports:
         - containerPort: 4180
         args:
-        - --config=/oauth2-proxy.cfg
+        - --config=/config/oauth2-proxy.cfg
         volumeMounts:
         - name: oauth2-proxy-config
-          mountPath: /oauth2-proxy.cfg
+          mountPath: /config
         env:
         - name: OAUTH2_PROXY_CLIENT_ID
           value: kubernetes-oauth2-proxy
@@ -47,31 +47,30 @@ kind: ConfigMap
 metadata:
   name: oauth2-proxy
 data:
-  # show-debug-on-error: true;
-  provider: oidc
-  reverse-proxy: true
-  approval-prompt: none # default=force
-  skip-provider-button: true
-  oidc-issuer-url: https://dex.home.cambridge.me
-  cookie-csrf-per-request: true
-  cookie-domain:
-  - .media.cambridge.me
-  whitelist-domain:
-  - .media.cambridge.me
-  email-domain:
-  - "*"
+  oauth2-proxy.cfg: |-
+    show_debug_on_error="true"
+    http_address="0.0.0.0:4180"
+    provider="oidc"
+    reverse_proxy="true"
+    approval_prompt="none" # default=force
+    skip_provider_button="true"
+    oidc_issuer_url="https://dex.home.cambridge.me"
+    cookie_csrf_per_request="true"
+    cookie_domains=[".media.cambridge.me"]
+    whitelist_domains=[".media.cambridge.me"]
+    email_domains=["*"]
 
-  skip-oidc-discovery: true
-  # why disable OIDC discovery?
-  # oauth2-proxy fetches info from .well-known/openid-configuration on dex
-  # if dex is not up yet, oauth2-proxy will fail to come up too
-  # fix this race by disabling discovery and declaring required settings here:
-  oidc-jwks-url: https://dex.home.cambridge.me/keys
-  login-url: https://dex.home.cambridge.me/auth
-  redeem-url: https://dex.home.cambridge.me/token
-  validate-url: https://dex.home.cambridge.me/token/introspect
+    skip_oidc_discovery="true"
+    # why disable OIDC discovery?
+    # oauth2-proxy fetches info from .well-known/openid-configuration on dex
+    # if dex is not up yet, oauth2-proxy will fail to come up too
+    # fix this race by disabling discovery and declaring required settings here:
+    oidc_jwks_url="https://dex.home.cambridge.me/keys"
+    login_url="https://dex.home.cambridge.me/auth"
+    redeem_url="https://dex.home.cambridge.me/token"
+    validate_url="https://dex.home.cambridge.me/token/introspect"
 
-  redirect-url: https://oauth2-proxy.media.cambridge.me/oauth2/callback
+    redirect_url="https://oauth2-proxy.media.cambridge.me/oauth2/callback"
 ---
 apiVersion: v1
 kind: Service
@@ -85,21 +84,96 @@ spec:
     port: 80
     targetPort: 4180
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: oauth2-proxy
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  parentRefs:
-    - namespace: kube-system
-      name: traefik-gateway
-  hostnames:
-    - "oauth2-proxy.media.cambridge.me"
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "oauth2-proxy.media.cambridge.me"
+    secretName: oauth2-proxy-media-cambridge-me-tls
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: oauth2-proxy
-          port: 80
+  - host: oauth2-proxy.media.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oauth2-proxy-vhosts
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: jackett.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: nzbget.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: radarr.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: sonarr.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: transmission.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: jackett.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80

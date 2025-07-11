@@ -77,22 +77,29 @@ spec:
     port: 80
     targetPort: 8989
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: HTTPRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: sonarr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
 spec:
-  parentRefs:
-    - namespace: kube-system
-      name: traefik-gateway
-  hostnames:
-    - "sonarr.media.cambridge.me"
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "sonarr.media.cambridge.me"
+    secretName: sonarr-media-cambridge-me-tls
+  ingressClassName: nginx
   rules:
-    # TODO: auth
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
-      backendRefs:
-        - name: sonarr
-          port: 80
+  - host: sonarr.media.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sonarr
+            port:
+              number: 80
