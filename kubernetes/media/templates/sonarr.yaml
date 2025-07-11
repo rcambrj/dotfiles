@@ -88,6 +88,7 @@ spec:
   hostnames:
     - "sonarr.media.cambridge.me"
   rules:
+    # TODO: auth
     - matches:
         - path:
             type: PathPrefix

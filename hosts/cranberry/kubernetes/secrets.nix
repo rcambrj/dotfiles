@@ -5,6 +5,11 @@
       kind = "Namespace";
       metadata.name = "media";
     }
+    {
+      apiVersion = "v1";
+      kind = "Namespace";
+      metadata.name = "auth";
+    }
   ];
 
   age-template.files."20-media-vpn-secret" = {
@@ -40,6 +45,26 @@
       type: Opaque
       stringData:
         token: $token
+    '';
+  };
+
+  age-template.files."20-oauth2-proxy" = {
+    path = "/var/lib/rancher/k3s/server/manifests/20-oauth2-proxy.yaml";
+    vars = {
+      clientsecret = config.age.secrets.kubernetes-oauth2-proxy-client-secret.path;
+      # cookie-secret. must be exactly 16, 24 or 32 chars.
+      cookiesecret = config.age.secrets.kubernetes-oauth2-proxy-cookie-secret.path;
+    };
+    content = ''
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: oauth2-proxy
+        namespace: auth
+      type: Opaque
+      stringData:
+        client-secret: $clientsecret
+        cookie-secret: $cookiesecret
     '';
   };
 }

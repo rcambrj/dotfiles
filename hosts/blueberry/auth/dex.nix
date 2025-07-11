@@ -76,10 +76,10 @@
           secretFile = config.age.secrets.blueberry-oauth2-proxy-client-secret.path;
         }
         {
-          id = "cranberry-oauth2-proxy";
+          id = "kubernetes-oauth2-proxy";
           redirectURIs = [ "https://oauth2-proxy.media.cambridge.me/oauth2/callback" ];
-          name = "Cranberry";
-          secretFile = config.age.secrets.cranberry-oauth2-proxy-client-secret.path;
+          name = "Kubernetes";
+          secretFile = config.age.secrets.kubernetes-oauth2-proxy-client-secret.path;
         }
         {
           id = "argocd";
@@ -94,7 +94,7 @@
   systemd.services.dex.restartTriggers = [
     config.age-template.files.dex-env.path
     config.age.secrets.blueberry-oauth2-proxy-client-secret.path
-    config.age.secrets.cranberry-oauth2-proxy-client-secret.path
+    config.age.secrets.kubernetes-oauth2-proxy-client-secret.path
     config.age.secrets.argocd-client-secret.path
   ];
 }

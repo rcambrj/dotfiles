@@ -71,8 +71,8 @@
     blueberry-oauth2-proxy-client-secret = {
       file = ../../secrets/blueberry-oauth2-proxy-client-secret.age;
     };
-    cranberry-oauth2-proxy-client-secret = {
-      file = ../../secrets/cranberry-oauth2-proxy-client-secret.age;
+    kubernetes-oauth2-proxy-client-secret = {
+      file = ../../secrets/kubernetes-oauth2-proxy-client-secret.age;
     };
     blueberry-oauth2-proxy-cookie-secret = {
       file = ../../secrets/blueberry-oauth2-proxy-cookie-secret.age;

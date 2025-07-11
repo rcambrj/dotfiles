@@ -84,6 +84,7 @@ spec:
   hostnames:
     - "jackett.media.cambridge.me"
   rules:
+    # TODO: auth
     - matches:
         - path:
             type: PathPrefix

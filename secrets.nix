@@ -1,6 +1,7 @@
 let
   sshKeys = import ./lib/ssh-keys.nix;
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
+  kubenodes = [ sshKeys.blueberry sshKeys.cranberry ];
 in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
@@ -9,12 +10,14 @@ in {
   # oauth2 apps
   "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/cranberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/kubernetes-oauth2-proxy-client-secret.age".publicKeys = defaults ++ kubenodes;
+  "secrets/argocd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
 
   # kubernetes
-  "secrets/k3s-token.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/argocd-session-key.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
-  "secrets/argocd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
-  "secrets/argocd-ssh-key.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/k3s-token.age".publicKeys = defaults ++ kubenodes;
+  "secrets/argocd-session-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/argocd-ssh-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];

@@ -86,6 +86,7 @@ spec:
   hostnames:
     - "nzbget.media.cambridge.me"
   rules:
+    # TODO: auth
     - matches:
         - path:
             type: PathPrefix

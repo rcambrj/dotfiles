@@ -9,4 +9,5 @@ config:
 
 applications:
   - name: kube-system
+  - name: auth
   - name: media

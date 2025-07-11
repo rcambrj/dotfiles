@@ -37,8 +37,8 @@ in {
     backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;
     backup-credentials.file = ../../secrets/cranberry-backup-credentials.age;
     backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;
-    cranberry-oauth2-proxy-client-secret.file = ../../secrets/cranberry-oauth2-proxy-client-secret.age;
-    cranberry-oauth2-proxy-cookie-secret.file = ../../secrets/cranberry-oauth2-proxy-cookie-secret.age;
+    kubernetes-oauth2-proxy-client-secret.file = ../../secrets/kubernetes-oauth2-proxy-client-secret.age;
+    kubernetes-oauth2-proxy-cookie-secret.file = ../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
     k3s-token.file = ../../secrets/k3s-token.age;
     argocd-session-key.file = ../../secrets/argocd-session-key.age;
     argocd-client-secret.file = ../../secrets/argocd-client-secret.age;

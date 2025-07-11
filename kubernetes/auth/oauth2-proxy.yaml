@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy
+  labels:
+    app: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: oauth2-proxy
+    spec:
+      volumes:
+      - name: oauth2-proxy-config
+        configMap:
+          name: oauth2-proxy
+      containers:
+      - name: oauth2-proxy
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.9.0-s390x
+        ports:
+        - containerPort: 4180
+        args:
+        - --config=/oauth2-proxy.cfg
+        volumeMounts:
+        - name: oauth2-proxy-config
+          mountPath: /oauth2-proxy.cfg
+        env:
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: kubernetes-oauth2-proxy
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-proxy
+              key: client-secret
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-proxy
+              key: cookie-secret
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy
+data:
+  # show-debug-on-error: true;
+  provider: oidc
+  reverse-proxy: true
+  approval-prompt: none # default=force
+  skip-provider-button: true
+  oidc-issuer-url: https://dex.home.cambridge.me
+  cookie-csrf-per-request: true
+  cookie-domain:
+  - .media.cambridge.me
+  whitelist-domain:
+  - .media.cambridge.me
+  email-domain:
+  - "*"
+
+  skip-oidc-discovery: true
+  # why disable OIDC discovery?
+  # oauth2-proxy fetches info from .well-known/openid-configuration on dex
+  # if dex is not up yet, oauth2-proxy will fail to come up too
+  # fix this race by disabling discovery and declaring required settings here:
+  oidc-jwks-url: https://dex.home.cambridge.me/keys
+  login-url: https://dex.home.cambridge.me/auth
+  redeem-url: https://dex.home.cambridge.me/token
+  validate-url: https://dex.home.cambridge.me/token/introspect
+
+  redirect-url: https://oauth2-proxy.media.cambridge.me/oauth2/callback
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy
+spec:
+  selector:
+    app: oauth2-proxy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4180
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: oauth2-proxy
+spec:
+  parentRefs:
+    - namespace: kube-system
+      name: traefik-gateway
+  hostnames:
+    - "oauth2-proxy.media.cambridge.me"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: oauth2-proxy
+          port: 80

@@ -120,6 +120,7 @@ spec:
   hostnames:
     - "transmission.media.cambridge.me"
   rules:
+    # TODO: auth
     - matches:
         - path:
             type: PathPrefix
