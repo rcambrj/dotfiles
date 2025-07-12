@@ -35,10 +35,10 @@ spec:
         - 6 # disk
       volumes:
       - name: jackett
-        persistentVolumeClaim:
-          claimName: jackett
-        # hostPath:
-        #   path: /var/lib/jackett/.config
+        # persistentVolumeClaim:
+        #   claimName: jackett
+        hostPath:
+          path: /var/lib/jackett/.config
       - name: gluetun-port-forwarding
         emptyDir:
       initContainers:
