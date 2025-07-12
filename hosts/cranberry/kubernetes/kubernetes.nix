@@ -1,4 +1,4 @@
-{ config, ... }: {
+{ config, pkgs, ... }: {
   networking.firewall = {
       # https://docs.k3s.io/installation/requirements#networking
     allowedTCPPorts = [
@@ -23,4 +23,15 @@
     # https://docs.k3s.io/datastore/ha-embedded#existing-single-node-clusters
     # clusterInit = true;
   };
+
+# fixes Longhorn expecting FHS
+# https://github.com/longhorn/longhorn/issues/2166#issuecomment-2994323945
+services.openiscsi = {
+  enable = true;
+  name = "${config.networking.hostName}-initiatorhost";
+};
+systemd.services.iscsid.serviceConfig = {
+  PrivateMounts = "yes";
+  BindPaths = "/run/current-system/sw/bin:/bin";
+};
 }

@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jackett
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 10Mi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,10 +30,15 @@ spec:
       # TODO: do distributed storage then unlink workload from node
       nodeSelector:
         kubernetes.io/hostname: cranberry
+      securityContext:
+        supplementalGroups:
+        - 6 # disk
       volumes:
       - name: jackett
-        hostPath:
-          path: /var/lib/jackett/.config
+        persistentVolumeClaim:
+          claimName: jackett
+        # hostPath:
+        #   path: /var/lib/jackett/.config
       - name: gluetun-port-forwarding
         emptyDir:
       initContainers:
@@ -31,9 +48,6 @@ spec:
       containers:
       - name: jackett
         image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
-        securityContext:
-          runAsUser: 998
-          runAsGroup: 998
         volumeMounts:
         - name: jackett
           mountPath: /config

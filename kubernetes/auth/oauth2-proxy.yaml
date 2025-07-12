@@ -177,3 +177,13 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
+  - host: longhorn.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
