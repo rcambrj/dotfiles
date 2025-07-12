@@ -1,6 +1,4 @@
 { config, pkgs, ... }: let
-  port = 30276;
-
   # argoVersion should equal the one provided by the chart
   chartVersion = "v8.1.2";
   argoVersion = "v3.0.6";
@@ -93,10 +91,7 @@ in {
         image = {
           tag = chartVersion;
         };
-        server.service = {
-          type = "NodePort";
-          nodePortHttp = port;
-        };
+        global.domain = "argocd.media.cambridge.me";
         dex.enabled = false;
         configs.secret.createSecret = false;
         configs.params."server.insecure" = true;
