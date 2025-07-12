@@ -1,0 +1,12 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: kyverno
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/kyverno/kyverno
+  repo: https://kyverno.github.io/kyverno/
+  chart: kyverno
+  version: 3.4.4
+  targetNamespace: kyverno

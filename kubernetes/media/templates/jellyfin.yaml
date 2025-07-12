@@ -4,9 +4,7 @@ metadata:
   name: jellyfin
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
-  strategy:
-    type: Recreate # because hostPath volume
+  replicas: 0
   selector:
     matchLabels:
       app: jellyfin
@@ -15,37 +13,28 @@ spec:
       labels:
         app: jellyfin
     spec:
-      # TODO: do distributed storage then unlink workload from node
-      nodeSelector:
-        kubernetes.io/hostname: cranberry
       volumes:
       - name: jellyfin-config
-        hostPath:
-          path: /var/lib/jellyfin/
-      - name: jellyfin-movies
-        hostPath:
-          path: /var/lib/media/movies
-      - name: jellyfin-tvshows
-        hostPath:
-          path: /var/lib/media/tvshows
+        persistentVolumeClaim:
+          claimName: jellyfin-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
-        # securityContext:
-        #   runAsUser: 998
-        #   runAsGroup: 998
         env:
+        - name: TZ
+          value: Europe/Amsterdam
         - name: PUID
-          value: "998"
+          value: "1000"
         - name: PGID
-          value: "998"
+          value: "1000"
         volumeMounts:
         - name: jellyfin-config
           mountPath: /config
-        - name: jellyfin-movies
-          mountPath: /data/movies
-        - name: jellyfin-tvshows
-          mountPath: /data/tvshows
+        - name: media
+          mountPath: /data
         ports:
         - name: http
           containerPort: 8096

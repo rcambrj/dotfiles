@@ -1,4 +1,4 @@
-{ config, ... }: {
+{ config, pkgs, ... }: {
   networking.firewall = {
       # https://docs.k3s.io/installation/requirements#networking
     allowedTCPPorts = [
@@ -22,5 +22,15 @@
 
     # https://docs.k3s.io/datastore/ha-embedded#existing-single-node-clusters
     # clusterInit = true;
+  };
+
+  # for Longhorn RWO
+  services.openiscsi = {
+    enable = true;
+    name = "${config.networking.hostName}-initiatorhost";
+  };
+  # for Longhorn RWX
+  services.nfs.server = {
+    enable = true;
   };
 }

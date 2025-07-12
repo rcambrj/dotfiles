@@ -4,9 +4,7 @@ metadata:
   name: sonarr
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
-  strategy:
-    type: Recreate # because hostPath volume
+  replicas: 0
   selector:
     matchLabels:
       app: sonarr
@@ -15,31 +13,33 @@ spec:
       labels:
         app: sonarr
     spec:
-      # TODO: do distributed storage then unlink workload from node
-      nodeSelector:
-        kubernetes.io/hostname: cranberry
       volumes:
       - name: sonarr-config
-        hostPath:
-          path: /var/lib/sonarr/.config/NzbDrone
-      - name: sonarr-tvshows
-        hostPath:
-          path: /var/lib/media/tvshows
-      - name: sonarr-downloads
-        hostPath:
-          path: /var/lib/media/downloads
+        persistentVolumeClaim:
+          claimName: sonarr-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads
       containers:
       - name: sonarr
         image: lscr.io/linuxserver/sonarr:4.0.15.2941-ls287
-        securityContext:
-          runAsUser: 998
-          runAsGroup: 998
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
         volumeMounts:
         - name: sonarr-config
           mountPath: /config
-        - name: sonarr-tvshows
+        - name: media
+          subPath: tvshows
           mountPath: /tvshows
-        - name: sonarr-downloads
+        - name: downloads
           mountPath: /downloads
         ports:
         - name: http

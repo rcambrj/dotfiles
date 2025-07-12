@@ -9,5 +9,7 @@ config:
 
 applications:
   - name: kube-system
+  - name: kyverno
+  - name: longhorn-system
   - name: auth
   - name: media

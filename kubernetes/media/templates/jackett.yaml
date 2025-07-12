@@ -4,9 +4,7 @@ metadata:
   name: jackett
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
-  strategy:
-    type: Recreate # because hostPath volume
+  replicas: 0
   selector:
     matchLabels:
       app: jackett
@@ -15,13 +13,10 @@ spec:
       labels:
         app: jackett
     spec:
-      # TODO: do distributed storage then unlink workload from node
-      nodeSelector:
-        kubernetes.io/hostname: cranberry
       volumes:
       - name: jackett
-        hostPath:
-          path: /var/lib/jackett/.config
+        persistentVolumeClaim:
+          claimName: jackett
       - name: gluetun-port-forwarding
         emptyDir:
       initContainers:
@@ -31,9 +26,13 @@ spec:
       containers:
       - name: jackett
         image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
-        securityContext:
-          runAsUser: 998
-          runAsGroup: 998
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
         volumeMounts:
         - name: jackett
           mountPath: /config

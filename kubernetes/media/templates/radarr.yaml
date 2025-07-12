@@ -4,9 +4,7 @@ metadata:
   name: radarr
 spec:
   revisionHistoryLimit: 1
-  replicas: 1
-  strategy:
-    type: Recreate # because hostPath volume
+  replicas: 0
   selector:
     matchLabels:
       app: radarr
@@ -15,31 +13,33 @@ spec:
       labels:
         app: radarr
     spec:
-      # TODO: do distributed storage then unlink workload from node
-      nodeSelector:
-        kubernetes.io/hostname: cranberry
       volumes:
       - name: radarr-config
-        hostPath:
-          path: /var/lib/radarr/.config/Radarr
-      - name: radarr-movies
-        hostPath:
-          path: /var/lib/media/movies
-      - name: radarr-downloads
-        hostPath:
-          path: /var/lib/media/downloads
+        persistentVolumeClaim:
+          claimName: radarr-config
+      - name: media
+        persistentVolumeClaim:
+          claimName: media
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: downloads
       containers:
       - name: radarr
         image: lscr.io/linuxserver/radarr:5.26.2.10099-ls277
-        securityContext:
-          runAsUser: 998
-          runAsGroup: 998
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
         volumeMounts:
         - name: radarr-config
           mountPath: /config
-        - name: radarr-movies
+        - name: media
+          subPath: movies
           mountPath: /movies
-        - name: radarr-downloads
+        - name: downloads
           mountPath: /downloads
         ports:
         - name: http
