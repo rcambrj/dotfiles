@@ -8,7 +8,6 @@
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     ./netbird.nix
-    ./photoprism-backup
     ./statistics.nix
   ];
 
