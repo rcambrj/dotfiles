@@ -2,6 +2,8 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: intel-device-plugins-operator
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
 spec:
   # https://artifacthub.io/packages/helm/intel/intel-device-plugins-operator
   repo: https://intel.github.io/helm-charts/
@@ -13,6 +15,8 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: intel-device-plugins-gpu
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
 spec:
   # https://artifacthub.io/packages/helm/intel/intel-device-plugins-gpu
   repo: https://intel.github.io/helm-charts/

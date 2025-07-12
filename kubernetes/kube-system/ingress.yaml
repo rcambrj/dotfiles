@@ -2,6 +2,8 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: ingress-nginx
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
 spec:
   repo: https://kubernetes.github.io/ingress-nginx
   chart: ingress-nginx

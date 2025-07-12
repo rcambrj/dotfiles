@@ -79,6 +79,9 @@ in {
     metadata = {
       namespace = "kube-system";
       name = "argocd";
+      finalizers = [
+        "wrangler.cattle.io/on-helm-chart-remove"
+      ];
     };
     spec = {
       targetNamespace = "argocd";

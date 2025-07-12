@@ -2,6 +2,8 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: cert-manager
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
 spec:
   # https://artifacthub.io/packages/helm/cert-manager/cert-manager
   repo: https://charts.jetstack.io
