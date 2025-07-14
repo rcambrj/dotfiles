@@ -13,15 +13,6 @@
     ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
   '';
 in {
-  services.nginx.virtualHosts."argocd.media.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "media.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:${toString port}";
-    };
-  };
-
   services.k3s.manifests."10-argocd-ns".content = {
     apiVersion = "v1";
     kind = "Namespace";
@@ -108,6 +99,14 @@ in {
         configs.rbac."policy.csv" = ''
           g, argocd, role:admin
         '';
+        server.ingress = {
+          enabled = true;
+          ingressClassName = "nginx";
+          annotations = {
+            "cert-manager.io/cluster-issuer" = "letsencrypt";
+          };
+          tls = true;
+        };
       };
     };
   };
