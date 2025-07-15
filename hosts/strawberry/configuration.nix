@@ -53,7 +53,11 @@
   networking.useNetworkd = true;
 
   # Dell Wyse 3040 doesn't have much RAM, but it does have 8GB internal MMC
-  swapDevices.internal.device = "/dev/mmcblk0p1";
+  swapDevices = [
+    {
+      device = "/dev/mmcblk0p1";
+    }
+  ];
   zramSwap.enable = true;
 
 }
