@@ -1,11 +1,5 @@
 #
-# this machine is used for running the home's entertainment
-# * jellyfin
-# * radarr
-# * sonarr
-# * transmission
-# * nzbget
-# * vpn
+# this machine is a kubernetes node
 #
 { flake, inputs, modulesPath, ... }: let
   group = import ./group.nix;
@@ -20,7 +14,7 @@ in {
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
-    flake.nixosModules.bare-metal-usb
+    flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
 
     ./backup.nix

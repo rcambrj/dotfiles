@@ -39,6 +39,7 @@
         targets = {
           rcambrj = "macbook/#macbook";
           vm = "macbook/#vm";
+          mango = "dotfiles/#mango";
         };
         target = targets.${hostname};
       in "sudo ${cmd} switch --flake ~/projects/nix/${target}";

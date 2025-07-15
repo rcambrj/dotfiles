@@ -6,7 +6,7 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.access-workstation
-    flake.nixosModules.standard-disk
+    flake.nixosModules.disk-single
     ./home-manager.nix
     ./keyboard.nix
     ./graphical

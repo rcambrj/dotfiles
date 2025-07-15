@@ -15,7 +15,7 @@ Records configuration for nix machines, builds images for bare metal machines an
         flake.nixosModules.base
         flake.nixosModules.access-server
         flake.nixosModules.common
-        flake.nixosModules.bare-metal-usb
+        flake.nixosModules.bare-metal
         flake.nixosModules.config-intel
         # or
         flake.nixosModules.config-raspi

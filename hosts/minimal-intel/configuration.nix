@@ -9,7 +9,7 @@
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
-    flake.nixosModules.bare-metal-usb
+    flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
     # minimal needs to be able to run on anything
     "${toString modulesPath}/profiles/all-hardware.nix"

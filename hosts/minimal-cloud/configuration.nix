@@ -4,7 +4,7 @@
 
     flake.nixosModules.base
     flake.nixosModules.access-server
-    flake.nixosModules.standard-disk
+    flake.nixosModules.disk-single
   ];
 
 

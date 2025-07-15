@@ -6,7 +6,7 @@
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common
-    flake.nixosModules.bare-metal-usb
+    flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
     ./http
     ./fluidd.nix
