@@ -31,15 +31,17 @@
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
+              extraArgs = ["-n" "ESP"];
             };
           };
-          const = {
+          nixosconf = {
             name = "NIXOSCONF";
             size = "1M";
             content = {
               type = "filesystem";
               format = "vfat";
               # mountpoint = "/mnt/conf";
+              extraArgs = ["-n" "NIXOSCONF"];
             };
           };
           root = {
@@ -59,21 +61,23 @@
         lvs = {
           root = {
             size = "64G";
-            name = "NIXOS";
+            name = "nixos";
             content = {
               type = "filesystem";
               format = "ext4";
               # mount at / even if that will change on normal boot
               # so that /nix/store points to the right place
               mountpoint = "/";
+              extraArgs = ["-L" "nixos"];
             };
           };
-          state = {
+          nixosstate = {
             size = "100%FREE";
             name = "NIXOSSTATE";
             content = {
               type = "filesystem";
               format = "ext4";
+              extraArgs = ["-L" "NIXOSSTATE"];
             };
           };
         };
