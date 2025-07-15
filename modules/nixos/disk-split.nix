@@ -63,7 +63,7 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              # mountpoint = "/mnt/root";
+              mountpoint = "/mnt/root";
               # mountOptions = [
               #   "defaults"
               # ];
@@ -82,6 +82,11 @@
             };
           };
         };
+      };
+    };
+    nodev = {
+      "/nix" = {
+        device = "/mnt/root/nix";
       };
     };
   };
