@@ -51,6 +51,16 @@
   systemd.network.enable = true;
   networking.useDHCP = false;
   networking.useNetworkd = true;
+  systemd.network = {
+    networks = {
+      "10-wired" = {
+        matchConfig.Name = "e*";
+        networkConfig = {
+          DHCP = "yes";
+        };
+      };
+    };
+  };
 
   # Dell Wyse 3040 doesn't have much RAM, but it does have 8GB internal MMC
   swapDevices = [
