@@ -30,7 +30,7 @@
             content = {
               type = "filesystem";
               format = "vfat";
-              # mountpoint = "/boot";
+              mountpoint = "/boot";
             };
           };
           const = {
@@ -63,10 +63,9 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/mnt/root";
-              # mountOptions = [
-              #   "defaults"
-              # ];
+              # mount at / even if that will change on normal boot
+              # so that /nix/store points to the right place
+              mountpoint = "/";
             };
           };
           state = {
@@ -75,18 +74,9 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              # mountpoint = "/var/lib";
-              # mountOptions = [
-              #   "defaults"
-              # ];
             };
           };
         };
-      };
-    };
-    nodev = {
-      "/nix" = {
-        device = "/mnt/root/nix";
       };
     };
   };

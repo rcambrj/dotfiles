@@ -33,27 +33,28 @@
 
   boot.growPartitionCustom.enable = true;
   fileSystems = {
-    "/boot" = {
+    # use mkDefault so that disko doesn't conflict during disko-install
+    "/boot" = lib.mkDefault {
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
-    "/" = {
+    "/" = lib.mkDefault {
       fsType = "tmpfs";
       options = [ "mode=0755" ];
     };
-    "/mnt/root" = {
+    "/mnt/root" = lib.mkDefault {
       device = "/dev/root";
       neededForBoot = true;
       autoResize = true; # resizes filesystem to occupy whole partition
       fsType = "ext4";
     };
-    "/nix" = {
+    "/nix" = lib.mkDefault {
       device = "/mnt/root/nix";
       neededForBoot = true;
       options = [ "defaults" "bind" ];
       depends = [ "/mnt/root" ];
     };
-    "/mnt/conf" = {
+    "/mnt/conf" = lib.mkDefault {
       device = "/dev/disk/by-label/NIXOSCONF";
       neededForBoot = true;
       fsType = "vfat";
