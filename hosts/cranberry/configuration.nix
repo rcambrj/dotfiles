@@ -67,11 +67,16 @@ in {
     enable = true;
     settings = {
       charger = {
+        # Intel(R) Celeron(R) N5105 @ 2.00GHz
+        # https://askubuntu.com/a/1064309/1682130
+
         governor = "powersave";
         energy_performance_preference = "power";
         turbo = "never";
-        # Intel(R) Celeron(R) N5105 @ 2.00GHz
-        # https://askubuntu.com/a/1064309/1682130
+
+        # governor = "performance";
+        # energy_performance_preference = "performance";
+        # turbo = "auto";
       };
     };
   };
