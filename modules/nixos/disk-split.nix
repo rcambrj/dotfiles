@@ -1,11 +1,11 @@
-{ config, inputs, ... }: { lib, ... }: {
+{ config, inputs, lib, ... }: {
   imports = [
     inputs.disko.nixosModules.disko
   ];
 
   boot.loader.grub = {
-    # mount points are not being set here, so devices list needs to be set
-    devices = [ config.disko.devices.disk.disk1.device ];
+    # no need to set devices, disko will add all devices that have a EF02 partition to the list already
+    # devices = [ ];
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
