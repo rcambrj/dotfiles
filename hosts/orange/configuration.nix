@@ -4,7 +4,7 @@
 
     flake.nixosModules.base
     flake.nixosModules.access-server
-    flake.nixosModules.disk-single
+    flake.nixosModules.disk-standard
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     ./netbird.nix

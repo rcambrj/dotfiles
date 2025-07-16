@@ -2,7 +2,7 @@
 
 Records configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
 
-## To set up a headless bare metal machine
+## Prepare a headless bare metal machine on split USB storage
 
 > Requires two USB sticks.
 
@@ -30,6 +30,30 @@ Records configuration for nix machines, builds images for bare metal machines an
 1. Plug both USB sticks into a machine and switch it on
 1. SSH to `minimal-intel-nomad` or `minimal-raspi-nomad`
 1. Run `sudo nixos-rebuild switch --flake github:rcambrj/dotfiles#{hostname}`
+
+## Prepare a headless bare metal machine with AIO disk
+
+1. Create a new configuration in `/hosts` which uses `disk-aio.nix`
+1. Boot `minimal-intel` with two-USB method (aarch64/raspi untested)
+    > Note: nixos graphical/livecd has limited free space for the nix store, so cannot be used
+
+1. Enable swap, if the machine is particularly underpowered
+    ```bash
+    fdisk
+    # ...create a swap partition
+
+    sudo swapon /dev/mmcblk0p1
+    ```
+1. Confirm that the disk partitions are correct
+    ```
+    sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#machine" --mode destroy,format,mount
+
+    lsblk -o name,mountpoint,label,size,uuid
+    ```
+1. Install nixos with `disko-install` (partitions again)
+    ```
+    sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake "github:rcambrj/dotfiles#host" --disk disk1 /dev/disk/by-id/deviceid
+    ```
 
 ## Building locally on MacOS
 

@@ -11,7 +11,7 @@
     inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
-    flake.nixosModules.disk-split
+    flake.nixosModules.disk-aio
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
