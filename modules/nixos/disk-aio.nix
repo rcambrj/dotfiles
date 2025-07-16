@@ -67,7 +67,7 @@
               format = "ext4";
               # mount at / even if that will change on normal boot
               # so that /nix/store points to the right place
-              mountpoint = "/";
+              mountpoint = "/mnt/root";
               extraArgs = ["-L" "nixos"];
             };
           };
@@ -81,6 +81,22 @@
             };
           };
         };
+      };
+    };
+    nodev = {
+      realroot = {
+        type = "nodev";
+        mountpoint = "/";
+        fsType = "tmpfs";
+        device = "tmpfs";
+        mountOptions = [ "mode=0755" ];
+      };
+      store = {
+        type = "nodev";
+        mountpoint = "/nix";
+        fsType = "auto";
+        device = "/mnt/root/nix";
+        mountOptions = [ "defaults" "bind" ];
       };
     };
   };
