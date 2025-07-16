@@ -2,16 +2,6 @@
   # argoVersion should equal the one provided by the chart
   chartVersion = "v8.1.2";
   argoVersion = "v3.0.6";
-
-  argoRepo = pkgs.fetchFromGitHub {
-    owner = "argoproj";
-    repo = "argo-cd";
-    tag = argoVersion;
-    hash = "sha256-I5xO66ZDinEoljT18kXukEW+rmcXaKui/Ha9nvEjxgA";
-  };
-  allNamespaces = pkgs.runCommand "argocd-all-namespaces" {} ''
-    ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
-  '';
 in {
   services.k3s.manifests."10-argocd-ns".content = {
     apiVersion = "v1";
@@ -111,7 +101,17 @@ in {
     };
   };
 
-  services.k3s.manifests.argocd-all-namespaces = {
+  services.k3s.manifests.argocd-all-namespaces = let
+    argoRepo = pkgs.fetchFromGitHub {
+      owner = "argoproj";
+      repo = "argo-cd";
+      tag = argoVersion;
+      hash = "sha256-I5xO66ZDinEoljT18kXukEW+rmcXaKui/Ha9nvEjxgA";
+    };
+    allNamespaces = pkgs.runCommand "argocd-all-namespaces" {} ''
+      ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
+    '';
+  in {
     target = "argocd-all-namespaces.yaml";
     source = allNamespaces;
   };
