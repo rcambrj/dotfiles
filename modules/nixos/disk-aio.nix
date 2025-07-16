@@ -97,7 +97,10 @@
         fsType = "auto";
         device = "/mnt/root/nix";
         mountOptions = [ "defaults" "bind" ];
+        # depends = [ "/mnt/root" ]; # not supported by disko. do this discretely
       };
     };
   };
+
+  fileSystems."/nix".depends = [ "/mnt/root" ];
 }
