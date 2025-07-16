@@ -44,15 +44,23 @@ Records configuration for nix machines, builds images for bare metal machines an
 
     sudo swapon /dev/mmcblk0p1
     ```
-1. Confirm that the disk partitions are correct
-    ```
-    sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#machine" --mode destroy,format,mount
-
+1. Partition the disk
+    ```bash
+    sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#host" --mode destroy,format,mount
+    
+    # confirm fs labels are correct (vs part labels)
     lsblk -o name,mountpoint,label,size,uuid
     ```
-1. Install nixos with `disko-install` (partitions again)
+1. Mount the partitions necessary for installation in a chroot
+    ```bash
+    sudo mkdir -p /mnt/install
+    sudo mount /dev/path/to/root/partition /mnt/install
+    sudo mkdir -p /mnt/install/boot
+    sudo mount /dev/path/to/boot/partition /mnt/install/boot
     ```
-    sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake "github:rcambrj/dotfiles#host" --disk disk1 /dev/disk/by-id/deviceid
+1. Install nixos
+    ```bash
+    sudo nixos-install --root /mnt/install --flake "github:rcambrj/dotfiles#host" --no-root-passwd
     ```
 
 ## Building locally on MacOS

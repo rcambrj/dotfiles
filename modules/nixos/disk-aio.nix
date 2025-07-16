@@ -10,6 +10,8 @@
     efiInstallAsRemovable = true;
   };
 
+  # if mountpoint is declared for any partition, its counterpart entry in `fileSystems` will be changed
+  # don't declare any mountpoints and use disko only for partitioning (don't use disko-install)
   disko.devices = {
     disk.disk1 = {
       # IMPORTANT: set this before nixos-anywhere!
@@ -30,7 +32,7 @@
             content = {
               type = "filesystem";
               format = "vfat";
-              mountpoint = "/boot";
+              # mountpoint = "/boot";
               extraArgs = ["-n" "ESP"];
             };
           };
@@ -40,9 +42,8 @@
             content = {
               type = "filesystem";
               format = "vfat";
-              # mountpoint = "/mnt/conf"; # not needed for installation
+              # mountpoint = "/mnt/conf";
               extraArgs = ["-n" "NIXOSCONF"];
-              # neededForBoot = true; # not supported by disko. do this discretely
             };
           };
           root = {
@@ -66,9 +67,8 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              mountpoint = "/mnt/root";
+              # mountpoint = "/mnt/root";
               extraArgs = ["-L" "nixos"];
-              # neededForBoot = true; # not supported by disko. do this discretely
             };
           };
           nixosstate = {
@@ -77,32 +77,12 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              # mountpoint = "/var/lib"; # not needed for installation
+              # mountpoint = "/var/lib";
               extraArgs = ["-L" "NIXOSSTATE"];
             };
           };
         };
       };
     };
-    nodev = {
-      realroot = {
-        type = "nodev";
-        mountpoint = "/";
-        fsType = "tmpfs";
-        device = "tmpfs";
-        mountOptions = [ "mode=0755" ];
-      };
-      store = {
-        type = "nodev";
-        mountpoint = "/nix";
-        fsType = "auto";
-        device = "/mnt/root/nix";
-        mountOptions = [ "defaults" "bind" ];
-        # depends = [ "/mnt/root" ]; # not supported by disko. do this discretely
-      };
-    };
   };
-
-  fileSystems."/mnt/root".neededForBoot = true;
-  fileSystems."/nix".depends = [ "/mnt/root" ];
 }

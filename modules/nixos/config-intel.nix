@@ -56,7 +56,6 @@
     };
     "/mnt/conf" = lib.mkDefault {
       device = "/dev/disk/by-label/NIXOSCONF";
-      neededForBoot = true;
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };

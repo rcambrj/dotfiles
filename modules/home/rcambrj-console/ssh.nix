@@ -34,6 +34,11 @@ in {
         hostname =  "cranberry.cambridge.me";
         user = "nixos";
       };
+      "strawberry" = {
+        # kubernetes node
+        hostname = "strawberry.cambridge.me";
+        user = "nixos";
+      };
       "minimal-intel" = {
         hostname =  "minimal-intel-nomad.local";
         user = "nixos";
