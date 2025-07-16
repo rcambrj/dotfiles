@@ -15,9 +15,9 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
+    flake.nixosModules.gpu-intel
 
     # ./backup.nix
-    # ./gpu.nix
     # ./telemetry.nix
     # ./kubernetes
   ];
@@ -37,12 +37,13 @@
     enable = true;
     settings = {
       charger = {
-        # governor = "powersave";
-        # energy_performance_preference = "power";
-        # turbo = "never";
+        # powersave / balanced / performance
+        governor = "powersave";
 
-        governor = "performance";
-        energy_performance_preference = "performance";
+        # power / performance
+        energy_performance_preference = "power";
+
+        # never / auto / always
         turbo = "auto";
       };
     };

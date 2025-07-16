@@ -1,3 +1,8 @@
+# requires secrets:
+# - backup-bucket
+# - backup-encryption-key
+# - backup-credentials
+
 { config, ... }: {
   services.restic.backups.main = {
     timerConfig = {

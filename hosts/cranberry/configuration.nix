@@ -16,27 +16,18 @@ in {
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
+    flake.nixosModules.gpu-intel
+    flake.nixosModules.server-backup
+    flake.nixosModules.kubernetes-node
 
-    ./backup.nix
-    ./gpu.nix
     ./telemetry.nix
-    ./kubernetes
   ];
 
   networking.hostName = "cranberry";
   age.secrets = {
-    acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
-    pia-vpn-user.file = ../../secrets/pia-vpn-user.age;
-    pia-vpn-pass.file = ../../secrets/pia-vpn-pass.age;
     backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;
     backup-credentials.file = ../../secrets/cranberry-backup-credentials.age;
     backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;
-    kubernetes-oauth2-proxy-client-secret.file = ../../secrets/kubernetes-oauth2-proxy-client-secret.age;
-    kubernetes-oauth2-proxy-cookie-secret.file = ../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
-    k3s-token.file = ../../secrets/k3s-token.age;
-    argocd-session-key.file = ../../secrets/argocd-session-key.age;
-    argocd-client-secret.file = ../../secrets/argocd-client-secret.age;
-    argocd-ssh-key.file = ../../secrets/argocd-ssh-key.age;
   };
 
   fileSystems = {
