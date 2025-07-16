@@ -12,8 +12,8 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
+    flake.nixosModules.server-backup
     inputs.agenix-template.nixosModules.default
-    ./backup.nix
     ./esphome.nix
     ./downloads-enabled.nix
     ./home-assistant

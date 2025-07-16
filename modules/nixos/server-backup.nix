@@ -27,7 +27,7 @@
       "logs"
       "logs.db"
       "log.txt"
-      "/var/lib/longhorn"
+      "/var/lib/longhorn/replicas"
       "/var/lib/media"
       "/var/lib/jellyfin/metadata"
       "/var/lib/radarr/.config/Radarr/MediaCover"

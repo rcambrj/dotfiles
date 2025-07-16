@@ -38,16 +38,6 @@ in {
     };
   };
 
-  # this group should be able to manipulate media files
-  users.users.media = {
-    uid = 998;
-    isSystemUser = true;
-    group = "media";
-  };
-  users.groups.media = {
-    gid = 998;
-  };
-
   services.auto-cpufreq = {
     enable = true;
     settings = {
@@ -115,52 +105,5 @@ in {
     DNS=192.168.142.1
     Domains=~cambridge.me
     '';
-  };
-
-  systemd.tmpfiles.settings = {
-    "10-media" = {
-      "/var/lib/media" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0750";
-        };
-      };
-      "/var/lib/media/tvshows" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0770";
-        };
-      };
-      "/var/lib/media/movies" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0770";
-        };
-      };
-      "/var/lib/media/downloads" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0750";
-        };
-      };
-      "/var/lib/media/downloads/nzbget" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0770";
-        };
-      };
-      "/var/lib/media/downloads/transmission" = {
-        d = {
-          user = "root";
-          group = group;
-          mode = "0770";
-        };
-      };
-    };
   };
 }
