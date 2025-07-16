@@ -40,8 +40,9 @@
             content = {
               type = "filesystem";
               format = "vfat";
-              # mountpoint = "/mnt/conf";
+              # mountpoint = "/mnt/conf"; # not needed for installation
               extraArgs = ["-n" "NIXOSCONF"];
+              # neededForBoot = true; # not supported by disko. do this discretely
             };
           };
           root = {
@@ -65,10 +66,9 @@
             content = {
               type = "filesystem";
               format = "ext4";
-              # mount at / even if that will change on normal boot
-              # so that /nix/store points to the right place
               mountpoint = "/mnt/root";
               extraArgs = ["-L" "nixos"];
+              # neededForBoot = true; # not supported by disko. do this discretely
             };
           };
           nixosstate = {
@@ -77,6 +77,7 @@
             content = {
               type = "filesystem";
               format = "ext4";
+              # mountpoint = "/var/lib"; # not needed for installation
               extraArgs = ["-L" "NIXOSSTATE"];
             };
           };
@@ -102,5 +103,6 @@
     };
   };
 
+  fileSystems."/mnt/root".neededForBoot = true;
   fileSystems."/nix".depends = [ "/mnt/root" ];
 }
