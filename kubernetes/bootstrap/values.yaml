@@ -19,7 +19,7 @@ applications:
     syncwave: "-80"
   - name: longhorn-system # depends on kyverno
     syncwave: "-80"
-  - name: auth # depends on: cert-manager, ingress-nginx
+  - name: oauth2-proxy # depends on: cert-manager, ingress-nginx
     syncwave: "-80"
 
   - name: intel-gpu # depends on: node-feature-discovery
