@@ -1,9 +1,9 @@
 let
   sshKeys = import ./lib/ssh-keys.nix;
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
-  kubenodes = [ sshKeys.blueberry sshKeys.cranberry ];
+  kubenodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
 in {
-  "secrets/acme-cloudflare.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
+  "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
   "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
 
@@ -11,7 +11,7 @@ in {
   "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/cranberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
   "secrets/kubernetes-oauth2-proxy-client-secret.age".publicKeys = defaults ++ kubenodes;
-  "secrets/argocd-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/argocd-client-secret.age".publicKeys = defaults ++ kubenodes;
 
   # kubernetes
   "secrets/k3s-token.age".publicKeys = defaults ++ kubenodes;
@@ -38,8 +38,8 @@ in {
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # cranberry
-  "secrets/pia-vpn-user.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/pia-vpn-pass.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
+  "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
   "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];

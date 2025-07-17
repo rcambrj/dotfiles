@@ -7,6 +7,7 @@ metadata:
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: {{ .syncwave | default "0" | quote }}
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:

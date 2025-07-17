@@ -39,10 +39,10 @@
     settings = {
       charger = {
         # powersave / balanced / performance
-        governor = "powersave";
+        governor = "performance";
 
         # power / performance
-        energy_performance_preference = "power";
+        # energy_performance_preference = "power";
 
         # never / auto / always
         turbo = "auto";

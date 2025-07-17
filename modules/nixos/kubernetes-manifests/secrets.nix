@@ -73,7 +73,7 @@ in {
         kind: Secret
         metadata:
           name: oauth2-proxy
-          namespace: auth
+          namespace: oauth2-proxy
         type: Opaque
         stringData:
           client-secret: $clientsecret
