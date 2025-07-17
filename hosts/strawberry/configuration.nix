@@ -16,10 +16,11 @@
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
     flake.nixosModules.gpu-intel
+    flake.nixosModules.telemetry
+    flake.nixosModules.kubernetes-node
+    flake.nixosModules.kubernetes-manifests
 
     # ./backup.nix
-    # ./telemetry.nix
-    # ./kubernetes
   ];
 
   networking.hostName = "strawberry";
@@ -70,5 +71,8 @@
     }
   ];
   zramSwap.enable = true;
+
+  services.kubernetes-node.enable = true;
+  services.kubernetes-manifests.enable = true;
 
 }

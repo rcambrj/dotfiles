@@ -13,6 +13,7 @@
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
     flake.nixosModules.server-backup
+    flake.nixosModules.telemetry
     inputs.agenix-template.nixosModules.default
     ./esphome.nix
     ./downloads-enabled.nix
@@ -21,7 +22,6 @@
     ./auth
     ./postgres.nix
     ./telemetry
-    ./telemetry.nix
   ];
 
   networking.hostName = "blueberry";

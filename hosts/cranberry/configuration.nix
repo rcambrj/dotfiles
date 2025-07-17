@@ -18,10 +18,9 @@ in {
     flake.nixosModules.config-intel
     flake.nixosModules.gpu-intel
     flake.nixosModules.server-backup
-    flake.nixosModules.kubernetes-node
-    flake.nixosModules.kubernetes-manifests
-
-    ./telemetry.nix
+    flake.nixosModules.telemetry
+    # flake.nixosModules.kubernetes-node
+    # flake.nixosModules.kubernetes-manifests
   ];
 
   networking.hostName = "cranberry";
@@ -108,6 +107,6 @@ in {
     '';
   };
 
-  services.kubernetes-node.enable = true;
-  services.kubernetes-manifests.enable = true;
+  # services.kubernetes-node.enable = true;
+  # services.kubernetes-manifests.enable = true;
 }

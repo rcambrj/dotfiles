@@ -8,13 +8,13 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
+    flake.nixosModules.telemetry
     ./http
     ./fluidd.nix
     ./klipper.nix
     ./mobileraker.nix
     ./moonraker.nix
     ./ustreamer.nix
-    ./telemetry.nix
   ];
 
   networking.hostName = "elderberry";

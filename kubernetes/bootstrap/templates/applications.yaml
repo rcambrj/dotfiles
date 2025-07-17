@@ -15,7 +15,7 @@ spec:
     server: {{ $config.spec.destination.server | quote }}
   project: default
   source:
-    path: {{ (printf "%s/%s" $config.spec.source.path (.path | default  .name)) | quote }}
+    path: {{ (printf "%s/%s" $config.spec.source.path (.path | default .name)) | quote }}
     repoURL: {{ $config.spec.source.repoURL }}
     targetRevision: {{ $config.spec.source.targetRevision }}
     {{- with .tool }}
