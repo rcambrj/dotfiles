@@ -1,8 +1,6 @@
 # kubectl patch -n argocd app dotfiles --patch-file kubernetes/utils/sync-argocd.yaml --type merge
 
 operation:
-  initiatedBy:
-    username: <username>
   sync:
     syncStrategy:
       hook: {}
