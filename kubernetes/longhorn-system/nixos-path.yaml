@@ -3,6 +3,9 @@ kind: ClusterPolicy
 metadata:
   name: longhorn-set-nixos-path
   annotations:
+    # this needs to be in place before any longhorn pods get created
+    argocd.argoproj.io/sync-wave: "-10"
+
     policies.kyverno.io/title: Set Environment Variables from ConfigMap
     policies.kyverno.io/subject: Pod
     policies.kyverno.io/category: Other
