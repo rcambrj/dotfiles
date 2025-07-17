@@ -5,6 +5,8 @@ kind: Application
 metadata:
   name: {{ printf "dotfiles.%s" .name | quote }}
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .syncwave | default "0" | quote }}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:

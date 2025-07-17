@@ -9,4 +9,4 @@ spec:
   repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
   chart: node-feature-discovery
   version: v0.17.3
-  targetNamespace: kube-system
+  targetNamespace: node-feature-discovery

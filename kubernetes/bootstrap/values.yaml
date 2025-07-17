@@ -8,8 +8,21 @@ config:
       targetRevision: HEAD
 
 applications:
-  - name: kube-system
   - name: kyverno
+    syncwave: "-90"
+  - name: node-feature-discovery
+    syncwave: "-90"
+
+  - name: cert-manager
+    syncwave: "-80"
+  - name: ingress-nginx
+    syncwave: "-80"
   - name: longhorn-system
+    syncwave: "-80"
   - name: auth
+    syncwave: "-80"
+
+  - name: intel-gpu
+    syncwave: "-70"
+
   - name: media
