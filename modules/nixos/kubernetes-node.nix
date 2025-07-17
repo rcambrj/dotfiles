@@ -6,9 +6,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    age.secrets = {
-      k3s-token.file = ../../../secrets/k3s-token.age;
-    };
+    age.secrets.k3s-token.file = ../../secrets/k3s-token.age;
 
     networking.firewall = {
         # https://docs.k3s.io/installation/requirements#networking
@@ -35,21 +33,18 @@ in {
       clusterInit = true;
 
       # points to all kubernetes nodes
+      # comment this to bring up the first node
       # serverAddr = "kubernetes.cambridge.me";
     };
 
     # Longhorn is installed onto kubernetes via ArgoCD
     # these are the host-level dependencies
-
     # RWO
     services.openiscsi = {
       enable = true;
       name = "${config.networking.hostName}-initiatorhost";
     };
     # RWX
-    services.nfs.server = {
-      enable = true;
-    };
-
+    services.nfs.server.enable = true;
   };
 }

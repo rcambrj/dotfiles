@@ -15,14 +15,14 @@ applications:
 
   - name: cert-manager
     syncwave: "-80"
-  - name: ingress-nginx
+  - name: ingress-nginx # depends on: ingress-nginx
     syncwave: "-80"
-  - name: longhorn-system
+  - name: longhorn-system # depends on kyverno
     syncwave: "-80"
-  - name: auth
+  - name: auth # depends on: cert-manager, ingress-nginx
     syncwave: "-80"
 
-  - name: intel-gpu
+  - name: intel-gpu # depends on: node-feature-discovery
     syncwave: "-70"
 
   - name: media
