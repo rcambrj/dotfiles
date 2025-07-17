@@ -10,6 +10,7 @@ spec:
   chart: intel-device-plugins-operator
   version: 0.32.1
   targetNamespace: intel-device-plugins-operator
+  createNamespace: true
 ---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
@@ -23,5 +24,6 @@ spec:
   chart: intel-device-plugins-gpu
   version: 0.32.1
   targetNamespace: intel-device-plugins-operator
+  createNamespace: true
   valuesContent: |-
     sharedDevNum: 99

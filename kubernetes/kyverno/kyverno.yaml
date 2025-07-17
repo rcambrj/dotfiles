@@ -10,3 +10,4 @@ spec:
   chart: kyverno
   version: 3.4.4
   targetNamespace: kyverno
+  createNamespace: true

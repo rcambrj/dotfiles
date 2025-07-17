@@ -10,3 +10,4 @@ spec:
   chart: node-feature-discovery
   version: v0.17.3
   targetNamespace: node-feature-discovery
+  createNamespace: true

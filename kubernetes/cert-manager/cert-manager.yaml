@@ -12,6 +12,7 @@ spec:
   chart: cert-manager
   version: v1.18.2
   targetNamespace: cert-manager
+  createNamespace: true
   valuesContent: |-
     crds:
       enabled: true
