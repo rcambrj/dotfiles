@@ -39,12 +39,15 @@ in {
 
     # Longhorn is installed onto kubernetes via ArgoCD
     # these are the host-level dependencies
-    # RWO
     services.openiscsi = {
       enable = true;
       name = "${config.networking.hostName}-initiatorhost";
     };
-    # RWX
     services.nfs.server.enable = true;
+    systemd.services.iscsid.serviceConfig.PrivateMounts = "yes";
+
+    # Fix Longhorn expecting FHS https://github.com/longhorn/longhorn/issues/2166
+    systemd.services.iscsid.serviceConfig.BindPaths = "/run/current-system/sw/bin:/bin";
+    systemd.tmpfiles.rules = [ "L /usr/bin/mount - - - - /run/current-system/sw/bin/mount" ];
   };
 }

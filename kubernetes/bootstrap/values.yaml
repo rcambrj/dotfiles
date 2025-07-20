@@ -8,8 +8,8 @@ config:
       targetRevision: HEAD
 
 applications:
-  - name: kyverno
-    syncwave: "-90"
+  # - name: kyverno
+  #   syncwave: "-90"
   - name: node-feature-discovery
     syncwave: "-90"
 
