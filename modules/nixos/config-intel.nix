@@ -56,6 +56,7 @@
     };
     "/mnt/conf" = lib.mkDefault {
       device = "/dev/disk/by-label/NIXOSCONF";
+      neededForBoot = true; # otherwise agenix will try to unencrypt secrets before mount
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
