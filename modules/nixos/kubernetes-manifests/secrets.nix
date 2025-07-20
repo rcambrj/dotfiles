@@ -21,6 +21,11 @@ in {
       {
         apiVersion = "v1";
         kind = "Namespace";
+        metadata.name = "cert-manager";
+      }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
         metadata.name = "oauth2-proxy";
       }
     ];
@@ -54,7 +59,7 @@ in {
         kind: Secret
         metadata:
           name: cloudflare-token
-          namespace: kube-system
+          namespace: cert-manager
         type: Opaque
         stringData:
           token: $token
