@@ -165,6 +165,9 @@ in {
           server =  "https://kubernetes.default.svc";
           namespace = "argocd";
         };
+        syncOptions = [
+          "CreateNamespace=true"
+        ];
         syncPolicy = {
           automated = {
             prune = true;
