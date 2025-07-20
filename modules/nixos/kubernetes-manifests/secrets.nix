@@ -21,7 +21,7 @@ in {
       {
         apiVersion = "v1";
         kind = "Namespace";
-        metadata.name = "auth";
+        metadata.name = "oauth2-proxy";
       }
     ];
 

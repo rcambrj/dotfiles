@@ -50,7 +50,7 @@ Records configuration for nix machines, builds images for bare metal machines an
     ```
 1. Partition the disk
     ```bash
-    sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#host" --mode destroy,format,mount
+    sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#host" --mode destroy,format,mount --yes-wipe-all-disks
     
     # confirm fs labels are correct (vs part labels)
     lsblk -o name,mountpoint,label,size,uuid
