@@ -2,6 +2,8 @@ apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
   name: longhorn
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
   finalizers:
   - wrangler.cattle.io/on-helm-chart-remove
 spec:
@@ -41,3 +43,11 @@ spec:
             name: longhorn-frontend
             port:
               number: 80
+---
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  name: longhorn-backup-b2
+spec:
+  backupTargetURL: s3://rcambrj-longhorn-backup@eu-central-003/
+  credentialSecret: longhorn-backup-b2

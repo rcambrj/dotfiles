@@ -27,6 +27,9 @@
     backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;
     backup-credentials.file = ../../secrets/cranberry-backup-credentials.age;
     backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;
+
+    longhorn-backup-b2-apikey.file = ../../secrets/longhorn-backup-b2-apikey.age;
+    longhorn-backup-b2-secret.file = ../../secrets/longhorn-backup-b2-secret.age;
   };
 
   disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024";

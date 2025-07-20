@@ -28,6 +28,11 @@ in {
         kind = "Namespace";
         metadata.name = "oauth2-proxy";
       }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "longhorn-system";
+      }
     ];
 
     age-template.files."20-media-vpn-secret" = {
@@ -83,6 +88,27 @@ in {
         stringData:
           client-secret: $clientsecret
           cookie-secret: $cookiesecret
+      '';
+    };
+
+    age-template.files."20-longhorn-backup-b2" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-longhorn-backup-b2.yaml";
+      vars = {
+        apikey = config.age.secrets.longhorn-backup-b2-apikey.path;
+        # cookie-secret. must be exactly 16, 24 or 32 chars.
+        secret = config.age.secrets.longhorn-backup-b2-secret.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: longhorn-backup-b2
+          namespace: longhorn-system
+        type: Opaque
+        stringData:
+          AWS_ENDPOINTS: s3.eu-central-003.backblazeb2.com
+          AWS_ACCESS_KEY_ID: $apikey
+          AWS_SECRET_ACCESS_KEY: $secret
       '';
     };
   });
