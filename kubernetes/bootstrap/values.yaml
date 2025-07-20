@@ -13,8 +13,8 @@ applications:
   - name: node-feature-discovery
     syncwave: "-90"
 
-  - name: cert-manager
-    syncwave: "-80"
+  # - name: cert-manager
+  #   syncwave: "-80"
   - name: ingress-nginx # depends on: ingress-nginx
     syncwave: "-80"
   - name: longhorn-system # depends on kyverno
