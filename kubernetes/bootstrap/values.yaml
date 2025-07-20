@@ -25,4 +25,4 @@ applications:
   - name: intel-gpu # depends on: node-feature-discovery
     syncwave: "-70"
 
-  - name: media
+  # - name: media

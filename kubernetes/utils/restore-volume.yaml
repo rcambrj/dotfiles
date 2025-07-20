@@ -21,7 +21,7 @@ spec:
           image: nixery.dev/shell/rsync
           tty: true
           command: [ "/bin/sh" ]
-          args: [ "-c", "rsync --size-only --bwlimit=10000 --progress --recursive /mnt/old/ /mnt/new/ && chown -R 1000:1000 /mnt/new/ && echo done" ]
+          args: [ "-c", "rsync --size-only --bwlimit=30000 --progress --recursive /mnt/old/ /mnt/new/ && chown -R 1000:1000 /mnt/new/ && echo done" ]
           volumeMounts:
             - name: old-vol
               mountPath: /mnt/old
@@ -30,7 +30,7 @@ spec:
       volumes:
         - name: old-vol
           hostPath:
-            path: /home/nixos/jellyfin
+            path: /var/lib/media
         - name: new-vol
           persistentVolumeClaim:
-            claimName: jellyfin-config
+            claimName: media
