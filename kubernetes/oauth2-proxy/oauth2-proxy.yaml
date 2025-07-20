@@ -127,6 +127,16 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
+  - host: longhorn.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
   - host: nzbget.media.cambridge.me
     http:
       paths:
@@ -158,26 +168,6 @@ spec:
             port:
               number: 80
   - host: transmission.media.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  - host: jackett.media.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  - host: longhorn.media.cambridge.me
     http:
       paths:
       - path: /oauth2
