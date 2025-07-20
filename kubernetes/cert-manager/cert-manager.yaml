@@ -22,7 +22,7 @@ kind: ClusterIssuer
 metadata:
   name: letsencrypt
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   acme:
     email: robert@cambridge.me
@@ -44,7 +44,7 @@ kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   acme:
     email: robert@cambridge.me
