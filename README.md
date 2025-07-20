@@ -44,6 +44,10 @@ Records configuration for nix machines, builds images for bare metal machines an
 
     sudo swapon /dev/mmcblk0p1
     ```
+1. Ensure that the disk target is correct
+    ```
+    disko.devices.disk.disk1.device = "/dev/disk/by-id/..."
+    ```
 1. Partition the disk
     ```bash
     sudo nix run github:nix-community/disko/latest -- --flake "github:rcambrj/dotfiles#host" --mode destroy,format,mount

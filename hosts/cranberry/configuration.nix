@@ -1,9 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ config, flake, inputs, modulesPath, ... }: let
-  group = import ./group.nix;
-in {
+{ flake, inputs, modulesPath, ... }: {
   imports = [
     # TODO: https://github.com/numtide/nixos-facter/issues/125
     # inputs.nixos-facter-modules.nixosModules.facter
@@ -13,6 +11,7 @@ in {
     inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
+    flake.nixosModules.disk-aio
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
@@ -30,6 +29,7 @@ in {
     backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;
   };
 
+  disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024";
   fileSystems = {
     "/var/lib" = {
       device = "/dev/disk/by-label/NIXOSSTATE";
@@ -43,15 +43,15 @@ in {
     settings = {
       charger = {
         # Intel(R) Celeron(R) N5105 @ 2.00GHz
-        # https://askubuntu.com/a/1064309/1682130
 
-        governor = "powersave";
-        energy_performance_preference = "power";
-        turbo = "never";
+        # powersave / balanced / performance
+        governor = "performance";
 
-        # governor = "performance";
-        # energy_performance_preference = "performance";
-        # turbo = "auto";
+        # power / performance
+        # energy_performance_preference = "power";
+
+        # never / auto / always
+        turbo = "auto";
       };
     };
   };
