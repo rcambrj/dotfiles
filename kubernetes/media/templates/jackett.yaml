@@ -4,7 +4,7 @@ metadata:
   name: jackett
 spec:
   revisionHistoryLimit: 1
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: jackett
@@ -16,7 +16,7 @@ spec:
       volumes:
       - name: jackett
         persistentVolumeClaim:
-          claimName: jackett
+          claimName: jackett-config
       - name: gluetun-port-forwarding
         emptyDir:
       initContainers:
