@@ -16,7 +16,7 @@ spec:
         app: jackett
     spec:
       volumes:
-      - name: jackett
+      - name: jackett-config
         persistentVolumeClaim:
           claimName: jackett-config
       - name: gluetun-port-forwarding
@@ -25,6 +25,13 @@ spec:
       {{- with .Values.vpnsidecar }}
       {{- . | toYaml | nindent 6 }}
       {{- end }}
+      - name: lock-logs-file
+        image: busybox
+        volumeMounts:
+        - name: jackett-config
+          mountPath: /config
+        command: ["/bin/sh", "-c"]
+        args: [ "chmod 000 /config/Jackett/log.txt" ]
       containers:
       - name: jackett
         image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
@@ -36,7 +43,7 @@ spec:
         - name: PGID
           value: "1000"
         volumeMounts:
-        - name: jackett
+        - name: jackett-config
           mountPath: /config
         ports:
         - name: http

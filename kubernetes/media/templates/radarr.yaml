@@ -25,6 +25,14 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads
+      initContainers:
+      - name: lock-logs-dir
+        image: busybox
+        volumeMounts:
+        - name: radarr-config
+          mountPath: /config
+        command: ["/bin/sh", "-c"]
+        args: [ "chmod 000 /config/logs" ]
       containers:
       - name: radarr
         image: lscr.io/linuxserver/radarr:5.26.2.10099-ls277
