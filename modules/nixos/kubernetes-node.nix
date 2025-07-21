@@ -1,4 +1,4 @@
-{ config, lib, ... }: with lib; let
+{ config, lib, pkgs, ... }: with lib; let
   cfg = config.services.kubernetes-node;
 in {
   options.services.kubernetes-node = {
@@ -39,15 +39,20 @@ in {
 
     # Longhorn is installed onto kubernetes via ArgoCD
     # these are the host-level dependencies
+    environment.systemPackages = with pkgs; [ tgt ];
     services.openiscsi = {
       enable = true;
-      name = "${config.networking.hostName}-initiatorhost";
+      name = config.networking.hostName;
     };
     services.nfs.server.enable = true;
     systemd.services.iscsid.serviceConfig.PrivateMounts = "yes";
 
-    # Fix Longhorn expecting FHS https://github.com/longhorn/longhorn/issues/2166
-    systemd.services.iscsid.serviceConfig.BindPaths = "/run/current-system/sw/bin:/bin";
-    systemd.tmpfiles.rules = [ "L /usr/bin/mount - - - - /run/current-system/sw/bin/mount" ];
+    # Fix Longhorn expecting FHS
+    # https://github.com/longhorn/longhorn/issues/2166
+    # https://takingnotes.net/kubernetes/longhorn/
+    system.activationScripts.usrlocalbin = ''
+      mkdir -m 0755 -p /usr/local
+      ln -nsf /run/current-system/sw/bin /usr/local/
+    '';
   };
 }
