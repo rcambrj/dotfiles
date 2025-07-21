@@ -32,7 +32,10 @@ spec:
         - name: sonarr-config
           mountPath: /config
         command: ["/bin/sh", "-c"]
-        args: [ "chmod 000 /config/logs" ]
+        args:
+          - |-
+            mkdir -p /config/logs
+            chmod 000 /config/logs
       containers:
       - name: sonarr
         image: lscr.io/linuxserver/sonarr:4.0.15.2941-ls287

@@ -31,7 +31,11 @@ spec:
         - name: jackett-config
           mountPath: /config
         command: ["/bin/sh", "-c"]
-        args: [ "chmod 000 /config/Jackett/log.txt" ]
+        args:
+          - |-
+            mkdir -p /config/Jackett
+            touch /config/Jackett/log.txt
+            chmod 000 /config/Jackett/log.txt
       containers:
       - name: jackett
         image: lscr.io/linuxserver/jackett:v0.22.2123-ls82

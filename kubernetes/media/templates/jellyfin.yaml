@@ -29,7 +29,10 @@ spec:
         - name: jellyfin-config
           mountPath: /config
         command: ["/bin/sh", "-c"]
-        args: [ "chmod 000 /config/log" ]
+        args:
+          - |-
+            mkdir -p /config/log
+            chmod 000 /config/log
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
