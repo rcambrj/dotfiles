@@ -11,7 +11,7 @@
     ];
   };
   environment.systemPackages = with pkgs; [
-    intel-gpu-tools
+    intel-gpu-tools # intel_gpu_top
     intel-media-sdk
     intel-compute-runtime
     libva-utils
