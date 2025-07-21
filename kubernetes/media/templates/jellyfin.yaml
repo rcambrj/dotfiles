@@ -22,6 +22,14 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: media
+      initContainers:
+      - name: lock-logs-dir
+        image: busybox
+        volumeMounts:
+        - name: jellyfin-config
+          mountPath: /config
+        command: ["/bin/sh", "-c"]
+        args: [ "chmod 000 /config/log" ]
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
