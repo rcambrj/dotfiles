@@ -5,6 +5,8 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: sonarr
@@ -50,19 +52,17 @@ spec:
             memory: "200Mi"
           limits:
             cpu: "200m"
-            memory: "300Mi"
+            memory: "500Mi"
         startupProbe:
           httpGet:
             path: /ping
             port: http
-          failureThreshold: 20
+          failureThreshold: 30
         readinessProbe:
           httpGet:
             path: /ping
             port: http
         livenessProbe:
-          periodSeconds: 60
-          timeoutSeconds: 60 # container locks up when copying large files
           httpGet:
             path: /ping
             port: http
