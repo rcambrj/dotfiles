@@ -51,3 +51,19 @@ metadata:
 spec:
   backupTargetURL: s3://rcambrj-longhorn-backup@eu-central-003/
   credentialSecret: longhorn-backup-b2
+# ---
+# apiVersion: longhorn.io/v1beta2
+# kind: RecurringJob
+# metadata:
+#   name: longhorn-backup-b2
+# spec:
+#   cron: "* * * * *"
+#   task: "snapshot"
+#   groups:
+#   - default
+#   - group1
+#   retain: 1
+#   concurrency: 2
+#   labels:
+#     label/1: a
+#     label/2: b
