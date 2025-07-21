@@ -61,6 +61,8 @@ spec:
             path: /ping
             port: http
         livenessProbe:
+          periodSeconds: 60
+          timeoutSeconds: 60 # container locks up when copying large files
           httpGet:
             path: /ping
             port: http

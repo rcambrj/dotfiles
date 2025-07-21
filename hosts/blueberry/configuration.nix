@@ -12,6 +12,7 @@
     flake.nixosModules.common
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
+    flake.nixosModules.gpu-intel
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
     inputs.agenix-template.nixosModules.default
