@@ -16,6 +16,10 @@ spec:
   createNamespace: true
   valuesContent: |-
     persistence.defaultClassReplicaCount: 1
+    csi.attacherReplicaCount: 1
+    csi.provisionerReplicaCount: 1
+    csi.resizerReplicaCount: 1
+    csi.snapshotterReplicaCount: 1
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
