@@ -48,7 +48,6 @@
 
       l = "ls -lah";
       vim = "nvim";
-      ip = "curl ifconfig.co";
       tf = "terraform";
       sshn = "ssh -o StrictHostKeychecking=no -o UserKnownHostsFile=/dev/null";
 
