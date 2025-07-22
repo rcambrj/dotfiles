@@ -20,23 +20,38 @@
 
     paths = [ "/var/lib" ];
     exclude = [
-      ".platformio"
+      # generics
       ".esphome"
       ".git"
+      ".platformio"
       "*.log"
-      "logs"
-      "logs.db"
       "log.txt"
-      "/var/lib/longhorn/replicas"
-      "/var/lib/media"
+      "logrotate.status"
+      "logs.db"
+      "logs"
+
+      # specifics
+      "/var/lib/alloy"
+      "/var/lib/cni"
+      "/var/lib/kubelet"
+      "/var/lib/longhorn"
+      "/var/lib/machines"
+      "/var/lib/nfs"
+      "/var/lib/nixos"
+      "/var/lib/portables"
+      "/var/lib/rancher/k3s"
+      "/var/lib/systemd"
+
+      # deprecated
       "/var/lib/jellyfin/metadata"
-      "/var/lib/radarr/.config/Radarr/MediaCover"
-      "/var/lib/radarr/.config/NzbDrone/MediaCover"
+      "/var/lib/media"
       "/var/lib/nzbget/downloads"
-      "/var/lib/transmission/watchdir"
-      "/var/lib/transmission/Downloads"
-      "/var/lib/transmission/.incomplete"
       "/var/lib/pia-vpn"
+      "/var/lib/radarr/.config/NzbDrone/MediaCover"
+      "/var/lib/radarr/.config/Radarr/MediaCover"
+      "/var/lib/transmission/.incomplete"
+      "/var/lib/transmission/Downloads"
+      "/var/lib/transmission/watchdir"
     ];
   };
 }
