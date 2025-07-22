@@ -21,6 +21,10 @@ in {
   "secrets/longhorn-backup-b2-apikey.age".publicKeys = defaults ++ kubenodes;
   "secrets/longhorn-backup-b2-secret.age".publicKeys = defaults ++ kubenodes;
 
+  # patroni / postgres
+  "secrets/patroni-replication-password.age".publicKeys = defaults ++ kubenodes;
+  "secrets/patroni-superuser-password.age".publicKeys = defaults ++ kubenodes;
+
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/authelia-jwt.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
