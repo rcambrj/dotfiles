@@ -39,7 +39,7 @@
       "/var/lib/nfs"
       "/var/lib/nixos"
       "/var/lib/portables"
-      "/var/lib/rancher/k3s"
+      "/var/lib/rancher"
       "/var/lib/systemd"
 
       # deprecated

@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ flake, inputs, modulesPath, ... }: {
+{ flake, inputs, modulesPath, pkgs, ... }: {
   imports = [
     # TODO: https://github.com/numtide/nixos-facter/issues/125
     # inputs.nixos-facter-modules.nixosModules.facter
@@ -20,6 +20,7 @@
     flake.nixosModules.telemetry
     flake.nixosModules.kubernetes-node
     flake.nixosModules.kubernetes-manifests
+    flake.nixosModules.disk-savers
   ];
 
   networking.hostName = "cranberry";
@@ -39,6 +40,11 @@
       fsType = "ext4";
       neededForBoot = true;
     };
+  };
+
+  disk-savers.etcd-store = {
+    targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
+    diskDir = "/var/lib/etcd-store";
   };
 
   services.auto-cpufreq = {
