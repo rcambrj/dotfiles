@@ -24,6 +24,19 @@ spec:
       - name: downloads
         persistentVolumeClaim:
           claimName: downloads
+      initContainers:
+      - name: create-dirs
+        image: busybox
+        volumeMounts:
+        - name: downloads
+          subPath: transmission
+          mountPath: /downloads
+        command: ["/bin/sh", "-c"]
+        args:
+          - |-
+            mkdir -p /downloads/complete/radarr
+            mkdir -p /downloads/complete/sonarr
+            chown -R 1000:1000 /downloads/*
       containers:
       - name: nzbget
         image: lscr.io/linuxserver/nzbget:v25.2-ls204
