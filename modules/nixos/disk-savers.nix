@@ -6,10 +6,17 @@
       targetDir = mkOption {
         type = types.path;
         description = "The path to the directory which needs to be saved.";
+        example = "/var/lib/foo";
+      };
+      targetMountName = mkOption {
+        type = types.str;
+        description = "Must be identical to `targetDir`, but with dashes instead of slashes, except the first slash, just like systemd-escape does.";
+        example = "var-lib-foo";
       };
       diskDir = mkOption {
         type = types.path;
         description = "The path to a directory on disk";
+        example = "/var/lib/bar";
       };
       diskDirOptions = mkOption {
         type = types.attrs;
@@ -25,10 +32,10 @@
         description = "The options to apply to the tmpfs";
         default = [ "mode=0700" ];
       };
-      syncEverySecs = mkOption {
-        type = types.int;
-        description = "The number of seconds between executing rsync";
-        default = 60;
+      syncEvery = mkOption {
+        type = types.str;
+        description = "The time between executing rsync (see systemd timer)";
+        default = "60s";
       };
     };
   };
@@ -65,18 +72,21 @@ in {
 
     systemd.services = attrsets.concatMapAttrs (name: value: {
       "disk-saver-${name}" = {
-        script = "${pkgs.lib.getExe pkgs.rsync} -a --delete ${value.targetDir}/ ${value.diskDir}/lowerdir/";
+        script = "${pkgs.lib.getExe pkgs.rsync} -ac --delete ${value.targetDir}/ ${value.diskDir}/lowerdir/";
+        serviceConfig = {
+          Type = "oneshot";
+        };
       };
     }) cfg;
 
     systemd.timers = attrsets.concatMapAttrs (name: value: {
       "disk-saver-${name}" = {
         timerConfig = {
-          OnActiveSec = 60;
+          OnUnitActiveSec = value.syncEvery;
           Unit = "disk-saver-${name}.service";
         };
-        # TODO: transform value.targetDir to hyphenated
-        # requires = [ "var-lib-whatever.mount" ];
+        # TODO: what does nix use in nixland instead of systemd-escape?
+        requires = [ "${value.targetMountName}.mount" ];
         wantedBy = ["multi-user.target"];
       };
     }) cfg;
