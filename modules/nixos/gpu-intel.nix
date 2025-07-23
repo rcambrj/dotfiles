@@ -12,20 +12,7 @@
   };
   environment.systemPackages = with pkgs; [
     intel-gpu-tools # intel_gpu_top
-    intel-media-sdk
     intel-compute-runtime
     libva-utils
-  ];
-
-  # error: Package ‘intel-media-sdk-23.2.2’ is marked as insecure, refusing to evaluate.
-  # Known issues:
-  # - End of life with various local privilege escalation vulnerabilites:
-  # - CVE-2023-22656
-  # - CVE-2023-45221
-  # - CVE-2023-47169
-  # - CVE-2023-47282
-  # - CVE-2023-48368
-  nixpkgs.config.permittedInsecurePackages = [
-    "intel-media-sdk-23.2.2"
   ];
 }
