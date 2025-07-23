@@ -26,6 +26,18 @@ spec:
         emptyDir:
       - name: logs
         emptyDir:
+      initContainers:
+      - name: create-dirs
+        image: busybox
+        volumeMounts:
+        - name: media
+          mountPath: /data
+        command: ["/bin/sh", "-c"]
+        args:
+          - |-
+            mkdir -p /data/tvshows
+            mkdir -p /data/movies
+            chown -R 1000:1000 /data/*
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
