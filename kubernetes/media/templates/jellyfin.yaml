@@ -24,17 +24,8 @@ spec:
           claimName: media
       - name: transcodes
         emptyDir:
-      initContainers:
-      - name: lock-logs-dir
-        image: busybox
-        volumeMounts:
-        - name: jellyfin-config
-          mountPath: /config
-        command: ["/bin/sh", "-c"]
-        args:
-          - |-
-            mkdir -p /config/log
-            chmod 000 /config/log
+      - name: logs
+        emptyDir:
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
@@ -52,6 +43,8 @@ spec:
           mountPath: /data
         - name: transcodes
           mountPath: /config/cache/transcodes
+        - name: logs
+          mountPath: /config/log
         ports:
         - name: http
           containerPort: 8096
