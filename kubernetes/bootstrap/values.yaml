@@ -7,7 +7,7 @@ config:
       path: kubernetes
       targetRevision: HEAD
 
-applications: []
+applications:
 - name: cert-manager
 - name: ingress-nginx
 - name: intel-gpu
