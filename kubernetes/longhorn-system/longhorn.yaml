@@ -52,6 +52,8 @@ apiVersion: longhorn.io/v1beta2
 kind: BackupTarget
 metadata:
   name: longhorn-backup-b2
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   backupTargetURL: s3://rcambrj-longhorn-backup@eu-central-003/
   credentialSecret: longhorn-backup-b2
