@@ -20,24 +20,11 @@ in {
       ];
     };
 
-    virtualisation.containerd = {
-      # install separately to get the latest version
-      enable = true;
-      settings = {
-      #   # [grpc]
-      #   # address = "/run/k3s/containerd/containerd.sock"
-      #   "plugins.'io.containerd.cri.v1.runtime'.containerd.runtimes.runc.options" = {
-      #     SystemdCgroup = true;
-      #   };
-      };
-    };
-
     services.k3s = {
       enable = true;
       role = "server";
       extraFlags = [
         "--disable=traefik"
-        # "--container-runtime-endpoint=/run/containerd/containerd.sock"
       ];
       # https://docs.k3s.io/cli/token
       tokenFile = config.age.secrets.k3s-token.path;
