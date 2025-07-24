@@ -1,35 +1,26 @@
 #
 # this machine is a kubernetes node
 #
-{ flake, inputs, modulesPath, pkgs, ... }: {
+{ flake, inputs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
-    # "${toString modulesPath}/profiles/all-hardware.nix"
-
     inputs.agenix-template.nixosModules.default
-    flake.nixosModules.base
+
     flake.nixosModules.access-server
-    flake.nixosModules.disk-aio
-    flake.nixosModules.common
     flake.nixosModules.bare-metal
+    flake.nixosModules.base
+    flake.nixosModules.common
     flake.nixosModules.config-intel
-    flake.nixosModules.gpu-intel
-    flake.nixosModules.telemetry
-    flake.nixosModules.kubernetes-node
-    flake.nixosModules.kubernetes-manifests
+    flake.nixosModules.disk-aio
     flake.nixosModules.disk-savers
+    flake.nixosModules.gpu-intel
+    flake.nixosModules.kubernetes-manifests
+    flake.nixosModules.kubernetes-node
+    flake.nixosModules.telemetry
   ];
 
   networking.hostName = "cranberry";
-  age.secrets = {
-    backup-bucket.file = ../../secrets/cranberry-backup-bucket.age;
-    backup-credentials.file = ../../secrets/cranberry-backup-credentials.age;
-    backup-encryption-key.file = ../../secrets/cranberry-backup-encryption-key.age;
-
-    longhorn-backup-b2-apikey.file = ../../secrets/longhorn-backup-b2-apikey.age;
-    longhorn-backup-b2-secret.file = ../../secrets/longhorn-backup-b2-secret.age;
-  };
 
   disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024";
   fileSystems = {
@@ -98,7 +89,6 @@
       # bypass local nameserver setting so that DNS requests will go through VPN
       dhcpV4Config.UseDNS = "no";
     };
-    # 60 is pia-vpn related
   };
   services.resolved = {
     enable = true;

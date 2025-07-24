@@ -1,21 +1,23 @@
 #
-# this machine is used for running the home's automation
-# * home assistant
-# * esphome
+# this machine is a kubernetes node
 #
 { flake, inputs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
-    flake.nixosModules.base
+    inputs.agenix-template.nixosModules.default
+
     flake.nixosModules.access-server
-    flake.nixosModules.common
     flake.nixosModules.bare-metal
+    flake.nixosModules.base
+    flake.nixosModules.common
     flake.nixosModules.config-intel
+    flake.nixosModules.disk-savers
     flake.nixosModules.gpu-intel
+    flake.nixosModules.kubernetes-node
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
-    inputs.agenix-template.nixosModules.default
+
     ./esphome.nix
     ./downloads-enabled.nix
     ./home-assistant
@@ -27,6 +29,11 @@
 
   networking.hostName = "blueberry";
 
+  facter.detected = {
+    # wifi driver broadcom-sta-6.30.223.271-57-6.12.39 is compromised
+    # not needed anyway, stop facter installing it
+    networking.broadcom.sta.enable = false;
+  };
 
   age.secrets = {
     acme-cloudflare.file = ../../secrets/acme-cloudflare.age;

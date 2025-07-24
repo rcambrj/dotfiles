@@ -7,6 +7,8 @@ in {
       acme-cloudflare.file = ../../../secrets/acme-cloudflare.age;
       kubernetes-oauth2-proxy-client-secret.file = ../../../secrets/kubernetes-oauth2-proxy-client-secret.age;
       kubernetes-oauth2-proxy-cookie-secret.file = ../../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
+      longhorn-backup-b2-apikey.file = ../../../secrets/longhorn-backup-b2-apikey.age;
+      longhorn-backup-b2-secret.file = ../../../secrets/longhorn-backup-b2-secret.age;
       pia-vpn-pass.file = ../../../secrets/pia-vpn-pass.age;
       pia-vpn-user.file = ../../../secrets/pia-vpn-user.age;
     };
