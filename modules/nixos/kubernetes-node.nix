@@ -28,6 +28,7 @@ in {
       role = "server";
       extraFlags = [
         "--disable=traefik"
+        "--tls-san=kubernetes.cambridge.me"
       ];
       # https://docs.k3s.io/cli/token
       tokenFile = config.age.secrets.k3s-token.path;
