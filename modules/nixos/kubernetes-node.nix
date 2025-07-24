@@ -38,13 +38,14 @@ in {
       enable = true;
       tokenFile = config.age.secrets.k3s-token.path;
       role = cfg.role;
+      serverAddr = optional (cfg.strategy == "join") "--server=https://kubernetes.cambridge.me:6443";
       extraFlags = (
-        [
+        []
+        ++ (optional (cfg.role == "server") [
           "--disable=traefik"
           "--tls-san=kubernetes.cambridge.me"
-        ]
+        ])
         ++ (optional (cfg.strategy == "init") "--cluster-init")
-        ++ (optional (cfg.strategy == "join") "--server=https://kubernetes.cambridge.me:6443")
         ++ (optional (cfg.strategy == "reset") "--cluster-reset")
       );
     };
