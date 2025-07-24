@@ -21,6 +21,12 @@ spec:
     csi.resizerReplicaCount: 1
     csi.snapshotterReplicaCount: 1
 ---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: allow-recurring-job-while-volume-detached
+value: "true"
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -57,19 +63,27 @@ metadata:
 spec:
   backupTargetURL: s3://rcambrj-longhorn-backup@eu-central-003/
   credentialSecret: longhorn-backup-b2
-# ---
-# apiVersion: longhorn.io/v1beta2
-# kind: RecurringJob
-# metadata:
-#   name: longhorn-backup-b2
-# spec:
-#   cron: "* * * * *"
-#   task: "snapshot"
-#   groups:
-#   - default
-#   - group1
-#   retain: 1
-#   concurrency: 2
-#   labels:
-#     label/1: a
-#     label/2: b
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: trim
+spec:
+  cron: "0 1 * * *"
+  task: "filesystem-trim"
+  groups:
+  - default
+  - backup
+  concurrency: 1
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup
+spec:
+  cron: "0 2 * * *"
+  task: "backup"
+  groups:
+  - backup
+  concurrency: 1
+  retain: 30
