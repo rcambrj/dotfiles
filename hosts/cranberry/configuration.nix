@@ -3,10 +3,9 @@
 #
 { flake, inputs, modulesPath, pkgs, ... }: {
   imports = [
-    # TODO: https://github.com/numtide/nixos-facter/issues/125
-    # inputs.nixos-facter-modules.nixosModules.facter
-    # { config.facter.reportPath = ./facter.json; }
-    "${toString modulesPath}/profiles/all-hardware.nix"
+    inputs.nixos-facter-modules.nixosModules.facter
+    { config.facter.reportPath = ./facter.json; }
+    # "${toString modulesPath}/profiles/all-hardware.nix"
 
     inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
