@@ -14,4 +14,4 @@ applications:
 - name: longhorn-system
 - name: node-feature-discovery
 - name: oauth2-proxy
-# - name: media
+- name: media

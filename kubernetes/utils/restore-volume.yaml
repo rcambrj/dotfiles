@@ -30,7 +30,7 @@ spec:
       volumes:
         - name: old-vol
           hostPath:
-            path: /var/lib/media
+            path: /var/lib/longhorn/backup
         - name: new-vol
           persistentVolumeClaim:
             claimName: media
