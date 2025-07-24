@@ -1,6 +1,7 @@
-{ config, ... }: {
+{ config, lib, ... }: {
   services.postgresql = {
     enable = true;
+    settings.listen_addresses = lib.mkForce "0.0.0.0";
   };
 
   # pgadmin regularly fails to come up. will investigate why when I can be bothered

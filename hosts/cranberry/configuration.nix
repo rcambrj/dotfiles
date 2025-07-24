@@ -113,6 +113,7 @@
   };
 
   services.k3s.extraFlags = [
-    "--node-label=ingress-nginx=true"
+    # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
+    "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
   ];
 }

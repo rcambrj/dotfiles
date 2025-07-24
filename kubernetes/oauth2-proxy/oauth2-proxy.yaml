@@ -56,8 +56,8 @@ data:
     skip_provider_button="true"
     oidc_issuer_url="https://dex.home.cambridge.me"
     cookie_csrf_per_request="true"
-    cookie_domains=[".media.cambridge.me"]
-    whitelist_domains=[".media.cambridge.me"]
+    cookie_domains=[".media.cambridge.me", ".home.cambridge.me"]
+    whitelist_domains=[".media.cambridge.me", ".home.cambridge.me"]
     email_domains=["*"]
 
     skip_oidc_discovery="true"
@@ -168,6 +168,16 @@ spec:
             port:
               number: 80
   - host: transmission.media.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: esphome.home.cambridge.me
     http:
       paths:
       - path: /oauth2

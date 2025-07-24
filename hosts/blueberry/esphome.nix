@@ -4,7 +4,7 @@
     useACMEHost = "home.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "http://localhost:6052";
+      proxyPass = "http://127.0.0.1:6052";
     };
   };
 
@@ -13,5 +13,6 @@
   services.esphome = {
     enable = true;
     usePing = true;
+    address = "0.0.0.0";
   };
 }

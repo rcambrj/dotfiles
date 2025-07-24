@@ -1,0 +1,155 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: homeassistant
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "home.cambridge.me"
+    secretName: home-cambridge-me-tls
+  rules:
+  - host: home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: homeassistant
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dex
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "dex.home.cambridge.me"
+    secretName: dex-home-cambridge-me-tls
+  rules:
+  - host: dex.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: dex
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lldap
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "ldap.home.cambridge.me"
+    secretName: ldap-home-cambridge-me-tls
+  rules:
+  - host: ldap.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lldap-http
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "grafana.home.cambridge.me"
+    secretName: grafana-home-cambridge-me-tls
+  rules:
+  - host: grafana.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: loki
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "loki.home.cambridge.me"
+    secretName: loki-home-cambridge-me-tls
+  rules:
+  - host: loki.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: loki
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: esphome
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "esphome.home.cambridge.me"
+    secretName: esphome-home-cambridge-me-tls
+  rules:
+  - host: esphome.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: esphome
+            port:
+              number: 80

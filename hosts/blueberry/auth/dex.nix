@@ -30,7 +30,7 @@
       };
       issuer = "https://dex.home.cambridge.me";
       web = {
-        http = "127.0.0.1:5556";
+        http = "0.0.0.0:5556";
       };
       oauth2 = {
         grantTypes = [ "authorization_code" "refresh_token" ];

@@ -16,6 +16,7 @@
     ];
     configuration = {
       server = {
+        http_listen_address = "0.0.0.0";
         http_listen_port = 3100;
       };
       auth_enabled = false; # TODO: enable authentication

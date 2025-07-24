@@ -28,6 +28,7 @@
     # clientSecret = ""; # see keyFile.
     # secret = "";       # see keyFile. cookie-secret. must be exactly 16, 24 or 32 chars.
     reverseProxy = true;
+    httpAddress = "http://0.0.0.0:4180";
     email.domains = ["*"];
     nginx = {
       domain = "oauth2-proxy.home.cambridge.me";

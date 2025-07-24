@@ -140,4 +140,6 @@
   services.k3s.extraFlags = [
     "--node-taint=proxy-only=true:NoSchedule"
   ];
+  # trust cluster traffic during transition
+  networking.firewall.trustedInterfaces = [ "flannel.1" "cni0" ];
 }
