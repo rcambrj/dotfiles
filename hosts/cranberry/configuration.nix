@@ -15,7 +15,6 @@
     flake.nixosModules.bare-metal
     flake.nixosModules.config-intel
     flake.nixosModules.gpu-intel
-    flake.nixosModules.server-backup
     flake.nixosModules.telemetry
     flake.nixosModules.kubernetes-node
     flake.nixosModules.kubernetes-manifests
