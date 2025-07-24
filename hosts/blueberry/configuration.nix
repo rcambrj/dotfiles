@@ -136,4 +136,8 @@
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
+
+  services.k3s.extraFlags = [
+    "--node-taint=proxy-only=true:NoSchedule"
+  ];
 }

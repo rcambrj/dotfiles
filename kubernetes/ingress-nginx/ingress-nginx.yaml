@@ -10,3 +10,6 @@ spec:
   version: 4.13.0
   targetNamespace: ingress-nginx
   createNamespace: true
+  valuesContent: |-
+    controller.nodeSelector:
+      ingress-nginx: true

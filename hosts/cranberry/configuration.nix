@@ -111,4 +111,8 @@
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
+
+  services.k3s.extraFlags = [
+    "--node-label=ingress-nginx=true"
+  ];
 }

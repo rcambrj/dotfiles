@@ -15,10 +15,15 @@ spec:
         app: blueberry-proxy
     spec:
       nodeSelector:
-        name: blueberry
+        kubernetes.io/hostname: blueberry
+      tolerations:
+      - key: "proxy-only"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
       containers:
       - name: homeassistant
-        image: busybox
+        image: nixery.dev/shell/socat
         command: ["/bin/sh", "-c"]
         args:
           - |-

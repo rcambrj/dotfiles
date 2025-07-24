@@ -5,6 +5,7 @@ in {
     enable = mkEnableOption "Start a kubernetes node on this host";
     role = mkOption {
       type = types.enum [ "server" "agent" ];
+      default = "agent";
     };
     strategy = mkOption {
       type = types.enum [ "init" "join" "reset" ];
@@ -13,9 +14,8 @@ in {
         * init: initialises a new cluster
         * join: joins this node to the cluster
         * reset: makes this node forget any joins
-        * change to empty value after desired state
       '';
-      default = "";
+      default = "join";
     };
   };
 
@@ -38,17 +38,18 @@ in {
       enable = true;
       tokenFile = config.age.secrets.k3s-token.path;
       role = cfg.role;
-      serverAddr = optional (cfg.strategy == "join") "--server=https://kubernetes.cambridge.me:6443";
       extraFlags = (
         []
-        ++ (optional (cfg.role == "server") [
+        ++ (optionals (cfg.role == "server") [
           "--disable=traefik"
           "--tls-san=kubernetes.cambridge.me"
         ])
         ++ (optional (cfg.strategy == "init") "--cluster-init")
         ++ (optional (cfg.strategy == "reset") "--cluster-reset")
       );
-    };
+    } // (optionalAttrs (cfg.strategy == "join") {
+      serverAddr = "https://kubernetes.cambridge.me:6443";
+    });
 
     # Longhorn is installed onto kubernetes via ArgoCD
     # these are the host-level dependencies
