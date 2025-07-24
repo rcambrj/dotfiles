@@ -75,5 +75,6 @@
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
+  # bring up other nodes
   services.k3s.serverAddr = "https://kubernetes.cambridge.me:6443";
 }

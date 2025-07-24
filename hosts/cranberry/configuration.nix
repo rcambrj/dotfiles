@@ -107,4 +107,7 @@
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
+
+  # start the cluster
+  services.k3s.clusterInit = true;
 }

@@ -20,8 +20,9 @@ in {
       ];
     };
 
-    # points to all kubernetes nodes
-    # use to bring up 2+ nodes
+    # start the cluster
+    # services.k3s.clusterInit = true;
+    # bring up other nodes
     # services.k3s.serverAddr = "https://kubernetes.cambridge.me:6443";
     services.k3s = {
       enable = true;
@@ -32,9 +33,6 @@ in {
       ];
       # https://docs.k3s.io/cli/token
       tokenFile = config.age.secrets.k3s-token.path;
-
-      # https://docs.k3s.io/datastore/ha-embedded#existing-single-node-clusters
-      clusterInit = true;
     };
 
     # Longhorn is installed onto kubernetes via ArgoCD
