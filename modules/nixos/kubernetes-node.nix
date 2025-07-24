@@ -43,6 +43,7 @@ in {
         ++ (optionals (cfg.role == "server") [
           "--disable=traefik"
           "--tls-san=kubernetes.cambridge.me"
+          "--flannel-backend=wireguard-native"
         ])
         ++ (optional (cfg.strategy == "init") "--cluster-init")
         ++ (optional (cfg.strategy == "reset") "--cluster-reset")
