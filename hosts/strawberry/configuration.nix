@@ -68,13 +68,14 @@
   ];
   zramSwap.enable = true;
 
-  services.kubernetes-node.enable = true;
+  services.kubernetes-node = {
+    enable = true;
+    strategy = "join";
+  };
   disk-savers.etcd-store = {
     targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
     targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
-  # bring up other nodes
-  services.k3s.serverAddr = "https://kubernetes.cambridge.me:6443";
 }

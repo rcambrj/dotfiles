@@ -3,6 +3,17 @@
 in {
   options.services.kubernetes-node = {
     enable = mkEnableOption "Start a kubernetes node on this host";
+    strategy = mkOption {
+      type = types.enum [ "init" "join" "reset" "none" ];
+      description = ''
+        How to configure k3s regarding an existing cluster:
+        * init sets --cluster-init
+        * join sets --server=...
+        * reset sets --cluster-reset
+        * none sets nothing
+      '';
+      default = "none";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -20,17 +31,18 @@ in {
       ];
     };
 
-    # start the cluster
-    # services.k3s.clusterInit = true;
-    # bring up other nodes
-    # services.k3s.serverAddr = "https://kubernetes.cambridge.me:6443";
     services.k3s = {
       enable = true;
       role = "server";
-      extraFlags = [
-        "--disable=traefik"
-        "--tls-san=kubernetes.cambridge.me"
-      ];
+      extraFlags = (
+        [
+          "--disable=traefik"
+          "--tls-san=kubernetes.cambridge.me"
+        ]
+        ++ (optional (cfg.strategy == "init") "--cluster-init")
+        ++ (optional (cfg.strategy == "join") "--server=https://kubernetes.cambridge.me:6443")
+        ++ (optional (cfg.strategy == "reset") "--cluster-reset")
+      );
       # https://docs.k3s.io/cli/token
       tokenFile = config.age.secrets.k3s-token.path;
     };

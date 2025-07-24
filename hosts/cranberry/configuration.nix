@@ -99,7 +99,10 @@
     '';
   };
 
-  services.kubernetes-node.enable = true;
+  services.kubernetes-node = {
+    enable = true;
+    strategy = "init";
+  };
   services.kubernetes-manifests.enable = true;
   disk-savers.etcd-store = {
     targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
@@ -107,7 +110,4 @@
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
   };
-
-  # start the cluster
-  services.k3s.clusterInit = true;
 }
