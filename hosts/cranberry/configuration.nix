@@ -101,6 +101,7 @@
 
   services.kubernetes-node = {
     enable = true;
+    role = "server";
     strategy = "init";
   };
   services.kubernetes-manifests.enable = true;

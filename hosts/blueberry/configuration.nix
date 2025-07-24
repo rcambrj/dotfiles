@@ -124,4 +124,16 @@
       };
     };
   };
+
+  services.kubernetes-node = {
+    enable = true;
+    role = "agent";
+    strategy = "join";
+  };
+  disk-savers.etcd-store = {
+    targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
+    targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
+    diskDir = "/var/lib/etcd-store";
+    syncEvery = "6h";
+  };
 }

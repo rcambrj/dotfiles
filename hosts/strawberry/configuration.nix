@@ -70,6 +70,7 @@
 
   services.kubernetes-node = {
     enable = true;
+    role = "agent";
     strategy = "join";
   };
   disk-savers.etcd-store = {
