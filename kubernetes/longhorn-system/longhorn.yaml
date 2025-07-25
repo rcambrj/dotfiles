@@ -25,6 +25,8 @@ apiVersion: longhorn.io/v1beta2
 kind: Setting
 metadata:
   name: allow-recurring-job-while-volume-detached
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 value: "true"
 ---
 apiVersion: networking.k8s.io/v1
@@ -68,6 +70,8 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: trim
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   cron: "0 1 * * *"
   task: "filesystem-trim"
@@ -80,6 +84,8 @@ apiVersion: longhorn.io/v1beta2
 kind: RecurringJob
 metadata:
   name: backup
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   cron: "0 2 * * *"
   task: "backup"

@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ flake, inputs, ... }: {
+{ config, flake, inputs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
@@ -110,6 +110,11 @@
     targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
+  };
+
+  systemd.services.k3s = {
+    requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
+    after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
   };
 
   services.k3s.extraFlags = [

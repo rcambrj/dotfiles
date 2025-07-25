@@ -54,6 +54,7 @@ in {
       "${value.targetDir}" = {
         fsType = "overlay";
         device = "overlay";
+        depends = [ "${value.diskDir}/lowerdir" ];
         overlay = {
           upperdir =   "${value.diskDir}/ramdisk/upperdir";
           workdir =    "${value.diskDir}/ramdisk/workdir";
@@ -87,6 +88,7 @@ in {
         };
         # TODO: what does nix use in nixland instead of systemd-escape?
         requires = [ "${value.targetMountName}.mount" ];
+        after    = [ "${value.targetMountName}.mount" ];
         wantedBy = ["multi-user.target"];
       };
     }) cfg;
