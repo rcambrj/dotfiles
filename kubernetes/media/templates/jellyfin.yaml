@@ -104,11 +104,11 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-      - "jellyfin.media.cambridge.me"
-    secretName: jellyfin-media-cambridge-me-tls
+      - "jellyfin.home.cambridge.me"
+    secretName: jellyfin-home-cambridge-me-tls
   ingressClassName: nginx
   rules:
-  - host: jellyfin.media.cambridge.me
+  - host: jellyfin.home.cambridge.me
     http:
       paths:
       - path: /

@@ -70,20 +70,14 @@
       }];
       staticClients = [
         {
-          id = "blueberry-oauth2-proxy";
-          redirectURIs = [ "https://oauth2-proxy.home.cambridge.me/oauth2/callback" ];
-          name = "Blueberry";
-          secretFile = config.age.secrets.blueberry-oauth2-proxy-client-secret.path;
-        }
-        {
           id = "kubernetes-oauth2-proxy";
-          redirectURIs = [ "https://oauth2-proxy.media.cambridge.me/oauth2/callback" ];
+          redirectURIs = [ "https://oauth2-proxy.home.cambridge.me/oauth2/callback" ];
           name = "Kubernetes";
           secretFile = config.age.secrets.kubernetes-oauth2-proxy-client-secret.path;
         }
         {
           id = "argocd";
-          redirectURIs = [ "https://argocd.media.cambridge.me/auth/callback" ];
+          redirectURIs = [ "https://argocd.home.cambridge.me/auth/callback" ];
           name = "Argo CD";
           secretFile = config.age.secrets.argocd-client-secret.path;
         }

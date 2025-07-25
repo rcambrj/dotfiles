@@ -4,8 +4,7 @@ metadata:
   name: homeassistant
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    # auth performed in app
 spec:
   ingressClassName: nginx
   tls:
@@ -30,8 +29,7 @@ metadata:
   name: dex
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    # auth performed in app
 spec:
   ingressClassName: nginx
   tls:
@@ -56,8 +54,7 @@ metadata:
   name: lldap
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    # auth performed in app
 spec:
   ingressClassName: nginx
   tls:
@@ -82,8 +79,7 @@ metadata:
   name: grafana
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    # auth performed in app
 spec:
   ingressClassName: nginx
   tls:
@@ -108,8 +104,7 @@ metadata:
   name: loki
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    # nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    # auth performed in app
 spec:
   ingressClassName: nginx
   tls:
@@ -135,7 +130,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
 spec:
   ingressClassName: nginx
   tls:

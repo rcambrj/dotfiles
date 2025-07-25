@@ -97,16 +97,16 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.media.cambridge.me/oauth2/start"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-      - "radarr.media.cambridge.me"
-    secretName: radarr-media-cambridge-me-tls
+      - "radarr.home.cambridge.me"
+    secretName: radarr-home-cambridge-me-tls
   ingressClassName: nginx
   rules:
-  - host: radarr.media.cambridge.me
+  - host: radarr.home.cambridge.me
     http:
       paths:
       - path: /

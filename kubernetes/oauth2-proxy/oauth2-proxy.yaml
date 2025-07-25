@@ -56,8 +56,8 @@ data:
     skip_provider_button="true"
     oidc_issuer_url="https://dex.home.cambridge.me"
     cookie_csrf_per_request="true"
-    cookie_domains=[".media.cambridge.me", ".home.cambridge.me"]
-    whitelist_domains=[".media.cambridge.me", ".home.cambridge.me"]
+    cookie_domains=[".cambridge.me"]
+    whitelist_domains=[".cambridge.me"]
     email_domains=["*"]
 
     skip_oidc_discovery="true"
@@ -70,7 +70,7 @@ data:
     redeem_url="https://dex.home.cambridge.me/token"
     validate_url="https://dex.home.cambridge.me/token/introspect"
 
-    redirect_url="https://oauth2-proxy.media.cambridge.me/oauth2/callback"
+    redirect_url="https://oauth2-proxy.home.cambridge.me/oauth2/callback"
 ---
 apiVersion: v1
 kind: Service
@@ -94,10 +94,10 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-      - "oauth2-proxy.media.cambridge.me"
-    secretName: oauth2-proxy-media-cambridge-me-tls
+      - "oauth2-proxy.home.cambridge.me"
+    secretName: oauth2-proxy-home-cambridge-me-tls
   rules:
-  - host: oauth2-proxy.media.cambridge.me
+  - host: oauth2-proxy.home.cambridge.me
     http:
       paths:
       - path: /
@@ -117,7 +117,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: jackett.media.cambridge.me
+  - host: jackett.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -127,7 +127,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: longhorn.media.cambridge.me
+  - host: longhorn.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -137,7 +137,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: nzbget.media.cambridge.me
+  - host: nzbget.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -147,7 +147,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: radarr.media.cambridge.me
+  - host: radarr.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -157,7 +157,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: sonarr.media.cambridge.me
+  - host: sonarr.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -167,7 +167,7 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: transmission.media.cambridge.me
+  - host: transmission.home.cambridge.me
     http:
       paths:
       - path: /oauth2

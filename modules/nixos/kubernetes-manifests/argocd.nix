@@ -82,12 +82,12 @@ in {
           image = {
             tag = chartVersion;
           };
-          global.domain = "argocd.media.cambridge.me";
+          global.domain = "argocd.home.cambridge.me";
           dex.enabled = false;
           configs.secret.createSecret = false;
           configs.params."server.insecure" = true;
           configs.params."application.namespaces" = "*";
-          configs.cm."url" = "https://argocd.media.cambridge.me";
+          configs.cm."url" = "https://argocd.home.cambridge.me";
           configs.cm."oidc.config" = builtins.toJSON {
             name = "SSO";
             issuer = "https://dex.home.cambridge.me";
