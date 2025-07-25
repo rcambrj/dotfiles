@@ -11,9 +11,9 @@ applications:
 - name: cert-manager
 - name: ingress-nginx
 - name: intel-gpu
-- name: longhorn-system
 - name: node-feature-discovery
 - name: oauth2-proxy
-- name: media
+# - name: longhorn-system
 - name: blueberry-proxy
 - name: landing
+# - name: media
