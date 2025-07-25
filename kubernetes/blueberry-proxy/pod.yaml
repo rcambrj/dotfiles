@@ -55,9 +55,9 @@ spec:
       - name: grafana
         image: nixery.dev/shell/socat/curl
         command: ["/bin/sh", "-c"]
-        args: [ "exec socat TCP-LISTEN:13000,fork,reuseaddr TCP:192.168.142.24:3000"]
+        args: [ "exec socat TCP-LISTEN:14723,fork,reuseaddr TCP:192.168.142.24:4723"]
         ports:
-        - containerPort: 13000
+        - containerPort: 14723
 
       - name: loki
         image: nixery.dev/shell/socat/curl
