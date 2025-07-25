@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landing
+  labels:
+    app: landing
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: landing
+  template:
+    metadata:
+      labels:
+        app: landing
+    spec:
+      volumes:
+      - name: var-www
+        configMap:
+          name: var-www
+      containers:
+      - name: landing
+        image: nginx:1.29.0
+        volumeMounts:
+        - name: var-www
+          mountPath: /usr/share/nginx/html
+        ports:
+        - containerPort: 80
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: landing
+spec:
+  selector:
+    app: landing
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: landing
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "landing.home.cambridge.me"
+    secretName: landing-home-cambridge-me-tls
+  ingressClassName: nginx
+  rules:
+  - host: landing.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: landing
+            port:
+              number: 80

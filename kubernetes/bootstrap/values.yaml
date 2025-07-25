@@ -16,3 +16,4 @@ applications:
 - name: oauth2-proxy
 - name: media
 - name: blueberry-proxy
+- name: landing
