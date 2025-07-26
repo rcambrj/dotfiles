@@ -1,33 +1,56 @@
-{ config, lib, pkgs, ... }: with lib; {
-  networking.firewall.allowedTCPPorts = [
-    (toInt (builtins.elemAt (strings.splitString ":" config.services.minio.listenAddress) 1))
-    (toInt (builtins.elemAt (strings.splitString ":" config.services.minio.consoleAddress) 1))
-  ];
+{ config, lib, pkgs, ... }: let
+  package = seaweedfs;
+  masterPort = 9333;
+  volumePort = 8080;
+  filterPort = 8888;
+  webdavPort = 8333;
+in with lib; {
+  environment.systemPackages = with pkgs; [ package ];
 
-  age.secrets.minio-secret-key.file = ../../secrets/minio-secret-key.age;
-  age.secrets.minio-access-key.file = ../../secrets/minio-access-key.age;
-  age.secrets.minio-root-pass.file = ../../secrets/minio-root-pass.age;
-
-  age-template.files.minio-env = {
-    vars = {
-      pass = config.age.secrets.minio-root-pass.path;
+  environment.etc."seaweedfs/security.toml".text = {
+    grpc.ca = "seaweedfs-rcambrj";
+    "grpc.master" = {
+      cert = "";
+      key = "";
     };
-    content = ''
-      MINIO_ROOT_USER=minioadmin
-      MINIO_ROOT_PASSWORD=$pass
-      MINIO_BROWSER_REDIRECT_URL="https://minio.home.cambridge.me"
-    '';
+    "grpc.volume" = {
+      cert = "";
+      key = "";
+    };
+    "grpc.filer" = {
+      cert = "";
+      key = "";
+    };
+    "grpc.client" = {
+      cert = "";
+      key = "";
+    };
+    "grpc.msg_broker" = {
+      cert = "";
+      key = "";
+    };
   };
 
-  services.minio = {
-    enable = true;
-    region = "home";
-    accessKey = config.age.secrets.minio-access-key.path; # 8-40 chars
-    secretKey = config.age.secrets.minio-secret-key.path; # 8-40 chars
-    rootCredentialsFile = config.age-template.files.minio-env.path;
-
-    # TODO: listen on the kubernetes network (and change the proxy pod)
-    # listenAddress = "10.42.0.1:9000";
-    # consoleAddress = "10.42.0.1:9001";
+  systemd.services.seaweedfs-master = rec {
+    description = "SeaweedFS";
+    wants = [ "network.target" ];
+    after = wants;
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = rec {
+      Restart = "on-failure";
+      Type = "exec";
+      ConfigurationDirectory = "seaweedfs/master";
+      RuntimeDirectory = ConfigurationDirectory;
+      RuntimeDirectoryPreserve = "restart";
+      WorkingDirectory = "/run/${RuntimeDirectory}";
+      ExecStart = builtins.concatStringsSep " " [
+        # https://github.com/seaweedfs/seaweedfs/blob/master/weed/command/master.go
+        "${getExe package} master"
+        "-port=${masterPort}"
+        "-ip=${config.networking.hostName}"
+        # "-peers=192.168.42.24:${masterPort}"
+        "-mdir=."
+      ];
+    };
   };
 }

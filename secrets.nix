@@ -21,11 +21,6 @@ in {
   "secrets/longhorn-backup-b2-apikey.age".publicKeys = defaults ++ kubenodes;
   "secrets/longhorn-backup-b2-secret.age".publicKeys = defaults ++ kubenodes;
 
-  # minio
-  "secrets/minio-access-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/minio-secret-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/minio-root-pass.age".publicKeys = defaults ++ kubenodes;
-
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/webos-dev-mode-curl.age".publicKeys = defaults ++ [ sshKeys.blueberry ];

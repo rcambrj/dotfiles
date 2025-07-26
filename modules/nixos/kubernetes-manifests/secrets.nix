@@ -97,7 +97,6 @@ in {
       path = "/var/lib/rancher/k3s/server/manifests/20-longhorn-backup-b2.yaml";
       vars = {
         apikey = config.age.secrets.longhorn-backup-b2-apikey.path;
-        # cookie-secret. must be exactly 16, 24 or 32 chars.
         secret = config.age.secrets.longhorn-backup-b2-secret.path;
       };
       content = ''

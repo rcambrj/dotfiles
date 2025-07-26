@@ -16,5 +16,4 @@ applications:
 # - name: longhorn-system
 - name: blueberry-proxy
 - name: landing
-- name: minio
 # - name: media

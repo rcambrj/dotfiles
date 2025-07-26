@@ -26,55 +26,55 @@ spec:
         effect: "NoSchedule"
       containers:
       - name: homeassistant
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:18123,fork,reuseaddr TCP:192.168.142.24:8123"]
         ports:
         - containerPort: 18123
 
       - name: dex
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:15556,fork,reuseaddr TCP:192.168.142.24:5556"]
         ports:
         - containerPort: 15556
 
       - name: lldap-http
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:15234,fork,reuseaddr TCP:192.168.142.24:5234"]
         ports:
         - containerPort: 15234
       - name: lldap-ldaps
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:16360,fork,reuseaddr TCP:192.168.142.24:6360"]
         ports:
         - containerPort: 16360
 
       - name: grafana
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:14723,fork,reuseaddr TCP:192.168.142.24:4723"]
         ports:
         - containerPort: 14723
 
       - name: loki
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:13100,fork,reuseaddr TCP:192.168.142.24:3100"]
         ports:
         - containerPort: 13100
 
       - name: esphome
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:16052,fork,reuseaddr TCP:192.168.142.24:6052"]
         ports:
         - containerPort: 16052
 
       - name: postgres
-        image: nixery.dev/shell/socat/curl:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
+        image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
         args: [ "exec socat TCP-LISTEN:15432,fork,reuseaddr TCP:192.168.142.24:5432"]
         ports:
