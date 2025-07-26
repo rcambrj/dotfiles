@@ -18,6 +18,8 @@
     flake.nixosModules.kubernetes-manifests
     flake.nixosModules.kubernetes-node
     flake.nixosModules.telemetry
+
+    ./storage.nix
   ];
 
   networking.hostName = "cranberry";

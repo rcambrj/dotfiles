@@ -36,6 +36,7 @@
       "/var/lib/kubelet"
       "/var/lib/longhorn"
       "/var/lib/machines"
+      "/var/lib/minio"
       "/var/lib/nfs"
       "/var/lib/nixos"
       "/var/lib/portables"

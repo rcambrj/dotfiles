@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-proxy
+  labels:
+    app: minio-proxy
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: minio-proxy
+  template:
+    metadata:
+      labels:
+        app: minio-proxy
+    spec:
+      nodeSelector:
+        # this is fragile but it'll do for now
+        kubernetes.io/hostname: cranberry
+      containers:
+      - name: console
+        image: nixery.dev/shell/socat/curl
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        command: ["/bin/sh", "-c"]
+        args: [ "exec socat TCP-LISTEN:19001,fork,reuseaddr TCP:${NODE_IP}:9001"]
+        ports:
+        - containerPort: 19001
+      - name: api
+        image: nixery.dev/shell/socat/curl
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        command: ["/bin/sh", "-c"]
+        args: [ "exec socat TCP-LISTEN:19000,fork,reuseaddr TCP:${NODE_IP}:9000"]
+        ports:
+        - containerPort: 19000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-console
+spec:
+  selector:
+    app: minio-proxy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 19001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-console
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "minio.home.cambridge.me"
+    secretName: minio-home-cambridge-me-tls
+  rules:
+  - host: minio.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: minio-console
+            port:
+              number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-api
+spec:
+  selector:
+    app: minio-proxy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 19000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio-api
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "minio-api.home.cambridge.me"
+    secretName: minio-api-home-cambridge-me-tls
+  rules:
+  - host: minio-api.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: minio-api
+            port:
+              number: 80
