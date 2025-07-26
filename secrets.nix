@@ -21,15 +21,8 @@ in {
   "secrets/longhorn-backup-b2-apikey.age".publicKeys = defaults ++ kubenodes;
   "secrets/longhorn-backup-b2-secret.age".publicKeys = defaults ++ kubenodes;
 
-  # patroni / postgres
-  "secrets/patroni-replication-password.age".publicKeys = defaults ++ kubenodes;
-  "secrets/patroni-superuser-password.age".publicKeys = defaults ++ kubenodes;
-
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/authelia-jwt.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/authelia-session.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/authelia-storage.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/webos-dev-mode-curl.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -46,14 +39,4 @@ in {
   # cranberry
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
-  "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-
-  # orange
-  "secrets/photoprism-sftp-password.age".publicKeys = defaults ++ [ sshKeys.orange ];
-  "secrets/photoprism-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.orange ];
-  "secrets/photoprism-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.orange ];
-  "secrets/photoprism-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.orange ];
 }
