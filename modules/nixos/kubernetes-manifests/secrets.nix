@@ -9,6 +9,7 @@ in {
       kubernetes-oauth2-proxy-cookie-secret.file = ../../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
       pia-vpn-pass.file = ../../../secrets/pia-vpn-pass.age;
       pia-vpn-user.file = ../../../secrets/pia-vpn-user.age;
+      minio-root-pass.file = ../../../secrets/minio-root-pass.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -26,6 +27,11 @@ in {
         apiVersion = "v1";
         kind = "Namespace";
         metadata.name = "oauth2-proxy";
+      }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "storage";
       }
     ];
 
@@ -79,6 +85,24 @@ in {
         stringData:
           client-secret: $clientsecret
           cookie-secret: $cookiesecret
+      '';
+    };
+
+    age-template.files."20-csi-s3" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-csi-s3.yaml";
+      vars = {
+        pass = config.age.secrets.minio-root-pass.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: csi-s3-secret
+          namespace: storage
+        stringData:
+          accessKeyID: minioadmin
+          secretAccessKey: $pass
+          endpoint: https://cranberry:9000
       '';
     };
   });
