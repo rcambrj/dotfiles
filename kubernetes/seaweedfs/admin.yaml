@@ -63,6 +63,10 @@ data:
     [grpc.admin]
     key  = "/certs/admin.key"
     cert = "/certs/admin.crt"
+
+    [grpc.client]
+    key  = "/certs/admin.key"
+    cert = "/certs/admin.crt"
 ---
 apiVersion: v1
 kind: Service
