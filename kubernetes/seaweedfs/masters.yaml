@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: masters
+immutable: true
+data:
+  masters: cranberry:9333.19333

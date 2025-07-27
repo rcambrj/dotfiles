@@ -13,7 +13,7 @@ applications:
 - name: intel-gpu
 - name: node-feature-discovery
 - name: oauth2-proxy
-# - name: longhorn-system
 - name: blueberry-proxy
 - name: landing
+- name: seaweedfs
 # - name: media

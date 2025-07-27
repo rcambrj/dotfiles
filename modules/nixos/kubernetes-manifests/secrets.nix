@@ -11,8 +11,13 @@ in {
       longhorn-backup-b2-secret.file = ../../../secrets/longhorn-backup-b2-secret.age;
       pia-vpn-pass.file = ../../../secrets/pia-vpn-pass.age;
       pia-vpn-user.file = ../../../secrets/pia-vpn-user.age;
+      seaweedfs-ca-crt = mkDefault {
+        file = ../../secrets/seaweedfs-ca-crt.age;
+        mode = "444";
+      };
+      kubernetes-seaweedfs-admin-key.file = ../../../secrets/kubernetes-seaweedfs-admin-key.age;
+      kubernetes-seaweedfs-admin-crt.file = ../../../secrets/kubernetes-seaweedfs-admin-crt.age;
     };
-
 
     services.k3s.manifests."10-secrets-ns".content = [
       {
@@ -110,6 +115,27 @@ in {
           AWS_ENDPOINTS: s3.eu-central-003.backblazeb2.com
           AWS_ACCESS_KEY_ID: $apikey
           AWS_SECRET_ACCESS_KEY: $secret
+      '';
+    };
+
+    age-template.files."20-seaweedfs-admin-certs" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-seaweedfs-admin-certs.yaml";
+      vars = {
+        cacrt = config.age.secrets.seaweedfs-ca-crt.path;
+        adminkey = config.age.secrets.kubernetes-seaweedfs-admin-key.path;
+        admincrt = config.age.secrets.kubernetes-seaweedfs-admin-crt.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: admin-certs
+          namespace: seaweedfs
+        type: Opaque
+        stringData:
+          ca.crt: "$cacrt"
+          admin.key: "$adminkey"
+          admin.crt: "$admincrt"
       '';
     };
   });

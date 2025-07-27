@@ -2,6 +2,7 @@ let
   sshKeys = import ./lib/ssh-keys.nix;
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
   kubenodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
+  disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
 in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
@@ -20,6 +21,16 @@ in {
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/longhorn-backup-b2-apikey.age".publicKeys = defaults ++ kubenodes;
   "secrets/longhorn-backup-b2-secret.age".publicKeys = defaults ++ kubenodes;
+  "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
+  "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
+  "secrets/kubernetes-seaweedfs-admin-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/kubernetes-seaweedfs-admin-crt.age".publicKeys = defaults ++ kubenodes;
+
+  # seaweedfs
+  "secrets/seaweedfs-ca-key.age".publicKeys = defaults;
+  "secrets/seaweedfs-ca-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/seaweedfs-jwt-read-key.age".publicKeys = defaults ++ disknodes;
+  "secrets/seaweedfs-jwt-write-key.age".publicKeys = defaults ++ disknodes;
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -37,6 +48,10 @@ in {
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # cranberry
-  "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
-  "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
+  "secrets/cranberry-seaweedfs-master-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-seaweedfs-master-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-seaweedfs-volume-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-seaweedfs-volume-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-seaweedfs-filer-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-seaweedfs-filer-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
 }
