@@ -1,0 +1,33 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: juicefs-csi-driver
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://juicefs.com/docs/csi/getting_started
+  repo: https://juicedata.github.io/charts
+  chart: juicefs-csi-driver
+  version: 0.29.1
+  targetNamespace: juicefs-csi-driver
+  createNamespace: true
+  valuesContent: |-
+    dashboard:
+      ingress:
+        enabled: true
+        className: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt
+          nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
+        hosts:
+        - host: "juicefs.home.cambridge.me"
+          paths:
+          - path: /
+            pathType: ImplementationSpecific
+        tls:
+        - hosts:
+            - "juicefs.home.cambridge.me"
+          secretName: juicefs-home-cambridge-me-tls
