@@ -15,5 +15,5 @@ applications:
 - name: oauth2-proxy
 - name: blueberry-proxy
 - name: landing
-- name: juicefs
+- name: storage
 # - name: media
