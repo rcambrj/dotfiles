@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: ldap-cert
+immutable: true
 data:
   ldap-cert.pem: |-
     -----BEGIN CERTIFICATE-----
@@ -34,4 +35,3 @@ data:
     m0DCOMRhXOOu1q90J/QkndZUWsiD1S6Km1AvD3vl31GgL9XUjk5QpCKvHaz/frve
     edmHSI+8U9LeIuiYvs7VyQ==
     -----END CERTIFICATE-----
-    

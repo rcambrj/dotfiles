@@ -31,7 +31,8 @@ spec:
             mountPath: /certs
           - name: security-toml
             readOnly: true
-            mountPath: /usr/local/etc/seaweedfs
+            mountPath: /etc/seaweedfs/security.toml
+            subPath: security.toml
         env:
         - name: MASTERS
           valueFrom:
@@ -43,14 +44,17 @@ spec:
           - |-
             weed admin \
             -port=23646 \
-            -masters=${MASTERS}
+            -masters=${MASTERS} \
+            -dataDir=/data
         ports:
         - containerPort: 23646
+        - containerPort: 33646
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: admin-security-toml
+immutable: true
 data:
   security.toml: |-
     [grpc]
@@ -63,7 +67,7 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: admin
+  name: admin-http
 spec:
   selector:
     app: admin
@@ -71,6 +75,18 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 23646
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-grpc
+spec:
+  selector:
+    app: admin
+  ports:
+  - protocol: TCP
+    port: 33646
+  type: LoadBalancer
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -94,6 +110,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: admin
+            name: admin-http
             port:
               number: 80

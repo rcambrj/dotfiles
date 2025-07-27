@@ -29,6 +29,7 @@ in {
   # seaweedfs
   "secrets/seaweedfs-ca-key.age".publicKeys = defaults;
   "secrets/seaweedfs-ca-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/seaweedfs-ca-crt-multiline.age".publicKeys = defaults ++ disknodes;
   "secrets/seaweedfs-jwt-read-key.age".publicKeys = defaults ++ disknodes;
   "secrets/seaweedfs-jwt-write-key.age".publicKeys = defaults ++ disknodes;
 

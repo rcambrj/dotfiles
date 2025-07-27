@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }: let
   package = pkgs.seaweedfs;
-  masterPortHTTP =  9333; # disabled
+  masterPortHTTP =  0; # disabled
   masterPortGRPC = 19333;
-  volumePortHTTP =  8080; # disabled
+  volumePortHTTP =  0; # disabled
   volumePortGRPC = 18080;
-  filerPortHTTP  =  8888; # disabled
+  filerPortHTTP  =  0; # disabled
   filerPortGRPC  = 18888;
   masters = "cranberry:${toString masterPortHTTP}.${toString masterPortGRPC}";
 in with lib; {
@@ -24,8 +24,8 @@ in with lib; {
     # certstrap request-cert --common-name cranberry-master
     # certstrap sign --expires "10 years" --CA ca cranberry-master
 
-    seaweedfs-ca-crt = {
-      file     = ../../secrets/seaweedfs-ca-crt.age;
+    seaweedfs-ca-crt-multiline = {
+      file     = ../../secrets/seaweedfs-ca-crt-multiline.age;
       mode = "444";
     };
     seaweedfs-master-key = {
@@ -86,7 +86,7 @@ in with lib; {
       key = "$jwtread"
 
       [grpc]
-      ca = "${config.age.secrets.seaweedfs-ca-crt.path}"
+      ca = "${config.age.secrets.seaweedfs-ca-crt-multiline.path}"
 
       [grpc.master]
       key  = "${config.age.secrets.seaweedfs-master-key.path}"
@@ -144,7 +144,7 @@ in with lib; {
         "-port.grpc=${toString masterPortGRPC}"
         "-ip=${config.networking.hostName}"
         "-ip.bind=0.0.0.0"
-        # "-peers=${masters}" # disable while there is only one node
+        # "-peers=\"${masters}\""" # disable while there is only one node
         "-mdir=."
         "-volumeSizeLimitMB=1000"
         "-defaultReplication=000"
@@ -173,7 +173,7 @@ in with lib; {
         "-port.grpc=${toString volumePortGRPC}"
         "-ip=${config.networking.hostName}"
         "-ip.bind=0.0.0.0"
-        # "-mserver=${masters}" # disable while there is only one node
+        "-mserver=\"${masters}\""
         "-dataCenter=home" # TODO: this should be configurable
         "-rack=blue" # TODO: this should be configurable
         "-max=0"
@@ -205,7 +205,7 @@ in with lib; {
         "-port.grpc=${toString filerPortGRPC}"
         "-ip=${config.networking.hostName}"
         "-ip.bind=0.0.0.0"
-        "-master=${masters}"
+        "-master=\"${masters}\""
         "-dataCenter=home" # TODO: this should be configurable
         "-rack=blue" # TODO: this should be configurable
       ];

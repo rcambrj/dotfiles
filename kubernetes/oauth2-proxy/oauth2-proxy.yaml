@@ -46,6 +46,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: oauth2-proxy
+immutable: true
 data:
   oauth2-proxy.cfg: |-
     show_debug_on_error="true"
