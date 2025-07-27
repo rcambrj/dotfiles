@@ -31,7 +31,7 @@ in {
       {
         apiVersion = "v1";
         kind = "Namespace";
-        metadata.name = "storage";
+        metadata.name = "csi-s3";
       }
     ];
 
@@ -98,7 +98,7 @@ in {
         kind: Secret
         metadata:
           name: csi-s3-secret
-          namespace: storage
+          namespace: csi-s3
         stringData:
           accessKeyID: minioadmin
           secretAccessKey: $pass

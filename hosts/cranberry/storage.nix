@@ -41,7 +41,6 @@
     content = ''
       MINIO_ROOT_USER=minioadmin
       MINIO_ROOT_PASSWORD=$pass
-      MINIO_BROWSER_REDIRECT_URL="https://minio.home.cambridge.me"
     '';
   };
 
