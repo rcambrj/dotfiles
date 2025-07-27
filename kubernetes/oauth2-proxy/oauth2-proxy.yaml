@@ -127,16 +127,6 @@ spec:
             name: oauth2-proxy
             port:
               number: 80
-  - host: longhorn.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
   - host: nzbget.home.cambridge.me
     http:
       paths:
@@ -188,16 +178,6 @@ spec:
             port:
               number: 80
   - host: landing.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  - host: seaweedfs.home.cambridge.me
     http:
       paths:
       - path: /oauth2

@@ -19,19 +19,8 @@ in {
   "secrets/argocd-session-key.age".publicKeys = defaults ++ kubenodes;
   "secrets/argocd-ssh-key.age".publicKeys = defaults ++ kubenodes;
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
-  "secrets/longhorn-backup-b2-apikey.age".publicKeys = defaults ++ kubenodes;
-  "secrets/longhorn-backup-b2-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
-  "secrets/kubernetes-seaweedfs-admin-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/kubernetes-seaweedfs-admin-crt.age".publicKeys = defaults ++ kubenodes;
-
-  # seaweedfs
-  "secrets/seaweedfs-ca-key.age".publicKeys = defaults;
-  "secrets/seaweedfs-ca-crt.age".publicKeys = defaults ++ disknodes;
-  "secrets/seaweedfs-ca-crt-multiline.age".publicKeys = defaults ++ disknodes;
-  "secrets/seaweedfs-jwt-read-key.age".publicKeys = defaults ++ disknodes;
-  "secrets/seaweedfs-jwt-write-key.age".publicKeys = defaults ++ disknodes;
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -47,12 +36,4 @@ in {
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-
-  # cranberry
-  "secrets/cranberry-seaweedfs-master-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-seaweedfs-master-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-seaweedfs-volume-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-seaweedfs-volume-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-seaweedfs-filer-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-seaweedfs-filer-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
 }

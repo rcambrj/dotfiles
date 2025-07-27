@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: masters
-data:
-  masters: cranberry:0.19333

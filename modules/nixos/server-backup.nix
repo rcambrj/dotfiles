@@ -40,7 +40,6 @@
       "/var/lib/nixos"
       "/var/lib/portables"
       "/var/lib/rancher"
-      "/var/lib/seaweedfs"
       "/var/lib/systemd"
 
       # deprecated

@@ -51,23 +51,5 @@ in {
     } // (optionalAttrs (cfg.strategy == "join") {
       serverAddr = "https://kubernetes.cambridge.me:6443";
     });
-
-    # Longhorn is installed onto kubernetes via ArgoCD
-    # these are the host-level dependencies
-    environment.systemPackages = with pkgs; [ tgt ];
-    services.openiscsi = {
-      enable = true;
-      name = config.networking.hostName;
-    };
-    services.nfs.server.enable = true;
-    systemd.services.iscsid.serviceConfig.PrivateMounts = "yes";
-
-    # Fix Longhorn expecting FHS
-    # https://github.com/longhorn/longhorn/issues/2166
-    # https://takingnotes.net/kubernetes/longhorn/
-    system.activationScripts.usrlocalbin = ''
-      mkdir -m 0755 -p /usr/local
-      ln -nsf /run/current-system/sw/bin /usr/local/
-    '';
   };
 }
