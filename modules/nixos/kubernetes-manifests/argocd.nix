@@ -34,7 +34,6 @@ in {
           labels:
             app.kubernetes.io/name: argocd-secret
             app.kubernetes.io/part-of: argocd
-        immutable: true
         stringData:
           server.secretkey: $session_key
           oidc.clientSecret: $oidc_client_secret
@@ -54,7 +53,6 @@ in {
           namespace: argocd
           labels:
             argocd.argoproj.io/secret-type: repository
-        immutable: true
         stringData:
           url: git@github.com:rcambrj/dotfiles
           sshPrivateKey: "$ssh_key"

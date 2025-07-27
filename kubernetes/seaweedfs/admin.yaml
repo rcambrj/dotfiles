@@ -54,15 +54,10 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: admin-security-toml
-immutable: true
 data:
   security.toml: |-
     [grpc]
     ca = "/certs/ca.crt"
-
-    [grpc.admin]
-    key  = "/certs/admin.key"
-    cert = "/certs/admin.crt"
 
     [grpc.client]
     key  = "/certs/admin.key"

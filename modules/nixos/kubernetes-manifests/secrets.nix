@@ -54,7 +54,6 @@ in {
         metadata:
           name: vpn
           namespace: media
-        immutable: true
         stringData:
           user: $user
           pass: $pass
@@ -72,7 +71,6 @@ in {
         metadata:
           name: cloudflare-token
           namespace: cert-manager
-        immutable: true
         stringData:
           token: $token
       '';
@@ -91,7 +89,6 @@ in {
         metadata:
           name: oauth2-proxy
           namespace: oauth2-proxy
-        immutable: true
         stringData:
           client-secret: $clientsecret
           cookie-secret: $cookiesecret
@@ -110,7 +107,6 @@ in {
         metadata:
           name: longhorn-backup-b2
           namespace: longhorn-system
-        immutable: true
         stringData:
           AWS_ENDPOINTS: s3.eu-central-003.backblazeb2.com
           AWS_ACCESS_KEY_ID: $apikey
@@ -131,7 +127,6 @@ in {
         metadata:
           name: admin-certs
           namespace: seaweedfs
-        immutable: true
         stringData:
           ca.crt: "$cacrt"
           admin.key: "$adminkey"
