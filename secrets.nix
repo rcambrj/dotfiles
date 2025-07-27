@@ -41,14 +41,8 @@ in {
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/minio-blueberry-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/minio-blueberry-crt.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # cranberry
   "secrets/minio-cranberry-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
   "secrets/minio-cranberry-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-
-  # strawberry
-  "secrets/minio-strawberry-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
-  "secrets/minio-strawberry-crt.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
 }
