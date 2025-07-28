@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ flake, inputs, ... }: {
+{ config, flake, inputs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
