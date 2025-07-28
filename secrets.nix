@@ -22,11 +22,6 @@ in {
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
 
-  # minio
-  "secrets/minio-ca-key.age".publicKeys = defaults;
-  "secrets/minio-ca-crt.age".publicKeys = defaults ++ disknodes;
-  "secrets/minio-root-pass.age".publicKeys = defaults ++ disknodes;
-
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/webos-dev-mode-curl.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -41,8 +36,4 @@ in {
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-
-  # cranberry
-  "secrets/minio-cranberry-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/minio-cranberry-crt.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
 }
