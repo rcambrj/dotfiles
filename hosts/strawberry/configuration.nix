@@ -15,6 +15,7 @@
     flake.nixosModules.disko-node
     flake.nixosModules.disk-savers
     flake.nixosModules.gpu-intel
+    flake.nixosModules.kubernetes-manifests
     flake.nixosModules.kubernetes-node
     flake.nixosModules.telemetry
   ];
@@ -73,10 +74,16 @@
     role = "agent";
     strategy = "join";
   };
+  # services.kubernetes-manifests.enable = true;
   disk-savers.etcd-store = {
     targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
     targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
     diskDir = "/var/lib/etcd-store";
     syncEvery = "6h";
+  };
+
+  systemd.services.k3s = {
+    requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
+    after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
   };
 }
