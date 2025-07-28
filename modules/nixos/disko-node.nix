@@ -72,13 +72,23 @@
             };
           };
           nixosstate = {
-            size = "100%FREE";
+            size = "16G";
             name = "NIXOSSTATE";
             content = {
               type = "filesystem";
               format = "ext4";
               # mountpoint = "/var/lib";
               extraArgs = ["-L" "NIXOSSTATE"];
+            };
+          };
+          data = {
+            size = "100%FREE";
+            name = "DATA";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              # mountpoint = "/data";
+              extraArgs = ["-L" "DATA"];
             };
           };
         };

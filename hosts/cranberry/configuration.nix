@@ -12,7 +12,7 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.config-intel
-    flake.nixosModules.disk-aio
+    flake.nixosModules.disko-node
     flake.nixosModules.disk-savers
     flake.nixosModules.gpu-intel
     flake.nixosModules.kubernetes-manifests
