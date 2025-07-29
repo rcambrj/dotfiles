@@ -18,6 +18,7 @@
     flake.nixosModules.kubernetes-manifests
     flake.nixosModules.kubernetes-node
     flake.nixosModules.telemetry
+    flake.nixosModules.storage
   ];
 
   networking.hostName = "strawberry";

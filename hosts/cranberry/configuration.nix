@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ config, flake, inputs, ... }: {
+{ config, flake, inputs, pkgs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
@@ -18,11 +18,11 @@
     flake.nixosModules.kubernetes-manifests
     flake.nixosModules.kubernetes-node
     flake.nixosModules.telemetry
-
-    ./storage.nix
+    flake.nixosModules.storage
   ];
 
   networking.hostName = "cranberry";
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024";
   fileSystems = {

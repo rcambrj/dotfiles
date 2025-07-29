@@ -21,10 +21,12 @@
     paths = [ "/var/lib" ];
     exclude = [
       # generics
+      ".cache"
       ".esphome"
       ".git"
       ".platformio"
       "*.log"
+      "cache"
       "log.txt"
       "logrotate.status"
       "logs.db"
@@ -33,12 +35,9 @@
       # specifics
       "/var/lib/alloy"
       "/var/lib/cni"
+      "/var/lib/etcd-store"
       "/var/lib/kubelet"
-      "/var/lib/longhorn"
       "/var/lib/machines"
-      "/var/lib/minio"
-      "/var/lib/juicefs"
-      "/var/lib/nfs"
       "/var/lib/nixos"
       "/var/lib/portables"
       "/var/lib/rancher"
