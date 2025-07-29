@@ -11,18 +11,21 @@
   resource = "r0";
   backDevice = "/dev/pool/DATA";
   nodes = {
+
     "0" = {
       name = "cranberry";
       ip = "192.168.142.20";
+      # dd: 480MB/s dropping to 170MB/s after heat soak
     };
     "1" = {
       name = "strawberry";
       ip = "192.168.142.22";
+      # iftop: ~500Mb/s resync
+      # dd: 220MB/s stable
     };
     # "2" = {
     #   name = "blueberry";
     #   ip = "192.168.142.24";
-    #   # rate = ???;
     # };
   };
 in {
@@ -32,9 +35,18 @@ in {
   ];
 
   age.secrets = {
-    tlshd-ca-crt.file = ../../secrets/tlshd-ca-crt.age;
-    tlshd-key.file = ./. + "/../../secrets/tlshd-${config.networking.hostName}-key.age";
-    tlshd-crt.file = ./. + "/../../secrets/tlshd-${config.networking.hostName}-crt.age";
+    tlshd-ca-crt = {
+      file = ../../secrets/tlshd-ca-crt.age;
+      mode = "0644";
+    };
+    tlshd-key = {
+      file = ./. + "/../../secrets/tlshd-${config.networking.hostName}-key.age";
+      mode = "0600";
+    };
+    tlshd-crt = {
+      file = ./. + "/../../secrets/tlshd-${config.networking.hostName}-crt.age";
+      mode = "0644";
+    };
   };
 
   # DRBD will temporarily pass the sockets to a user space utility (tlshd, part
@@ -88,9 +100,6 @@ in {
           protocol C;
           tls yes;
         }
-        syncer {
-          rate 64M;
-        }
       }
       resource "${resource}" {
         device minor 1;
@@ -99,7 +108,13 @@ in {
 
         # options {
         #   auto-promote yes;
+        #   quorum majority;
         # }
+
+        disk {
+          c-min-rate 55000; # KiB/s: bandwidth available for resync
+          c-max-rate 60000; # KiB/s: total bandwidth available
+        }
 
         ${(strings.concatMapAttrsStringSep "\n" (nodeId: node: ''
           on "${node.name}" {
@@ -123,6 +138,10 @@ in {
       Type = "oneshot";
       Restart = "on-failure";
       RemainAfterExit = "true";
+
+      # debug:
+      # ExecStart = "${pkgs.drbd}/bin/drbdadm up all -v";
+      # ExecStop = "${pkgs.drbd}/bin/drbdadm down all -v";
     };
   };
 
