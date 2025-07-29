@@ -22,7 +22,6 @@
   ];
 
   networking.hostName = "cranberry";
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024";
   fileSystems = {

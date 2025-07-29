@@ -18,6 +18,7 @@ in {
     asciinema
     # balena-cli # doesn't build on darwin
     binwalk
+    certstrap
     coreutils
     curl
     dtc # device-tree-compiler
