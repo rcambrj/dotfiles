@@ -70,6 +70,10 @@
   ];
   zramSwap.enable = true;
 
+  services.gluster-node = {
+    enable = true;
+    disknode = true;
+  };
   services.kubernetes-node = {
     enable = true;
     role = "agent";

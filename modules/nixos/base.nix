@@ -58,7 +58,7 @@ with lib;
     ntfs  = mkOverride 99 false;
     tmpfs = mkOverride 99 true;
     vfat  = mkOverride 99 true;
-    xfs   = mkOverride 99 false;
+    xfs   = mkOverride 99 true;
     zfs   = mkOverride 99 false;
   };
 

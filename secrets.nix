@@ -36,4 +36,14 @@ in {
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+
+  # gluster
+  "secrets/gluster-ca-key.age".publicKeys = defaults;
+  "secrets/gluster-ca-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/gluster-cranberry-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/gluster-cranberry-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/gluster-strawberry-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
+  "secrets/gluster-strawberry-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/gluster-blueberry-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/gluster-blueberry-crt.age".publicKeys = defaults ++ disknodes;
 }

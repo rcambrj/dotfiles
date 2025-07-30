@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ config, flake, inputs, pkgs, ... }: {
+{ config, flake, inputs, lib, pkgs, ... }: with lib; {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
@@ -51,6 +51,7 @@
   };
 
   systemd.network.enable = true;
+  systemd.network.wait-online.enable = mkForce true;
   networking.useDHCP = false;
   networking.useNetworkd = true;
   systemd.network = {
@@ -63,43 +64,36 @@
     networks."11-enp1s0" = {
       matchConfig.Name = "enp1s0";
       networkConfig.Bridge = "br0";
+      linkConfig.RequiredForOnline = "no";
     };
     networks."11-enp2s0" = {
       matchConfig.Name = "enp2s0";
       networkConfig.Bridge = "br0";
+      linkConfig.RequiredForOnline = "no";
     };
     networks."11-enp3s0" = {
       matchConfig.Name = "enp3s0";
       networkConfig.Bridge = "br0";
+      linkConfig.RequiredForOnline = "no";
     };
     networks."11-enp4s0" = {
       matchConfig.Name = "enp4s0";
       networkConfig.Bridge = "br0";
+      linkConfig.RequiredForOnline = "no";
     };
     networks."12-br0" = {
       matchConfig.Name = "br0";
       networkConfig.DHCP = "ipv4";
       networkConfig.LinkLocalAddressing = "no";
-      dhcpV4Config.UseHostname = "no";
-      linkConfig.RequiredForOnline = "yes";
-      routingPolicyRules = [{
-        # this helps to prevent VPN rules/routes affecting SSH while debugging
-        Priority = 100;
-        To = "192.168.142.0/24";
-      }];
-      # bypass local nameserver setting so that DNS requests will go through VPN
-      dhcpV4Config.UseDNS = "no";
+      linkConfig.RequiredForOnline = "routable";
+      dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
     };
   };
-  services.resolved = {
-    enable = true;
-    extraConfig = ''
-    [Resolve]
-    DNS=192.168.142.1
-    Domains=~cambridge.me
-    '';
-  };
 
+  services.gluster-node = {
+    enable = true;
+    disknode = true;
+  };
   services.kubernetes-node = {
     enable = true;
     role = "server";

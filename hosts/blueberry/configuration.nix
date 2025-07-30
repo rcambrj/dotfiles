@@ -17,6 +17,7 @@
     flake.nixosModules.kubernetes-node
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
+    flake.nixosModules.storage
 
     ./esphome.nix
     ./downloads-enabled.nix
@@ -125,6 +126,10 @@
     };
   };
 
+  services.gluster-node = {
+    enable = true;
+    disknode = false;
+  };
   services.kubernetes-node = {
     enable = true;
     role = "agent";
