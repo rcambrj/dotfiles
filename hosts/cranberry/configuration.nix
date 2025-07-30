@@ -13,12 +13,10 @@
     flake.nixosModules.common
     flake.nixosModules.config-intel
     flake.nixosModules.disko-node
-    flake.nixosModules.disk-savers
     flake.nixosModules.gpu-intel
-    flake.nixosModules.kubernetes-manifests
-    flake.nixosModules.kubernetes-node
     flake.nixosModules.telemetry
-    flake.nixosModules.storage
+
+    ./node.nix
   ];
 
   networking.hostName = "cranberry";
@@ -89,34 +87,4 @@
       dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
     };
   };
-
-  services.gluster-node = {
-    enable = true;
-    disknode = true;
-  };
-  services.kubernetes-node = {
-    enable = true;
-    role = "server";
-    strategy = "init";
-  };
-  services.kubernetes-manifests.enable = true;
-  disk-savers.etcd-store = {
-    # writes about 100-200KB/s constantly (17GB/day)
-    # or with rsync, 200MB every...
-    targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
-    targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
-    diskDir = "/var/lib/etcd-store";
-    syncEvery = "3h";
-  };
-
-  systemd.services.k3s = {
-    bindsTo = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
-    requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
-    after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
-  };
-
-  services.k3s.extraFlags = [
-    # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
-    "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
-  ];
 }

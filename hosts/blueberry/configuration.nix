@@ -12,12 +12,9 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.config-intel
-    flake.nixosModules.disk-savers
     flake.nixosModules.gpu-intel
-    flake.nixosModules.kubernetes-node
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
-    flake.nixosModules.storage
 
     ./esphome.nix
     ./downloads-enabled.nix
@@ -26,6 +23,7 @@
     ./auth
     ./postgres.nix
     ./telemetry
+    ./node.nix
   ];
 
   networking.hostName = "blueberry";
@@ -126,25 +124,4 @@
     };
   };
 
-  services.gluster-node = {
-    enable = true;
-    disknode = false;
-  };
-  services.kubernetes-node = {
-    enable = true;
-    role = "agent";
-    strategy = "join";
-  };
-  disk-savers.etcd-store = {
-    targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
-    targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
-    diskDir = "/var/lib/etcd-store";
-    syncEvery = "6h";
-  };
-
-  services.k3s.extraFlags = [
-    "--node-taint=proxy-only=true:NoSchedule"
-  ];
-  # trust cluster traffic during transition
-  networking.firewall.trustedInterfaces = [ "flannel.1" "cni0" ];
 }
