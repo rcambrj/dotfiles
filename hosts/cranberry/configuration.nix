@@ -114,18 +114,9 @@
   };
 
   systemd.services.k3s = {
-    bindsTo = [
-      "${config.disk-savers.etcd-store.targetMountName}.mount"
-      # "data.mount"
-    ];
-    requires = [
-      "${config.disk-savers.etcd-store.targetMountName}.mount"
-      # "data.mount"
-    ];
-    after = [
-      "${config.disk-savers.etcd-store.targetMountName}.mount"
-      # "data.mount"
-    ];
+    bindsTo = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
+    requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
+    after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
   };
 
   services.k3s.extraFlags = [

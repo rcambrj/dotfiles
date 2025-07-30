@@ -36,15 +36,4 @@ in {
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-
-  # tlshd (drbd)
-  "secrets/drbd-secret.age".publicKeys = defaults ++ disknodes;
-  "secrets/tlshd-ca-key.age".publicKeys = defaults;
-  "secrets/tlshd-ca-crt.age".publicKeys = defaults ++ disknodes;
-  "secrets/tlshd-cranberry-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/tlshd-cranberry-crt.age".publicKeys = defaults ++ disknodes;
-  "secrets/tlshd-strawberry-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
-  "secrets/tlshd-strawberry-crt.age".publicKeys = defaults ++ disknodes;
-  "secrets/tlshd-blueberry-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/tlshd-blueberry-crt.age".publicKeys = defaults ++ disknodes;
 }
