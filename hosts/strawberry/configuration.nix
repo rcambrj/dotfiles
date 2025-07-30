@@ -77,10 +77,12 @@
   };
   # services.kubernetes-manifests.enable = true;
   disk-savers.etcd-store = {
+    # writes about 100-200KB/s constantly (17GB/day)
+    # or with rsync, 200MB every...
     targetDir = "/var/lib/rancher/k3s/server/db/etcd/member";
     targetMountName = "var-lib-rancher-k3s-server-db-etcd-member";
     diskDir = "/var/lib/etcd-store";
-    syncEvery = "6h";
+    syncEvery = "3h";
   };
 
   systemd.services.k3s = {

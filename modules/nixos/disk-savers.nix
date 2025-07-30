@@ -83,6 +83,7 @@ in {
     systemd.timers = attrsets.concatMapAttrs (name: value: {
       "disk-saver-${name}" = {
         timerConfig = {
+          OnBootSec = value.syncEvery;
           OnUnitActiveSec = value.syncEvery;
           Unit = "disk-saver-${name}.service";
         };
