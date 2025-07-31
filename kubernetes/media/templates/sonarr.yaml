@@ -24,9 +24,6 @@ spec:
       - name: media
         hostPath:
           path: /data/media
-      - name: downloads
-        hostPath:
-          path: /data/downloads
       initContainers:
       - name: lock-logs-dir
         image: busybox
@@ -52,10 +49,7 @@ spec:
         - name: sonarr-config
           mountPath: /config
         - name: media
-          subPath: tvshows
-          mountPath: /tvshows
-        - name: downloads
-          mountPath: /downloads
+          mountPath: /media
         ports:
         - name: http
           containerPort: 8989

@@ -25,7 +25,7 @@ spec:
           path: /data/nzbget
       - name: downloads
         hostPath:
-          path: /data/downloads
+          path: /data/media/downloads
       initContainers:
       - name: create-dirs
         image: busybox

@@ -15,4 +15,4 @@ applications:
 - name: oauth2-proxy
 - name: blueberry-proxy
 - name: landing
-# - name: media
+- name: media
