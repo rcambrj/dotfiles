@@ -27,13 +27,12 @@ spec:
           path: /data/transmission
       - name: downloads
         hostPath:
-          path: /data/media/downloads
+          path: /data/media/downloads/transmission
       initContainers:
       - name: create-dirs
         image: busybox
         volumeMounts:
         - name: downloads
-          subPath: transmission
           mountPath: /downloads
         command: ["/bin/sh", "-c"]
         args:
@@ -86,7 +85,6 @@ spec:
         - name: transmission-config
           mountPath: /config
         - name: downloads
-          subPath: transmission
           mountPath: /downloads
         ports:
         - name: http
