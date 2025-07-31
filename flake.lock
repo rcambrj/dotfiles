@@ -309,11 +309,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1743441282,
-        "narHash": "sha256-7vWfVt55mDMQO0Qb7PPszpTP9MX8UsJSoEQUMNpiAws=",
+        "lastModified": 1753989661,
+        "narHash": "sha256-ceWzzOi5/w1S6J12tgGY/lbMCMzo8FgfldCJdAkSaeo=",
         "owner": "rcambrj",
         "repo": "nix-pi-loader",
-        "rev": "3c2e405091493bb54a7eb87bc4776db359ace472",
+        "rev": "17ae6e3add955cbed5ffea8c5b3ff8929dddcbe9",
         "type": "github"
       },
       "original": {
