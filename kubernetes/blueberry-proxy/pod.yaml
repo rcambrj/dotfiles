@@ -42,9 +42,9 @@ spec:
       - name: lldap-http
         image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]
-        args: [ "exec socat TCP-LISTEN:15234,fork,reuseaddr TCP:192.168.142.24:5234"]
+        args: [ "exec socat TCP-LISTEN:15324,fork,reuseaddr TCP:192.168.142.24:5324"]
         ports:
-        - containerPort: 15234
+        - containerPort: 15324
       - name: lldap-ldaps
         image: nixery.dev/shell/socat/curl@sha256:56dcb4c680d3dd923c1b72222170029f3dff954abdef7d7676f28addf213c3fc
         command: ["/bin/sh", "-c"]

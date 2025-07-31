@@ -32,7 +32,7 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 15234
+    targetPort: 15324
 ---
 apiVersion: v1
 kind: Service
