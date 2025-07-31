@@ -33,9 +33,11 @@ in {
   ];
 
   environment.etc = {
-    "klipper/firmwares/btt-skr".source = firmwares.btt-skr;
-    "klipper/firmwares/btt-ebb".source = firmwares.btt-ebb;
-    "klipper/firmwares/ucan".source = firmwares.ucan;
+    # these won't build. maybe the config needs updating? https://github.com/NixOS/nixpkgs/issues/271063
+    # "klipper/firmwares/btt-skr".source = firmwares.btt-skr;
+    # "klipper/firmwares/btt-ebb".source = firmwares.btt-ebb;
+    # "klipper/firmwares/ucan".source = firmwares.ucan;
+
     "klipper/fluidd-config".source = perSystem.self.fluidd-config.overrideAttrs (attrs: {
       installPhase = attrs.installPhase + ''
 
