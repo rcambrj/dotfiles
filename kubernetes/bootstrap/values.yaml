@@ -17,3 +17,4 @@ applications:
 - name: landing
 - name: copyparty
 - name: media
+- name: fdm

@@ -31,7 +31,7 @@
         group_dn = "cn=fdm,ou=groups,dc=cambridge,dc=me";
       };
       authorization = {
-        cors_domains = [ "https://fdm.cambridge.me" ];
+        cors_domains = [ "https://fdm.home.cambridge.me" ];
         force_logins = false;
         trusted_clients = [
           "127.0.0.1" # allow mobileraker-companion to connect without a key
