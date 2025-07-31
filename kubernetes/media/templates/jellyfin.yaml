@@ -16,7 +16,7 @@ spec:
         app: jellyfin
     spec:
       nodeSelector:
-        gluster-volume-mounted: true
+        gluster-volume-mounted: "true"
       volumes:
       - name: jellyfin-config
         hostPath:
