@@ -15,16 +15,18 @@ spec:
       labels:
         app: jellyfin
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: jellyfin-config
-        persistentVolumeClaim:
-          claimName: jellyfin-config
+        hostPath:
+          path: /data/jellyfin
       - name: ldap-cert
         configMap:
           name: ldap-cert
       - name: media
-        persistentVolumeClaim:
-          claimName: media
+        hostPath:
+          path: /data/media
       - name: transcodes
         emptyDir:
       - name: logs

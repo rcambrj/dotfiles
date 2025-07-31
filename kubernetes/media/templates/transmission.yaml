@@ -17,15 +17,17 @@ spec:
       labels:
         app: transmission
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: gluetun-port-forwarding
         emptyDir:
       - name: transmission-config
-        persistentVolumeClaim:
-          claimName: transmission-config
+        hostPath:
+          path: /data/transmission
       - name: downloads
-        persistentVolumeClaim:
-          claimName: downloads
+        hostPath:
+          path: /data/downloads
       initContainers:
       - name: create-dirs
         image: busybox

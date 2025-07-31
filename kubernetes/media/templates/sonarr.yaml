@@ -15,16 +15,18 @@ spec:
       labels:
         app: sonarr
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: sonarr-config
-        persistentVolumeClaim:
-          claimName: sonarr-config
+        hostPath:
+          path: /data/sonarr
       - name: media
-        persistentVolumeClaim:
-          claimName: media
+        hostPath:
+          path: /data/media
       - name: downloads
-        persistentVolumeClaim:
-          claimName: downloads
+        hostPath:
+          path: /data/downloads
       initContainers:
       - name: lock-logs-dir
         image: busybox

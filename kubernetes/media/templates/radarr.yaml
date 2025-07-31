@@ -15,16 +15,18 @@ spec:
       labels:
         app: radarr
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: radarr-config
-        persistentVolumeClaim:
-          claimName: radarr-config
+        hostPath:
+          path: /data/radarr
       - name: media
-        persistentVolumeClaim:
-          claimName: media
+        hostPath:
+          path: /data/media
       - name: downloads
-        persistentVolumeClaim:
-          claimName: downloads
+        hostPath:
+          path: /data/downloads
       initContainers:
       - name: lock-logs-dir
         image: busybox

@@ -17,13 +17,15 @@ spec:
       labels:
         app: nzbget
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: nzbget-config
-        persistentVolumeClaim:
-          claimName: nzbget-config
+        hostPath:
+          path: /data/nzbget
       - name: downloads
-        persistentVolumeClaim:
-          claimName: downloads
+        hostPath:
+          path: /data/downloads
       initContainers:
       - name: create-dirs
         image: busybox

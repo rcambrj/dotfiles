@@ -15,10 +15,12 @@ spec:
       labels:
         app: jackett
     spec:
+      nodeSelector:
+        gluster-volume-mounted: true
       volumes:
       - name: jackett-config
-        persistentVolumeClaim:
-          claimName: jackett-config
+        hostPath:
+          path: /data/jackett
       - name: gluetun-port-forwarding
         emptyDir:
       initContainers:

@@ -27,11 +27,6 @@ in {
         kind = "Namespace";
         metadata.name = "oauth2-proxy";
       }
-      {
-        apiVersion = "v1";
-        kind = "Namespace";
-        metadata.name = "csi-s3";
-      }
     ];
 
     age-template.files."20-media-vpn-secret" = {
