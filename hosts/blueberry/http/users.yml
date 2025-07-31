@@ -1,6 +1,0 @@
-users:
-  rcambrj:
-    disabled: false
-    displayname: "Robert Cambridge"
-    password: "$argon2id$v=19$m=65536,t=3,p=4$aiuhfEbBW2vNtPifFaw0FA$8nBcSd7FT7p45kw8NhzUwbQvqSFg1SZY97FuVqZx+TE"
-    groups: []

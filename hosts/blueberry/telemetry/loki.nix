@@ -1,13 +1,4 @@
 { config, ... }: {
-  services.nginx.virtualHosts."loki.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:${toString config.services.loki.configuration.server.http_listen_port}";
-    };
-  };
-
   services.loki = {
     enable = true;
     extraFlags = [

@@ -1,13 +1,4 @@
 { config, ... }: {
-  services.nginx.virtualHosts."influxdb.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:8086";
-    };
-  };
-
   services.influxdb2 = {
     enable = true;
     provision = {

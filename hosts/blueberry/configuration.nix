@@ -19,7 +19,6 @@
     ./esphome.nix
     ./downloads-enabled.nix
     ./home-assistant
-    ./http
     ./auth
     ./postgres.nix
     ./telemetry

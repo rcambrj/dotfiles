@@ -18,14 +18,4 @@
     name = "pgadmin";
     ensureClauses.superuser = true;
   }];
-
-  services.nginx.virtualHosts."postgres.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:5050";
-    };
-  };
-
 }

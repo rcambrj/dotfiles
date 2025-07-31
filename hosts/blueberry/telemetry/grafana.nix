@@ -1,13 +1,4 @@
 { config, flake, pkgs, ... }: {
-  services.nginx.virtualHosts."grafana.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
-    };
-  };
-
   age-template.files.grafana-ldap-password = {
     vars = {
       ldap_admin_password = config.age.secrets.ldap-admin-ro-password.path;

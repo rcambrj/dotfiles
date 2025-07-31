@@ -10,15 +10,6 @@
     ensureDBOwnership = true;
   }];
 
-  services.nginx.virtualHosts."ldap.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:5324";
-    };
-  };
-
   users.users.lldap = {
     uid = 5324;
     group = "lldap";

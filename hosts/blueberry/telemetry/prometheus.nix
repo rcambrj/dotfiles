@@ -1,15 +1,4 @@
 { config, ... }: {
-  services.nginx.virtualHosts."prometheus.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:${toString config.services.prometheus.port}";
-    };
-  };
-
-  services.oauth2-proxy.nginx.virtualHosts."prometheus.home.cambridge.me" = {};
-
   services.prometheus = {
     # fails to build.
     # TODO: reenable when stats are meaningful

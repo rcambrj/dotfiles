@@ -1,13 +1,4 @@
 { config, flake, ... }: {
-  services.nginx.virtualHosts."dex.home.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "home.cambridge.me";
-    locations."/" = {
-      proxyWebsockets = true;
-      proxyPass = "http://127.0.0.1:5556";
-    };
-  };
-
   age-template.files.dex-env = {
     vars = {
       ldap_admin_password = config.age.secrets.ldap-admin-ro-password.path;
