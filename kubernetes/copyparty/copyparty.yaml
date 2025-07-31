@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: copyparty
+  labels:
+    app: copyparty
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: copyparty
+  template:
+    metadata:
+      labels:
+        app: copyparty
+    spec:
+      volumes:
+      - name: copyparty-config
+        configMap:
+          name: copyparty-config
+      - name: data
+        hostPath:
+          path: /data
+      containers:
+      - name: copyparty
+        image: ghcr.io/9001/copyparty-ac:1.18.8
+        volumeMounts:
+        - name: copyparty-config
+          mountPath: /cfg
+          readOnly: true
+        - name: data
+          mountPath: /w
+        ports:
+        - containerPort: 3923
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: copyparty-config
+data:
+  copyparty.conf: |-
+    [global]
+    v: .::A
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: copyparty
+spec:
+  selector:
+    app: copyparty
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3923
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: copyparty
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.oauth2-proxy.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "copyparty.home.cambridge.me"
+    secretName: copyparty-home-cambridge-me-tls
+  rules:
+  - host: copyparty.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: copyparty
+            port:
+              number: 80
