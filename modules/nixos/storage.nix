@@ -4,6 +4,7 @@
 #
 # gluster peer probe cranberry.cambridge.me
 # gluster peer probe strawberry.cambridge.me
+# gluster peer probe blueberry.cambridge.me
 #
 # gluster volume create gv0 \
 #   replica 3 arbiter 1 \
@@ -11,6 +12,14 @@
 #   strawberry.cambridge.me:/mnt/gluster/brick \
 #   blueberry.cambridge.me:/var/lib/glusterd-brick-arbiter \
 #   force
+#
+# TODO: gluster volume set gv0 client.ssl on
+# TODO: gluster volume set gv0 server.ssl on
+# TODO: gluster volume set gv0 ssl.cipher-list 'HIGH:!SSLv2'
+# TODO: gluster volume set gv0 ssl.certificate-depth 1
+# TODO: gluster volume set gv0 auth.ssl-allow cranberry,strawberry,blueberry # default is *
+#
+# TODO: echo "option transport.socket.ssl-cert-depth 1" >  /var/lib/glusterd/secure-access
 #
 # gluster volume start gv0
 #
@@ -20,17 +29,14 @@
     # iftop cranberry to strawberry: ~500Mb/s resync
     {
       fqdn = "cranberry.cambridge.me";
-      ip = "192.168.142.20";
       # dd: 480MB/s dropping to 170MB/s after heat soak
     }
     {
       fqdn = "strawberry.cambridge.me";
-      ip = "192.168.142.22";
       # dd: 220MB/s stable
     }
     {
       fqdn = "blueberry.cambridge.me";
-      ip = "192.168.142.24";
     }
   ];
   cfg = config.services.gluster-node;
