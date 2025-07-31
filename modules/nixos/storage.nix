@@ -13,13 +13,11 @@
 #   blueberry.cambridge.me:/var/lib/glusterd-brick-arbiter \
 #   force
 #
-# TODO: gluster volume set gv0 client.ssl on
-# TODO: gluster volume set gv0 server.ssl on
-# TODO: gluster volume set gv0 ssl.cipher-list 'HIGH:!SSLv2'
-# TODO: gluster volume set gv0 ssl.certificate-depth 1
-# TODO: gluster volume set gv0 auth.ssl-allow cranberry,strawberry,blueberry # default is *
-#
-# TODO: echo "option transport.socket.ssl-cert-depth 1" >  /var/lib/glusterd/secure-access
+# gluster volume set gv0 client.ssl on
+# gluster volume set gv0 server.ssl on
+# gluster volume set gv0 ssl.cipher-list 'HIGH:!SSLv2'
+# gluster volume set gv0 ssl.certificate-depth 1
+# gluster volume set gv0 auth.ssl-allow *
 #
 # gluster volume start gv0
 #
@@ -74,6 +72,11 @@ in {
       description = "The mount point for the distributed volume. This is the bit you consume";
       default = "/data";
     };
+    distributedVolumeMountName = mkOption {
+      type = types.string;
+      description = "The name of the mount, as escaped by systemd-escape";
+      default = "data.mount";
+    };
     mountLocalhost = mkOption {
       type = types.bool;
       description = ''
@@ -101,11 +104,11 @@ in {
     };
 
     networking.firewall = {
-      # https://github.com/nik-redhat/glusterfs/blob/devel/extras/firewalld/glusterfs.xml
+      # https://github.com/gluster/glusterfs/blob/devel/extras/firewalld/glusterfs.xml
       allowedTCPPorts = [
         24007 # glusterd
         24008 # glusterd RDMA port management
-        24009 # glustereventsd
+        55555 # glustereventsd
       ];
       allowedTCPPortRanges = [
         { from = 38465; to = 38469; } # Gluster NFS service.
@@ -131,8 +134,13 @@ in {
         policycoreutils # restorecon: command not found
         hostname # hostname: command not found
         samba # smbd: command not found
-
       ];
+      preStart = ''
+        echo "option transport.socket.ssl-cert-depth 1" > /var/lib/glusterd/secure-access
+      '';
+      postStart = ''
+        systemctl restart --no-block ${cfg.distributedVolumeMountName}
+      '';
       serviceConfig = optionalAttrs cfg.disknode {
         Requires = [ cfg.backendMountName ];
         After = [ cfg.backendMountName ];
@@ -163,9 +171,9 @@ in {
 
     environment.systemPackages = with pkgs; let
       gluster-status = pkgs.writeShellScriptBin "gluster-status" ''
+        ${glusterfs}/bin/gluster volume status
         ${glusterfs}/bin/gluster peer status
         ${glusterfs}/bin/gluster volume info
-        ${glusterfs}/bin/gluster volume status
       '';
     in [
       gluster-status
