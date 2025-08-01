@@ -58,7 +58,7 @@
         {
           # https://github.com/lldap/lldap/blob/9ac96e8/example_configs/home-assistant.md
           type = "command_line";
-          command = "${perSystem.self.lldap-ha-auth}/bin/lldap-ha-auth";
+          command = "/lldap-ha-auth/bin/lldap-ha-auth";
           args = [
             "https://ldap.home.cambridge.me"
             "homeassistant_user"

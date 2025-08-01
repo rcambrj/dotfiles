@@ -1,3 +1,21 @@
+apiVersion: akri.sh/v0
+kind: Configuration
+metadata:
+  name: zigbee
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  capacity: 1
+  discoveryHandler:
+    discoveryDetails: |
+      groupRecursive: true
+      udevRules:
+      - ATTRS{idVendor}=="1cf1", ATTRS{idProduct}=="0030"
+    name: udev
+# UDEV_DEVNODE_0:    /dev/bus/usb/001/007
+# UDEV_DEVNODE_3:    /dev/ttyACM0
+# UDEV_DEVPATH:      /devices/pci0000:00/0000:00:14.0/usb1/1-1
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +25,8 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: home-assistant
@@ -15,18 +35,31 @@ spec:
       labels:
         app: home-assistant
     spec:
+      nodeSelector:
+        gluster-volume-mounted: "true"
+        feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
       volumes:
-      - name: home-assistant-state
+      - name: state
         hostPath:
           path: /data/home-assistant
-      - name: home-assistant-configs
+      - name: configs
         emptyDir:
+      - name: lldap-ha-auth
+        emptyDir:
+      - name: secrets
+        secret:
+          secretName: home-assistant
+      - name: ldap-cert
+        configMap:
+          name: ldap-cert
       initContainers:
       - name: create-configs
         image: nixos/nix:2.30.2
         volumeMounts:
-        - name: home-assistant-configs
+        - name: configs
           mountPath: /configs
+        - name: lldap-ha-auth
+          mountPath: /lldap-ha-auth
         command: ["/bin/sh", "-c"]
         args:
         - |-
@@ -35,26 +68,84 @@ spec:
             --extra-experimental-features "flakes nix-command" \
             --accept-flake-config \
             --max-jobs 0
-          ls -l result/
+          ls -lR result/
           cp -RL result/* /configs/
-          ls -l /configs/
+          ls -lR /configs/
+
+          nix build github:rcambrj/dotfiles#packages.x86_64-linux.lldap-ha-auth \
+            --extra-experimental-features "flakes nix-command" \
+            --accept-flake-config \
+            --max-jobs 0
+          ls -lR result/
+          cp -RL result/bin /lldap-ha-auth/bin
+          ls -lR /lldap-ha-auth/
       containers:
       - name: home-assistant
         image: homeassistant/home-assistant:2025.9.0.dev202508010256
+        resources:
+          limits:
+            akri.sh/zigbee: "1"
+          requests:
+            akri.sh/zigbee: "1"
         env:
         - name: TZ
           value: Europe/Amsterdam
         volumeMounts:
-        - name: home-assistant-state
+        - name: state
           mountPath: /config
-        volumeMounts:
-        - name: home-assistant-configs
+        - name: configs
           subPath: configuration.yaml
           mountPath: /config/configuration.yaml
           readOnly: true
-        - name: home-assistant-configs
+        - name: configs
           subPath: ui-lovelace.yaml
           mountPath: /config/ui-lovelace.yaml
           readOnly: true
+        - name: lldap-ha-auth
+          mountPath: /lldap-ha-auth
+          readOnly: true
+        - name: secrets
+          subPath: secrets.yaml
+          mountPath: /config/secrets.yaml
+          readOnly: true
+        - name: ldap-cert
+          mountPath: /ldap-cert
         ports:
         - containerPort: 8123
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-assistant
+spec:
+  selector:
+    app: home-assistant
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8123
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: home-assistant
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "home.cambridge.me"
+    secretName: home-cambridge-me-tls
+  ingressClassName: nginx
+  rules:
+  - host: home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: home-assistant
+            port:
+              number: 80

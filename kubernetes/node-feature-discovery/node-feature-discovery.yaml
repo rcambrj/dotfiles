@@ -11,3 +11,13 @@ spec:
   version: v0.17.3
   targetNamespace: node-feature-discovery
   createNamespace: true
+
+  # https://kubernetes-sigs.github.io/node-feature-discovery/v0.17/reference/worker-configuration-reference.html
+  # https://www.usb.org/defined-class-codes
+  # 02 => CDC (zigbee)
+  valuesContent: |-
+    worker:
+      config:
+        sources:
+          usb:
+            deviceClassWhitelist: ["02"]

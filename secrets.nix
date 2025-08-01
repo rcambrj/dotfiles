@@ -46,4 +46,12 @@ in {
   "secrets/gluster-strawberry-crt.age".publicKeys = defaults ++ disknodes;
   "secrets/gluster-blueberry-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/gluster-blueberry-crt.age".publicKeys = defaults ++ disknodes;
+
+  # google-assistant
+  "secrets/google-assistant-client-email.age".publicKeys = defaults ++ kubenodes;
+  "secrets/google-assistant-private-key.age".publicKeys = defaults ++ kubenodes;
+
+  # telegram bot
+  "secrets/telegram-bot-api-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/telegram-group.age".publicKeys = defaults ++ kubenodes;
 }
