@@ -18,3 +18,4 @@ applications:
 - name: copyparty
 - name: media
 - name: fdm
+- name: home-assistant

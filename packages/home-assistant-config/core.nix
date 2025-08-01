@@ -36,7 +36,7 @@
 
     recorder = {
       # in-memory recorder is no longer supported
-      db_url = "postgresql://@/hass";
+      # db_url = "postgresql://@postgres/hass";
       # setting purge_keep_days to 0 will error
       purge_keep_days = 1;
       exclude = {

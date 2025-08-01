@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  labels:
+    app: home-assistant
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      volumes:
+      - name: home-assistant-state
+        hostPath:
+          path: /data/home-assistant
+      - name: home-assistant-configs
+        emptyDir:
+      initContainers:
+      - name: create-configs
+        image: nixos/nix:2.30.2
+        volumeMounts:
+        - name: home-assistant-configs
+          mountPath: /configs
+        command: ["/bin/sh", "-c"]
+        args:
+        - |-
+          set -ex
+          nix build github:rcambrj/dotfiles#packages.x86_64-linux.home-assistant-config \
+            --extra-experimental-features "flakes nix-command" \
+            --accept-flake-config \
+            --max-jobs 0
+          ls -l result/
+          cp -RL result/* /configs/
+          ls -l /configs/
+      containers:
+      - name: home-assistant
+        image: homeassistant/home-assistant:2025.9.0.dev202508010256
+        env:
+        - name: TZ
+          value: Europe/Amsterdam
+        volumeMounts:
+        - name: home-assistant-state
+          mountPath: /config
+        volumeMounts:
+        - name: home-assistant-configs
+          subPath: configuration.yaml
+          mountPath: /config/configuration.yaml
+          readOnly: true
+        - name: home-assistant-configs
+          subPath: ui-lovelace.yaml
+          mountPath: /config/ui-lovelace.yaml
+          readOnly: true
+        ports:
+        - containerPort: 8123
