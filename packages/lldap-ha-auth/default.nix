@@ -1,6 +1,7 @@
 { pkgs, ... }: with pkgs; stdenv.mkDerivation {
   name = "lldap-ha-auth";
 
+  # TODO: make this a flake input
   src = fetchFromGitHub {
     owner = "lldap";
     repo = "lldap";
@@ -8,7 +9,7 @@
     hash = "sha256-zuJNe6GY8P2EpVA87q4TAbCGlT4B5FypZeLrNUzxtWc=";
   };
 
-  nativeBuildInputs = [  makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin
