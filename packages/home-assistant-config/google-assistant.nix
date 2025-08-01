@@ -1,7 +1,7 @@
 { lib, ... }: let
   groups = import ./lib/light-groups.nix;
 in {
-  "home-assistant.yaml".google_assistant = {
+  "configuration.yaml".google_assistant = {
     project_id = "dynamic-dreamers-06ff7";
     service_account = {
       client_email = "!secret google_assistant_client_email";

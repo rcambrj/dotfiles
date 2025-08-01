@@ -1,5 +1,5 @@
 { ... }: {
-  "home-assistant.yaml".scene = [
+  "configuration.yaml".scene = [
     # hass doesnt support groups in scenes, only entities
     # TODO: workaround with groups from light-groups.nix
     {

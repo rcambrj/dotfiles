@@ -38,7 +38,7 @@
       "zha" # zigbee home assistant
       "homekit_controller" # homekit device discovery (somfy tahoma)
     ];
-    config = perSystem.self.home-assistant-config.passthru."home-assistant.yaml";
+    config = perSystem.self.home-assistant-config.passthru."configuration.yaml";
     lovelaceConfigWritable = true;
     lovelaceConfig = perSystem.self.home-assistant-config.passthru."ui-lovelace.yaml";
   };

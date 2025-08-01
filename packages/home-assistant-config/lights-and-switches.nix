@@ -1,7 +1,7 @@
 { ... }: let
   groups = import ./lib/light-groups.nix;
 in {
-  "home-assistant.yaml".group = builtins.listToAttrs (map (group: {
+  "configuration.yaml".group = builtins.listToAttrs (map (group: {
     name = group.key + "_lights";
     value = {
       name = group.name + " Lights";
@@ -9,7 +9,7 @@ in {
     };
   }) groups);
 
-  "home-assistant.yaml".automation = map (group: {
+  "configuration.yaml".automation = map (group: {
     alias = "Toggle group " + group.name;
     mode = "single";
     trigger = map (button_device: {

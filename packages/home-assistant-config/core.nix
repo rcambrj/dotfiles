@@ -1,6 +1,6 @@
 { perSystem, pkgs, ... }: with pkgs.lib; {
   options = {
-    "home-assistant.yaml" = mkOption {
+    "configuration.yaml" = mkOption {
       type = (pkgs.formats.yaml { }).type;
       default = {};
     };
@@ -9,7 +9,7 @@
       default = {};
     };
   };
-  config."home-assistant.yaml" = {
+  config."configuration.yaml" = {
     # don't enable default_config, instead enumerate individual features
     # https://www.home-assistant.io/integrations/default_config/
     # assist_pipeline = {};

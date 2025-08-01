@@ -8,10 +8,10 @@
   # url=https://developer.lge.com/secure/ResetDevModeSession.dev?sessionToken=$token
   # (see curl -K)
 
-  "home-assistant.yaml".shell_command = {
+  "configuration.yaml".shell_command = {
     extend_webos_dev_mode = "${pkgs.curl}/bin/curl --no-progress-meter -K /run/home-assistant/webos-dev-mode-curl.env";
   };
-  "home-assistant.yaml".automation = [{
+  "configuration.yaml".automation = [{
     alias = "Extend WebOS dev mode";
     mode = "single";
     trigger = {
