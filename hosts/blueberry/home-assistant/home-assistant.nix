@@ -1,13 +1,7 @@
-{ perSystem, pkgs, ... }: let
-  lldap-ha-auth = import ./lldap-ha-auth.nix { inherit pkgs; };
-in {
+{ config, perSystem, pkgs, ... }: {
 
   networking.firewall.allowedUDPPorts = [
     5353 # mDNS
-  ];
-
-  environment.systemPackages = [
-    lldap-ha-auth
   ];
 
   services.postgresql.ensureDatabases = [ "hass" ];
@@ -15,6 +9,18 @@ in {
     name = "hass";
     ensureDBOwnership = true;
   }];
+
+  age-template.files.webos-dev-mode-curl = {
+    path = "/run/home-assistant/webos-dev-mode-curl.env";
+    vars = {
+      token = config.age.secrets.webos-dev-mode-token.path;
+    };
+    content = ''
+      url=https://developer.lge.com/secure/ResetDevModeSession.dev?sessionToken=$token
+    '';
+    owner = "hass";
+    group = "hass";
+  };
 
   services.home-assistant = {
     enable = true;
@@ -32,6 +38,8 @@ in {
       "zha" # zigbee home assistant
       "homekit_controller" # homekit device discovery (somfy tahoma)
     ];
-    config = perSystem.self.home-assistant-config;
+    config = perSystem.self.home-assistant-config.passthru."home-assistant.yaml";
+    lovelaceConfigWritable = true;
+    lovelaceConfig = perSystem.self.home-assistant-config.passthru."ui-lovelace.yaml";
   };
 }

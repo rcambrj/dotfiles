@@ -1,23 +1,23 @@
 { ... }: {
-  services.home-assistant.config.input_boolean = {
+  "home-assistant.yaml".input_boolean = {
     ventilation_auto_speed_enabled = {
       name = "Ventilation Auto Speed";
       # initial = true; # don't set so that the state gets restored across restarts
       icon = "mdi:fan-auto";
     };
   };
-  services.home-assistant.config.script.on_ventilation_auto_turn_on = { sequence = [
+  "home-assistant.yaml".script.on_ventilation_auto_turn_on = { sequence = [
     {
       action = "input_boolean.turn_on";
       entity_id = "input_boolean.ventilation_auto_speed_enabled";
     }
   ]; };
-  services.home-assistant.config.script.on_ventilation_auto_turn_off = { sequence = [{
+  "home-assistant.yaml".script.on_ventilation_auto_turn_off = { sequence = [{
     action = "input_boolean.turn_off";
     entity_id = "input_boolean.ventilation_auto_speed_enabled";
   }]; };
 
-  services.home-assistant.config.automation = [{
+  "home-assistant.yaml".automation = [{
     alias = "Update ventilation speed";
     mode = "single";
     trigger = {

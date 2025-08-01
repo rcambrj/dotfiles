@@ -3,7 +3,7 @@
   # turn them off again if the other lights in the group aren't on. yolo.
   # seems to be limited to E14 LIDL LIVARNO bulbs.
 
-  services.home-assistant.config.automation = let
+  "home-assistant.yaml".automation = let
     quirky_lights = [
       { entity_id = "light.bathroom_mirror_light"; other_entity_id = "light.bathroom_light"; }
       { entity_id = "light.hallway_2_light"; other_entity_id = "light.hallway_1_light"; }

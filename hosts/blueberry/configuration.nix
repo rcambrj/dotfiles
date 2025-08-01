@@ -41,10 +41,8 @@
       owner = "hass";
       group = "hass";
     };
-    webos-dev-mode-curl = {
-      file = ../../secrets/webos-dev-mode-curl.age;
-      owner = "hass";
-      group = "hass";
+    webos-dev-mode-token = {
+      file = ../../secrets/webos-dev-mode-token.age;
     };
     backup-bucket = {
       file = ../../secrets/blueberry-backup-bucket.age;

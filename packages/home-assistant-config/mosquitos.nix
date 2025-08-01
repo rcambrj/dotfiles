@@ -1,5 +1,5 @@
 { ... }: {
-  services.home-assistant.config.automation = [
+  "home-assistant.yaml".automation = [
     {
       alias = "Mosquitos ON at sunset";
       mode = "single";

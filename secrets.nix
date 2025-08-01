@@ -24,7 +24,7 @@ in {
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/webos-dev-mode-curl.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
