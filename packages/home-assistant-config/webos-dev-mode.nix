@@ -9,7 +9,7 @@
   # (see curl -K)
 
   "configuration.yaml".shell_command = {
-    extend_webos_dev_mode = "${pkgs.curl}/bin/curl --no-progress-meter -K /run/home-assistant/webos-dev-mode-curl.env";
+    extend_webos_dev_mode = "curl --no-progress-meter -K /webos-dev-mode-curl";
   };
   "configuration.yaml".automation = [{
     alias = "Extend WebOS dev mode";

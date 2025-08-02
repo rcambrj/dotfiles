@@ -14,6 +14,8 @@ in {
 
       google-assistant-client-email.file = ../../../secrets/google-assistant-client-email.age;
       google-assistant-private-key.file  = ../../../secrets/google-assistant-private-key.age;
+
+      webos-dev-mode-token.file = ../../../secrets/webos-dev-mode-token.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -108,6 +110,23 @@ in {
           secrets.yaml: |-
             google_assistant_client_email: "$ga_email"
             google_assistant_private_key: "$ga_pkey"
+      '';
+    };
+
+    age-template.files."20-webos-dev-mode-curl" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-webos-dev-mode-curl.yaml";
+      vars = {
+        token = config.age.secrets.webos-dev-mode-token.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: webos-dev-mode-curl
+          namespace: home-assistant
+        stringData:
+          webos-dev-mode-curl: |-
+            url=https://developer.lge.com/secure/ResetDevModeSession.dev?sessionToken=$token
       '';
     };
   });

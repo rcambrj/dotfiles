@@ -18,7 +18,6 @@
 
     ./esphome.nix
     ./downloads-enabled.nix
-    ./home-assistant
     ./auth
     ./postgres.nix
     ./telemetry
@@ -40,9 +39,6 @@
       path = "/var/lib/hass/secrets.yaml";
       owner = "hass";
       group = "hass";
-    };
-    webos-dev-mode-token = {
-      file = ../../secrets/webos-dev-mode-token.age;
     };
     backup-bucket = {
       file = ../../secrets/blueberry-backup-bucket.age;
