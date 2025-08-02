@@ -63,13 +63,6 @@
         "::1"
       ];
     };
-    telegram_bot = [
-      {
-        platform = "broadcast";
-        api_key = "!secret telegram_bot_api_key";
-        allowed_chat_ids = [ "!secret telegram_group" ];
-      }
-    ];
     lovelace = {
       mode = "yaml";
     };

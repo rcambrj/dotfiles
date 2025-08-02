@@ -14,9 +14,6 @@ in {
 
       google-assistant-client-email.file = ../../../secrets/google-assistant-client-email.age;
       google-assistant-private-key.file  = ../../../secrets/google-assistant-private-key.age;
-
-      telegram-bot-api-key.file = ../../../secrets/telegram-bot-api-key.age;
-      telegram-group.file       = ../../../secrets/telegram-group.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -100,9 +97,6 @@ in {
       vars = {
         ga_email = config.age.secrets.google-assistant-client-email.path;
         ga_pkey  = config.age.secrets.google-assistant-private-key.path;
-
-        tg_api_key = config.age.secrets.telegram-bot-api-key.path;
-        tg_group   = config.age.secrets.telegram-group.path;
       };
       content = ''
         apiVersion: v1
@@ -114,9 +108,6 @@ in {
           secrets.yaml: |-
             google_assistant_client_email: "$ga_email"
             google_assistant_private_key: "$ga_pkey"
-
-            telegram_bot_api_key: "$tg_api_key"
-            telegram_group: "$tg_group"
       '';
     };
   });
