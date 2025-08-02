@@ -4,6 +4,7 @@
       specialArgs = { inherit inputs perSystem pkgs; };
       modules = [
         ./core.nix
+        ./auth.nix
         ./mosquitos.nix
         ./lights-and-switches.nix
         ./fix-quirky-lidl-lights.nix

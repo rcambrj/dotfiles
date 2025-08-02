@@ -54,22 +54,6 @@
       country = "NL";
       internal_url = "https://home.cambridge.me";
       external_url = "https://home.cambridge.me";
-      auth_providers = [
-        {
-          # https://github.com/lldap/lldap/blob/9ac96e8/example_configs/home-assistant.md
-          type = "command_line";
-          command = "/lldap-ha-auth/bin/lldap-ha-auth";
-          args = [
-            "https://ldap.home.cambridge.me"
-            "homeassistant_user"
-            "homeassistant_admin"
-          ];
-          meta = true;
-        }
-        # keep enabled.
-        # use admin user for long-lived tokens, eg. google-assistant
-        { type = "homeassistant"; }
-      ];
     };
     http = {
       use_x_forwarded_for = true;
