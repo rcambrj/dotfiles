@@ -53,8 +53,8 @@ spec:
           set -ex
           nix build github:rcambrj/dotfiles#packages.x86_64-linux.home-assistant-config \
             --extra-experimental-features "flakes nix-command" \
-            --accept-flake-config \
-            --max-jobs 0
+            --accept-flake-config
+
           ls -lR result/
           cp -RL result/* /configs/
           ls -lR /configs/
@@ -99,6 +99,18 @@ spec:
           mountPath: /ldap-cert
         ports:
         - containerPort: 8123
+        startupProbe:
+          httpGet:
+            path: /manifest.json
+            port: 8123
+        readinessProbe:
+          httpGet:
+            path: /manifest.json
+            port: 8123
+        livenessProbe:
+          httpGet:
+            path: /manifest.json
+            port: 8123
 ---
 apiVersion: v1
 kind: Service
