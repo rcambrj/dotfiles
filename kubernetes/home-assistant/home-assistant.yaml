@@ -66,9 +66,13 @@ spec:
       - name: home-assistant
         image: homeassistant/home-assistant:2025.9.0.dev202508010256
         resources:
-          limits:
-            squat.ai/zigbee: 1
           requests:
+            cpu: "50m"
+            memory: "400Mi"
+            squat.ai/zigbee: 1
+          limits:
+            cpu: "500m"
+            memory: "600Mi"
             squat.ai/zigbee: 1
         env:
         - name: TZ
