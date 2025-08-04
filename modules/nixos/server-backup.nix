@@ -18,7 +18,10 @@
     passwordFile    = config.age.secrets.backup-encryption-key.path;
     environmentFile = config.age.secrets.backup-credentials.path;
 
-    paths = [ "/var/lib" ];
+    paths = [
+      "/var/lib"
+      "/data"
+    ];
     exclude = [
       # generics
       ".cache"
@@ -31,8 +34,12 @@
       "logrotate.status"
       "logs.db"
       "logs"
+      "jellyfin/metadata"
+      "NzbDrone/MediaCover"
+      "Radarr/MediaCover"
 
       # specifics
+      "/data/media"
       "/var/lib/alloy"
       "/var/lib/cni"
       "/var/lib/etcd-store"
@@ -42,17 +49,6 @@
       "/var/lib/portables"
       "/var/lib/rancher"
       "/var/lib/systemd"
-
-      # deprecated
-      "/var/lib/jellyfin/metadata"
-      "/var/lib/media"
-      "/var/lib/nzbget/downloads"
-      "/var/lib/pia-vpn"
-      "/var/lib/radarr/.config/NzbDrone/MediaCover"
-      "/var/lib/radarr/.config/Radarr/MediaCover"
-      "/var/lib/transmission/.incomplete"
-      "/var/lib/transmission/Downloads"
-      "/var/lib/transmission/watchdir"
     ];
   };
 }
