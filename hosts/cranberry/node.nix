@@ -31,6 +31,10 @@
     after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
   };
 
+  services.udev.extraRules = ''
+    ACTION=="add", ATTRS{idVendor}=="1cf1", ATTRS{idProduct}=="0030", SYMLINK+="zigbee"
+  '';
+
   services.k3s.extraFlags = [
     # has the gluster volume at /data
     "--node-label=gluster-volume-mounted=true"

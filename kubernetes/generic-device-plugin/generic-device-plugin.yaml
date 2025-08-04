@@ -1,0 +1,28 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: generic-device-plugin
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/gabe565/generic-device-plugin
+  repo: https://charts.gabe565.com
+  chart: generic-device-plugin
+  version: 0.1.3
+  targetNamespace: generic-device-plugin
+  createNamespace: true
+
+  # no versions
+  # https://github.com/squat/generic-device-plugin/issues/24
+  # https://github.com/squat/generic-device-plugin/issues/68
+  valuesContent: |-
+    image:
+      pullPolicy: IfNotPresent
+      tag: 0f7fddf166f17d58107d9811b53bec74e4d52e7c
+    config:
+      data: |-
+        devices:
+        - name: zigbee
+          groups:
+          - paths:
+            - path: /dev/zigbee

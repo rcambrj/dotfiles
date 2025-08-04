@@ -1,21 +1,21 @@
-apiVersion: akri.sh/v0
-kind: Configuration
-metadata:
-  name: zigbee
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  capacity: 1
-  discoveryHandler:
-    discoveryDetails: |
-      groupRecursive: true
-      udevRules:
-      - ATTRS{idVendor}=="1cf1", ATTRS{idProduct}=="0030"
-    name: udev
-# UDEV_DEVNODE_0:    /dev/bus/usb/001/007
-# UDEV_DEVNODE_3:    /dev/ttyACM0
-# UDEV_DEVPATH:      /devices/pci0000:00/0000:00:14.0/usb1/1-1
----
+# apiVersion: akri.sh/v0
+# kind: Configuration
+# metadata:
+#   name: zigbee
+#   annotations:
+#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+# spec:
+#   capacity: 1
+#   discoveryHandler:
+#     discoveryDetails: |
+#       groupRecursive: true
+#       udevRules:
+#       - ATTRS{idVendor}=="1cf1", ATTRS{idProduct}=="0030"
+#     name: udev
+# # UDEV_DEVNODE_0:    /dev/bus/usb/001/007
+# # UDEV_DEVNODE_3:    /dev/ttyACM0
+# # UDEV_DEVPATH:      /devices/pci0000:00/0000:00:14.0/usb1/1-1
+# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,9 +85,9 @@ spec:
         image: homeassistant/home-assistant:2025.9.0.dev202508010256
         resources:
           limits:
-            akri.sh/zigbee: "1"
+            squat.ai/zigbee: 1
           requests:
-            akri.sh/zigbee: "1"
+            squat.ai/zigbee: 1
         env:
         - name: TZ
           value: Europe/Amsterdam
