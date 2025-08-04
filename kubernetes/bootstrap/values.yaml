@@ -12,7 +12,6 @@ applications:
 - name: ingress-nginx
 - name: intel-gpu
 - name: node-feature-discovery
-# - name: akri
 - name: generic-device-plugin
 - name: oauth2-proxy
 - name: blueberry-proxy
