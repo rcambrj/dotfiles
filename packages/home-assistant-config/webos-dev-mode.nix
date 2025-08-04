@@ -4,7 +4,7 @@
   #
   # use https://github.com/webosbrew/dev-manager-desktop to authenticate
   # then put contents of /var/luna/preferences/devmode_enabled
-  # into file /run/home-assistant/webos-dev-mode-curl.env in this format:
+  # into /webos-dev-mode-curl mounted in the container in this format:
   # url=https://developer.lge.com/secure/ResetDevModeSession.dev?sessionToken=$token
   # (see curl -K)
 

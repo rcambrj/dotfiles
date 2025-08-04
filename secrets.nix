@@ -24,7 +24,6 @@ in {
 
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -54,4 +53,7 @@ in {
   # telegram bot
   "secrets/telegram-bot-api-key.age".publicKeys = defaults ++ kubenodes;
   "secrets/telegram-group.age".publicKeys = defaults ++ kubenodes;
+
+  # LG webos
+  "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;
 }

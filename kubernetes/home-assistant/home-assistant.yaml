@@ -31,9 +31,9 @@ spec:
       - name: secrets
         secret:
           secretName: home-assistant
-      # - name: webos-dev-mode-curl
-      #   secret:
-      #     secretName: webos-dev-mode-curl
+      - name: webos-dev-mode-curl
+        secret:
+          secretName: webos-dev-mode-curl
       - name: ldap-cert
         configMap:
           name: ldap-cert
@@ -92,9 +92,9 @@ spec:
           subPath: secrets.yaml
           mountPath: /config/secrets.yaml
           readOnly: true
-        # - name: webos-dev-mode-curl
-        #   subPath: webos-dev-mode-curl
-        #   mountPath: /webos-dev-mode-curl
+        - name: webos-dev-mode-curl
+          subPath: webos-dev-mode-curl
+          mountPath: /webos-dev-mode-curl
         - name: ldap-cert
           mountPath: /ldap-cert
         ports:
