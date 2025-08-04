@@ -25,4 +25,4 @@ spec:
         - name: zigbee
           groups:
           - paths:
-            - path: /dev/zigbee
+            - path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2650375-if00
