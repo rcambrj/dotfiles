@@ -57,14 +57,6 @@
       owner = "lldap";
       group = "lldap";
     };
-    lldap-cert-key = {
-      file = ../../secrets/lldap-cert-key.age;
-      owner = "lldap";
-      group = "lldap";
-    };
-    lldap-env = {
-      file = ../../secrets/lldap-env.age;
-    };
     ldap-admin-ro-password = {
       file = ../../secrets/ldap-admin-ro-password.age;
     };

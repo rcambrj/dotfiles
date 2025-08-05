@@ -5,7 +5,7 @@
       type = "command_line";
       command = "/lldap-ha-auth.sh";
       args = [
-        "https://ldap.home.cambridge.me"
+        "https://lldap.home.cambridge.me"
         "homeassistant_user"
         "homeassistant_admin"
       ];

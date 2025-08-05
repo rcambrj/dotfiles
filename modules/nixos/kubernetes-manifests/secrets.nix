@@ -103,8 +103,6 @@ in {
       vars = {
         keyseed = config.age.secrets.lldap-key-seed.path;
         jwtsecret = config.age.secrets.lldap-jwt-secret.path;
-        certkey = config.age.secrets.lldap-cert-key.path;
-        certcrt = config.age.secrets.lldap-cert-crt.path;
         smtppass = config.age.secrets.mailgun-smtp-password.path;
       };
       content = ''

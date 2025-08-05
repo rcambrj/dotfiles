@@ -34,7 +34,7 @@
         id = "ldap";
         name = "LDAP";
         config = {
-          host = "ldap.home.cambridge.me:6360";
+          host = "lldap.home.cambridge.me:6360";
           insecureNoSSL = false;
           insecureSkipVerify = false;
           rootCA = "${flake.lib.ldap-cert}";

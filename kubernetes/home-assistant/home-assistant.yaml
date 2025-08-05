@@ -37,9 +37,6 @@ spec:
       - name: webos-dev-mode-curl
         secret:
           secretName: webos-dev-mode-curl
-      - name: ldap-cert
-        configMap:
-          name: ldap-cert
       initContainers:
       - name: create-configs
         image: nixos/nix:2.30.2
@@ -105,8 +102,6 @@ spec:
         - name: webos-dev-mode-curl
           subPath: webos-dev-mode-curl
           mountPath: /webos-dev-mode-curl
-        - name: ldap-cert
-          mountPath: /ldap-cert
         ports:
         - containerPort: 8123
         startupProbe:

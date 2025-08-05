@@ -18,7 +18,7 @@
   };
 
   services.grafana = {
-    enable = true;
+    enable = false;
     settings = {
       server = {
         http_addr = "0.0.0.0";
@@ -36,10 +36,10 @@
         enabled = true;
         config_file = "" + ((pkgs.formats.toml { }).generate "grafana-ldap.toml" {
           servers = [{
-            host = "ldap.home.cambridge.me";
+            host = "lldap.home.cambridge.me";
             port = 6360;
             use_ssl = true;
-            root_ca_cert = flake.lib.ldap-cert;
+            root_ca_cert = "TODO";
             bind_dn = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
             bind_password = "$__file{${config.age-template.files.grafana-ldap-password.path}}";
             search_filter = "(&(uid=%s)(memberof=cn=grafana,ou=groups,dc=cambridge,dc=me))";

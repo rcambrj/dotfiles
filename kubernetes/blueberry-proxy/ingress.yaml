@@ -51,31 +51,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lldap
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    # auth performed in app
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-      - "ldap.home.cambridge.me"
-    secretName: ldap-home-cambridge-me-tls
-  rules:
-  - host: ldap.home.cambridge.me
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: lldap-http
-            port:
-              number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
   name: grafana
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
