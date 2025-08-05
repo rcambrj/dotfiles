@@ -32,7 +32,7 @@ in {
       {
         apiVersion = "v1";
         kind = "Namespace";
-        metadata.name = "oauth2-proxy";
+        metadata.name = "auth";
       }
       {
         apiVersion = "v1";
@@ -87,7 +87,7 @@ in {
         kind: Secret
         metadata:
           name: oauth2-proxy
-          namespace: oauth2-proxy
+          namespace: auth
         stringData:
           client-secret: $clientsecret
           cookie-secret: $cookiesecret

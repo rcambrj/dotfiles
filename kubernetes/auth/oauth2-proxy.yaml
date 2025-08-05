@@ -117,7 +117,37 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+  - host: copyparty.home.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: esphome.home.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
   - host: jackett.home.cambridge.me
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 80
+  - host: landing.home.cambridge.me
     http:
       paths:
       - path: /oauth2
@@ -158,26 +188,6 @@ spec:
             port:
               number: 80
   - host: transmission.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  - host: esphome.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  - host: landing.home.cambridge.me
     http:
       paths:
       - path: /oauth2
