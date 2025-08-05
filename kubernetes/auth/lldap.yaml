@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lldap
+  labels:
+    app: lldap
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: lldap
+  template:
+    metadata:
+      labels:
+        app: lldap
+    spec:
+      volumes:
+      - name: data
+        hostPath:
+          path: /data/lldap
+      - name: secrets
+        secret:
+          secretName: lldap-secrets
+      containers:
+      - name: lldap
+        image: lldap/lldap:2025-07-29
+        envFrom:
+        - configMapRef:
+            name: lldap-env
+        env:
+        - name: LLDAP_SMTP_OPTIONS__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lldap-secrets
+              key: smtp-pass
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+        command: [ "/app/lldap" ] # skip the default entrypoint checks
+        args: [ "run", "--config-file", "/secrets/lldap_config.toml" ]
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: secrets
+          mountPath: /secrets
+        ports:
+        - name: ldap
+          containerPort: 3890
+        - name: ldaps
+          containerPort: 6360
+        - name: http
+          containerPort: 17170
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lldap-env
+data:
+  # UID: "1000"
+  # GID: "1000"
+  TZ: Europe/Amsterdam
+
+  LLDAP_DATABASE_URL: sqlite:///data/users.db?mode=rwc
+  LLDAP_HTTP_HOST: 0.0.0.0
+  LLDAP_HTTP_PORT: "17170"
+  LLDAP_HTTP_URL: https://lldap.home.cambridge.me
+  LLDAP_LDAP_BASE_DN: dc=cambridge,dc=me
+  LLDAP_LDAP_HOST: 0.0.0.0
+  LLDAP_LDAP_PORT: "3890"
+  LLDAP_LDAP_USER_DN: admin
+  LLDAP_LDAP_USER_EMAIL: team+admin@cambridge.me
+  LLDAP_LDAP_USER_PASS: password
+  LLDAP_LDAPS_OPTIONS__ENABLED: "true"
+  LLDAP_LDAPS_OPTIONS__PORT: "6360"
+  LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: "true"
+  LLDAP_SMTP_OPTIONS__FROM: ldap@cambridge.me
+  LLDAP_SMTP_OPTIONS__PORT: "465"
+  LLDAP_SMTP_OPTIONS__SERVER: smtp.eu.mailgun.org
+  LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: TLS
+  LLDAP_SMTP_OPTIONS__TO: noreply@cambridge.me # reply to
+  LLDAP_SMTP_OPTIONS__USER: postmaster@mailgun.cambridge.me
+  LLDAP_KEY_FILE: "" # use key_seed instead and silence warning
+
+  LLDAP_KEY_SEED_FILE: /secrets/key-seed
+  LLDAP_JWT_SECRET_FILE: /secrets/jwt-secret
+  LLDAP_LDAPS_OPTIONS__KEY_FILE: /secrets/ldap-cert.key
+  LLDAP_LDAPS_OPTIONS__CERT_FILE: /secrets/ldap-cert.crt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lldap-http
+spec:
+  selector:
+    app: lldap
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lldap-ldaps
+spec:
+  selector:
+    app: lldap
+  ports:
+  - protocol: TCP
+    port: 6360
+    targetPort: ldaps
+  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lldap
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "lldap.home.cambridge.me"
+    secretName: lldap-home-cambridge-me-tls
+  rules:
+  - host: lldap.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lldap-http
+            port:
+              number: 80

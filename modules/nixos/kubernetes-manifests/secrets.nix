@@ -16,6 +16,12 @@ in {
       google-assistant-private-key.file  = ../../../secrets/google-assistant-private-key.age;
 
       webos-dev-mode-token.file = ../../../secrets/webos-dev-mode-token.age;
+
+      lldap-key-seed.file = ../../../secrets/lldap-key-seed.age;
+      lldap-jwt-secret.file = ../../../secrets/lldap-jwt-secret.age;
+      lldap-cert-key.file = ../../../secrets/lldap-cert-key.age;
+      lldap-cert-crt.file = ../../../secrets/lldap-cert-crt.age;
+      mailgun-smtp-password.file = ../../../secrets/mailgun-smtp-password.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -91,6 +97,30 @@ in {
         stringData:
           client-secret: $clientsecret
           cookie-secret: $cookiesecret
+      '';
+    };
+
+    age-template.files."20-lldap" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-lldap.yaml";
+      vars = {
+        keyseed = config.age.secrets.lldap-key-seed.path;
+        jwtsecret = config.age.secrets.lldap-jwt-secret.path;
+        certkey = config.age.secrets.lldap-cert-key.path;
+        certcrt = config.age.secrets.lldap-cert-crt.path;
+        smtppass = config.age.secrets.mailgun-smtp-password.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: lldap-secrets
+          namespace: auth
+        stringData:
+          key-seed: "$keyseed"
+          jwt-secret: "$jwtsecret"
+          ldap-cert.key: "$certkey"
+          ldap-cert.crt: "$certcrt"
+          smtp-pass: "$smtppass"
       '';
     };
 

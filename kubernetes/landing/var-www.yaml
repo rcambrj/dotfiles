@@ -36,7 +36,7 @@ data:
       <p>&nbsp;</p>
       <p><a href="https://openwrt.lan/">OpenWRT</a></p>
       <p><a href="https://openwrt.lan:8443/">Unifi</a></p>
-      <p><a href="https://ldap.home.cambridge.me/">LDAP</a></p>
+      <p><a href="https://lldap.home.cambridge.me/">LDAP</a></p>
       <p><a href="https://esphome.home.cambridge.me">esphome</a></p>
     </body>
     </html>

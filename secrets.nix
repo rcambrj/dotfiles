@@ -28,13 +28,20 @@ in {
   "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-pgadmin.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/lldap-jwt-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/lldap-cert-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/lldap-env.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+
+  # lldap
+  "secrets/lldap-key-seed.age".publicKeys = defaults ++ kubenodes;
+  "secrets/lldap-jwt-secret.age".publicKeys = defaults ++ kubenodes;
+  "secrets/lldap-cert-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/lldap-cert-crt.age".publicKeys = defaults ++ kubenodes;
+
+  # mailgun
+  "secrets/mailgun-smtp-password.age".publicKeys = defaults ++ kubenodes;
 
   # gluster
   "secrets/gluster-ca-key.age".publicKeys = defaults;
