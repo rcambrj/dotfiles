@@ -24,6 +24,9 @@ spec:
       - name: secrets
         secret:
           secretName: lldap-secrets
+      - name: cert
+        secret:
+          secretName: ldap-server
       containers:
       - name: lldap
         image: lldap/lldap:2025-07-29
@@ -46,6 +49,8 @@ spec:
           mountPath: /data
         - name: secrets
           mountPath: /secrets
+        - name: cert
+          mountPath: /cert
         ports:
         - name: ldap
           containerPort: 3890
@@ -86,8 +91,8 @@ data:
 
   LLDAP_KEY_SEED_FILE: /secrets/key-seed
   LLDAP_JWT_SECRET_FILE: /secrets/jwt-secret
-  LLDAP_LDAPS_OPTIONS__KEY_FILE: /secrets/ldap-cert.key
-  LLDAP_LDAPS_OPTIONS__CERT_FILE: /secrets/ldap-cert.crt
+  LLDAP_LDAPS_OPTIONS__KEY_FILE: /cert/tls.key
+  LLDAP_LDAPS_OPTIONS__CERT_FILE: /cert/tls.crt
 ---
 apiVersion: v1
 kind: Service
@@ -137,3 +142,19 @@ spec:
             name: lldap-http
             port:
               number: 80
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ldap-server
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  secretName: ldap-server
+  dnsNames:
+  - lldap.home.cambridge.me
+  - lldap.auth.svc.cluster.local
+  issuerRef:
+    name: ldap-ca
+    kind: ClusterIssuer
+    group: cert-manager.io

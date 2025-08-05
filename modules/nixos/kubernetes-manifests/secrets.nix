@@ -19,8 +19,6 @@ in {
 
       lldap-key-seed.file = ../../../secrets/lldap-key-seed.age;
       lldap-jwt-secret.file = ../../../secrets/lldap-jwt-secret.age;
-      lldap-cert-key.file = ../../../secrets/lldap-cert-key.age;
-      lldap-cert-crt.file = ../../../secrets/lldap-cert-crt.age;
       mailgun-smtp-password.file = ../../../secrets/mailgun-smtp-password.age;
     };
 
@@ -118,8 +116,6 @@ in {
         stringData:
           key-seed: "$keyseed"
           jwt-secret: "$jwtsecret"
-          ldap-cert.key: "$certkey"
-          ldap-cert.crt: "$certcrt"
           smtp-pass: "$smtppass"
       '';
     };

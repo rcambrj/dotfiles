@@ -5,8 +5,6 @@ let
   disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
 in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
-  "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
-  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
 
   # oauth2 apps
   "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
@@ -37,8 +35,8 @@ in {
   # lldap
   "secrets/lldap-key-seed.age".publicKeys = defaults ++ kubenodes;
   "secrets/lldap-jwt-secret.age".publicKeys = defaults ++ kubenodes;
-  "secrets/lldap-cert-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/lldap-cert-crt.age".publicKeys = defaults ++ kubenodes;
+  "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
+  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
 
   # mailgun
   "secrets/mailgun-smtp-password.age".publicKeys = defaults ++ kubenodes;

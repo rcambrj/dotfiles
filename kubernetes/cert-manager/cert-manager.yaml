@@ -17,6 +17,22 @@ spec:
     crds:
       enabled: true
 ---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: trust-manager
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://cert-manager.io/docs/trust/trust-manager/installation/
+  repo: https://charts.jetstack.io
+  chart: trust-manager
+  version: 0.18.0
+  targetNamespace: cert-manager
+  createNamespace: true
+---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
@@ -60,3 +76,12 @@ spec:
             # refers to the resource with the given name in the configured ‘cluster resource namespace’, which is set as a flag on the controller component (and defaults to the namespace that cert-manager runs in).
             name: cloudflare-token
             key: token
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: self-signed
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selfSigned: {}
