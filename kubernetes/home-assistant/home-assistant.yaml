@@ -20,6 +20,9 @@ spec:
       nodeSelector:
         gluster-volume-mounted: "true"
         feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
+      securityContext:
+        supplementalGroups:
+        - 27 # "video" group for generic-device-plugin
       volumes:
       - name: state
         hostPath:
@@ -64,7 +67,7 @@ spec:
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       containers:
       - name: home-assistant
-        image: lscr.io/linuxserver/homeassistant:2025.7.4-ls126
+        image: homeassistant/home-assistant:2025.9.0.dev202508010256
         resources:
           requests:
             cpu: "50m"
@@ -74,13 +77,12 @@ spec:
             cpu: "500m"
             memory: "600Mi"
             squat.ai/zigbee: 1
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         env:
         - name: TZ
           value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
         volumeMounts:
         - name: state
           mountPath: /config
@@ -111,7 +113,6 @@ spec:
           httpGet:
             path: /manifest.json
             port: 8123
-          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /manifest.json
