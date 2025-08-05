@@ -64,7 +64,7 @@ spec:
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       containers:
       - name: home-assistant
-        image: homeassistant/home-assistant:2025.9.0.dev202508010256
+        image: lscr.io/linuxserver/homeassistant:2025.7.4-ls126
         resources:
           requests:
             cpu: "50m"
@@ -77,6 +77,10 @@ spec:
         env:
         - name: TZ
           value: Europe/Amsterdam
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
         volumeMounts:
         - name: state
           mountPath: /config
@@ -107,6 +111,7 @@ spec:
           httpGet:
             path: /manifest.json
             port: 8123
+          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /manifest.json
