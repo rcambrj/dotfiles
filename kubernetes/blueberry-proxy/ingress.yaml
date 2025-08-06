@@ -47,29 +47,3 @@ spec:
             name: loki
             port:
               number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: esphome
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
-spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-      - "esphome.home.cambridge.me"
-    secretName: esphome-home-cambridge-me-tls
-  rules:
-  - host: esphome.home.cambridge.me
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: esphome
-            port:
-              number: 80

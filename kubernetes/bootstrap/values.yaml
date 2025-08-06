@@ -8,15 +8,16 @@ config:
       targetRevision: HEAD
 
 applications:
-- name: cert-manager
-- name: ingress-nginx
-- name: intel-gpu
-- name: node-feature-discovery
-- name: generic-device-plugin
 - name: auth
 - name: blueberry-proxy
-- name: landing
+- name: cert-manager
 - name: copyparty
-- name: media
+- name: esphome
 - name: fdm
+- name: generic-device-plugin
 - name: home-assistant
+- name: ingress-nginx
+- name: intel-gpu
+- name: landing
+- name: media
+- name: node-feature-discovery
