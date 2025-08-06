@@ -18,7 +18,6 @@
 
     ./esphome.nix
     ./downloads-enabled.nix
-    ./auth
     ./postgres.nix
     ./telemetry
     ./node.nix
@@ -33,13 +32,6 @@
   };
 
   age.secrets = {
-    acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
-    home-assistant = {
-      file = ../../secrets/home-assistant.age;
-      path = "/var/lib/hass/secrets.yaml";
-      owner = "hass";
-      group = "hass";
-    };
     backup-bucket = {
       file = ../../secrets/blueberry-backup-bucket.age;
     };
@@ -52,25 +44,8 @@
     blueberry-pgadmin = {
       file = ../../secrets/blueberry-pgadmin.age;
     };
-    lldap-jwt-secret = {
-      file = ../../secrets/lldap-jwt-secret.age;
-      owner = "lldap";
-      group = "lldap";
-    };
     ldap-admin-ro-password = {
       file = ../../secrets/ldap-admin-ro-password.age;
-    };
-    blueberry-oauth2-proxy-client-secret = {
-      file = ../../secrets/blueberry-oauth2-proxy-client-secret.age;
-    };
-    kubernetes-oauth2-proxy-client-secret = {
-      file = ../../secrets/kubernetes-oauth2-proxy-client-secret.age;
-    };
-    blueberry-oauth2-proxy-cookie-secret = {
-      file = ../../secrets/blueberry-oauth2-proxy-cookie-secret.age;
-    };
-    argocd-client-secret = {
-      file = ../../secrets/argocd-client-secret.age;
     };
     grafana-secret = {
       file = ../../secrets/grafana-secret.age;
