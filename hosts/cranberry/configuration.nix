@@ -17,6 +17,7 @@
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
 
+    ./primary-wan.nix
     ./node.nix
   ];
 

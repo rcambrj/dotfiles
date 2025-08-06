@@ -17,7 +17,6 @@
     flake.nixosModules.telemetry
 
     ./primary-wan.nix
-    ./telemetry
     ./node.nix
   ];
 
