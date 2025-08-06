@@ -28,39 +28,6 @@
     networking.broadcom.sta.enable = false;
   };
 
-  age.secrets = {
-    backup-bucket = {
-      file = ../../secrets/blueberry-backup-bucket.age;
-    };
-    backup-credentials = {
-      file = ../../secrets/blueberry-backup-credentials.age;
-    };
-    backup-encryption-key = {
-      file = ../../secrets/blueberry-backup-encryption-key.age;
-    };
-    blueberry-pgadmin = {
-      file = ../../secrets/blueberry-pgadmin.age;
-    };
-    ldap-admin-ro-password = {
-      file = ../../secrets/ldap-admin-ro-password.age;
-    };
-    grafana-secret = {
-      file = ../../secrets/grafana-secret.age;
-      owner = "grafana";
-      group = "grafana";
-    };
-    influxdb-admin-password = {
-      file = ../../secrets/influxdb-admin-password.age;
-      owner = "influxdb2";
-      group = "influxdb2";
-    };
-    influxdb-admin-token = {
-      file = ../../secrets/influxdb-admin-token.age;
-      owner = "influxdb2";
-      group = "influxdb2";
-    };
-  };
-
   fileSystems = {
     "/var/lib" = {
       device = "/dev/disk/by-label/NIXOSSTATE";
