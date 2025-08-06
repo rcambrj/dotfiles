@@ -1,4 +1,14 @@
+#
+# each server to back up the replicated store discretely.
+# waste of storage? yes, but better than data loss.
+#
 { config, ... }: {
+  age.secrets = {
+    backup-bucket.file = ./. + "/../../secrets/${config.networking.hostName}-backup-bucket.age";
+    backup-credentials.file = ./. + "/../../secrets/${config.networking.hostName}-backup-credentials.age";
+    backup-encryption-key.file = ./. + "/../../secrets/${config.networking.hostName}-backup-encryption-key.age";
+  };
+
   services.restic.backups.main = {
     timerConfig = {
       OnCalendar = "04:00";
@@ -19,7 +29,7 @@
     environmentFile = config.age.secrets.backup-credentials.path;
 
     paths = [
-      "/var/lib"
+      "/var/lib/glusterd"
       "/data"
     ];
     exclude = [
@@ -40,15 +50,6 @@
       "NzbDrone/MediaCover"
       "Radarr/MediaCover"
       "/data/media"
-      "/var/lib/alloy"
-      "/var/lib/cni"
-      "/var/lib/etcd-store"
-      "/var/lib/kubelet"
-      "/var/lib/machines"
-      "/var/lib/nixos"
-      "/var/lib/portables"
-      "/var/lib/rancher"
-      "/var/lib/systemd"
     ];
   };
 }

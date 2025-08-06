@@ -20,6 +20,11 @@ in {
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
 
+  # cranberry
+  "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+
   # blueberry
   "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
