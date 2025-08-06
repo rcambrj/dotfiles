@@ -34,11 +34,11 @@
       "logrotate.status"
       "logs.db"
       "logs"
-      "jellyfin/metadata"
-      "NzbDrone/MediaCover"
-      "Radarr/MediaCover"
 
       # specifics
+      "jellyfin/data/metadata"
+      "NzbDrone/MediaCover"
+      "Radarr/MediaCover"
       "/data/media"
       "/var/lib/alloy"
       "/var/lib/cni"
