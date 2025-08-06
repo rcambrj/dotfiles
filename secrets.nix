@@ -8,16 +8,18 @@ in {
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
 
   # oauth2 apps
-  "secrets/blueberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/cranberry-oauth2-proxy-client-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry sshKeys.cranberry ];
+  "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/kubernetes-oauth2-proxy-client-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/argocd-client-secret.age".publicKeys = defaults ++ kubenodes;
 
   # kubernetes
   "secrets/k3s-token.age".publicKeys = defaults ++ kubenodes;
+
+  # argocd
   "secrets/argocd-session-key.age".publicKeys = defaults ++ kubenodes;
   "secrets/argocd-ssh-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
+
+  # pia vpn
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
 
@@ -58,16 +60,9 @@ in {
   "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
 
   # blueberry
-  "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-pgadmin.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/lldap-env.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # strawberry
   "secrets/strawberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
