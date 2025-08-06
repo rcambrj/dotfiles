@@ -9,7 +9,6 @@ config:
 
 applications:
 - name: auth
-- name: blueberry-proxy
 - name: cert-manager
 - name: copyparty
 - name: esphome
