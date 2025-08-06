@@ -30,7 +30,7 @@ spec:
           path: /data/media/downloads/transmission
       initContainers:
       - name: create-dirs
-        image: busybox
+        image: busybox:1.37.0
         volumeMounts:
         - name: downloads
           mountPath: /downloads

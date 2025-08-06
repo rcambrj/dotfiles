@@ -26,7 +26,7 @@ spec:
           path: /data/media
       initContainers:
       - name: lock-logs-dir
-        image: busybox
+        image: busybox:1.37.0
         volumeMounts:
         - name: radarr-config
           mountPath: /config

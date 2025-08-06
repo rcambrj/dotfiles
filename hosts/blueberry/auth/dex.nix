@@ -36,8 +36,9 @@
         config = {
           host = "lldap.home.cambridge.me:6360";
           insecureNoSSL = false;
-          insecureSkipVerify = false;
-          rootCA = "${flake.lib.ldap-cert}";
+          # temporarily disable tls check during transition to kubernetes
+          insecureSkipVerify = true;
+          # rootCA = "${flake.lib.ldap-cert}";
           bindDN = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
           bindPW = "$LDAP_ADMIN_PASSWORD";
           userSearch = {

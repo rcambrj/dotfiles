@@ -17,9 +17,12 @@ in {
 
       webos-dev-mode-token.file = ../../../secrets/webos-dev-mode-token.age;
 
-      lldap-key-seed.file = ../../../secrets/lldap-key-seed.age;
-      lldap-jwt-secret.file = ../../../secrets/lldap-jwt-secret.age;
+      lldap-key-seed.file        = ../../../secrets/lldap-key-seed.age;
+      lldap-jwt-secret.file      = ../../../secrets/lldap-jwt-secret.age;
       mailgun-smtp-password.file = ../../../secrets/mailgun-smtp-password.age;
+
+      ldap-admin-ro-password.file                = ../../../secrets/ldap-admin-ro-password.age;
+      argocd-client-secret.file                  = ../../../secrets/argocd-client-secret.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -151,6 +154,27 @@ in {
         stringData:
           webos-dev-mode-curl: |-
             url=https://developer.lge.com/secure/ResetDevModeSession.dev?sessionToken=$token
+      '';
+    };
+
+    age-template.files."20-dex" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-dex.yaml";
+      vars = {
+        ldap_admin_pass = config.age.secrets.ldap-admin-ro-password.path;
+        app_secret_oauth2_proxy = config.age.secrets.kubernetes-oauth2-proxy-client-secret.path;
+        app_secret_argocd = config.age.secrets.argocd-client-secret.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: dex-secrets
+          namespace: auth
+        stringData:
+          secrets.yaml: |-
+            ldap_admin_pass: $ldap_admin_pass
+            app_secret_oauth2_proxy: $app_secret_oauth2_proxy
+            app_secret_argocd: $app_secret_argocd
       '';
     };
   });

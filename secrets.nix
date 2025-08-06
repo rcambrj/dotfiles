@@ -36,7 +36,7 @@ in {
   "secrets/lldap-key-seed.age".publicKeys = defaults ++ kubenodes;
   "secrets/lldap-jwt-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
-  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ [ sshKeys.cranberry sshKeys.blueberry sshKeys.elderberry ];
+  "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
 
   # mailgun
   "secrets/mailgun-smtp-password.age".publicKeys = defaults ++ kubenodes;

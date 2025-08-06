@@ -35,6 +35,8 @@ spec:
             name: lldap-env
         env:
         - name: LLDAP_SMTP_OPTIONS__PASSWORD
+          # TODO: don't use env for secrets
+          # proposal: initContainer generates config file from configmap + secret
           valueFrom:
             secretKeyRef:
               name: lldap-secrets

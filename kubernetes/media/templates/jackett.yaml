@@ -28,7 +28,7 @@ spec:
       {{- . | toYaml | nindent 6 }}
       {{- end }}
       - name: lock-logs-file
-        image: busybox
+        image: busybox:1.37.0
         volumeMounts:
         - name: jackett-config
           mountPath: /config
