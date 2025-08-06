@@ -14,6 +14,7 @@
     flake.nixosModules.config-intel
     flake.nixosModules.disko-node
     flake.nixosModules.gpu-intel
+    flake.nixosModules.server-backup
     flake.nixosModules.telemetry
 
     ./node.nix

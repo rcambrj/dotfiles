@@ -4,6 +4,7 @@ let
   kubenodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
   disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
 in {
+  # cloudflare
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
 
   # oauth2 apps
@@ -19,23 +20,6 @@ in {
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-user.age".publicKeys = defaults ++ kubenodes;
   "secrets/pia-vpn-pass.age".publicKeys = defaults ++ kubenodes;
-
-  # cranberry
-  "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-  "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
-
-  # blueberry
-  "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-pgadmin.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/lldap-env.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/blueberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
-  "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
 
   # lldap
   "secrets/lldap-key-seed.age".publicKeys = defaults ++ kubenodes;
@@ -66,4 +50,27 @@ in {
 
   # LG webos
   "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;
+
+  # == machine-specific ==
+  # cranberry
+  "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+  "secrets/cranberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
+
+  # blueberry
+  "secrets/home-assistant.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/blueberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/blueberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/blueberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/blueberry-pgadmin.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/lldap-env.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/blueberry-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/grafana-secret.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/influxdb-admin-password.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+  "secrets/influxdb-admin-token.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
+
+  # strawberry
+  "secrets/strawberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
+  "secrets/strawberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
+  "secrets/strawberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
 }
