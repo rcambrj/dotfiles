@@ -16,9 +16,7 @@
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
 
-    ./esphome.nix
     ./downloads-enabled.nix
-    ./postgres.nix
     ./telemetry
     ./node.nix
   ];
