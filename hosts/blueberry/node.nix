@@ -8,11 +8,11 @@
 
   services.gluster-node = {
     enable = true;
-    disknode = false;
+    disknode = true;
   };
   services.kubernetes-node = {
     enable = true;
-    role = "agent";
+    role = "server";
     strategy = "join";
   };
   services.kubernetes-manifests.enable = false;
@@ -35,8 +35,7 @@
     # has the gluster volume at /data
     "--node-label=gluster-volume-mounted=true"
 
-    "--node-taint=proxy-only=true:NoSchedule"
+    # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
+    "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
   ];
-  # trust cluster traffic during transition
-  networking.firewall.trustedInterfaces = [ "flannel.1" "cni0" ];
 }

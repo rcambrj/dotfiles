@@ -12,7 +12,7 @@
   };
   services.kubernetes-node = {
     enable = true;
-    role = "agent";
+    role = "server";
     strategy = "join";
   };
   services.kubernetes-manifests.enable = false;
@@ -34,5 +34,8 @@
   services.k3s.extraFlags = [
     # has the gluster volume at /data
     "--node-label=gluster-volume-mounted=true"
+
+    # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
+    "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
   ];
 }
