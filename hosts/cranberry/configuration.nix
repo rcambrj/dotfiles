@@ -36,6 +36,7 @@
     enable = true;
     settings = {
       charger = {
+        # TOPTON 4-port
         # Intel(R) Celeron(R) N5105 @ 2.00GHz
 
         # powersave / balanced / performance

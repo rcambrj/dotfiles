@@ -12,6 +12,7 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.config-intel
+    flake.nixosModules.disko-node
     flake.nixosModules.gpu-intel
     flake.nixosModules.server-backup
     flake.nixosModules.telemetry
@@ -28,6 +29,7 @@
     networking.broadcom.sta.enable = false;
   };
 
+  disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-PNY_1TB_SATA_SSD_PNB17255012860100073";
   fileSystems = {
     "/var/lib" = {
       device = "/dev/disk/by-label/NIXOSSTATE";
@@ -41,11 +43,32 @@
     enable = true;
     settings = {
       charger = {
-        governor = "powersave";
-        energy_performance_preference = "power";
-        turbo = "never";
+        # Macbook Mini 2011
+        # Intel Core i7 @ 2.0GHz
+
+        # powersave / balanced / performance
+        governor = "performance";
+
+        # power / performance
+        # energy_performance_preference = "power";
+
+        # never / auto / always
+        turbo = "auto";
       };
     };
   };
 
+  systemd.network.enable = true;
+  networking.useDHCP = false;
+  networking.useNetworkd = true;
+  systemd.network = {
+    networks = {
+      "10-wired" = {
+        matchConfig.Name = "e*";
+        networkConfig = {
+          DHCP = "yes";
+        };
+      };
+    };
+  };
 }

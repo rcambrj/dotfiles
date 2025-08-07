@@ -86,7 +86,7 @@
             name = "DATA";
             content = {
               type = "filesystem";
-              format = "ext4";
+              format = "xfs";
               # mountpoint = "/data";
               extraArgs = ["-L" "DATA"];
             };
