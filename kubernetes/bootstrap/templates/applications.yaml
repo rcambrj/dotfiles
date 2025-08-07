@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ printf "dotfiles.%s" .name | quote }}
+  name: {{ .name | quote }}
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: {{ .syncwave | default "0" | quote }}
@@ -27,6 +27,6 @@ spec:
       - CreateNamespace=true
     automated:
       prune: true
-      selfHeal: false
+      selfHeal: true
 ---
 {{ end -}}
