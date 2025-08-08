@@ -62,7 +62,7 @@
         type = "lvm_vg";
         lvs = {
           root = {
-            size = "64G";
+            size = "32G";
             name = "nixos";
             content = {
               type = "filesystem";
@@ -72,7 +72,7 @@
             };
           };
           nixosstate = {
-            size = "16G";
+            size = "32G";
             name = "NIXOSSTATE";
             content = {
               type = "filesystem";
