@@ -171,9 +171,14 @@ in {
 
     environment.systemPackages = with pkgs; let
       gluster-status = pkgs.writeShellScriptBin "gluster-status" ''
+        echo "### volume status"
         ${glusterfs}/bin/gluster volume status
+        echo "### peer status"
         ${glusterfs}/bin/gluster peer status
+        echo "### volume info"
         ${glusterfs}/bin/gluster volume info
+        echo "### volume heal gv0 info summary"
+        ${glusterfs}/bin/gluster volume heal gv0 info summary
       '';
     in [
       gluster-status
