@@ -1,10 +1,11 @@
 #
 # this machine is a kubernetes node
 #
-{ config, flake, inputs, lib, pkgs, ... }: with lib; {
+{ config, flake, inputs, lib, modulesPath, pkgs, ... }: with lib; {
   imports = [
-    inputs.nixos-facter-modules.nixosModules.facter
-    { config.facter.reportPath = ./facter.json; }
+    # inputs.nixos-facter-modules.nixosModules.facter
+    # { config.facter.reportPath = ./facter.json; }
+    (modulesPath + "/profiles/all-hardware.nix")
     inputs.agenix-template.nixosModules.default
 
     flake.nixosModules.access-server
