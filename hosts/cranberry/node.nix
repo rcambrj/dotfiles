@@ -13,7 +13,7 @@
   services.kubernetes-node = {
     enable = true;
     role = "server";
-    strategy = "init";
+    strategy = "join";
   };
   services.kubernetes-manifests.enable = true;
   disk-savers.etcd-store = {
