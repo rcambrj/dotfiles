@@ -25,12 +25,12 @@ in {
         user = "root";
       };
       "blueberry" = {
-        # auth and home assistant
+        # kubernetes node
         hostname =  "blueberry.cambridge.me";
         user = "nixos";
       };
       "cranberry" = {
-        # media
+        # kubernetes node
         hostname =  "cranberry.cambridge.me";
         user = "nixos";
       };
