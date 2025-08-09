@@ -1,0 +1,53 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: prometheus
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/prometheus-community/prometheus
+  repo: https://prometheus-community.github.io/helm-charts
+  chart: prometheus
+  version: 27.29.1
+  targetNamespace: telemetry
+  createNamespace: true
+  valuesContent: |-
+    extraScrapeConfigs: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+spec:
+  selector:
+    app: prometheus
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - "prometheus.home.cambridge.me"
+    secretName: prometheus-home-cambridge-me-tls
+  rules:
+  - host: prometheus.home.cambridge.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus
+            port:
+              number: 80
