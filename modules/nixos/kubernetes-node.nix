@@ -60,7 +60,6 @@ in {
         2379 2380 # etcd
         80 443    # ingress-nginx
         10250     # kubelet
-        7443      # poor man's load balancer
       ];
       allowedUDPPorts = [
         8472      # flannel
