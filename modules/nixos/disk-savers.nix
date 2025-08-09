@@ -44,6 +44,10 @@ in {
     type = types.attrsOf (types.submodule opts);
     description = "Saves disk wear by creating an overlay filesystem with tmpfs";
   };
+  options.disk-savers-bin = mkOption {
+    # passthru for the executable to sync on demand
+    readOnly = true;
+  };
 
   config = {
     fileSystems = attrsets.concatMapAttrs (name: value: {
@@ -71,9 +75,17 @@ in {
       };
     }) cfg;
 
+    disk-savers-bin = attrsets.concatMapAttrs (name: value: {
+      "${name}" = pkgs.writeShellScriptBin "disk-saver-sync-${name}" "${pkgs.lib.getExe pkgs.rsync} -ac --delete ${value.targetDir}/ ${value.diskDir}/lowerdir/";
+    }) cfg;
+
+    environment.systemPackages = builtins.attrValues config.disk-savers-bin;
+
     systemd.services = attrsets.concatMapAttrs (name: value: {
       "disk-saver-${name}" = {
-        script = "${pkgs.lib.getExe pkgs.rsync} -ac --delete ${value.targetDir}/ ${value.diskDir}/lowerdir/";
+        script = ''
+          ${config.disk-savers-bin.${name}}/bin/disk-saver-sync-${name}
+        '';
         serviceConfig = {
           Type = "oneshot";
         };

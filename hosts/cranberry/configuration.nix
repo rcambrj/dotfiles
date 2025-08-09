@@ -39,14 +39,11 @@
     enable = true;
     settings = {
       charger = {
-        # TOPTON 4-port
-        # Intel(R) Celeron(R) N5105 @ 2.00GHz
+        # Dell Wyse 3040
+        # Intel(R) Atom(TM) x5-Z8350  CPU @ 1.44GHz
 
         # powersave / balanced / performance
         governor = "performance";
-
-        # power / performance
-        # energy_performance_preference = "power";
 
         # never / auto / always
         turbo = "auto";

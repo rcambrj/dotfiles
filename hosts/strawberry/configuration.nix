@@ -42,9 +42,6 @@
         # powersave / balanced / performance
         governor = "performance";
 
-        # power / performance
-        # energy_performance_preference = "power";
-
         # never / auto / always
         turbo = "auto";
       };

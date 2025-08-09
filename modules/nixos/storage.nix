@@ -53,27 +53,27 @@ in {
       default = true;
     };
     backendDevice = mkOption {
-      type = types.string;
+      type = types.str;
       description = "The xfs partition which serves as the backend. This should be a block device";
       default = "/dev/pool/DATA";
     };
     backendMountPoint = mkOption {
-      type = types.string;
+      type = types.str;
       description = "The mount point for the backend. Doesn't matter where this is";
       default = "/mnt/gluster";
     };
     backendMountName = mkOption {
-      type = types.string;
+      type = types.str;
       description = "The name of the mount, as escaped by systemd-escape";
       default = "mnt-gluster.mount";
     };
     distributedVolumeMountPoint = mkOption {
-      type = types.string;
+      type = types.str;
       description = "The mount point for the distributed volume. This is the bit you consume";
       default = "/data";
     };
     distributedVolumeMountName = mkOption {
-      type = types.string;
+      type = types.str;
       description = "The name of the mount, as escaped by systemd-escape";
       default = "data.mount";
     };

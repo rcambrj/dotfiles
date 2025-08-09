@@ -43,17 +43,14 @@
     enable = true;
     settings = {
       charger = {
-        # Macbook Mini 2011
+        # Mac Mini 2011
         # Intel Core i7 @ 2.0GHz
 
         # powersave / balanced / performance
         governor = "performance";
 
-        # power / performance
-        # energy_performance_preference = "power";
-
         # never / auto / always
-        turbo = "auto";
+        turbo = "never";
       };
     };
   };
