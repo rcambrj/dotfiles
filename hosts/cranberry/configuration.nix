@@ -24,8 +24,8 @@
 
   networking.hostName = "cranberry";
 
-  # disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024"; # Verbatim 1TB
-  disko.devices.disk.disk1.device = "/dev/disk/by-id/usb-Seagate_BACKUP+_2HC015KJ-0:0"; # USB-SATA adapter
+  disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-Vi550_S3_SSD_493535208372024"; # Verbatim 1TB
+  # disko.devices.disk.disk1.device = "/dev/disk/by-id/usb-Seagate_BACKUP+_2HC015KJ-0:0"; # USB-SATA adapter
 
   fileSystems = {
     "/var/lib" = {
