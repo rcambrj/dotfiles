@@ -37,5 +37,10 @@
 
     # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
     "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
+
+    # this node is very underpowered.
+    # serves as a disk replica and an etcd vote
+    # don't put workloads on it, can't handle them
+    "--node-taint=node-role.kubernetes.io/master:NoSchedule"
   ];
 }
