@@ -1,16 +1,16 @@
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
-metadata:
-  name: prometheus
-  finalizers:
-  - wrangler.cattle.io/on-helm-chart-remove
-spec:
-  # https://artifacthub.io/packages/helm/prometheus-community/prometheus
-  repo: https://prometheus-community.github.io/helm-charts
-  chart: prometheus
-  version: 27.29.1
-  targetNamespace: telemetry
-  createNamespace: true
-  valuesContent: |-
-    extraScrapeConfigs: ""
-# TODO: data store hostPath
+# apiVersion: helm.cattle.io/v1
+# kind: HelmChart
+# metadata:
+#   name: prometheus
+#   finalizers:
+#   - wrangler.cattle.io/on-helm-chart-remove
+# spec:
+#   # https://artifacthub.io/packages/helm/prometheus-community/prometheus
+#   repo: https://prometheus-community.github.io/helm-charts
+#   chart: prometheus
+#   version: 27.29.1
+#   targetNamespace: telemetry
+#   createNamespace: true
+#   valuesContent: |-
+#     extraScrapeConfigs: ""
+# # TODO: data store hostPath
