@@ -47,7 +47,7 @@
         # Intel Core i7 @ 2.0GHz
 
         # powersave / balanced / performance
-        governor = "performance";
+        governor = "powersave";
 
         # never / auto / always
         turbo = "never";
