@@ -1,0 +1,17 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: cluster-essential
+value: 2000
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+description: "For workloads essential to the cluster"
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: home-automation
+value: 1000
+globalDefault: false
+preemptionPolicy: PreemptLowerPriority
+description: "For workloads which would be annoying if not running"

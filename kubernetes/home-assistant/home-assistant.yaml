@@ -20,6 +20,7 @@ spec:
       nodeSelector:
         gluster-volume-mounted: "true"
         feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
+      priorityClassName: home-automation
       securityContext:
         supplementalGroups:
         - 27 # "video" group for generic-device-plugin
