@@ -69,5 +69,4 @@
     }
   ];
   zramSwap.enable = true;
-
 }
