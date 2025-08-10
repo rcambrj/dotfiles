@@ -72,7 +72,7 @@
             };
           };
           nixosstate = {
-            size = "32G";
+            size = "48G";
             name = "NIXOSSTATE";
             content = {
               type = "filesystem";
