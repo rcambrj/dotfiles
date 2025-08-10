@@ -109,6 +109,7 @@ spec:
           httpGet:
             path: /manifest.json
             port: 8123
+          failureThreshold: 30
         readinessProbe:
           httpGet:
             path: /manifest.json
