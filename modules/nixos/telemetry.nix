@@ -1,20 +1,19 @@
-# TODO: once stable, make a reusable module of this
 { config, ... }: {
-  networking.firewall.allowedTCPPorts = [
-    config.services.prometheus.exporters.node.port
-  ];
+  # networking.firewall.allowedTCPPorts = [
+  #   config.services.prometheus.exporters.node.port
+  # ];
 
-  services.prometheus = {
-    exporters = {
-      node = {
-        enable = true;
-        enabledCollectors = [
-          "systemd"
-          "processes"
-        ];
-      };
-    };
-  };
+  # services.prometheus = {
+  #   exporters = {
+  #     node = {
+  #       enable = true;
+  #       enabledCollectors = [
+  #         "systemd"
+  #         "processes"
+  #       ];
+  #     };
+  #   };
+  # };
 
   services.alloy = {
     enable = true;
