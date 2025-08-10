@@ -165,7 +165,6 @@ in {
     } // (optionalAttrs cfg.disknode {
       "${cfg.backendMountPoint}" = {
         device = cfg.backendDevice;
-        fsType = "xfs";
       };
     });
 
