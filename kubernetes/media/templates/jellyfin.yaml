@@ -37,12 +37,15 @@ spec:
         volumeMounts:
         - name: media
           mountPath: /data
+        - name: logs
+          mountPath: /config/log
         command: ["/bin/sh", "-c"]
         args:
           - |-
             mkdir -p /data/tvshows
             mkdir -p /data/movies
             chown -R 1000:1000 /data/*
+            chown -R 1000:1000 /config/log
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
