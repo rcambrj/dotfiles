@@ -63,7 +63,11 @@
       ];
     };
     lovelace = {
+      # reproducible
       mode = "yaml";
+
+      # for designing in UI
+      # mode = "storage";
     };
   };
 }

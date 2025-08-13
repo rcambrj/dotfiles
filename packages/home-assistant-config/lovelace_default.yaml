@@ -1,0 +1,121 @@
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - type: entities
+        entities:
+          - light.attic_light
+        title: Attic Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.bathroom_light
+          - light.bathroom_mirror_light
+        title: Bathroom Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.bedroom_light
+          - switch.bedroom_lamp
+        title: Bedroom Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.guest_room_light
+        title: Guest Room Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.hallway_0_light
+          - light.hallway_1_light
+          - light.hallway_2_light
+        title: Hallway Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.kitchen_light
+        title: Kitchen Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.living_room_east_light
+          - light.living_room_west_lamp
+          - light.living_room_west_light
+          - switch.living_room_east_lamp
+        title: Living Room Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - light.office_light
+        title: Office Lights
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - person.robert_cambridge
+      - type: entities
+        entities:
+          - cover.bedroom_blind
+          - cover.office_blind
+        title: Cover
+      - type: entities
+        entities:
+          - input_boolean.ventilation_auto_speed_enabled
+        title: Helpers
+      - type: entities
+        entities:
+          - light.mechanical_ventilation
+        title: Light
+      - type: entities
+        entities:
+          - scene.goodnight
+          - scene.in_bed
+        title: Scene
+      - type: entities
+        entities:
+          - entity: sensor.bathroom_environmental_sensor_humidity
+            name: Humidity
+          - entity: sensor.bathroom_environmental_sensor_temperature
+            name: Temperature
+        title: Bathroom Environmental Sensor
+      - type: entities
+        entities:
+          - entity: switch.mosquito_0
+            name: Mosquito 0
+          - entity: binary_sensor.mosquito_0_button
+            name: Mosquito 0 Button
+        title: Sonoff-S20-1
+      - type: entities
+        entities:
+          - entity: switch.bedroom_lamp
+            name: Bedroom Lamp
+          - entity: binary_sensor.bedroom_lamp_button
+            name: Bedroom Lamp Button
+        title: Sonoff-S20-2
+      - type: entities
+        entities:
+          - entity: switch.mosquito_1
+            name: Mosquito 1
+          - entity: binary_sensor.mosquito_1_button
+            name: Mosquito 1 Button
+        title: Sonoff-S20-3
+      - type: entities
+        entities:
+          - entity: switch.mosquito_2
+            name: Mosquito 2
+          - entity: binary_sensor.mosquito_2_button
+            name: Mosquito 2 Button
+        title: Sonoff-S20-4
+      - type: entities
+        entities:
+          - entity: switch.living_room_east_lamp
+            name: Living Room East Lamp
+          - entity: binary_sensor.living_room_east_lamp_button
+            name: Living Room East Lamp Button
+        title: Sonoff-S20-5
+      - type: entities
+        entities:
+          - entity: switch.3d_printer
+            name: 3D Printer
+          - entity: binary_sensor.3d_printer_button
+            name: 3D Printer Button
+        title: Sonoff-S20-6

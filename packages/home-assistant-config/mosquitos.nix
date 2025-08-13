@@ -1,4 +1,6 @@
-{ ... }: {
+{ ... }: let
+  mosquitos = import ./lib/mosquitos.nix;
+in {
   "configuration.yaml".automation = [
     {
       alias = "Mosquitos ON at sunset";
@@ -11,11 +13,7 @@
       action = [{
       action = "switch.turn_on";
       target = {
-        entity_id = [
-        "switch.mosquito_0"
-        "switch.mosquito_1"
-        "switch.mosquito_2"
-        ];
+        entity_id = mosquitos;
       };
       }];
     }
@@ -30,11 +28,7 @@
       action = [{
       action = "switch.turn_off";
       target = {
-        entity_id = [
-        "switch.mosquito_0"
-        "switch.mosquito_1"
-        "switch.mosquito_2"
-        ];
+        entity_id = mosquitos;
       };
       }];
     }

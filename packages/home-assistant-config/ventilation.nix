@@ -44,7 +44,14 @@
         #           humidity - humidityLower
         #     ) / humidityRange * speedRange + speedLower);
         # TODO: how to make this more maintainable?
-        data = ''{"brightness_pct":"{{ max(min((states.sensor.bathroom_environmental_sensor_humidity.state|float(0) - 65) / (80 - 65) * 100 + 30, 100), 30) }}"}'';
+        data = let
+          humidityUpper = 80;
+          humidityLower = 65;
+          humidityRange = humidityUpper - humidityLower;
+          speedUpper = 100;
+          speedLower = 30;
+          speedRange = speedUpper - speedLower;
+        in ''{"brightness_pct":"{{ max(min((states.sensor.bathroom_environmental_sensor_humidity.state|float(0) - ${toString humidityLower}) / ${toString humidityRange} * ${toString speedUpper} + ${toString speedLower}, ${toString speedUpper}), ${toString speedLower}) }}"}'';
       }
     ];
   }];
