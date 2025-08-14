@@ -21,15 +21,28 @@ spec:
       - name: config
         hostPath:
           path: /data/esphome
+      - name: platformio
+        hostPath:
+          path: /data/esphome/.platformio
+      - name: temp
+        hostPath:
+          path: /data/esphome/.temp
       containers:
       - name: esphome
         image: ghcr.io/esphome/esphome:2025.7
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
+        env:
+        - name: ESPHOME_DASHBOARD_USE_PING
+          value: "true"
         volumeMounts:
         - name: config
           mountPath: /config
+        - name: platformio
+          mountPath: /.platformio
+        - name: temp
+          mountPath: /.temp
         ports:
         - name: http
           containerPort: 6052
