@@ -37,7 +37,9 @@ in {
             title = "Mosquitos";
             icon = "mdi:skull-crossbones-outline";
             show_header_toggle = true;
-            entities = mosquitos;
+            entities = [
+              "automation.mosquitos_on_at_sunset"
+            ] ++ mosquitos;
           }
           {
             type = "entities";
