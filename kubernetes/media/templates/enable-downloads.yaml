@@ -62,12 +62,17 @@ spec:
             #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
             #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
 
+            # Interface status:
+            #  interface wan is offline and tracking is paused
+            #  interface wan_lte is online 116h:58m:03s, uptime 116h:58m:07s and tracking is active
+
             if [[ $(echo "$STATUSES" | grep "Interface status" | wc -l) != "1" ]]; then
-              echo Unable to determine WAN status.
-              exit 1
+              echo Unable to determine WAN status, entering failsafe mode.
+              WANONLINE=0
+            else
+              WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
             fi
 
-            WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
             if [[ "${WANONLINE}" == "1" ]]; then
               echo "WAN is up." >&2
               REPLICAS=1
@@ -78,16 +83,21 @@ spec:
 
             echo Setting replicas to $REPLICAS
 
-            curl ${APISERVER}/apis/apps/v1/namespaces/${NAMESPACE}/deployments/transmission \
-              -X PATCH --fail-with-body --no-progress-meter -m 5 \
-              --cacert ${CACERT} \
-              --header "Authorization: Bearer ${TOKEN}" \
-              --header "Content-Type: application/strategic-merge-patch+json" \
-              --data "{ \
-                \"apiVersion\": \"apps/v1\", \
-                \"kind\": \"Deployment\", \
-                \"metadata\": { \"name\": \"transmission\" }, \
-                \"spec\": { \"replicas\": ${REPLICAS} } \
-              }" | jq ".status"
+            DEPLOYMENTS=(jackett transmission nzbget)
+            for DEPLOYMENT in ${DEPLOYMENTS[@]}; do
+              echo "Setting ${DEPLOYMENT} replicas to ${REPLICAS}..."
+              curl ${APISERVER}/apis/apps/v1/namespaces/${NAMESPACE}/deployments/${DEPLOYMENT} \
+                -X PATCH --fail-with-body --no-progress-meter -m 5 \
+                --cacert ${CACERT} \
+                --header "Authorization: Bearer ${TOKEN}" \
+                --header "Content-Type: application/strategic-merge-patch+json" \
+                --data "{ \
+                  \"apiVersion\": \"apps/v1\", \
+                  \"kind\": \"Deployment\", \
+                  \"metadata\": { \"name\": \"${DEPLOYMENT}\" }, \
+                  \"spec\": { \"replicas\": ${REPLICAS} } \
+                }" | jq ".status"
+            done
+
             sleep 60
           done
