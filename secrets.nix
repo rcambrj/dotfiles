@@ -68,4 +68,7 @@ in {
   "secrets/strawberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
   "secrets/strawberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
   "secrets/strawberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
+
+  # orange
+  "secrets/orange-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.orange ];
 }

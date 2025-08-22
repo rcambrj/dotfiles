@@ -1,6 +1,6 @@
 { config, ... }: {
   # only permit on wt0
-  networking.firewall.interfaces.wt0.allowedTCPPorts = [
+  networking.firewall.interfaces.nb-default.allowedTCPPorts = [
     config.services.prometheus.exporters.node.port
   ];
 
