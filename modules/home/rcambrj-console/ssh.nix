@@ -95,7 +95,7 @@ in {
       };
       "orange" = {
         # oracle cloud free aarch64
-        hostname = "orange.cambridge.me";
+        hostname = "orange-external.cambridge.me";
         user = "nixos";
       };
       "lancache" = {
