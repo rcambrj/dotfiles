@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }: with lib; let
   nodes = [
     "cranberry.cambridge.me"
-    "strawberry.cambridge.me"
     "blueberry.cambridge.me"
+    "orange.cambridge.me"
   ];
 
   cfg = config.services.kubernetes-node;
@@ -40,6 +40,11 @@ in {
       '';
       default = "join";
     };
+    openFirewallOnInterface = mkOption {
+      type = types.str;
+      default = "";
+      description = "If specified, only open ports on this interface. Otherwise, open ports on all interfaces";
+    };
     k3s-reset = mkOption {
       readOnly = true;
       default = k3s-reset;
@@ -53,18 +58,22 @@ in {
   config = mkIf cfg.enable {
     age.secrets.k3s-token.file = ../../secrets/k3s-token.age;
 
-    networking.firewall = {
+    networking.firewall = let
+      ports = {
         # https://docs.k3s.io/installation/requirements#networking
-      allowedTCPPorts = [
-        6443      # apiserver
-        2379 2380 # etcd
-        80 443    # ingress-nginx
-        10250     # kubelet
-      ];
-      allowedUDPPorts = [
-        8472      # flannel
-      ];
-    };
+        allowedTCPPorts = [
+          6443      # apiserver
+          2379 2380 # etcd
+          80 443    # ingress-nginx
+          10250     # kubelet
+        ];
+        allowedUDPPorts = [
+          8472      # flannel
+        ];
+      };
+    in (if (stringLength cfg.openFirewallOnInterface > 0) then {
+      interfaces."${cfg.openFirewallOnInterface}" = ports;
+    } else ports);
 
     services.k3s = {
       enable = true;
@@ -104,6 +113,5 @@ in {
         }
       '';
     };
-
   };
 }

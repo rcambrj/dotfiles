@@ -1,8 +1,8 @@
 let
   sshKeys = import ./lib/ssh-keys.nix;
   defaults = [ sshKeys.mbp2024 sshKeys.linux-vm sshKeys.mango ];
-  kubenodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
-  disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.strawberry ];
+  kubenodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.orange ];
+  disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.orange ];
 in {
   # cloudflare
   "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
@@ -41,6 +41,8 @@ in {
   "secrets/gluster-strawberry-crt.age".publicKeys = defaults ++ disknodes;
   "secrets/gluster-blueberry-key.age".publicKeys = defaults ++ [ sshKeys.blueberry ];
   "secrets/gluster-blueberry-crt.age".publicKeys = defaults ++ disknodes;
+  "secrets/gluster-orange-key.age".publicKeys = defaults ++ [ sshKeys.orange ];
+  "secrets/gluster-orange-crt.age".publicKeys = defaults ++ disknodes;
 
   # google-assistant
   "secrets/google-assistant-client-email.age".publicKeys = defaults ++ kubenodes;
@@ -52,6 +54,9 @@ in {
 
   # LG webos
   "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;
+
+  # netbird
+  "secrets/orange-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.orange ];
 
   # == machine-specific ==
   # cranberry
@@ -69,6 +74,4 @@ in {
   "secrets/strawberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
   "secrets/strawberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
 
-  # orange
-  "secrets/orange-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.orange ];
 }

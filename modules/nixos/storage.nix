@@ -86,6 +86,11 @@ in {
       '';
       default = true;
     };
+    openFirewallOnInterface = mkOption {
+      type = types.str;
+      default = "";
+      description = "If specified, only open ports on this interface. Otherwise, open ports on all interfaces";
+    };
   };
   config = mkIf cfg.enable {
     age.secrets = {
@@ -103,19 +108,22 @@ in {
       };
     };
 
-    networking.firewall = {
-      # https://github.com/gluster/glusterfs/blob/devel/extras/firewalld/glusterfs.xml
-      allowedTCPPorts = [
-        24007 # glusterd
-        24008 # glusterd RDMA port management
-        55555 # glustereventsd
-      ];
-      allowedTCPPortRanges = [
-        { from = 38465; to = 38469; } # Gluster NFS service.
-        { from = 49152; to = 60999; } # Gluster inter-brick
-      ];
-    };
-
+    networking.firewall = let
+      ports = {
+        # https://github.com/gluster/glusterfs/blob/devel/extras/firewalld/glusterfs.xml
+        allowedTCPPorts = [
+          24007 # glusterd
+          24008 # glusterd RDMA port management
+          55555 # glustereventsd
+        ];
+        allowedTCPPortRanges = [
+          { from = 38465; to = 38469; } # Gluster NFS service.
+          { from = 49152; to = 60999; } # Gluster inter-brick
+        ];
+      };
+    in (if (stringLength cfg.openFirewallOnInterface > 0) then {
+      interfaces."${cfg.openFirewallOnInterface}" = ports;
+    } else ports);
 
     services.glusterfs = {
       enable = true;

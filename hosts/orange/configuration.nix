@@ -1,6 +1,9 @@
 { flake, inputs, modulesPath, ... }: {
   imports = [
-    "${toString modulesPath}/profiles/qemu-guest.nix"
+    # "${toString modulesPath}/profiles/qemu-guest.nix"
+    inputs.nixos-facter-modules.nixosModules.facter
+    { config.facter.reportPath = ./facter.json; }
+
     inputs.agenix-template.nixosModules.default
 
     flake.nixosModules.base
@@ -9,7 +12,7 @@
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     ./netbird.nix
-    ./statistics.nix
+    # ./node.nix
   ];
 
   networking.hostName = "orange";
@@ -22,13 +25,23 @@
   systemd.network.enable = true;
   networking.useDHCP = false;
   networking.useNetworkd = true;
-  systemd.network = {
-    networks = {
-      "10-wired" = {
-        matchConfig.Name = "e*";
-        networkConfig = {
-          DHCP = "yes";
-        };
+  services.resolved = {
+    enable = true;
+    llmnr = "false";
+    extraConfig = ''
+      MulticastDNS=false
+    '';
+  };
+  systemd.network.networks = {
+    "10-wired" = {
+      matchConfig.Name = "e*";
+      dhcpV4Config.UseDNS = "no";
+      dhcpV6Config.UseDNS = "no";
+      networkConfig = {
+        LinkLocalAddressing = "no";
+        MulticastDNS = "no";
+        LLMNR = "no";
+        DHCP = "yes";
       };
     };
   };
