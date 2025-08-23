@@ -12,7 +12,7 @@
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     ./netbird.nix
-    # ./node.nix
+    ./node.nix
   ];
 
   networking.hostName = "orange";

@@ -149,11 +149,10 @@ in {
       postStart = ''
         systemctl restart --no-block ${cfg.distributedVolumeMountName}
       '';
-      serviceConfig = optionalAttrs cfg.disknode {
-        Requires = [ cfg.backendMountName ];
-        After = [ cfg.backendMountName ];
-      };
-    };
+    } // (optionalAttrs cfg.disknode {
+      requires = [ cfg.backendMountName ];
+      after = [ cfg.backendMountName ];
+    });
 
     fileSystems = {
       "${cfg.distributedVolumeMountPoint}" = let

@@ -18,7 +18,7 @@
     flake.nixosModules.telemetry
 
     ./primary-wan.nix
-    ./node.nix
+    # ./node.nix
   ];
 
   networking.hostName = "strawberry";

@@ -16,14 +16,11 @@
   };
 
   services.netbird.clients.default = {
-    port = 51820;
+    # default wireguard port 51820 for k3s flannel-wg
+    port = 51821;
     openFirewall = true;
     interface = "netbird";
     hardened = false; # fails to bring up DNS route
-    dns-resolver = {
-      address = "127.0.0.1";
-      port = 5353;
-    };
   };
 
   # don't delay network-online
@@ -40,6 +37,8 @@
   # };
 
   # TODO: let netbird set DNS server routes when hardened
+  # currently fails with:
+  # failed to apply DNS host manager update: set interface DNS server calling command with context, err: Permission denied
   # services.dbus.packages = let
   #   netbird-dbus-policy = pkgs.stdenv.mkDerivation {
   #     name = "netbird-dbus-policy";

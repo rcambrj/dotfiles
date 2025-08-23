@@ -7,7 +7,7 @@
 
   services.gluster-node = {
     enable = true;
-    disknode = true;
+    disknode = false;
     openFirewallOnInterface = config.services.netbird.clients.default.interface;
   };
   services.kubernetes-node = {
@@ -19,9 +19,10 @@
   services.kubernetes-manifests.enable = false;
 
   services.k3s.extraFlags = [
-    "--node-ip=100.68.241.89"
-
     # control-plane only
     "--node-taint=node-role.kubernetes.io/master:NoSchedule"
+
+    # send traffic over netbird
+    "--flannel-iface=netbird"
   ];
 }
