@@ -26,7 +26,8 @@ spec:
         - name: var-www
           mountPath: /usr/share/nginx/html
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -36,9 +37,10 @@ spec:
   selector:
     app: landing
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 80
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -65,4 +67,4 @@ spec:
           service:
             name: landing
             port:
-              number: 80
+              name: http

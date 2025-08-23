@@ -104,7 +104,8 @@ spec:
           subPath: webos-dev-mode-curl
           mountPath: /webos-dev-mode-curl
         ports:
-        - containerPort: 8123
+        - name: http
+          containerPort: 8123
         startupProbe:
           httpGet:
             path: /manifest.json
@@ -127,9 +128,10 @@ spec:
   selector:
     app: home-assistant
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 8123
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -154,4 +156,4 @@ spec:
           service:
             name: home-assistant
             port:
-              number: 80
+              name: http

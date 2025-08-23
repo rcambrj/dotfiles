@@ -85,9 +85,10 @@ spec:
   selector:
     app: jackett
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 9117
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -113,4 +114,4 @@ spec:
           service:
             name: jackett
             port:
-              number: 80
+              name: http

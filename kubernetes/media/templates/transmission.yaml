@@ -119,9 +119,10 @@ spec:
   selector:
     app: transmission
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 9091
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -148,4 +149,4 @@ spec:
           service:
             name: transmission
             port:
-              number: 80
+              name: http

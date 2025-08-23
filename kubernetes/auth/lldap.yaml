@@ -104,7 +104,8 @@ spec:
   selector:
     app: lldap
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
     targetPort: http
 ---
@@ -116,7 +117,8 @@ spec:
   selector:
     app: lldap
   ports:
-  - protocol: TCP
+  - name: ldaps
+    protocol: TCP
     port: 6360
     targetPort: ldaps
   type: LoadBalancer
@@ -143,7 +145,7 @@ spec:
           service:
             name: lldap-http
             port:
-              number: 80
+              name: http
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

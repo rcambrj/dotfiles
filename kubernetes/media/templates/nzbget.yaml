@@ -86,9 +86,10 @@ spec:
   selector:
     app: nzbget
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 6789
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -115,4 +116,4 @@ spec:
           service:
             name: nzbget
             port:
-              number: 80
+              name: http

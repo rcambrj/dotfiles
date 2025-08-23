@@ -22,7 +22,8 @@ spec:
       - name: oauth2-proxy
         image: quay.io/oauth2-proxy/oauth2-proxy:v7.9.0-amd64
         ports:
-        - containerPort: 4180
+        - name: http
+          containerPort: 4180
         args:
         - --config=/config/oauth2-proxy.cfg
         volumeMounts:
@@ -80,9 +81,10 @@ spec:
   selector:
     app: oauth2-proxy
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 4180
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -106,7 +108,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -126,7 +128,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: esphome.home.cambridge.me
     http:
       paths:
@@ -136,7 +138,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: jackett.home.cambridge.me
     http:
       paths:
@@ -146,7 +148,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: landing.home.cambridge.me
     http:
       paths:
@@ -156,7 +158,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: nzbget.home.cambridge.me
     http:
       paths:
@@ -166,7 +168,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: radarr.home.cambridge.me
     http:
       paths:
@@ -176,7 +178,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: sonarr.home.cambridge.me
     http:
       paths:
@@ -186,7 +188,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http
   - host: transmission.home.cambridge.me
     http:
       paths:
@@ -196,4 +198,4 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: 80
+              name: http

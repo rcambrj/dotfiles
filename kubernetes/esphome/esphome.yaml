@@ -55,7 +55,8 @@ spec:
   selector:
     app: esphome
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
     targetPort: http
 ---
@@ -83,4 +84,4 @@ spec:
           service:
             name: esphome
             port:
-              number: 80
+              name: http

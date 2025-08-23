@@ -124,7 +124,8 @@ spec:
   selector:
     app: dex
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
     targetPort: http
 ---
@@ -150,4 +151,4 @@ spec:
           service:
             name: dex
             port:
-              number: 80
+              name: http

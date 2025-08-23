@@ -84,9 +84,10 @@ spec:
   selector:
     app: sonarr
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
-    targetPort: 8989
+    targetPort: http
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -113,4 +114,4 @@ spec:
           service:
             name: sonarr
             port:
-              number: 80
+              name: http
