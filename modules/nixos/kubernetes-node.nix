@@ -62,9 +62,11 @@ in {
           2379 2380 # etcd
           80 443    # ingress-nginx
           10250     # kubelet
+          7946      # metallb
         ];
         allowedUDPPorts = [
           8472      # flannel
+          7946      # metallb
         ];
       };
     in (if (stringLength cfg.openFirewallOnInterface > 0) then {

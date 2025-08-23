@@ -1,7 +1,7 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: metallb-system
+  name: metallb
   finalizers:
   - wrangler.cattle.io/on-helm-chart-remove
 spec:
@@ -20,7 +20,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   addresses:
-  - 192.168.142.50
+  - 192.168.142.50/32
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement

@@ -61,7 +61,7 @@ in {
 
     # services.k3s.autoDeployCharts breaks when building on arm64
     # so just use K3s' HelmChart resource in an Addon manifest
-    services.k3s.manifests.argocd.content = {
+    services.k3s.manifests."20-argocd".content = {
       apiVersion = "helm.cattle.io/v1";
       kind = "HelmChart";
       metadata = {
@@ -128,7 +128,7 @@ in {
       };
     };
 
-    services.k3s.manifests.argocd-all-namespaces = let
+    services.k3s.manifests."30-argocd-all-namespaces" = let
       argoRepo = pkgs.fetchFromGitHub {
         owner = "argoproj";
         repo = "argo-cd";
@@ -143,7 +143,7 @@ in {
       source = allNamespaces;
     };
 
-    services.k3s.manifests.argocd-dotfiles-application.content = {
+    services.k3s.manifests."40-argocd-dotfiles-application".content = {
       apiVersion =  "argoproj.io/v1alpha1";
       kind = "Application";
       metadata = {

@@ -17,12 +17,11 @@ in {
     role = "server";
     openFirewallOnInterface = iface;
     k3sExtraFlags = [
-      # control-plane only
-      "--node-taint=node-role.kubernetes.io/master:NoSchedule"
+      "--node-taint=remote-via-netbird:NoSchedule"
 
       # send traffic over netbird
       "--flannel-iface=${iface}"
-      "--node-external-ip=100.68.241.89"
+      "--node-ip=100.68.241.89"
     ];
   };
   services.kubernetes-manifests.enable = false;
