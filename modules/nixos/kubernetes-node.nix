@@ -8,7 +8,8 @@
   cfg = config.services.kubernetes-node;
   serverFlags = [
     "--disable=traefik"
-    "--tls-san=kubernetes.cambridge.me"
+    "--disable=servicelb"
+    # "--tls-san=kubernetes.cambridge.me" # not needed with poor man's LB
     "--flannel-backend=wireguard-native"
   ];
   k3s-reset = pkgs.writeShellScriptBin "k3s-reset" ''

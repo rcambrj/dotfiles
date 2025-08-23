@@ -10,3 +10,9 @@ spec:
   version: 4.13.0
   targetNamespace: ingress-nginx
   createNamespace: true
+  valuesContent: |-
+    controller:
+      service:
+        annotations:
+          metallb.io/loadBalancerIPs: 192.168.142.50
+          metallb.io/allow-shared-ip: 192.168.142.50

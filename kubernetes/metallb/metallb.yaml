@@ -1,0 +1,33 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: metallb-system
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/metallb/metallb
+  repo: https://metallb.github.io/metallb
+  chart: metallb
+  version: 0.15.2
+  targetNamespace: metallb-system
+  createNamespace: true
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  addresses:
+  - 192.168.142.50
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  ipAddressPools:
+  - default

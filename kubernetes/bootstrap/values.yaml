@@ -19,6 +19,7 @@ applications:
 - name: intel-gpu
 - name: landing
 - name: media
+- name: metallb
 - name: node-feature-discovery
 - name: priorities
 - name: telemetry
