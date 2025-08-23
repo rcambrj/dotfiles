@@ -34,11 +34,6 @@ in {
         hostname =  "cranberry.cambridge.me";
         user = "nixos";
       };
-      "strawberry" = {
-        # kubernetes node
-        hostname = "strawberry.cambridge.me";
-        user = "nixos";
-      };
       "minimal-intel" = {
         hostname =  "minimal-intel-nomad.local";
         user = "nixos";
@@ -57,35 +52,10 @@ in {
           StrictHostKeyChecking = "no";
         };
       };
-      "gooseberry" = {
-        # ?? (raspi 3)
-        hostname =  "gooseberry.cambridge.me";
-        user = "nixos";
-      };
-      "lingonberry" = {
-        # ?? (nanopi neo)
-        hostname =  "lingonberry.cambridge.me";
-        user = "pi";
-      };
       "elderberry" = {
         # 3d printer (dell wyse)
         hostname = "elderberry.cambridge.me";
         user = "nixos";
-      };
-      "blackberry" = {
-        # paper printer (raspi zero w)
-        hostname = "blackberry.cambridge.me";
-        user = "pi";
-      };
-      "mulberry" = {
-        # ??? (raspi 4)
-        hostname = "mulberry.cambridge.me";
-        user = "root";
-      };
-      "gojiberry" = {
-        # ??? (raspi 5)
-        hostname = "gojiberry.cambridge.me";
-        user = "root";
       };
       "lime" = {
         # gullo's shitbox
@@ -97,11 +67,6 @@ in {
         # oracle cloud free aarch64
         hostname = "orange-external.cambridge.me";
         user = "nixos";
-      };
-      "lancache" = {
-        # lan party lancache
-        hostname = "lancache.local";
-        user = "pi";
       };
     };
   };
