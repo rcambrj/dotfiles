@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with lib; let
+{ config, lib, pkgs, ... }: with builtins; with lib; let
   nodes = [
     "cranberry.cambridge.me"
     "blueberry.cambridge.me"
@@ -9,21 +9,9 @@
   serverFlags = [
     "--disable=traefik"
     "--disable=servicelb"
-    # "--tls-san=kubernetes.cambridge.me" # not needed with poor man's LB
     "--flannel-backend=wireguard-native"
-  ];
-  k3s-reset = pkgs.writeShellScriptBin "k3s-reset" ''
-    ${pkgs.k3s}/bin/k3s server \
-      --cluster-reset \
-      --token-file ${config.age.secrets.k3s-token.path} \
-      ${builtins.concatStringsSep " " serverFlags}
-  '';
-  k3s-init = pkgs.writeShellScriptBin "k3s-init" ''
-    ${pkgs.k3s}/bin/k3s server \
-      --cluster-init \
-      --token-file ${config.age.secrets.k3s-token.path} \
-      ${builtins.concatStringsSep " " serverFlags}
-  '';
+    "--tls-san=home.cambridge.me"
+  ] ++ (map (node: "--tls-san=${node}") nodes);
 in {
   options.services.kubernetes-node = {
     enable = mkEnableOption "Start a kubernetes node on this host";
@@ -31,28 +19,35 @@ in {
       type = types.enum [ "server" "agent" ];
       default = "agent";
     };
-    strategy = mkOption {
-      type = types.enum [ "init" "join" "reset" ];
-      description = ''
-        How to configure k3s regarding an existing cluster:
-        * init: initialises a new cluster
-        * join: joins this node to the cluster
-        * reset: makes this node forget any joins
-      '';
-      default = "join";
-    };
     openFirewallOnInterface = mkOption {
       type = types.str;
       default = "";
       description = "If specified, only open ports on this interface. Otherwise, open ports on all interfaces";
     };
+    k3sExtraFlags = mkOption {
+      description = "Extra flags to pass to the k3s command. Don't modify services.k3s.extraFlags directly if you want k3s-reset and k3s-init to be consistent with these flags";
+      type = with lib.types; either str (listOf str);
+      default = [ ];
+    };
     k3s-reset = mkOption {
       readOnly = true;
-      default = k3s-reset;
+      default = pkgs.writeShellScriptBin "k3s-reset" ''
+        ${pkgs.k3s}/bin/k3s server \
+          --cluster-reset \
+          --token-file ${config.age.secrets.k3s-token.path} \
+          ${builtins.concatStringsSep " " serverFlags} \
+          ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
+      '';
     };
     k3s-init = mkOption {
       readOnly = true;
-      default = k3s-init;
+      default = pkgs.writeShellScriptBin "k3s-init" ''
+        ${pkgs.k3s}/bin/k3s server \
+          --cluster-init \
+          --token-file ${config.age.secrets.k3s-token.path} \
+          ${builtins.concatStringsSep " " serverFlags} \
+          ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
+      '';
     };
   };
 
@@ -80,17 +75,15 @@ in {
       enable = true;
       tokenFile = config.age.secrets.k3s-token.path;
       role = cfg.role;
+      serverAddr = "https://127.0.0.1:7443";
       extraFlags = (
         []
         ++ (optionals (cfg.role == "server") serverFlags)
-        ++ (optional (cfg.strategy == "init") "--cluster-init")
-        ++ (optional (cfg.strategy == "reset") "--cluster-reset")
+        ++ cfg.k3sExtraFlags
       );
-    } // (optionalAttrs (cfg.strategy == "join") {
-      serverAddr = "https://127.0.0.1:7443";
-    });
+    };
 
-    environment.systemPackages = [ k3s-reset k3s-init ];
+    environment.systemPackages = [ cfg.k3s-reset cfg.k3s-init ];
 
     services.nginx = {
       # poor man's load balancer (requires no separate machine)

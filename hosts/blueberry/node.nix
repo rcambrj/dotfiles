@@ -13,7 +13,13 @@
   services.kubernetes-node = {
     enable = true;
     role = "server";
-    strategy = "join";
+    k3sExtraFlags = [
+      # has the gluster volume at /data
+      "--node-label=gluster-volume-mounted=true"
+
+      # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
+      "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
+    ];
   };
   services.kubernetes-manifests.enable = false;
   disk-savers.etcd-store = {
@@ -30,12 +36,4 @@
     requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
     after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
   };
-
-  services.k3s.extraFlags = [
-    # has the gluster volume at /data
-    "--node-label=gluster-volume-mounted=true"
-
-    # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
-    "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
-  ];
 }
