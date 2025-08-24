@@ -28,6 +28,8 @@ spec:
       - name: state
         hostPath:
           path: /data/home-assistant
+      - name: custom-components
+        emptyDir:
       - name: configs
         emptyDir:
       - name: lldap-ha-auth
@@ -39,6 +41,20 @@ spec:
         secret:
           secretName: webos-dev-mode-curl
       initContainers:
+      - name: download-custom-components
+        image: nixery.dev/shell/curl/gzip/gnutar@sha256:4b5f094af50de7060c1cb01389697c9c289d20bd84bff8daf84fb627dfea84d3
+        volumeMounts:
+        - name: custom-components
+          mountPath: /custom_components
+        command: ["/bin/sh", "-c"]
+        args:
+        - |-
+          set -ex
+
+          # https://github.com/j9brown/scenery
+          curl -s -L https://github.com/j9brown/scenery/archive/refs/tags/v0.5.0.tar.gz | gunzip | tar -xvf - \
+            -C /custom_components \
+            --strip-components=2 scenery-0.5.0/custom_components/
       - name: create-configs
         image: nixos/nix:2.30.2
         volumeMounts:
@@ -68,11 +84,11 @@ spec:
         image: homeassistant/home-assistant:2025.9.0.dev202508010256
         resources:
           requests:
-            cpu: "50m"
+            cpu: "100m"
             memory: "400Mi"
             squat.ai/zigbee: 1
           limits:
-            cpu: "500m"
+            cpu: "1000m"
             memory: "600Mi"
             squat.ai/zigbee: 1
         securityContext:
@@ -84,6 +100,8 @@ spec:
         volumeMounts:
         - name: state
           mountPath: /config
+        - name: custom-components
+          mountPath: /config/custom_components
         - name: configs
           subPath: configuration.yaml
           mountPath: /config/configuration.yaml
@@ -110,15 +128,20 @@ spec:
           httpGet:
             path: /manifest.json
             port: 8123
+          timeoutSeconds: 10
           failureThreshold: 60
         readinessProbe:
           httpGet:
             path: /manifest.json
             port: 8123
+          timeoutSeconds: 10
+          failureThreshold: 10
         livenessProbe:
           httpGet:
             path: /manifest.json
             port: 8123
+          timeoutSeconds: 10
+          failureThreshold: 10
 ---
 apiVersion: v1
 kind: Service

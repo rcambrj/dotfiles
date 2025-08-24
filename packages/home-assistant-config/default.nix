@@ -4,15 +4,17 @@
       specialArgs = { inherit inputs perSystem pkgs; };
       modules = [
         ./core.nix
+
         ./auth.nix
-        ./mosquitos.nix
-        ./lights-and-switches.nix
         ./fix-quirky-lidl-lights.nix
         ./google-assistant.nix
+        ./lights-and-switches.nix
+        ./lovelace.nix
+        ./mosquitos.nix
+        ./scenery.nix
         ./scenes.nix
         ./ventilation.nix
         ./webos-dev-mode.nix
-        ./lovelace.nix
       ];
     };
     in eval.config
