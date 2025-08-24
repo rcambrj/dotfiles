@@ -14,6 +14,7 @@ applications:
 - name: esphome
 - name: fdm
 - name: generic-device-plugin
+- name: gluster-mount-watcher
 - name: home-assistant
 - name: ingress-nginx
 - name: intel-gpu

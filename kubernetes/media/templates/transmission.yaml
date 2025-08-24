@@ -18,7 +18,7 @@ spec:
         app: transmission
     spec:
       nodeSelector:
-        gluster-volume-mounted: "true"
+        gluster-volume-mount/ready: "true"
       volumes:
       - name: gluetun-port-forwarding
         emptyDir:

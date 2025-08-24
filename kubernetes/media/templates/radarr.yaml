@@ -16,7 +16,7 @@ spec:
         app: radarr
     spec:
       nodeSelector:
-        gluster-volume-mounted: "true"
+        gluster-volume-mount/ready: "true"
       volumes:
       - name: radarr-config
         hostPath:

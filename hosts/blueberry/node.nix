@@ -15,7 +15,8 @@
     role = "server";
     k3sExtraFlags = [
       # has the gluster volume at /data
-      "--node-label=gluster-volume-mounted=true"
+      "--node-label=gluster-volume-mount/configured=true"
+      "--node-taint=gluster-volume-mount=absent:NoExecute"
 
       # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
       "--node-label=svccontroller.k3s.cattle.io/enablelb=true"

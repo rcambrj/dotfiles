@@ -18,7 +18,7 @@ spec:
         app: jackett
     spec:
       nodeSelector:
-        gluster-volume-mounted: "true"
+        gluster-volume-mount/ready: "true"
       volumes:
       - name: jackett-config
         hostPath:

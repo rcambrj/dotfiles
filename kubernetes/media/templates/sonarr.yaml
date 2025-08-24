@@ -16,7 +16,7 @@ spec:
         app: sonarr
     spec:
       nodeSelector:
-        gluster-volume-mounted: "true"
+        gluster-volume-mount/ready: "true"
       volumes:
       - name: sonarr-config
         hostPath:
