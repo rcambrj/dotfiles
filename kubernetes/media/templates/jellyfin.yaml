@@ -27,7 +27,7 @@ spec:
       - name: media
         hostPath:
           path: /data/media
-      - name: transcodes
+      - name: cache
         emptyDir:
       - name: logs
         emptyDir:
@@ -38,24 +38,20 @@ spec:
         - name: media
           mountPath: /data
         - name: logs
-          mountPath: /config/log
+          mountPath: /logs
         command: ["/bin/sh", "-c"]
         args:
           - |-
             mkdir -p /data/tvshows
             mkdir -p /data/movies
             chown -R 1000:1000 /data/*
-            chown -R 1000:1000 /config/log
+            chown -R 1000:1000 /logs
       containers:
       - name: jellyfin
-        image: lscr.io/linuxserver/jellyfin:10.10.7ubu2404-ls68
-        env:
-        - name: TZ
-          value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        image: ghcr.io/jellyfin/jellyfin:10.10.7
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         volumeMounts:
         - name: jellyfin-config
           mountPath: /config
@@ -64,8 +60,8 @@ spec:
           mountPath: /ldap-ca.pem
         - name: media
           mountPath: /data
-        - name: transcodes
-          mountPath: /config/cache/transcodes
+        - name: cache
+          mountPath: /cache
         - name: logs
           mountPath: /config/log
         ports:
@@ -83,7 +79,7 @@ spec:
           httpGet:
             path: /health
             port: http
-          failureThreshold: 30
+          failureThreshold: 12
         readinessProbe:
           httpGet:
             path: /health
