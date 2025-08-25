@@ -54,7 +54,7 @@
   zramSwap.enable = true;
 
   systemd.network.enable = true;
-  systemd.network.wait-online.enable = mkForce true;
+  systemd.network.wait-online.enable = mkForce true; # so gluster volume doesnt mount too early
   networking.useDHCP = false;
   networking.useNetworkd = true;
   systemd.network = {

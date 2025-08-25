@@ -1,7 +1,7 @@
 #
 # this machine is a kubernetes node
 #
-{ flake, inputs, ... }: {
+{ flake, inputs, lib, ... }: with lib; {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
@@ -56,16 +56,15 @@
   };
 
   systemd.network.enable = true;
+  systemd.network.wait-online.enable = mkForce true; # so gluster volume doesnt mount too early
   networking.useDHCP = false;
   networking.useNetworkd = true;
   systemd.network = {
-    networks = {
-      "10-wired" = {
-        matchConfig.Name = "e*";
-        networkConfig = {
-          DHCP = "yes";
-        };
-      };
+    networks."10-wired" = {
+      matchConfig.Name = "e*";
+      networkConfig.DHCP = "yes";
+      networkConfig.LinkLocalAddressing = "no";
+      linkConfig.RequiredForOnline = "routable";
     };
   };
 }
