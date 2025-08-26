@@ -18,6 +18,7 @@
     ./dnsmasq.nix
     ./interfaces.nix
     ./firewall.nix
+    ./upnp.nix
   ];
 
   networking.hostName = "cloudberry";
