@@ -130,10 +130,11 @@ with config.router;
       # temporarily do plain DHCP onto the existing network during development
       matchConfig = {
         Type = "ether";
-        Name = wan-vlan;
+        Name = wan-netdev;
       };
       networkConfig = {
         DHCP = "yes";
+        dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
       };
     };
   };

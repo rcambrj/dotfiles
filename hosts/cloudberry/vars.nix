@@ -21,6 +21,7 @@ in {
       spare-1 = "enp0s20u1"; # front right usb3
     };
 
+    wan-netdev = ifaces.wan; # temporarily
     wan-vlan = 6;
 
     mgmt-netdev     = "mgmt";

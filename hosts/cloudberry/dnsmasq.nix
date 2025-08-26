@@ -6,19 +6,6 @@ with lib;
     ./static-leases.nix
   ];
 
-  # these interfaces are usually on the trusted side
-  # but good practice to open necessary ports anyway
-  networking.firewall.interfaces = (genAttrs [
-    home-netdev
-    mgmt-netdev
-  ] (iface: {
-    allowedUDPPorts = [
-      53    # DNS
-      67 68 # DHCP
-    ];
-  }));
-
-
   services.resolved.enable = false;
   services.dnsmasq = {
     enable = true;
