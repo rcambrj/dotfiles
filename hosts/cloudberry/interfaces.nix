@@ -1,111 +1,140 @@
-{ ... }: {
+{ config, ... }:
+with config.router;
+{
   systemd.network.enable = true;
   networking.useDHCP = false;
   networking.useNetworkd = true;
 
-  # systemd.network = {
-  #   # bridge netdevs
-  #   netdevs."10-br-lan".netdevConfig = {
-  #     Kind = "bridge";
-  #     Name = "br-lan";
-  #     MACAddress = "00:e2:69:59:2e:76";
-  #   };
-  #   netdevs."10-br-mgmt".netdevConfig = {
-  #     Kind = "bridge";
-  #     Name = "br-lan";
-  #     MACAddress = "00:e2:69:59:2e:76";
-  #   };
+  systemd.network = {
+    # create vlan netdevs (make one per vlan on each port)
+    # netdevs."10-vlan-wan" = {
+    #   Kind = "vlan";
+    #   Name = "wan";
+    #   vlanConfig.Id = wan-vlan;
+    # };
+    netdevs."10-vlan-lte" = {
+      netdevConfig = {
+        Kind = "vlan";
+        Name = lte-netdev;
+      };
+      vlanConfig.Id = lte-vlan;
+    };
+    netdevs."10-vlan-home" = {
+      netdevConfig = {
+        Kind = "vlan";
+        Name = "home-trunk";
+      };
+      vlanConfig.Id = home-vlan;
+    };
+    netdevs."10-vlan-mgmt" = {
+      netdevConfig = {
+        Kind = "vlan";
+        Name = "mgmt-trunk";
+      };
+      vlanConfig.Id = mgmt-vlan;
+    };
 
-  #   # vlan netdevs
-  #   netdevs."20-enp1s0-6"   = {
-  #     # KPN uplink requires VLAN 6
-  #     matchConfig = {
-  #       Name = "enp1s0-6";
-  #       Kind = "vlan";
-  #     };
-  #     netdevConfig = {};
-  #     vlanConfig.Id = 6;
-  #   };
-  #   netdevs."20-enp1s0-44" = {
-  #     # LTE 4G
-  #     matchConfig = {
-  #       Name = "enp1s0-142";
-  #       Kind = "vlan";
-  #     };
-  #     netdevConfig = {};
-  #     vlanConfig.Id = 142;
-  #   };
-  #   netdevs."20-enp1s0-142" = {
-  #     # Primary LAN
-  #     matchConfig = {
-  #       Name = "enp1s0-142";
-  #       Kind = "vlan";
-  #     };
-  #     netdevConfig = {};
-  #     vlanConfig.Id = 142;
-  #   };
+    # attach vlan networks to ports
+    # networks."20-vlan-wan" = {
+    #   matchConfig = {
+    #     Name = ifaces.wan;
+    #     Type = "ether";
+    #   };
+    #   networkConfig.VLAN = [ "wan" ];
+    # };
+    networks."20-vlan-trunk" = {
+      matchConfig = {
+        Name = ifaces.sw0;
+        Type = "ether";
+      };
+      networkConfig.VLAN = [ "home-trunk" "mgmt-trunk" lte-netdev ];
+    };
 
-  #   # physical networks
-  #   networks."30-enp1s0" = {
-  #     # 00:e2:69:59:2e:72
-  #     matchConfig.Name = "enp1s0";
-  #     networkConfig.VLAN = [ "enp1s0-6" ];
-  #   };
-  #   networks."30-enp2s0" = {
-  #     # 00:e2:69:59:2e:73
-  #     matchConfig.Name = "enp2s0";
-  #     networkConfig.VLAN = [ "enp1s0-44" "enp1s0-142" ];
-  #   };
-  #   networks."30-enp3s0" = {
-  #     # 00:e2:69:59:2e:74
-  #     matchConfig.Name = "enp3s0";
-  #     networkConfig.Bridge = "br-lan";
-  #   };
-  #   networks."30-enp4s0" = {
-  #     # 00:e2:69:59:2e:75
-  #     matchConfig.Name = "enp4s0";
-  #     networkConfig.Bridge = "br-lan";
-  #   };
+    # create bridge netdevs
+    netdevs."30-bridge-home" = {
+      netdevConfig = {
+        Kind = "bridge";
+        Name = home-netdev;
+      };
+    };
+    netdevs."30-bridge-mgmt" = {
+      netdevConfig = {
+        Kind = "bridge";
+        Name = mgmt-netdev;
+      };
+    };
 
-  #   # vlan networks
-  #   networks."40-enp1s0-6" = {
-  #     matchConfig = {
-  #       Name = "enp1s0-6";
-  #       Type = "vlan";
-  #     };
-  #   };
-  #   networks."40-enp2s0-44" = {
-  #     matchConfig = {
-  #       Name = "enp2s0-44";
-  #       Type = "vlan";
-  #     };
-  #   };
-  #   networks."40-enp2s0-142" = {
-  #     matchConfig = {
-  #       Name = "enp2s0-142";
-  #       Type = "vlan";
-  #     };
-  #   };
+    # attach vlans/ports to bridges
+    networks."40-bridge-home-trunk" = {
+      matchConfig = {
+        Type = "vlan";
+        Name = "home-trunk";
+      };
+      networkConfig.Bridge = home-netdev;
+    };
+    networks."40-bridge-home-0" = {
+      matchConfig = {
+        Type = "ether";
+        Name = ifaces.home-0;
+      };
+      networkConfig.Bridge = home-netdev;
+    };
+    networks."40-bridge-mgmt-trunk" = {
+      matchConfig = {
+        Type = "vlan";
+        Name = "mgmt-trunk";
+      };
+      networkConfig.Bridge = mgmt-netdev;
+    };
 
-  #   # bridge networks
-  #   networks."50-br-lan" = {
-  #     matchConfig.Name = "br-lan";
-  #     linkConfig = {
-  #       RequiredForOnline = "yes";
-  #     };
-  #     networkConfig = {
-  #       Address = "192.168.142.1/24";
-  #       IPv4Forwarding = "yes";
-  #       # IPv6Forwarding = "yes";
-  #       DHCPServer = "yes";
-  #     };
-  #     dhcpServerConfig = {
+    # configure networks
+    networks."50-home-config" = {
+      matchConfig.Name = home-netdev;
+      networkConfig = {
+        Address = home-cidr;
+        ConfigureWithoutCarrier = true;
+        IPv4Forwarding = true;
+        IPv6Forwarding = false; # deal with this challenge another day
+      };
+      routingPolicyRules = [{
+        Priority = 100;
+        To = home-cidr;
+      }];
+    };
 
-  #     };
-  #     routingPolicyRules = [{
-  #       Priority = 100;
-  #       To = "192.168.142.0/24";
-  #     }];
-  #   };
-  # };
+    networks."50-mgmt-config" = {
+      matchConfig.Name = mgmt-netdev;
+      networkConfig = {
+        Address = mgmt-cidr;
+        ConfigureWithoutCarrier = true;
+        IPv4Forwarding = true;
+        IPv6Forwarding = false; # deal with this challenge another day
+      };
+      routingPolicyRules = [{
+        Priority = 100;
+        To = mgmt-cidr;
+      }];
+    };
+
+    networks."50-lte-config" = {
+      matchConfig = {
+        Type = "vlan";
+        Name = lte-netdev;
+      };
+      networkConfig = {
+        DHCP = "yes";
+      };
+    };
+
+    networks."50-wan-config-tmp" = {
+      # temporarily do plain DHCP onto the existing network during development
+      matchConfig = {
+        Type = "ether";
+        Name = wan-vlan;
+      };
+      networkConfig = {
+        DHCP = "yes";
+      };
+    };
+  };
 }

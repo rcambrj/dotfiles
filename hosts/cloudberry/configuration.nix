@@ -14,6 +14,8 @@
     flake.nixosModules.common
     flake.nixosModules.config-intel
 
+    ./vars.nix
+    ./dnsmasq.nix
     ./interfaces.nix
   ];
 
