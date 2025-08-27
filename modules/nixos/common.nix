@@ -9,6 +9,7 @@ with lib;
     htop btop
     iftop
     iotop
+    nettools # arp
     ncdu
     ripgrep
     tmate
