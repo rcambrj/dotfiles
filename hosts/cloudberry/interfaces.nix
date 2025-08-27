@@ -93,8 +93,6 @@ with config.router;
       networkConfig = {
         Address = home-cidr;
         ConfigureWithoutCarrier = true;
-        IPv4Forwarding = true;
-        IPv6Forwarding = false; # deal with this challenge another day
       };
       routingPolicyRules = [{
         Priority = 100;
@@ -107,8 +105,6 @@ with config.router;
       networkConfig = {
         Address = mgmt-cidr;
         ConfigureWithoutCarrier = true;
-        IPv4Forwarding = true;
-        IPv6Forwarding = false; # deal with this challenge another day
       };
       routingPolicyRules = [{
         Priority = 100;
@@ -132,9 +128,9 @@ with config.router;
         Type = "ether";
         Name = wan-netdev;
       };
+      dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
       networkConfig = {
         DHCP = "yes";
-        dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
       };
     };
   };

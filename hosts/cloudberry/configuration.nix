@@ -13,6 +13,7 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.config-intel
+    flake.nixosModules.netbird
 
     ./vars.nix
     ./dnsmasq.nix
@@ -54,4 +55,10 @@
     }
   ];
   zramSwap.enable = true;
+
+  boot.kernel.sysctl = {
+    "net.ipv6.conf.all.disable_ipv6" = true; # deal with this challenge another day
+    "net.ipv4.conf.all.forwarding" = true;
+    "net.ipv6.conf.all.forwarding" = true;
+  };
 }

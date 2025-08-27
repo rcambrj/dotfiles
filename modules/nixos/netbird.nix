@@ -1,4 +1,7 @@
 { config, lib, pkgs, ... }: with lib; {
+  # TODO: try configuring PrivateKey first https://wg.orz.tools/
+  # netbird up --setup-key=<setup key>
+  # then take /var/lib/netbird-default/config.json::PrivateKey
   age.secrets.netbird-private-key.file = ./. + "/../../secrets/${config.networking.hostName}-netbird-privatekey.age";
 
   age-template.files.netbird-secrets = {

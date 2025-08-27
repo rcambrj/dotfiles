@@ -11,7 +11,7 @@
     flake.nixosModules.disko-standard
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
-    ./netbird.nix
+    flake.nixosModules.netbird
     ./node.nix
   ];
 
