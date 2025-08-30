@@ -25,7 +25,7 @@ in {
     wan-vlan = 6;
 
     lte-netdev = "lte";
-    lte-vlan   = 45;
+    lte-vlan   = 44;
     lte-prefix = "192.168.44";
     lte-bits   = "24";
     lte-ip     = "${lte-prefix}.3";
@@ -33,7 +33,7 @@ in {
     lte-gw     = "${lte-prefix}.1";
 
     mgmt-netdev     = "mgmt";
-    mgmt-vlan       = 1;
+    mgmt-vlan       = 99;
     mgmt-prefix     = "192.168.99";
     mgmt-bits       = "24";
     mgmt-ip         = "${mgmt-prefix}.1";
@@ -51,8 +51,10 @@ in {
     home-dhcp-end   = "${home-prefix}.254";
 
     client-ips = {
-      ap-top = "${mgmt-prefix}.5";
-      ap-gnd = "${mgmt-prefix}.6";
+      switch-0 = "${mgmt-prefix}.2"; # not assigned by dhcp
+      switch-1 = "${mgmt-prefix}.3"; # not assigned by dhcp
+      ap-top   = "${mgmt-prefix}.5";
+      ap-gnd   = "${mgmt-prefix}.6";
       # servers
       cranberry  = "${home-prefix}.21";
       blueberry  = "${home-prefix}.22";
@@ -60,7 +62,7 @@ in {
       cloudberry = "${home-prefix}.34";
       gaming-pc  = "${home-prefix}.26";
       # not assigned by dhcp, metallb arps this address into existence
-      kubernetes-lb   = "${home-prefix}.50";
+      kubernetes-lb = "${home-prefix}.50";
 
       # switches
       sonoff-s20-1 = "${home-prefix}.51";

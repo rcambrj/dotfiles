@@ -3,8 +3,8 @@ with lib;
 with config.router;
 let
   mac = {
-    switch0      = "60:83:E7:2E:7D:76";
-    switch1      = "28:87:BA:98:89:72";
+    switch-0     = "60:83:E7:2E:7D:76";
+    switch-1     = "28:87:BA:98:89:72";
     ap-top       = "70:a7:41:7f:6d:41";
     ap-gnd       = "70:a7:41:7f:6e:e1";
 
@@ -43,8 +43,10 @@ let
 
   hosts = [
     # infra
-    { name = "ap-top";       ip = client-ips.ap-top;  hwaddrs = [ mac.ap-top ]; }
-    { name = "ap-gnd";       ip = client-ips.ap-gnd;  hwaddrs = [ mac.ap-gnd ]; }
+    { name = "switch-0";     ip = client-ips.switch-0;   hwaddrs = [ mac.switch-0 ]; }
+    { name = "switch-1";     ip = client-ips.switch-1;   hwaddrs = [ mac.switch-1 ]; }
+    { name = "ap-top";       ip = client-ips.ap-top;     hwaddrs = [ mac.ap-top ]; }
+    { name = "ap-gnd";       ip = client-ips.ap-gnd;     hwaddrs = [ mac.ap-gnd ]; }
     # servers
     { name = "cranberry";    ip = client-ips.cranberry;  hwaddrs = [ mac.br-cranberry mac.topton-a-1 mac.topton-a-2 mac.topton-a-3 mac.topton-a-4]; }
     { name = "blueberry";    ip = client-ips.blueberry;  hwaddrs = [ mac.macmini-2011 ]; }

@@ -1,3 +1,8 @@
+# https://github.com/ghostbuster91/blogposts/blob/a2374f0039f8cdf4faddeaaa0347661ffc2ec7cf/router2023-part2/main.md
+# https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/getting-started-with-nftables_configuring-and-managing-networking
+# https://wiki.nftables.org/wiki-nftables/index.php/Quick_reference-nftables_in_10_minutes
+#
+
 { config, lib, ... }:
 with config.router;
 with lib;

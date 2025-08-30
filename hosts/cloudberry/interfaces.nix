@@ -118,8 +118,13 @@ with config.router;
         Name = lte-netdev;
       };
       networkConfig = {
-        DHCP = "yes";
+        Address = lte-cidr;
       };
+      routes = [{
+        Gateway = lte-gw;
+        Metric = 2048; # lower prio than wan
+      }];
+      # no IPv6 on this network
     };
 
     networks."50-wan-config-tmp" = {
@@ -128,10 +133,15 @@ with config.router;
         Type = "ether";
         Name = wan-netdev;
       };
-      dhcpV4Config.UseHostname = "no"; # Could not set hostname: Access denied
       networkConfig = {
         DHCP = "yes";
+        # TODO: route metric
       };
+      dhcpV4Config = {
+        UseHostname = "no"; # Could not set hostname: Access denied
+        RouteMetric = 1024; # explicit default
+      };
+      # dhcpV6Config = {}; # TODO
     };
   };
 }
