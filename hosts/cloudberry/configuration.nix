@@ -22,6 +22,8 @@
     ./upnp.nix
     ./wan-failover.nix
     ./ddns.nix
+    ./http
+    ./unifi.nix
   ];
 
   networking.hostName = "cloudberry";

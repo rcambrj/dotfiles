@@ -49,13 +49,15 @@ with lib;
       # TODO: configure netbird
       # server = "/*.netbird.cloud/127.0.0.1#5053";
 
-      address = "/home.cambridge.me/${home-prefix}.50";
+      address = [
+        "/router.cambridge.me/${home-ip}"
+        "/home.cambridge.me/${client-ips.kubernetes-lb}"
+      ];
       cname = "orange.cambridge.me,orange.netbird.cloud";
 
       dhcp-option = [
-        # temporarily disable default route for debugging
-        # sudo route -n add -net x.x.x.x/32 y.y.y.y
-        "option:router"
+        # to debug: temporarily disable default route
+        # "option:router"
       ];
     };
   };

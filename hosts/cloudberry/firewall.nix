@@ -31,6 +31,7 @@ in {
           tcp dport 22 accept
 
           ip saddr ${client-ips.solar0} drop
+          iifname != "lo" tcp dport 8443 drop comment "Unifi controller self-signed HTTPS"
 
           iifname { "${home-netdev}", "${mgmt-netdev}" } accept
           iifname { "${wan-netdev}", "${lte-netdev}" } ct state { established, related } accept
