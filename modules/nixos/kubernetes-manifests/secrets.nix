@@ -4,7 +4,7 @@ in {
   options = {};
   config = mkIf cfg.enable ({
     age.secrets = {
-      acme-cloudflare.file = ../../../secrets/acme-cloudflare.age;
+      cloudflare-token.file = ../../../secrets/cloudflare-token.age;
 
       kubernetes-oauth2-proxy-client-secret.file = ../../../secrets/kubernetes-oauth2-proxy-client-secret.age;
       kubernetes-oauth2-proxy-cookie-secret.file = ../../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
@@ -69,7 +69,7 @@ in {
     age-template.files."20-cloudflare-token" = {
       path = "/var/lib/rancher/k3s/server/manifests/20-cloudflare-token.yaml";
       vars = {
-        token = config.age.secrets.acme-cloudflare.path;
+        token = config.age.secrets.cloudflare-token.path;
       };
       content = ''
         apiVersion: v1

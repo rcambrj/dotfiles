@@ -3,7 +3,7 @@
 
   age-template.files.acme-env-cloudflare = {
     vars = {
-      token = config.age.secrets.acme-cloudflare.path;
+      token = config.age.secrets.cloudflare-token.path;
     };
     content = ''
       CLOUDFLARE_DNS_API_TOKEN=$token

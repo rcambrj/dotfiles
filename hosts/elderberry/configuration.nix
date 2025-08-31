@@ -19,7 +19,7 @@
 
   networking.hostName = "elderberry";
   age.secrets = {
-    acme-cloudflare.file = ../../secrets/acme-cloudflare.age;
+    cloudflare-token.file = ../../secrets/cloudflare-token.age;
     ldap-admin-ro-password.file = ../../secrets/ldap-admin-ro-password.age;
   };
 

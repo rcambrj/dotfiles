@@ -5,7 +5,9 @@ let
   disknodes = [ sshKeys.blueberry sshKeys.cranberry sshKeys.orange ];
 in {
   # cloudflare
-  "secrets/acme-cloudflare.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
+  "secrets/cloudflare-token.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.cloudberry sshKeys.elderberry ];
+  "secrets/cloudflare-zone-id.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/cloudflare-ddns-host.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
 
   # oauth2 apps
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;

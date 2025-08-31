@@ -9,4 +9,10 @@ with lib;
     internalIPs = [ home-netdev ];
     externalInterface = wan-netdev;
   };
+
+  systemd.services.miniupnpd = {
+    serviceConfig = {
+      Restart = "always";
+    };
+  };
 }
