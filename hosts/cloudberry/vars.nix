@@ -21,8 +21,15 @@ in {
       spare-1 = "enp0s20u1"; # front right usb3
     };
 
+    # main    = 32766
+    # default = 32767
+    uplink-rule-override = 32767 + 1000;
+    uplink-rule-wan      = 32767 + 1100;
+    uplink-rule-lte      = 32767 + 1200;
+
     wan-netdev = ifaces.wan; # temporarily
     wan-vlan = 6;
+    wan-rt   = 926;
 
     lte-netdev = "lte";
     lte-vlan   = 44;
@@ -31,6 +38,8 @@ in {
     lte-ip     = "${lte-prefix}.3";
     lte-cidr   = "${lte-ip}/${lte-bits}";
     lte-gw     = "${lte-prefix}.1";
+    lte-rt     = 1583;
+    lte-ct     = "0x02000000";
 
     mgmt-netdev     = "mgmt";
     mgmt-vlan       = 99;

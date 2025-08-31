@@ -6,6 +6,15 @@ with config.router;
   networking.useNetworkd = true;
 
   systemd.network = {
+    config = {
+      routeTables = {
+        # these aliases are not used programmatically
+        # just nice-to-haves for monitoring/debugging
+        "wan" = wan-rt;
+        "lte" = lte-rt;
+      };
+    };
+
     # create vlan netdevs (make one per vlan on each port)
     # netdevs."10-vlan-wan" = {
     #   Kind = "vlan";
@@ -122,8 +131,15 @@ with config.router;
       };
       routes = [{
         Gateway = lte-gw;
-        Metric = 2048; # lower prio than wan
+        PreferredSource = lte-ip;
+        Table = lte-rt;
       }];
+      routingPolicyRules = [
+        {
+          Priority = uplink-rule-lte;
+          Table = lte-rt;
+        }
+      ];
       # no IPv6 on this network
     };
 
@@ -139,8 +155,14 @@ with config.router;
       };
       dhcpV4Config = {
         UseHostname = "no"; # Could not set hostname: Access denied
-        RouteMetric = 1024; # explicit default
+        RouteTable = wan-rt;
       };
+      routingPolicyRules = [
+        {
+          Priority = uplink-rule-wan;
+          Table = wan-rt;
+        }
+      ];
       # dhcpV6Config = {}; # TODO
     };
   };

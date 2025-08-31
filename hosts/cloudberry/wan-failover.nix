@@ -12,19 +12,22 @@ in {
 
           oifname { "${lte-netdev}" } ip daddr ${lte-gw} accept comment "LTE dashboard"
           oifname { "${lte-netdev}" } meta l4proto { icmp, icmpv6 } accept
-          oifname { "${lte-netdev}" } jump block-lte
+          oifname "${lte-netdev}" jump block-lte
         }
         chain output {
           type filter hook output priority filter + 10;
 
-          oifname { "${lte-netdev}" } ip daddr ${lte-gw} accept comment "LTE dashboard"
-          oifname { "${lte-netdev}" } meta l4proto { icmp, icmpv6 } accept
-          oifname { "${lte-netdev}" } jump block-lte
+          oifname "${lte-netdev}" ip daddr ${lte-gw} accept comment "LTE dashboard"
+          oifname "${lte-netdev}" meta l4proto { icmp, icmpv6 } accept
+          oifname "${lte-netdev}" jump block-lte
         }
-
         chain block-lte {
           # LTE blocked by default. script to unblock in case of failover
           oifname "${lte-netdev}" reject
+        }
+        chain postrouting {
+          type filter hook postrouting priority mangle; policy accept;
+          oifname "${lte-netdev}" ct mark set ${lte-ct}
         }
       '';
     };
@@ -38,15 +41,19 @@ in {
       NotifyAccess = "all";
     };
     environment = let
-      set-lte-block = pkgs.writeShellScript "wan-failover-set-lte-block" ''
-        set -eu
-        TOGGLE="$1"
-        # always start from a blank chain
-        ${pkgs.nftables}/bin/nft flush chain inet lte-data-saver block-lte
-        if [ "$TOGGLE" == "on" ]; then
-          ${pkgs.nftables}/bin/nft add rule inet lte-data-saver block-lte oifname "${lte-netdev}" reject
-        fi
-      '';
+      lte-block-off = pkgs.writeTextFile {
+        name = "wan-failover-lte-block-off";
+        text = ''
+          flush chain inet lte-data-saver block-lte
+        '';
+      };
+      lte-block-on = pkgs.writeTextFile {
+        name = "wan-failover-lte-block-on";
+        text = ''
+          flush chain inet lte-data-saver block-lte
+          add rule inet lte-data-saver block-lte oifname "${lte-netdev}" reject
+        '';
+      };
     in {
       INTERVAL = "10s";          # sleep between checks; e.g. 10s, 1m
       RISE_N = "3";              # successes required to go UP
@@ -57,15 +64,21 @@ in {
         set -eu
         ${pkgs.iputils}/bin/ping -I ${wan-netdev} -c1 -W1 1.1.1.1 || ${pkgs.iputils}/bin/ping -I ${wan-netdev} -c1 -W1 8.8.8.8
       '');
+
+      # TODO: RTNETLINK answers: No such file or directory
       ON_UP_CMD = toString (pkgs.writeShellScript "wan-failover-up" ''
-        ${pkgs.ifmetric}/bin/ifmetric ${wan-netdev} 1024
-        ${pkgs.ifmetric}/bin/ifmetric ${lte-netdev} 2048
-        ${set-lte-block} on
+        echo "Switching route rule priorities..."
+        ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString uplink-rule-override} table ${toString lte-rt} || true
+        echo "Blocking LTE traffic..."
+        ${pkgs.nftables}/bin/nft -f ${lte-block-on} || true
+        echo "Flushing conntrack..."
+        ${pkgs.conntrack-tools}/bin/conntrack -D -f ipv4 --mark ${lte-ct}/${lte-ct} || true
       '');
       ON_DOWN_CMD = toString (pkgs.writeShellScript "wan-failover-down" ''
-        ${pkgs.ifmetric}/bin/ifmetric ${lte-netdev} 1024
-        ${pkgs.ifmetric}/bin/ifmetric ${wan-netdev} 2048
-        ${set-lte-block} off
+        echo "Switching route rule priorities..."
+        ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString uplink-rule-override} table ${toString lte-rt} || true
+        echo "Permitting LTE traffic..."
+        ${pkgs.nftables}/bin/nft -f ${lte-block-off} || true
       '');
     };
     script = toString (pkgs.writeShellScript "wan-failover" ''
