@@ -78,4 +78,8 @@ in {
   "secrets/strawberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
   "secrets/strawberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.strawberry ];
 
+  # cloudberry
+  "secrets/cloudberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/cloudberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/cloudberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
 }

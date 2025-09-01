@@ -55,6 +55,8 @@
     };
   };
 
+  services.server-backup.enable = true;
+
   systemd.network.enable = true;
   systemd.network.wait-online.enable = mkForce true; # so gluster volume doesnt mount too early
   networking.useDHCP = false;

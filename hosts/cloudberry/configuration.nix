@@ -14,6 +14,7 @@
     flake.nixosModules.common
     flake.nixosModules.config-intel
     flake.nixosModules.netbird
+    flake.nixosModules.server-backup
 
     ./vars.nix
     ./dnsmasq.nix
@@ -50,6 +51,11 @@
         turbo = "auto";
       };
     };
+  };
+
+  services.server-backup = {
+    enable = true;
+    paths = [ "/var/lib" ];
   };
 
   # Dell Wyse 3040 doesn't have much RAM, but it does have 8GB internal MMC

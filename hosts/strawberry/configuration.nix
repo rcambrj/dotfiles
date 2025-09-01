@@ -48,6 +48,8 @@
     };
   };
 
+  services.server-backup.enable = true;
+
   systemd.network.enable = true;
   networking.useDHCP = false;
   networking.useNetworkd = true;

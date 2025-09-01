@@ -51,6 +51,8 @@
     };
   };
 
+  services.server-backup.enable = true;
+
   zramSwap.enable = true;
 
   systemd.network.enable = true;
