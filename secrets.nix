@@ -51,8 +51,9 @@ in {
   "secrets/google-assistant-private-key.age".publicKeys = defaults ++ kubenodes;
 
   # telegram bot
-  "secrets/telegram-bot-api-key.age".publicKeys = defaults ++ kubenodes;
-  "secrets/telegram-group.age".publicKeys = defaults ++ kubenodes;
+  "secrets/telegram-router-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/telegram-telly-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/telegram-group.age".publicKeys = defaults  ++ [ sshKeys.cloudberry ];
 
   # LG webos
   "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;

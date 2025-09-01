@@ -39,6 +39,11 @@ in {
     };
   };
 
+  age.secrets = {
+    telegram-router-bot-key.file = ../../secrets/telegram-router-bot-key.age;
+    telegram-group.file = ../../secrets/telegram-group.age;
+  };
+
   services.up-or-down.wan-failover = let
     lte-block-off = pkgs.writeTextFile {
       name = "wan-failover-lte-block-off";
@@ -53,6 +58,14 @@ in {
         add rule inet lte-data-saver block-lte oifname "${lte-netdev}" reject
       '';
     };
+    notify-telegram = pkgs.writeShellScript "wan-failover-notify-telegram" ''
+      TOKEN="$(cat ${config.age.secrets.telegram-router-bot-key.path})"
+      CHAT_ID="$(cat ${config.age.secrets.telegram-group.path})"
+      TEXT="$1"
+
+      sleep 5s
+      ${pkgs.curl}/bin/curl "https://api.telegram.org/bot$TOKEN/sendMessage" --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "text=$TEXT" &
+    '';
   in {
     interval = "10s";
     rise-n = "3";
@@ -72,7 +85,9 @@ in {
       echo "Flushing conntrack..."
       ${pkgs.conntrack-tools}/bin/conntrack -D -f ipv4 --mark ${lte-ct}/${lte-ct} || true
       echo "Updating status file..."
-      echo "interface wan is online" > ${wan-status-file}
+      echo "interface wan is online" > ${wan-status-file} || true
+      echo "Notifying telegram..."
+      ${notify-telegram} "wan online (cloudberry)" || true
     '');
     on-down-cmd = toString (pkgs.writeShellScript "wan-failover-down" ''
       echo "Switching route rule priorities..."
@@ -80,7 +95,9 @@ in {
       echo "Permitting LTE traffic..."
       ${pkgs.nftables}/bin/nft -f ${lte-block-off} || true
       echo "Updating status file..."
-      echo "interface wan is offline" > ${wan-status-file}
+      echo "interface wan is offline" > ${wan-status-file} || true
+      echo "Notifying telegram..."
+      ${notify-telegram} "wan offline (cloudberry)" || true
     '');
   };
 
