@@ -32,6 +32,8 @@ with lib;
         "9.9.9.9"
         "8.8.8.8"
         "1.1.1.1"
+
+        "/*.netbird.cloud/127.0.0.62#5053"
       ];
 
       interface = [
@@ -45,9 +47,6 @@ with lib;
 
       domain = "cambridge.me";
       expand-hosts = true;
-
-      # TODO: configure netbird
-      # server = "/*.netbird.cloud/127.0.0.1#5053";
 
       address = [
         "/router.cambridge.me/${home-ip}"

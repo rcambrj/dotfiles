@@ -24,6 +24,18 @@
     openFirewall = true;
     interface = "netbird";
     hardened = false; # fails to bring up DNS route
+    dns-resolver = {
+      address = "127.0.0.62";
+      port = 5053;
+
+      # also set:
+      # services.resolved.extraConfig = ''
+      #   DNS=1.1.1.1#cloudflare-dns.com 8.8.8.8#dns.google 1.0.0.1#cloudflare-dns.com 8.8.4.4#dns.google 2606:4700:4700::1111#cloudflare-dns.com 2001:4860:4860::8888#dns.google 2606:4700:4700::1001#cloudflare-dns.com 2001:4860:4860::8844#dns.google
+      #   [Resolve]
+      #   DNS=127.0.0.62:5053
+      #   Domains=~cambridge.me ~netbird.cloud
+      # '';
+    };
   };
 
   # don't delay network-online
