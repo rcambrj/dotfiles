@@ -19,6 +19,7 @@ with lib;
     unzip
     sysstat
     sysz
+    tcpdump
     usbtop
     usbutils
     vim

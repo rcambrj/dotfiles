@@ -9,11 +9,6 @@ with config.router;
   services.nginx = {
     enable = true;
 
-    defaultListen = [
-      { addr = home-ip; }
-      { addr = mgmt-ip; }
-    ];
-
     clientMaxBodySize = "200M";
     proxyTimeout = "300s";
 

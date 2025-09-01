@@ -14,6 +14,7 @@ let
     { proto = "tcp"; ports = [ "27015-27016" "33540" ]; to = client-ips.gaming-pc; }
     { proto = "udp"; ports = [ "27015-27016" "33540" ]; to = client-ips.gaming-pc; }
   ];
+  netbird-netdev = config.services.netbird.clients.default.interface;
 in {
   # networking.nat.externalInterface only supports one uplink
   networking.nat.enable = mkForce false;
@@ -33,7 +34,7 @@ in {
           ip saddr ${client-ips.solar0} drop
           iifname != "lo" tcp dport 8443 drop comment "Unifi controller self-signed HTTPS"
 
-          iifname { "${home-netdev}", "${mgmt-netdev}" } accept
+          iifname { "${home-netdev}", "${mgmt-netdev}", "${netbird-netdev}" } accept
           iifname { "${wan-netdev}", "${lte-netdev}" } ct state { established, related } accept
           tcp flags syn / fin,syn,rst,ack jump syn_flood
           iifname { "${wan-netdev}", "${lte-netdev}" } meta l4proto { icmp, icmpv6 } limit rate 100/second accept
@@ -44,7 +45,8 @@ in {
         }
         chain forward {
           type filter hook forward priority filter; policy drop;
-          iifname { "${home-netdev}" } oifname { "${wan-netdev}", "${lte-netdev}" } accept
+          iifname { "${home-netdev}" } oifname { "${netbird-netdev}", "${wan-netdev}", "${lte-netdev}" } accept
+          iifname { "${netbird-netdev}"} oifname { "${home-netdev}" }
           iifname { "${wan-netdev}", "${lte-netdev}" } oifname { "${home-netdev}" } ct state { established, related } accept
 
           ${concatMapStringsSep "\n" (pf:
