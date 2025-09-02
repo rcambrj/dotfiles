@@ -16,7 +16,7 @@
     flake.nixosModules.netbird
     flake.nixosModules.server-backup
 
-    ./vars.nix
+    ./router.nix
     ./dnsmasq.nix
     ./interfaces.nix
     ./firewall.nix
