@@ -6,7 +6,7 @@ with lib;
     enable = true;
     upnp = true;
     natpmp = true;
-    internalIPs = [ networks.lan.ip ];
+    internalIPs = [ networks.lan.ifname ];
     externalInterface = networks.wan.ifname;
   };
 
