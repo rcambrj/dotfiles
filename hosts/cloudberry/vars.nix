@@ -27,9 +27,12 @@ in {
     uplink-rule-wan      = 32767 + 1100;
     uplink-rule-lte      = 32767 + 1200;
 
-    wan-netdev = ifaces.wan; # temporarily
-    wan-vlan = 6;
-    wan-rt   = 926;
+    wan-dev-mode     = true;
+    wan-vlan         = 6;
+    wan-vlan-netdev  = "wan-vlan";
+    wan-pppoe-netdev = "wan";
+    wan-netdev       = if wan-dev-mode then ifaces.wan else wan-pppoe-netdev;
+    wan-rt           = 926;
 
     lte-netdev = "lte";
     lte-vlan   = 44;
@@ -85,7 +88,6 @@ in {
       dsmr         = "${home-prefix}.72";
       somfy-tahoma = "${home-prefix}.73";
       solar0       = "${home-prefix}.74";
-
     };
   };
 }

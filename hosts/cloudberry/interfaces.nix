@@ -1,6 +1,16 @@
 { config, ... }:
 with config.router;
-{
+let
+  noip = {
+    # [Network]
+    DHCP = "no";
+    EmitLLDP = "no";
+    IPv6AcceptRA = "no";
+    IPv6SendRA = "no";
+    LinkLocalAddressing = "no";
+    LLDP = "no";
+  };
+in {
   systemd.network.enable = true;
   networking.useDHCP = false;
   networking.useNetworkd = true;
@@ -17,8 +27,10 @@ with config.router;
 
     # create vlan netdevs (make one per vlan on each port)
     # netdevs."10-vlan-wan" = {
-    #   Kind = "vlan";
-    #   Name = "wan";
+    #   netdevConfig = {
+    #     Kind = "vlan";
+    #     Name = wan-vlan-netdev;
+    #   };
     #   vlanConfig.Id = wan-vlan;
     # };
     netdevs."10-vlan-lte" = {
@@ -49,14 +61,18 @@ with config.router;
     #     Name = ifaces.wan;
     #     Type = "ether";
     #   };
-    #   networkConfig.VLAN = [ "wan" ];
+    #   networkConfig = noip // {
+    #     VLAN = [ wan-vlan-netdev ];
+    #   };
     # };
     networks."20-vlan-trunk" = {
       matchConfig = {
         Name = ifaces.sw0;
         Type = "ether";
       };
-      networkConfig.VLAN = [ "home-trunk" "mgmt-trunk" lte-netdev ];
+      networkConfig = noip // {
+        VLAN = [ "home-trunk" "mgmt-trunk" lte-netdev ];
+      };
     };
 
     # create bridge netdevs
@@ -143,15 +159,13 @@ with config.router;
       # no IPv6 on this network
     };
 
-    networks."50-wan-config-tmp" = {
-      # temporarily do plain DHCP onto the existing network during development
+    networks."50-wan-config" = {
       matchConfig = {
         Type = "ether";
         Name = wan-netdev;
       };
       networkConfig = {
-        DHCP = "yes";
-        # TODO: route metric
+        DHCP = if wan-dev-mode then "yes" else "no";
       };
       dhcpV4Config = {
         UseHostname = "no"; # Could not set hostname: Access denied
