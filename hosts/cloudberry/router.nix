@@ -56,6 +56,7 @@ in {
           mode = "dhcp-uplink";
         };
       }."dev-mode";
+
       lte = rec {
         ifname = "br-lte";
         mac  = "16:0c:9e:d1:b3:72";
@@ -74,6 +75,7 @@ in {
         prio   = uplink-rule-lte;
         ct     = "0x02000000";
       };
+
       lan = rec {
         ifname = "br-lan";
         mac  = "42:b9:31:e0:f6:5f";
@@ -90,6 +92,7 @@ in {
         dhcp-start = "${prefix}.101";
         dhcp-end   = "${prefix}.254";
       };
+
       mgmt = rec {
         ifname = "br-mgmt";
         mac  = "62:b2:63:47:60:ff";

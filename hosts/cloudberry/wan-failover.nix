@@ -74,7 +74,9 @@ in {
     check-timeout = "5s";
     check-cmd = toString (pkgs.writeShellScript "wan-failover-check" ''
       set -eu
-      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 1.1.1.1 || ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 8.8.8.8
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 9.9.9.9 || \
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 8.8.8.8 || \
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 1.1.1.1
     '');
 
     on-up-cmd = toString (pkgs.writeShellScript "wan-failover-up" ''
