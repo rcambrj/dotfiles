@@ -6,8 +6,8 @@ with lib;
     enable = true;
     upnp = true;
     natpmp = true;
-    internalIPs = [ home-netdev ];
-    externalInterface = wan-netdev;
+    internalIPs = [ networks.lan.ip ];
+    externalInterface = networks.wan.ifname;
   };
 
   systemd.services.miniupnpd = {

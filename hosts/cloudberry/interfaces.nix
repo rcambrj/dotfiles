@@ -1,5 +1,6 @@
-{ config, ... }:
+{ config, lib, ... }:
 with config.router;
+with lib;
 let
   noip = {
     # [Network]
@@ -20,164 +21,148 @@ in {
       routeTables = {
         # these aliases are not used programmatically
         # just nice-to-haves for monitoring/debugging
-        "wan" = wan-rt;
-        "lte" = lte-rt;
+        "wan" = networks.wan.rt;
+        "lte" = networks.lte.rt;
       };
     };
 
-    # create vlan netdevs (make one per vlan on each port)
-    # netdevs."10-vlan-wan" = {
-    #   netdevConfig = {
-    #     Kind = "vlan";
-    #     Name = wan-vlan-netdev;
-    #   };
-    #   vlanConfig.Id = wan-vlan;
-    # };
-    netdevs."10-vlan-lte" = {
-      netdevConfig = {
-        Kind = "vlan";
-        Name = lte-netdev;
-      };
-      vlanConfig.Id = lte-vlan;
-    };
-    netdevs."10-vlan-home" = {
-      netdevConfig = {
-        Kind = "vlan";
-        Name = "home-trunk";
-      };
-      vlanConfig.Id = home-vlan;
-    };
-    netdevs."10-vlan-mgmt" = {
-      netdevConfig = {
-        Kind = "vlan";
-        Name = "mgmt-trunk";
-      };
-      vlanConfig.Id = mgmt-vlan;
-    };
+    #
+    # processes config.router.networks into something meaningful for networkd.
+    # for simplicity, every network gets its own bridge network interface.
+    # this likely has a performance impact on networks with just one port.
+    # but it's probably marginal.
+    #
 
-    # attach vlan networks to ports
-    # networks."20-vlan-wan" = {
-    #   matchConfig = {
-    #     Name = ifaces.wan;
-    #     Type = "ether";
-    #   };
-    #   networkConfig = noip // {
-    #     VLAN = [ wan-vlan-netdev ];
-    #   };
-    # };
-    networks."20-vlan-trunk" = {
-      matchConfig = {
-        Name = ifaces.sw0;
-        Type = "ether";
-      };
-      networkConfig = noip // {
-        VLAN = [ "home-trunk" "mgmt-trunk" lte-netdev ];
-      };
-    };
+    netdevs = concatMapAttrs (networkName: network: {}
+      # netdevs for tagged vlans
+      // listToAttrs (map (iface: nameValuePair "10-${iface}-${networkName}" {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "${iface}-${networkName}";
+        };
+        vlanConfig.Id = network.vlan;
+      }) network.ifaces.t)
 
-    # create bridge netdevs
-    netdevs."30-bridge-home" = {
-      netdevConfig = {
-        Kind = "bridge";
-        Name = home-netdev;
-      };
-    };
-    netdevs."30-bridge-mgmt" = {
-      netdevConfig = {
-        Kind = "bridge";
-        Name = mgmt-netdev;
-      };
-    };
+      # netdevs for bridges
+      // {
+        "20-br-${networkName}" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br-${networkName}";
+            MACAddress = network.mac;
+          };
+        };
+      }
+    ) networks;
 
-    # attach vlans/ports to bridges
-    networks."40-bridge-home-trunk" = {
-      matchConfig = {
-        Type = "vlan";
-        Name = "home-trunk";
-      };
-      networkConfig.Bridge = home-netdev;
-    };
-    networks."40-bridge-home-0" = {
-      matchConfig = {
-        Type = "ether";
-        Name = ifaces.home-0;
-      };
-      networkConfig.Bridge = home-netdev;
-    };
-    networks."40-bridge-mgmt-trunk" = {
-      matchConfig = {
-        Type = "vlan";
-        Name = "mgmt-trunk";
-      };
-      networkConfig.Bridge = mgmt-netdev;
-    };
+    networks = {}
+      # attach vlans to physical ports
+      // (concatMapAttrs (ifaceFriendly: iface: let
+        networkNamesUsingThisIface = attrNames (filterAttrs (networkName: network: elem iface network.ifaces.t) networks);
+      in optionalAttrs (length networkNamesUsingThisIface > 0) {
+        "10-${iface}" = {
+          matchConfig = {
+            Name = iface;
+            Type = "ether";
+          };
+          networkConfig = noip // {
+            VLAN = map (networkName: "${iface}-${networkName}") networkNamesUsingThisIface;
+          };
+        };
+      }) ifaces)
 
-    # configure networks
-    networks."50-home-config" = {
-      matchConfig.Name = home-netdev;
-      networkConfig = {
-        Address = home-cidr;
-        ConfigureWithoutCarrier = true;
-      };
-      routingPolicyRules = [{
-        Priority = 100;
-        To = home-cidr;
-      }];
-    };
+      # attach networks to bridges
+      // (concatMapAttrs (networkName: network: {}
+        # tagged vlans
+        // listToAttrs (map (iface: nameValuePair "20-${iface}-${networkName}" {
+          matchConfig = {
+            Type = "vlan";
+            Name = "${iface}-${networkName}";
+          };
+          networkConfig.Bridge = "br-${networkName}";
+        }) network.ifaces.t)
 
-    networks."50-mgmt-config" = {
-      matchConfig.Name = mgmt-netdev;
-      networkConfig = {
-        Address = mgmt-cidr;
-        ConfigureWithoutCarrier = true;
-      };
-      routingPolicyRules = [{
-        Priority = 100;
-        To = mgmt-cidr;
-      }];
-    };
+        # untagged ports
+        // listToAttrs (map (iface: nameValuePair "30-${iface}" {
+          matchConfig = {
+            Type = "ether";
+            Name = iface;
+          };
+          networkConfig.Bridge = "br-${networkName}";
+        }) network.ifaces.u)
+      ) networks)
 
-    networks."50-lte-config" = {
-      matchConfig = {
-        Type = "vlan";
-        Name = lte-netdev;
-      };
-      networkConfig = {
-        Address = lte-cidr;
-      };
-      routes = [{
-        Gateway = lte-gw;
-        PreferredSource = lte-ip;
-        Table = lte-rt;
-      }];
-      routingPolicyRules = [
-        {
-          Priority = uplink-rule-lte;
-          Table = lte-rt;
-        }
-      ];
-      # no IPv6 on this network
-    };
-
-    networks."50-wan-config" = {
-      matchConfig = {
-        Type = "ether";
-        Name = wan-netdev;
-      };
-      networkConfig = {
-        DHCP = if wan-dev-mode then "yes" else "no";
-      };
-      dhcpV4Config = {
-        UseHostname = "no"; # Could not set hostname: Access denied
-        RouteTable = wan-rt;
-      };
-      routingPolicyRules = [
-        {
-          Priority = uplink-rule-wan;
-          Table = wan-rt;
-        }
-      ];
-      # dhcpV6Config = {}; # TODO
-    };
+      # configure bridges
+      // (concatMapAttrs (networkName: network: {
+        "40-${"br-${networkName}"}" = {
+          dhcp-uplink = {
+            matchConfig = {
+              Type = "bridge";
+              Name = "br-${networkName}";
+            };
+            networkConfig = {
+              DHCP = "yes";
+            };
+            dhcpV4Config = {
+              UseHostname = "no"; # Could not set hostname: Access denied
+              RouteTable = network.rt;
+            };
+            routingPolicyRules = [
+              {
+                Priority = network.prio;
+                Table = network.rt;
+              }
+            ];
+            # dhcpV6Config = {}; # TODO
+          };
+          pppoe-uplink = {
+            matchConfig = {
+              Type = "bridge";
+              Name = "br-${networkName}";
+            };
+            # TODO: what's needed here?
+            routingPolicyRules = [
+              {
+                Priority = network.prio;
+                Table = network.rt;
+              }
+            ];
+          };
+          static-uplink = {
+            matchConfig = {
+              Type = "bridge";
+              Name = "br-${networkName}";
+            };
+            networkConfig = {
+              Address = network.cidr;
+            };
+            routes = [{
+              Gateway = network.gw;
+              PreferredSource = network.ip;
+              Table = network.rt;
+            }];
+            routingPolicyRules = [
+              {
+                Priority = network.prio;
+                Table = network.rt;
+              }
+            ];
+          };
+          dhcp-server = {
+            matchConfig = {
+              Type = "bridge";
+              Name = "br-${networkName}";
+            };
+            networkConfig = {
+              Address = network.cidr;
+              ConfigureWithoutCarrier = true;
+            };
+            routingPolicyRules = [{
+              Priority = 100;
+              To = network.cidr;
+            }];
+          };
+        }."${network.mode}";
+      }) networks);
   };
 }

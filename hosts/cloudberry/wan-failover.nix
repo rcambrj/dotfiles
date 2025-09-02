@@ -16,24 +16,24 @@ in {
         chain forward {
           type filter hook forward priority filter + 10;
 
-          oifname { "${lte-netdev}" } ip daddr ${lte-gw} accept comment "LTE dashboard"
-          oifname { "${lte-netdev}" } meta l4proto { icmp, icmpv6 } accept
-          oifname "${lte-netdev}" jump block-lte
+          oifname { "${networks.lte.ifname}" } ip daddr ${networks.lte.gw} accept comment "LTE dashboard"
+          oifname { "${networks.lte.ifname}" } meta l4proto { icmp, icmpv6 } accept
+          oifname "${networks.lte.ifname}" jump block-lte
         }
         chain output {
           type filter hook output priority filter + 10;
 
-          oifname "${lte-netdev}" ip daddr ${lte-gw} accept comment "LTE dashboard"
-          oifname "${lte-netdev}" meta l4proto { icmp, icmpv6 } accept
-          oifname "${lte-netdev}" jump block-lte
+          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.gw} accept comment "LTE dashboard"
+          oifname "${networks.lte.ifname}" meta l4proto { icmp, icmpv6 } accept
+          oifname "${networks.lte.ifname}" jump block-lte
         }
         chain block-lte {
           # LTE blocked by default. script to unblock in case of failover
-          oifname "${lte-netdev}" reject
+          oifname "${networks.lte.ifname}" reject
         }
         chain postrouting {
           type filter hook postrouting priority mangle; policy accept;
-          oifname "${lte-netdev}" ct mark set ${lte-ct}
+          oifname "${networks.lte.ifname}" ct mark set ${networks.lte.ct}
         }
       '';
     };
@@ -55,7 +55,7 @@ in {
       name = "wan-failover-lte-block-on";
       text = ''
         flush chain inet lte-data-saver block-lte
-        add rule inet lte-data-saver block-lte oifname "${lte-netdev}" reject
+        add rule inet lte-data-saver block-lte oifname "${networks.lte.ifname}" reject
       '';
     };
     notify-telegram = pkgs.writeShellScript "wan-failover-notify-telegram" ''
@@ -74,16 +74,16 @@ in {
     check-timeout = "5s";
     check-cmd = toString (pkgs.writeShellScript "wan-failover-check" ''
       set -eu
-      ${pkgs.iputils}/bin/ping -I ${wan-netdev} -c1 -W1 1.1.1.1 || ${pkgs.iputils}/bin/ping -I ${wan-netdev} -c1 -W1 8.8.8.8
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 1.1.1.1 || ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 8.8.8.8
     '');
 
     on-up-cmd = toString (pkgs.writeShellScript "wan-failover-up" ''
       echo "Switching route rule priorities..."
-      ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString uplink-rule-override} table ${toString lte-rt} || true
+      ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString uplink-rule-override} table ${toString networks.lte.rt} || true
       echo "Blocking LTE traffic..."
       ${pkgs.nftables}/bin/nft -f ${lte-block-on} || true
       echo "Flushing conntrack..."
-      ${pkgs.conntrack-tools}/bin/conntrack -D -f ipv4 --mark ${lte-ct}/${lte-ct} || true
+      ${pkgs.conntrack-tools}/bin/conntrack -D -f ipv4 --mark ${networks.lte.ct}/${networks.lte.ct} || true
       echo "Updating status file..."
       echo "interface wan is online" > ${wan-status-file} || true
       echo "Notifying telegram..."
@@ -91,7 +91,7 @@ in {
     '');
     on-down-cmd = toString (pkgs.writeShellScript "wan-failover-down" ''
       echo "Switching route rule priorities..."
-      ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString uplink-rule-override} table ${toString lte-rt} || true
+      ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString uplink-rule-override} table ${toString networks.lte.rt} || true
       echo "Permitting LTE traffic..."
       ${pkgs.nftables}/bin/nft -f ${lte-block-off} || true
       echo "Updating status file..."

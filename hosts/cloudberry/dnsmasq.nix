@@ -2,10 +2,6 @@
 with config.router;
 with lib;
 {
-  imports = [
-    ./static-leases.nix
-  ];
-
   services.resolved.enable = false;
   services.dnsmasq = {
     enable = true;
@@ -37,19 +33,19 @@ with lib;
       ];
 
       interface = [
-        home-netdev
-        mgmt-netdev
+        networks.lan.ifname
+        networks.mgmt.ifname
       ];
       dhcp-range = [
-        "${home-netdev},${home-dhcp-start},${home-dhcp-end}"
-        "${mgmt-netdev},${mgmt-dhcp-start},${mgmt-dhcp-end}"
+        "${networks.lan.ifname},${networks.lan.dhcp-start},${networks.lan.dhcp-end}"
+        "${networks.mgmt.ifname},${networks.mgmt.dhcp-start},${networks.mgmt.dhcp-end}"
       ];
 
       domain = "cambridge.me";
       expand-hosts = true;
 
       address = [
-        "/router.cambridge.me/${home-ip}"
+        "/router.cambridge.me/${networks.lan.ip}"
         "/home.cambridge.me/${client-ips.kubernetes-lb}"
       ];
       cname = "orange.cambridge.me,orange.netbird.cloud";
@@ -58,6 +54,8 @@ with lib;
         # to debug: temporarily disable default route
         # "option:router"
       ];
+
+      dhcp-host = map (host: concatStringsSep "," (flatten [host.hwaddrs host.ip host.name])) hosts;
     };
   };
 }

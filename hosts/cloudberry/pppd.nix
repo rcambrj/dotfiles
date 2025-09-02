@@ -5,7 +5,7 @@ with config.router;
   services.pppd = {
     enable = true;
     peers.wan = {
-      enable = !wan-dev-mode;
+      enable = !networks.wan.mode == "pppoe-uplink";
       name = "wan";
       # https://github.com/openwrt/openwrt/blob/main/package/network/services/ppp/files/ppp.sh
       # /usr/sbin/pppd
@@ -34,14 +34,14 @@ with config.router;
       config = let
         # https://github.com/openwrt/openwrt/tree/main/package/network/services/ppp/files/lib/netifd
         ipv4-up = pkgs.writeShellScript "pppd-wan-ipv4-up" ''
-          ${pkgs.iproute2}/bin/ip -4 route replace table ${wan-rt} default via $IPREMOTE dev $IFNAME src $IPLOCAL
-          ${pkgs.iproute2}/bin/ip -4 route replace table ${wan-rt} $IPREMOTE dev $IFNAME scope link src $IPLOCAL
+          ${pkgs.iproute2}/bin/ip -4 route replace table ${networks.wan.rt} default via $IPREMOTE dev $IFNAME src $IPLOCAL
+          ${pkgs.iproute2}/bin/ip -4 route replace table ${networks.wan.rt} $IPREMOTE dev $IFNAME scope link src $IPLOCAL
         '';
         ipv6-up = pkgs.writeShellScript "pppd-wan-ipv6-up" ''
           # TODO: ipv6
         '';
         ipv4-down = pkgs.writeShellScript "pppd-wan-ipv4-down" ''
-          ${pkgs.iproute2}/bin/ip -4 route flush table ${wan-rt}
+          ${pkgs.iproute2}/bin/ip -4 route flush table ${networks.wan.rt}
         '';
         ipv6-down = pkgs.writeShellScript "pppd-wan-ipv6-down" ''
           # TODO: ipv6
@@ -62,8 +62,8 @@ with config.router;
         "ipv6-up-script ${ipv6-up}"
         "ip-down-script ${ipv4-down}"
         "ipv6-down-script ${ipv6-down}"
-        "nic-${wan-vlan-netdev}"
-        "ifname ${wan-pppoe-netdev}"
+        "nic-br-wan"
+        "ifname pppoe-wan"
         # KPN doesn't care what the user/pass is
         "user internet"
         "password internet"

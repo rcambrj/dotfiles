@@ -7,13 +7,6 @@
 with config.router;
 with lib;
 let
-  port-forwards = [
-    { proto = "tcp"; ports = [ "443" ]; to = client-ips.kubernetes-lb; }
-
-    # wreckfest
-    { proto = "tcp"; ports = [ "27015-27016" "33540" ]; to = client-ips.gaming-pc; }
-    { proto = "udp"; ports = [ "27015-27016" "33540" ]; to = client-ips.gaming-pc; }
-  ];
   netbird-netdev = config.services.netbird.clients.default.interface;
 in {
   # networking.nat.externalInterface only supports one uplink
@@ -34,23 +27,23 @@ in {
           ip saddr ${client-ips.solar0} drop
           iifname != "lo" tcp dport 8443 drop comment "Unifi controller self-signed HTTPS"
 
-          iifname { "${home-netdev}", "${mgmt-netdev}", "${netbird-netdev}" } accept
-          iifname { "${wan-netdev}", "${lte-netdev}" } ct state { established, related } accept
+          iifname { "${networks.lan.ifname}", "${networks.mgmt.ifname}", "${netbird-netdev}" } accept
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct state { established, related } accept
           tcp flags syn / fin,syn,rst,ack jump syn_flood
-          iifname { "${wan-netdev}", "${lte-netdev}" } meta l4proto { icmp, icmpv6 } limit rate 100/second accept
-          iifname { "${wan-netdev}", "${lte-netdev}" } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
-          iifname { "${wan-netdev}", "${lte-netdev}" } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
-          iifname { "${wan-netdev}", "${lte-netdev}" } udp dport ${toString config.services.netbird.clients.default.port} accept
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta l4proto { icmp, icmpv6 } limit rate 100/second accept
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString config.services.netbird.clients.default.port} accept
           iifname "lo" accept
         }
         chain forward {
           type filter hook forward priority filter; policy drop;
-          iifname { "${home-netdev}" } oifname { "${netbird-netdev}", "${wan-netdev}", "${lte-netdev}" } accept
-          iifname { "${netbird-netdev}"} oifname { "${home-netdev}" }
-          iifname { "${wan-netdev}", "${lte-netdev}" } oifname { "${home-netdev}" } ct state { established, related } accept
+          iifname { "${networks.lan.ifname}" } oifname { "${netbird-netdev}", "${networks.wan.ifname}", "${networks.lte.ifname}" } accept
+          iifname { "${netbird-netdev}"} oifname { "${networks.lan.ifname}" }
+          iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } oifname { "${networks.lan.ifname}" } ct state { established, related } accept
 
           ${concatMapStringsSep "\n" (pf:
-            ''iifname { "${wan-netdev}", "${lte-netdev}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
+            ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
           ) port-forwards}
         }
         chain syn_flood {
@@ -66,12 +59,12 @@ in {
           type nat hook prerouting priority dstnat;
 
           ${concatMapStringsSep "\n" (pf:
-            ''iifname { "${wan-netdev}", "${lte-netdev}" } ${pf.proto} dport { ${concatStringsSep "," pf.ports} } dnat to ${pf.to}''
+            ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ${pf.proto} dport { ${concatStringsSep "," pf.ports} } dnat to ${pf.to}''
           ) port-forwards}
         }
         chain srcnat {
           type nat hook postrouting priority srcnat;
-          oifname { "${wan-netdev}", "${lte-netdev}" } masquerade
+          oifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } masquerade
         }
       '';
     };
