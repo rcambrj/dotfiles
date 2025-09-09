@@ -57,12 +57,6 @@ in {
         hostname = "elderberry.cambridge.me";
         user = "nixos";
       };
-      "lime" = {
-        # gullo's shitbox
-        hostname = "51.255.83.152";
-        user = "root";
-        port = 15120;
-      };
       "orange" = {
         # oracle cloud free aarch64
         hostname = "orange-external.cambridge.me";
