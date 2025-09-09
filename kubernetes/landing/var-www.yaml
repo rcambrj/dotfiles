@@ -34,9 +34,13 @@ data:
       <p><a href="https://transmission.home.cambridge.me">Transmission</a></p>
       <p><a href="https://nzbget.home.cambridge.me">NZBGet</a></p>
       <p>&nbsp;</p>
-      <p><a href="https://openwrt.lan/">OpenWRT</a></p>
-      <p><a href="https://openwrt.lan:8443/">Unifi</a></p>
       <p><a href="https://lldap.home.cambridge.me/">LDAP</a></p>
       <p><a href="https://esphome.home.cambridge.me">esphome</a></p>
+      <p>&nbsp;</p>
+      <p><a href="https://wan-status.router.cambridge.me">wan status</a></p>
+      <p><a href="https://unifi.router.cambridge.me">Unifi</a></p>
+      <p><a href="https://lte.router.cambridge.me">LTE modem</a></p>
+      <p><a href="https://switch-0.router.cambridge.me">Switch 0</a></p>
+      <p><a href="https://switch-1.router.cambridge.me">Switch 1</a></p>
     </body>
     </html>
