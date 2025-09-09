@@ -46,6 +46,11 @@ in {
             ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
           ) port-forwards}
         }
+        chain mangle_forward {
+          type filter hook forward priority mangle; policy accept;
+          iifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
+          oifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
+        }
         chain syn_flood {
           limit rate 25/second burst 50 packets return
           drop
