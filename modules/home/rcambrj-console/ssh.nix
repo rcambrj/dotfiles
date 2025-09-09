@@ -20,7 +20,8 @@ in {
           StrictHostKeyChecking = "no";
         };
       };
-      "router" = {
+      "cloudberry" = {
+        # use IP because it runs the DNS server
         hostname =  "192.168.142.1";
         user = "nixos";
       };
