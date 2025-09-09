@@ -2,15 +2,22 @@
 with config.router;
 with lib;
 let
-  noip = {
+  base = {
     # [Network]
-    DHCP = "no";
-    EmitLLDP = "no";
-    IPv6AcceptRA = "no";
-    IPv6SendRA = "no";
     LinkLocalAddressing = "no";
+    EmitLLDP = "no";
     LLDP = "no";
   };
+  noipv6 = {
+    # [Network]
+    IPv6AcceptRA = "no";
+    IPv6SendRA = "no";
+  };
+  noipv4 = {
+    # [Network]
+    DHCP = "no";
+  };
+  noip = noipv6 // noipv4;
 in {
   systemd.network.enable = true;
   networking.useDHCP = false;
@@ -65,7 +72,7 @@ in {
             Name = iface;
             Type = "ether";
           };
-          networkConfig = noip // {
+          networkConfig = base // noip // {
             VLAN = map (vlan: "${iface}-${toString vlan}") vlans;
           };
         };
@@ -100,7 +107,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = {
+            networkConfig = base // noipv6 // {
               DHCP = "yes";
             };
             dhcpV4Config = {
@@ -120,7 +127,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            # TODO: what's needed here?
+            networkConfig = base // noipv6;
             routingPolicyRules = [
               {
                 Priority = network.prio;
@@ -133,7 +140,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = {
+            networkConfig = base // noipv6 // {
               Address = network.cidr;
             };
             routes = [{
@@ -153,7 +160,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = {
+            networkConfig = base // noipv6 // {
               Address = network.cidr;
               ConfigureWithoutCarrier = true;
             };

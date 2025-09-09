@@ -36,7 +36,7 @@ with config.router;
           "lcp-echo-interval 1"
           "lcp-echo-failure 5"
           "lcp-echo-adaptive"
-          "noipv6" # # deal with this challenge another day
+          "noipv6" # deal with this challenge another day
           "maxfail 1"
           "mtu 1492"
           "mru 1492"
