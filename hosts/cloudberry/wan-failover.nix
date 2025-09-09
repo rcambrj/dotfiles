@@ -72,6 +72,7 @@ in {
     fall-n = "3";
     initial-state = "UNKNOWN";
     check-timeout = "5s";
+
     check-cmd = toString (pkgs.writeShellScript "wan-failover-check" ''
       set -eu
       ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 9.9.9.9 || \
@@ -82,22 +83,30 @@ in {
     on-up-cmd = toString (pkgs.writeShellScript "wan-failover-up" ''
       echo "Switching route rule priorities..."
       ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString uplink-rule-override} table ${toString networks.lte.rt} || true
+
       echo "Blocking LTE traffic..."
       ${pkgs.nftables}/bin/nft -f ${lte-block-on} || true
+
       echo "Flushing conntrack..."
       ${pkgs.conntrack-tools}/bin/conntrack -D -f ipv4 --mark ${networks.lte.ct}/${networks.lte.ct} || true
+
       echo "Updating status file..."
       echo "interface wan is online" > ${wan-status-file} || true
+
       echo "Notifying telegram..."
       ${notify-telegram} "wan online (cloudberry)" || true
     '');
+
     on-down-cmd = toString (pkgs.writeShellScript "wan-failover-down" ''
       echo "Switching route rule priorities..."
       ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString uplink-rule-override} table ${toString networks.lte.rt} || true
+
       echo "Permitting LTE traffic..."
       ${pkgs.nftables}/bin/nft -f ${lte-block-off} || true
+
       echo "Updating status file..."
       echo "interface wan is offline" > ${wan-status-file} || true
+
       echo "Notifying telegram..."
       ${notify-telegram} "wan offline (cloudberry)" || true
     '');

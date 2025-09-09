@@ -23,6 +23,8 @@ in {
     uplink-rule-wan      = 32767 + 1100;
     uplink-rule-lte      = 32767 + 1200;
 
+    wan-profile = "kpn-zakelijk";
+
     networks = {
       wan = recursiveUpdate rec {
         rt   = 926;
@@ -55,7 +57,7 @@ in {
           };
           mode = "dhcp-uplink";
         };
-      }."dev-mode";
+      }."${wan-profile}";
 
       lte = rec {
         ifname = "br-lte";

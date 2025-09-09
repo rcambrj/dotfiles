@@ -80,7 +80,7 @@ in {
             Name = "${iface}-${networkName}";
           };
           networkConfig.Bridge = "br-${networkName}";
-        }) network.ifaces.t)
+        }) (network.ifaces.t or []))
 
         # untagged ports
         // listToAttrs (map (iface: nameValuePair "30-${iface}" {
@@ -89,7 +89,7 @@ in {
             Name = iface;
           };
           networkConfig.Bridge = "br-${networkName}";
-        }) network.ifaces.u)
+        }) (network.ifaces.u or []))
       ) networks)
 
       # configure bridges
