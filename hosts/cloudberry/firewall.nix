@@ -39,7 +39,7 @@ in {
         chain forward {
           type filter hook forward priority filter; policy drop;
           iifname { "${networks.lan.ifname}" } oifname { "${netbird-netdev}", "${networks.wan.ifname}", "${networks.lte.ifname}" } accept
-          iifname { "${netbird-netdev}"} oifname { "${networks.lan.ifname}" }
+          iifname { "${netbird-netdev}"} oifname { "${networks.lan.ifname}" } accept
           iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } oifname { "${networks.lan.ifname}" } ct state { established, related } accept
 
           ${concatMapStringsSep "\n" (pf:
