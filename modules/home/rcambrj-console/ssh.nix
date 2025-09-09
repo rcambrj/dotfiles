@@ -22,7 +22,7 @@ in {
       };
       "router" = {
         hostname =  "192.168.142.1";
-        user = "root";
+        user = "nixos";
       };
       "blueberry" = {
         # kubernetes node
