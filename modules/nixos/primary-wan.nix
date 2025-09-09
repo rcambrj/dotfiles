@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-    systemd.services.primary-wan = {
+  systemd.services.primary-wan = {
     requires = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
@@ -11,16 +11,23 @@
       while true; do
         # loop infinitely
 
-        statuses=$(${pkgs.curl}/bin/curl --no-progress-meter -m 5 http://192.168.142.1:6926/interfaces || true)
-        echo "$statuses"
+        status=$(${pkgs.curl}/bin/curl --no-progress-meter -m 5 https://wan-status.router.cambridge.me || true)
+        echo "$status"
 
-        # Interface status:
-        #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
-        #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
-
-        if [ "$(echo "$statuses" | ${pkgs.ripgrep}/bin/rg "interface wan is online" | wc -l)" != "1" ]; then
+        if [ "$(echo "$status" | ${pkgs.ripgrep}/bin/rg "interface wan is online" | wc -l)" != "1" ]; then
             echo "WAN is not up." >&2
             exit 1
+        fi
+        if [[ $(echo "$status" | grep "interface wan is" | wc -l) != "1" ]]; then
+          echo Unable to determine WAN status, entering failsafe mode.
+          WANONLINE=0
+        else
+          WANONLINE=$(echo "$status" | grep "interface wan is online" | wc -l)
+        fi
+
+        if [[ "$WANONLINE" != "1" ]]; then
+          echo "WAN is not up." >&2
+          exit 1
         fi
 
         echo "WAN is up." >&2

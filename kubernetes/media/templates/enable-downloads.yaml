@@ -55,22 +55,14 @@ spec:
             TOKEN=$(cat ${SERVICEACCOUNT}/token)
             CACERT=${SERVICEACCOUNT}/ca.crt
 
-            STATUSES=$(curl --no-progress-meter -m 5 http://192.168.142.1:6926/interfaces || true)
-            echo "$STATUSES"
+            status=$(curl --no-progress-meter -m 5 https://wan-status.router.cambridge.me || true)
+            echo "$status"
 
-            # Interface status:
-            #  interface wan is online 18h:41m:16s, uptime 19h:36m:50s and tracking is active
-            #  interface wan_lte is online 18h:41m:16s, uptime 120h:47m:35s and tracking is active
-
-            # Interface status:
-            #  interface wan is offline and tracking is paused
-            #  interface wan_lte is online 116h:58m:03s, uptime 116h:58m:07s and tracking is active
-
-            if [[ $(echo "$STATUSES" | grep "Interface status" | wc -l) != "1" ]]; then
+            if [[ $(echo "$status" | grep "interface wan is" | wc -l) != "1" ]]; then
               echo Unable to determine WAN status, entering failsafe mode.
               WANONLINE=0
             else
-              WANONLINE=$(echo "$STATUSES" | grep "interface wan is online" | wc -l)
+              WANONLINE=$(echo "$status" | grep "interface wan is online" | wc -l)
             fi
 
             if [[ "${WANONLINE}" == "1" ]]; then
@@ -99,5 +91,5 @@ spec:
                 }" | jq ".status"
             done
 
-            sleep 60
+            sleep 10
           done
