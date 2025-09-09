@@ -38,7 +38,7 @@ in {
       // listToAttrs (map (iface: nameValuePair "10-${iface}-${networkName}" {
         netdevConfig = {
           Kind = "vlan";
-          Name = "${iface}-${networkName}";
+          Name = "${iface}-${toString network.vlan}";
         };
         vlanConfig.Id = network.vlan;
       }) network.ifaces.t)
@@ -58,15 +58,15 @@ in {
     networks = {}
       # attach vlans to physical ports
       // (concatMapAttrs (ifaceFriendly: iface: let
-        networkNamesUsingThisIface = attrNames (filterAttrs (networkName: network: elem iface network.ifaces.t) networks);
-      in optionalAttrs (length networkNamesUsingThisIface > 0) {
+        vlans = attrValues (mapAttrs (networkName: network: network.vlan) (filterAttrs (networkName: network: elem iface network.ifaces.t) networks));
+      in optionalAttrs (length vlans > 0) {
         "10-${iface}" = {
           matchConfig = {
             Name = iface;
             Type = "ether";
           };
           networkConfig = noip // {
-            VLAN = map (networkName: "${iface}-${networkName}") networkNamesUsingThisIface;
+            VLAN = map (vlan: "${iface}-${toString vlan}") vlans;
           };
         };
       }) ifaces)
@@ -77,7 +77,7 @@ in {
         // listToAttrs (map (iface: nameValuePair "20-${iface}-${networkName}" {
           matchConfig = {
             Type = "vlan";
-            Name = "${iface}-${networkName}";
+            Name = "${iface}-${toString network.vlan}";
           };
           networkConfig.Bridge = "br-${networkName}";
         }) (network.ifaces.t or []))

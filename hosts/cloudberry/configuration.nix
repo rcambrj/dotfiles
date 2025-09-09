@@ -2,7 +2,7 @@
 # this machine is the Internet router
 # it does bridging, vlans, routing, failover, vpn
 #
-{ flake, inputs, ... }: {
+{ flake, inputs, pkgs, ... }: {
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
@@ -72,4 +72,8 @@
     "net.ipv4.conf.all.forwarding" = true;
     "net.ipv6.conf.all.forwarding" = true;
   };
+
+  environment.systemPackages = with pkgs; [
+    speedtest-cli
+  ];
 }

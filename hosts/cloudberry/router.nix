@@ -8,11 +8,11 @@ in {
   config.router = let
     # Dell Wyse 3040 (test machine)
     ifaces' = {
-      wan     = "enp1s0";    # builtin
-      sw0     = "enp0s20u3"; # rear lower usb2
-      lan-0   = "enp0s20u4"; # rear upper usb2
-      spare-0 = "enp0s20u2"; # front left usb2
-      spare-1 = "enp0s20u1"; # front right usb3
+      wan        = "enp1s0";    # builtin
+      vlan-trunk = "enp0s20u1"; # front right usb3
+      lan-0      = "enp0s20u2"; # front left usb2
+      lan-1      = "enp0s20u3"; # rear lower usb2
+      lan-2      = "enp0s20u4"; # rear upper usb2
     };
   in rec {
     ifaces = ifaces';
@@ -64,7 +64,7 @@ in {
         mac  = "16:0c:9e:d1:b3:72";
         vlan = 44;
         ifaces = {
-          t = [ ifaces'.sw0 ];
+          t = [ ifaces'.vlan-trunk ];
           u = [];
         };
         mode   = "static-uplink";
@@ -81,13 +81,13 @@ in {
       lan = rec {
         ifname = "br-lan";
         mac  = "42:b9:31:e0:f6:5f";
-        vlan = 143;
+        vlan = 142;
         ifaces = {
-          t = [ ifaces'.sw0 ];
-          u = [ ifaces'.lan-0 ];
+          t = [ ifaces'.vlan-trunk ];
+          u = [ ifaces'.lan-0 ifaces'.lan-1 ifaces'.lan-2 ];
         };
         mode = "dhcp-server";
-        prefix     = "192.168.143";
+        prefix     = "192.168.142";
         bits       = "24";
         ip         = "${prefix}.1";
         cidr       = "${ip}/${bits}";
@@ -98,13 +98,13 @@ in {
       mgmt = rec {
         ifname = "br-mgmt";
         mac  = "62:b2:63:47:60:ff";
-        vlan = 99;
+        vlan = 1;
         ifaces = {
-          t = [ ifaces'.sw0 ];
+          t = [ ifaces'.vlan-trunk ];
           u = [];
         };
         mode = "dhcp-server";
-        prefix     = "192.168.99";
+        prefix     = "192.168.1";
         bits       = "24";
         ip         = "${prefix}.1";
         cidr       = "${ip}/${bits}";
