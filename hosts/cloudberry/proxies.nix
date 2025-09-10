@@ -20,9 +20,13 @@ with lib;
     locations."/" = {
       proxyPass = "http://${client-ips.switch-0}/";
       recommendedProxySettings = false;
+      # TL-SG108PE is really fussy about the http request
       extraConfig = ''
+        gzip off;
         proxy_set_header Host $proxy_host;
         proxy_set_header Content-Type $http_content_type;
+        proxy_set_header Cookie $http_cookie;
+        proxy_set_header Referer $proxy_host;
       '';
     };
   };
@@ -33,9 +37,13 @@ with lib;
     locations."/" = {
       proxyPass = "http://${client-ips.switch-1}/";
       recommendedProxySettings = false;
+      # TL-SG105PE is really fussy about the http request
       extraConfig = ''
+        gzip off;
         proxy_set_header Host $proxy_host;
         proxy_set_header Content-Type $http_content_type;
+        proxy_set_header Cookie $http_cookie;
+        proxy_set_header Referer $proxy_host;
       '';
     };
   };
