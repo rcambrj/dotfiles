@@ -62,26 +62,32 @@ in {
     };
   };
 
-  # systemd.network.networks = optionalAttrs (network.mode == "pppoe-uplink") {
-  #   "50-${network.ifname}" = {
-  #     matchConfig = {
-  #       Type = "ppp";
-  #       Name = network.ifname;
-  #     };
-  #     networkConfig = {
-  #       KeepConfiguration = "static";
-  #       LLDP = "no";
-  #       EmitLLDP = "no";
-  #       LinkLocalAddressing = "ipv6";
-  #       IPv6AcceptRA = "no";
-  #       IPv6SendRA = "no";
-  #       DHCP = "ipv6";
-  #       DHCPPrefixDelegation = "yes";
-  #     };
-  #     dhcpV6Config = {
-  #       UseHostname = "no"; # Could not set hostname: Access denied
-  #       WithoutRA = "solicit";
-  #     };
-  #   };
-  # };
+  systemd.network.networks = optionalAttrs (network.mode == "pppoe-uplink") {
+    "50-${network.ifname}" = {
+      matchConfig = {
+        Type = "ppp";
+        Name = network.ifname;
+      };
+      networkConfig = {
+        KeepConfiguration = "static";
+        LLDP = "no";
+        EmitLLDP = "no";
+        LinkLocalAddressing = "ipv6";
+        IPv6AcceptRA = "no";
+        IPv6SendRA = "no";
+        DHCP = "ipv6";
+        DHCPPrefixDelegation = "yes";
+      };
+      dhcpV6Config = {
+        UseHostname = "no"; # Could not set hostname: Access denied
+        WithoutRA = "solicit";
+      };
+    };
+  };
+
+  # if networkd restarts, pppoe connection breaks silently.
+  systemd.services.pppd-wan = {
+    after = [ "systemd-networkd.service" ];
+    partOf = [ "systemd-networkd.service" ];
+  };
 }
