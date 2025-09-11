@@ -41,6 +41,7 @@ in {
         };
         kpn-zakelijk = rec {
           ifname = "pppoe-wan";
+          ifname-pppoe = "br-wan";
           vlan   = 6;
           ifaces = {
             t = [ ifaces'.wan ];

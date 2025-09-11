@@ -1,25 +1,28 @@
 { config, lib, pkgs, ... }:
 with lib;
 with config.router;
-{
+let
+  network = networks.wan;
+in {
   services.pppd = {
     enable = true;
     peers.wan = {
-      enable = networks.wan.mode == "pppoe-uplink";
+      enable = network.mode == "pppoe-uplink";
       name = "wan";
       config = let
         ipv4-up = pkgs.writeShellScript "pppd-wan-ipv4-up" ''
-          ${pkgs.iproute2}/bin/ip -4 route replace table ${toString networks.wan.rt} default via $IPREMOTE dev $IFNAME src $IPLOCAL
-          ${pkgs.iproute2}/bin/ip -4 route replace table ${toString networks.wan.rt} $IPREMOTE dev $IFNAME scope link src $IPLOCAL
+          ${pkgs.iproute2}/bin/ip -4 route replace table ${toString network.rt} default via $IPREMOTE dev $IFNAME src $IPLOCAL
+          ${pkgs.iproute2}/bin/ip -4 route replace table ${toString network.rt} $IPREMOTE dev $IFNAME scope link src $IPLOCAL
         '';
         ipv6-up = pkgs.writeShellScript "pppd-wan-ipv6-up" ''
-          # TODO: ipv6
+          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} default via $LLREMOTE dev $IFNAME src $LLLOCAL
+          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} $LLREMOTE dev $IFNAME scope link src $LLLOCAL
         '';
         ipv4-down = pkgs.writeShellScript "pppd-wan-ipv4-down" ''
-          ${pkgs.iproute2}/bin/ip -4 route flush table ${toString networks.wan.rt}
+          ${pkgs.iproute2}/bin/ip -4 route flush table ${toString network.rt}
         '';
         ipv6-down = pkgs.writeShellScript "pppd-wan-ipv6-down" ''
-          # TODO: ipv6
+          ${pkgs.iproute2}/bin/ip -6 route flush table ${toString network.rt}
         '';
       in concatStringsSep "\n" [
           # https://github.com/openwrt/openwrt/blob/main/package/network/services/ppp/files/ppp.sh
@@ -27,8 +30,8 @@ with config.router;
           # pppd help; pppd show-options
 
           "plugin pppoe.so"
-          "br-wan"
-          "ifname pppoe-wan"
+          network.ifname-pppoe
+          "ifname ${network.ifname}"
           "user internet password internet" # KPN doesn't care what the user/pass is
 
           "nodetach"
@@ -36,11 +39,19 @@ with config.router;
           "lcp-echo-interval 1"
           "lcp-echo-failure 5"
           "lcp-echo-adaptive"
-          "noipv6" # deal with this challenge another day
           "maxfail 1"
           "mtu 1492"
           "mru 1492"
+
+          # KPN provides IPv6 via DHCPv6, pppd aquires link local addresses
+          # "noipv6"
+          "+ipv6 ipv6cp-accept-local ipv6cp-use-persistent ipv6cp-accept-remote"
+
+          # pppd doesn't support specifying a routing table, use up/down script
           "nodefaultroute"
+          "nodefaultroute6"
+
+          # use custom dns
           # "usepeerdns"
 
           "ip-up-script ${ipv4-up}"
@@ -50,4 +61,27 @@ with config.router;
         ];
     };
   };
+
+  # systemd.network.networks = optionalAttrs (network.mode == "pppoe-uplink") {
+  #   "50-${network.ifname}" = {
+  #     matchConfig = {
+  #       Type = "ppp";
+  #       Name = network.ifname;
+  #     };
+  #     networkConfig = {
+  #       KeepConfiguration = "static";
+  #       LLDP = "no";
+  #       EmitLLDP = "no";
+  #       LinkLocalAddressing = "ipv6";
+  #       IPv6AcceptRA = "no";
+  #       IPv6SendRA = "no";
+  #       DHCP = "ipv6";
+  #       DHCPPrefixDelegation = "yes";
+  #     };
+  #     dhcpV6Config = {
+  #       UseHostname = "no"; # Could not set hostname: Access denied
+  #       WithoutRA = "solicit";
+  #     };
+  #   };
+  # };
 }
