@@ -127,7 +127,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = base // noipv6;
+            networkConfig = base // noipv6 // noipv4;
             routingPolicyRules = [
               {
                 Priority = network.prio;
