@@ -5,6 +5,10 @@ with lib;
   services.nginx.virtualHosts."lte.router.cambridge.me" = {
     forceSSL = true;
     useACMEHost = "router.cambridge.me";
+    locations."= /" = {
+      # fix javascript redirect
+      return = "301 /index.html";
+    };
     locations."/" = {
       proxyPass = "http://${networks.lte.gw}/";
       recommendedProxySettings = false;
