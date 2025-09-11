@@ -63,7 +63,7 @@ in {
       TEXT="$1"
 
       sleep 5s
-      ${pkgs.curl}/bin/curl "https://api.telegram.org/bot$TOKEN/sendMessage" --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "text=$TEXT" &
+      ${pkgs.curl}/bin/curl "https://api.telegram.org/bot$TOKEN/sendMessage" --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "text=$TEXT" --no-progress-meter &
     '';
   in {
     interval = "10s";
@@ -74,9 +74,9 @@ in {
 
     check-cmd = toString (pkgs.writeShellScript "wan-failover-check" ''
       set -eu
-      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 9.9.9.9 || \
-      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 8.8.8.8 || \
-      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 1.1.1.1
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 8.8.8.8 > /dev/null || \
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 1.1.1.1 > /dev/null || \
+      ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 9.9.9.9 > /dev/null
     '');
 
     on-up-cmd = toString (pkgs.writeShellScript "wan-failover-up" ''
