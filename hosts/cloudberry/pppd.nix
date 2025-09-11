@@ -10,16 +10,21 @@ in {
       enable = network.mode == "pppoe-uplink";
       name = "wan";
       config = let
+        # https://github.com/ppp-project/ppp/blob/master/pppd/ipcp.c "ppp_script_setenv"
         ipv4-up = pkgs.writeShellScript "pppd-wan-ipv4-up" ''
           ${pkgs.iproute2}/bin/ip -4 route replace table ${toString network.rt} default via $IPREMOTE dev $IFNAME src $IPLOCAL
           ${pkgs.iproute2}/bin/ip -4 route replace table ${toString network.rt} $IPREMOTE dev $IFNAME scope link src $IPLOCAL
         '';
-        ipv6-up = pkgs.writeShellScript "pppd-wan-ipv6-up" ''
-          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} default via $LLREMOTE dev $IFNAME src $LLLOCAL
-          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} $LLREMOTE dev $IFNAME scope link src $LLLOCAL
-        '';
         ipv4-down = pkgs.writeShellScript "pppd-wan-ipv4-down" ''
           ${pkgs.iproute2}/bin/ip -4 route flush table ${toString network.rt}
+        '';
+
+        # https://github.com/ppp-project/ppp/blob/master/pppd/ipv6cp.c "ppp_script_setenv"
+        ipv6-up = pkgs.writeShellScript "pppd-wan-ipv6-up" ''
+          # LLREMOTE is a CIDR, but `ip route` expects an address
+          LLREMOTE_ADDR="''${LLREMOTE%%/*}"
+          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} default via $LLREMOTE_ADDR dev $IFNAME
+          ${pkgs.iproute2}/bin/ip -6 route replace table ${toString network.rt} $LLREMOTE dev $IFNAME scope link src $LLLOCAL
         '';
         ipv6-down = pkgs.writeShellScript "pppd-wan-ipv6-down" ''
           ${pkgs.iproute2}/bin/ip -6 route flush table ${toString network.rt}
@@ -55,8 +60,9 @@ in {
           # "usepeerdns"
 
           "ip-up-script ${ipv4-up}"
-          "ipv6-up-script ${ipv6-up}"
           "ip-down-script ${ipv4-down}"
+
+          "ipv6-up-script ${ipv6-up}"
           "ipv6-down-script ${ipv6-down}"
         ];
     };

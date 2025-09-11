@@ -130,6 +130,7 @@ in {
             networkConfig = base // noipv6 // noipv4;
             routingPolicyRules = [
               {
+                Family = "both";
                 Priority = network.prio;
                 Table = network.rt;
               }
