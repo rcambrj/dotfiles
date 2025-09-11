@@ -38,9 +38,11 @@ in {
         }
         chain forward {
           type filter hook forward priority filter; policy drop;
+
           iifname { "${networks.lan.ifname}" } oifname { "${netbird-netdev}", "${networks.wan.ifname}", "${networks.lte.ifname}" } accept
           iifname { "${netbird-netdev}"} oifname { "${networks.lan.ifname}" } accept
           iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } oifname { "${networks.lan.ifname}" } ct state { established, related } accept
+          tcp flags syn / fin,syn,rst,ack jump syn_flood
 
           ${concatMapStringsSep "\n" (pf:
             ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
