@@ -89,6 +89,9 @@ in {
         UseHostname = "no"; # Could not set hostname: Access denied
         WithoutRA = "solicit";
       };
+      dhcpPrefixDelegationConfig = {
+        UplinkInterface = ":self";
+      };
     };
   };
 

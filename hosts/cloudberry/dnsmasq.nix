@@ -39,6 +39,7 @@ with lib;
       dhcp-range = [
         "${networks.lan.ifname},${networks.lan.ip4-prefix}.101,${networks.lan.ip4-prefix}.254"
         "${networks.mgmt.ifname},${networks.mgmt.ip4-prefix}.101,${networks.mgmt.ip4-prefix}.254"
+        # "::,constructor:pppoe-wan"
       ];
 
       domain = "cambridge.me";
