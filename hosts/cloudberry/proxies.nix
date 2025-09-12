@@ -10,7 +10,7 @@ with lib;
       return = "301 /index.html";
     };
     locations."/" = {
-      proxyPass = "http://${networks.lte.gw}/";
+      proxyPass = "http://${networks.lte.ip4-gateway}/";
       recommendedProxySettings = false;
       extraConfig = ''
         proxy_set_header Host $proxy_host;

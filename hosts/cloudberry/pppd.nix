@@ -85,6 +85,7 @@ in {
         DHCPPrefixDelegation = "yes";
       };
       dhcpV6Config = {
+        SendHostname = "no";
         UseHostname = "no"; # Could not set hostname: Access denied
         WithoutRA = "solicit";
       };

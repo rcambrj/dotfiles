@@ -22,7 +22,7 @@ in {
         chain output {
           type filter hook output priority filter + 10;
 
-          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.gw} accept comment "LTE dashboard"
+          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE dashboard"
           oifname "${networks.lte.ifname}" meta l4proto { icmp, icmpv6 } accept
           oifname "${networks.lte.ifname}" jump block-lte
         }

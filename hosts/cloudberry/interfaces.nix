@@ -4,14 +4,15 @@ with lib;
 let
   base = {
     # [Network]
-    LinkLocalAddressing = "no";
+    LinkLocalAddressing = "ipv6";
     EmitLLDP = "no";
     LLDP = "no";
+    IPv6SendRA = "no"; # use dnsmasq instead
   };
   noipv6 = {
     # [Network]
+    LinkLocalAddressing = "no";
     IPv6AcceptRA = "no";
-    IPv6SendRA = "no";
   };
   noipv4 = {
     # [Network]
@@ -113,6 +114,7 @@ in {
             dhcpV4Config = {
               UseHostname = "no"; # Could not set hostname: Access denied
               RouteTable = network.rt;
+              SendHostname = "no";
             };
             routingPolicyRules = [
               {
@@ -127,7 +129,7 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = base // noipv6 // noipv4;
+            networkConfig = base // noip;
             routingPolicyRules = [
               {
                 Family = "both";
@@ -142,11 +144,11 @@ in {
               Name = "br-${networkName}";
             };
             networkConfig = base // noipv6 // {
-              Address = network.cidr;
+              Address = network.ip4-cidr;
             };
             routes = [{
-              Gateway = network.gw;
-              PreferredSource = network.ip;
+              Gateway = network.ip4-gateway;
+              PreferredSource = network.ip4-address;
               Table = network.rt;
             }];
             routingPolicyRules = [
@@ -161,13 +163,13 @@ in {
               Type = "bridge";
               Name = "br-${networkName}";
             };
-            networkConfig = base // noipv6 // {
-              Address = network.cidr;
+            networkConfig = base // {
+              Address = [ network.ip4-cidr network.ip6-cidr ];
               ConfigureWithoutCarrier = true;
             };
             routingPolicyRules = [{
               Priority = 100;
-              To = network.cidr;
+              To = network.ip4-cidr;
             }];
           };
         }."${network.mode}";

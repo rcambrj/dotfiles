@@ -37,15 +37,15 @@ with lib;
         networks.mgmt.ifname
       ];
       dhcp-range = [
-        "${networks.lan.ifname},${networks.lan.dhcp-start},${networks.lan.dhcp-end}"
-        "${networks.mgmt.ifname},${networks.mgmt.dhcp-start},${networks.mgmt.dhcp-end}"
+        "${networks.lan.ifname},${networks.lan.ip4-prefix}.101,${networks.lan.ip4-prefix}.254"
+        "${networks.mgmt.ifname},${networks.mgmt.ip4-prefix}.101,${networks.mgmt.ip4-prefix}.254"
       ];
 
       domain = "cambridge.me";
       expand-hosts = true;
 
       address = [
-        "/router.cambridge.me/${networks.lan.ip}"
+        "/router.cambridge.me/${networks.lan.ip4-address}"
         "/home.cambridge.me/${client-ips.kubernetes-lb}"
       ];
       cname = "orange.cambridge.me,orange.netbird.cloud";

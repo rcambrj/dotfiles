@@ -68,15 +68,15 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [];
         };
-        mode   = "static-uplink";
-        prefix = "192.168.44";
-        bits   = "24";
-        ip     = "${prefix}.3";
-        cidr   = "${ip}/${bits}";
-        gw     = "${prefix}.1";
-        rt     = 583;
-        prio   = uplink-rule-lte;
-        ct     = "0x02000000";
+        mode        = "static-uplink";
+        ip4-prefix  = "192.168.44";
+        ip4-subnet  = "24";
+        ip4-address = "${ip4-prefix}.3";
+        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+        ip4-gateway = "${ip4-prefix}.1";
+        rt          = 583;
+        prio        = uplink-rule-lte;
+        ct          = "0x02000000";
       };
 
       lan = rec {
@@ -87,13 +87,17 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [ ifaces'.lan-0 ifaces'.lan-1 ifaces'.lan-2 ];
         };
-        mode = "dhcp-server";
-        prefix     = "192.168.142";
-        bits       = "24";
-        ip         = "${prefix}.1";
-        cidr       = "${ip}/${bits}";
-        dhcp-start = "${prefix}.101";
-        dhcp-end   = "${prefix}.254";
+        mode        = "dhcp-server";
+
+        ip4-prefix  = "192.168.142";
+        ip4-subnet  = "24";
+        ip4-address = "${ip4-prefix}.1";
+        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+
+        ip6-prefix  = "fd00:cafe:babe";
+        ip6-subnet  = "48";
+        ip6-address = "${ip4-prefix}::1";
+        ip6-cidr    = "${ip4-address}/${ip4-subnet}";
       };
 
       mgmt = rec {
@@ -104,13 +108,17 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [];
         };
-        mode = "dhcp-server";
-        prefix     = "192.168.1";
-        bits       = "24";
-        ip         = "${prefix}.1";
-        cidr       = "${ip}/${bits}";
-        dhcp-start = "${prefix}.2";
-        dhcp-end   = "${prefix}.254";
+        mode        = "dhcp-server";
+
+        ip4-prefix  = "192.168.1";
+        ip4-subnet  = "24";
+        ip4-address = "${ip4-prefix}.1";
+        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+
+        ip6-prefix  = "fd00:dead:beef";
+        ip6-subnet  = "48";
+        ip6-address = "${ip4-prefix}::1";
+        ip6-cidr    = "${ip4-address}/${ip4-subnet}";
       };
     };
 
@@ -155,31 +163,31 @@ in {
     };
 
     client-ips = {
-      switch-0 = "${networks.mgmt.prefix}.2"; # not assigned by dhcp
-      switch-1 = "${networks.mgmt.prefix}.3"; # not assigned by dhcp
-      ap-top   = "${networks.mgmt.prefix}.5";
-      ap-gnd   = "${networks.mgmt.prefix}.6";
+      switch-0 = "${networks.mgmt.ip4-prefix}.2"; # not assigned by dhcp
+      switch-1 = "${networks.mgmt.ip4-prefix}.3"; # not assigned by dhcp
+      ap-top   = "${networks.mgmt.ip4-prefix}.5";
+      ap-gnd   = "${networks.mgmt.ip4-prefix}.6";
       # servers
-      cranberry  = "${networks.lan.prefix}.21";
-      blueberry  = "${networks.lan.prefix}.22";
-      elderberry = "${networks.lan.prefix}.23";
-      cloudberry = "${networks.lan.prefix}.34";
-      gaming-pc  = "${networks.lan.prefix}.26";
+      cranberry  = "${networks.lan.ip4-prefix}.21";
+      blueberry  = "${networks.lan.ip4-prefix}.22";
+      elderberry = "${networks.lan.ip4-prefix}.23";
+      cloudberry = "${networks.lan.ip4-prefix}.34";
+      gaming-pc  = "${networks.lan.ip4-prefix}.26";
       # not assigned by dhcp, metallb arps this address into existence
-      kubernetes-lb = "${networks.lan.prefix}.50";
+      kubernetes-lb = "${networks.lan.ip4-prefix}.50";
 
       # switches
-      sonoff-s20-1 = "${networks.lan.prefix}.51";
-      sonoff-s20-2 = "${networks.lan.prefix}.52";
-      sonoff-s20-3 = "${networks.lan.prefix}.53";
-      sonoff-s20-4 = "${networks.lan.prefix}.54";
-      sonoff-s20-5 = "${networks.lan.prefix}.55";
-      sonoff-s20-6 = "${networks.lan.prefix}.56";
+      sonoff-s20-1 = "${networks.lan.ip4-prefix}.51";
+      sonoff-s20-2 = "${networks.lan.ip4-prefix}.52";
+      sonoff-s20-3 = "${networks.lan.ip4-prefix}.53";
+      sonoff-s20-4 = "${networks.lan.ip4-prefix}.54";
+      sonoff-s20-5 = "${networks.lan.ip4-prefix}.55";
+      sonoff-s20-6 = "${networks.lan.ip4-prefix}.56";
       # sensors
-      ventilator   = "${networks.lan.prefix}.71";
-      dsmr         = "${networks.lan.prefix}.72";
-      somfy-tahoma = "${networks.lan.prefix}.73";
-      solar0       = "${networks.lan.prefix}.74";
+      ventilator   = "${networks.lan.ip4-prefix}.71";
+      dsmr         = "${networks.lan.ip4-prefix}.72";
+      somfy-tahoma = "${networks.lan.ip4-prefix}.73";
+      solar0       = "${networks.lan.ip4-prefix}.74";
     };
 
     hosts = [
