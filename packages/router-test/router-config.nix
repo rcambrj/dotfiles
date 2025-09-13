@@ -11,16 +11,22 @@ in rec {
   telegram-token-path = "/dev/null";
   telegram-group-path = "/dev/null";
 
-  # main    = 32766
-  # default = 32767
-  uplink-rule-override = 32767 + 1000;
-  uplink-rule-wan      = 32767 + 1100;
-  uplink-rule-lte      = 32767 + 1200;
+  uplink-failover = {
+    primary = "wan";
+    secondary = "lte";
+    rule-prio = {
+      # main    = 32766
+      # default = 32767
+      override  = 32767 + 1000;
+      primary   = 32767 + 1100;
+      secondary = 32767 + 1200;
+    };
+  };
 
   networks = {
     wan = rec {
       rt   = 926;
-      prio = uplink-rule-wan;
+      prio = uplink-failover.rule-prio.primary;
       mac  = "00:00:00:00:00:01";
       ifname = "br-wan";
       ifaces = {
@@ -45,7 +51,7 @@ in rec {
       ip4-cidr    = "${ip4-address}/${ip4-subnet}";
       ip4-gateway = "${ip4-prefix}.1";
       rt          = 583;
-      prio        = uplink-rule-lte;
+      prio        = uplink-failover.rule-prio.secondary;
       ct          = "0x02000000";
     };
 

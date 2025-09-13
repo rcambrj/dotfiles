@@ -6,8 +6,8 @@ with lib;
     ./firewall.nix
     ./interfaces.nix
     ./pppd.nix
+    ./uplink-failover.nix
     ./upnp.nix
-    ./wan-failover.nix
   ];
 
   options.router = mkOption {

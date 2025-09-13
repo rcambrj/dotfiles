@@ -21,6 +21,7 @@
     ./http
     ./unifi.nix
     ./proxies.nix
+    ./wan-status.nix
   ];
 
   networking.hostName = "cloudberry";

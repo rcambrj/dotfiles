@@ -27,18 +27,22 @@ in {
 
     ifaces = ifaces';
 
-    # main    = 32766
-    # default = 32767
-    uplink-rule-override = 32767 + 1000;
-    uplink-rule-wan      = 32767 + 1100;
-    uplink-rule-lte      = 32767 + 1200;
-
-    wan-profile = "kpn-zakelijk";
+    uplink-failover = {
+      primary = "wan";
+      secondary = "lte";
+      rule-prio = {
+        # main    = 32766
+        # default = 32767
+        override  = 32767 + 1000;
+        primary   = 32767 + 1100;
+        secondary = 32767 + 1200;
+      };
+    };
 
     networks = {
       wan = recursiveUpdate rec {
         rt   = 926;
-        prio = uplink-rule-wan;
+        prio = uplink-failover.rule-prio.primary;
         mac  = "fe:d7:9c:98:73:d2";
         ping-targets = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
       } {
@@ -69,7 +73,7 @@ in {
           };
           mode = "dhcp-uplink";
         };
-      }."${wan-profile}";
+      }."kpn-zakelijk";
 
       lte = rec {
         ifname = "br-lte";
@@ -86,7 +90,7 @@ in {
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
         ip4-gateway = "${ip4-prefix}.1";
         rt          = 583;
-        prio        = uplink-rule-lte;
+        prio        = uplink-failover.rule-prio.secondary;
         ct          = "0x02000000";
       };
 
