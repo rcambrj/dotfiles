@@ -72,9 +72,9 @@ in {
         ${pkgs.curl}/bin/curl "https://api.telegram.org/bot$TOKEN/sendMessage" --data-urlencode "chat_id=$CHAT_ID" --data-urlencode "text=$TEXT" --no-progress-meter &
       '';
     in {
-      interval = "10s";
-      rise-n = "3";
-      fall-n = "3";
+      interval = uplink-failover.interval;
+      rise-n = uplink-failover.rise-n;
+      fall-n = uplink-failover.fall-n;
       initial-state = "UNKNOWN";
       check-timeout = "5s";
 

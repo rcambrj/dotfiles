@@ -28,7 +28,10 @@ in {
     ifaces = ifaces';
 
     uplink-failover = {
-      primary = "wan";
+      interval  = "10s";
+      rise-n    = "3";
+      fall-n    = "3";
+      primary   = "wan";
       secondary = "lte";
       rule-prio = {
         # main    = 32766

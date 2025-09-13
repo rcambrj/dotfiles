@@ -12,7 +12,10 @@ in rec {
   telegram-group-path = "/dev/null";
 
   uplink-failover = {
-    primary = "primary";
+    interval  = "1s";
+    rise-n    = "2";
+    fall-n    = "2";
+    primary   = "primary";
     secondary = "secondary";
     rule-prio = {
       # main    = 32766
