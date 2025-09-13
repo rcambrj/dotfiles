@@ -2,7 +2,7 @@
 with config.router;
 with lib;
 let
-  wan-status-dir = "/var/run/wan-status";
+  wan-status-dir = "/run/wan-status";
   wan-status-file = "${wan-status-dir}/index.txt";
 in {
   imports = [

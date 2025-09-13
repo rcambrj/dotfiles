@@ -3,7 +3,7 @@
     forceSSL = true;
     useACMEHost = "router.cambridge.me";
     locations."/" = {
-      root = "/var/run/wan-status";
+      root = "/run/wan-status";
       index = "index.txt";
     };
   };
