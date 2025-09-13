@@ -1,4 +1,4 @@
-args@{ config, lib, pkgs, ... }: with lib; let
+{ config, lib, pkgs, ... }: with lib; let
   cfg = config.services.kubernetes-manifests;
 in {
   imports = [

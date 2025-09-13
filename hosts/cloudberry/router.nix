@@ -1,20 +1,30 @@
-{ config, lib, ... }: with lib; let
-  cfg = config.router;
+{ inputs, config, lib, ... }:
+with lib;
+let
+  # Dell Wyse 3040 (test machine)
+  ifaces' = {
+    wan        = "enp1s0";    # builtin
+    vlan-trunk = "enp0s20u1"; # front right usb3
+    lan-0      = "enp0s20u2"; # front left usb2
+    lan-1      = "enp0s20u3"; # rear lower usb2
+    lan-2      = "enp0s20u4"; # rear upper usb2
+  };
+  netbird-netdev = config.services.netbird.clients.default.interface;
+  netbird-port   = config.services.netbird.clients.default.port;
 in {
-  options.router = mkOption {
-    # TODO: make options structure more strict once changes slow down
+  imports = [
+    inputs.self.nixosModules.router
+  ];
+
+  age.secrets = {
+    telegram-router-bot-key.file = ../../secrets/telegram-router-bot-key.age;
+    telegram-group.file = ../../secrets/telegram-group.age;
   };
 
-  config.router = let
-    # Dell Wyse 3040 (test machine)
-    ifaces' = {
-      wan        = "enp1s0";    # builtin
-      vlan-trunk = "enp0s20u1"; # front right usb3
-      lan-0      = "enp0s20u2"; # front left usb2
-      lan-1      = "enp0s20u3"; # rear lower usb2
-      lan-2      = "enp0s20u4"; # rear upper usb2
-    };
-  in rec {
+  router = rec {
+    telegram-token-path = config.age.secrets.telegram-router-bot-key.path;
+    telegram-group-path = config.age.secrets.telegram-group.path;
+
     ifaces = ifaces';
 
     # main    = 32766
@@ -30,6 +40,7 @@ in {
         rt   = 926;
         prio = uplink-rule-wan;
         mac  = "fe:d7:9c:98:73:d2";
+        ping-targets = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
       } {
         dev-mode = rec {
           ifname = "br-wan";
@@ -120,6 +131,24 @@ in {
         ip6-address = "${ip4-prefix}::1";
         ip6-cidr    = "${ip4-address}/${ip4-subnet}";
       };
+    };
+
+    firewall = {
+      input = ''
+        tcp dport 22 accept
+        iifname != "lo" tcp dport 8443 drop comment "Unifi controller self-signed HTTPS"
+        iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString netbird-port} accept
+        iifname "${netbird-netdev}" accept
+      '';
+      forward = ''
+        ip saddr ${client-ips.solar0} drop
+        iifname "${networks.lan.ifname}" oifname "${netbird-netdev}" accept
+        iifname "${netbird-netdev}"}     oifname "${networks.lan.ifname}" accept
+      '';
+    };
+    dns = {
+      "router.cambridge.me" = networks.lan.ip4-address;
+      "home.cambridge.me" = client-ips.kubernetes-lb;
     };
 
     mac = {

@@ -17,15 +17,9 @@
     flake.nixosModules.server-backup
 
     ./router.nix
-    ./dnsmasq.nix
-    ./interfaces.nix
-    ./firewall.nix
-    ./upnp.nix
-    ./wan-failover.nix
     ./ddns.nix
     ./http
     ./unifi.nix
-    ./pppd.nix
     ./proxies.nix
   ];
 
