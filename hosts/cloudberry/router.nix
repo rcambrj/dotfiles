@@ -149,7 +149,14 @@ in {
         iifname "${networks.lan.ifname}" oifname "${netbird-netdev}" accept
         iifname "${netbird-netdev}"      oifname "${networks.lan.ifname}" accept
       '';
+      uplink-failover = {
+        forward = '''';
+        output = ''
+            oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"
+        '';
+      };
     };
+
     dns = {
       "router.cambridge.me" = networks.lan.ip4-address;
       "home.cambridge.me" = client-ips.kubernetes-lb;

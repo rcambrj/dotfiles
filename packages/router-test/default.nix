@@ -8,7 +8,7 @@ in
 pkgs.testers.runNixOSTest {
   name = "router";
   nodes = {
-    wan_gateway = { pkgs, ... }: let
+    primary_gw = { pkgs, ... }: let
       ifname = "enp1s0";
     in {
       virtualisation.interfaces = {
@@ -35,7 +35,7 @@ pkgs.testers.runNixOSTest {
       };
     };
 
-    lte_gateway = { pkgs, ... }: let
+    secondary_gw = { pkgs, ... }: let
       ifname = "enp1s0";
     in {
       virtualisation.interfaces = {
@@ -89,10 +89,10 @@ pkgs.testers.runNixOSTest {
   testScript = ''
     start_all()
 
-    wan_gateway.wait_for_unit("dnsmasq")
+    primary_gw.wait_for_unit("dnsmasq")
 
-    lte_gateway.wait_for_unit("multi-user.target")
-    print(lte_gateway.execute("ip -br a"))
+    secondary_gw.wait_for_unit("multi-user.target")
+    print(secondary_gw.execute("ip -br a"))
 
     router.wait_until_succeeds("ping -c 1 -I br-wan 10.11.0.1", 10)
 

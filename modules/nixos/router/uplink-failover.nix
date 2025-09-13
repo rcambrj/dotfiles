@@ -24,18 +24,21 @@ in {
           chain forward {
             type filter hook forward priority filter + 10;
 
+            ${firewall.uplink-failover.forward}
+
             oifname { "${secondary.ifname}" } meta l4proto { icmp, icmpv6 } accept
             oifname "${secondary.ifname}" jump block-secondary-uplink
           }
           chain output {
             type filter hook output priority filter + 10;
 
-            oifname "${secondary.ifname}" ip daddr ${secondary.ip4-gateway} accept comment "LTE dashboard"
+            ${firewall.uplink-failover.output}
+
             oifname "${secondary.ifname}" meta l4proto { icmp, icmpv6 } accept
             oifname "${secondary.ifname}" jump block-secondary-uplink
           }
           chain block-secondary-uplink {
-            # LTE blocked by default. script to unblock in case of failover
+            # secondary blocked by default. script to unblock in case of failover
             oifname "${secondary.ifname}" reject
           }
           chain postrouting {
