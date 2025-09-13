@@ -5,7 +5,7 @@ with lib;
   options = {};
   config = {
     services.miniupnpd = {
-      enable = true;
+      enable = false; # TODO: enable this with logic to switch the externalInterface based on wan-failover
       upnp = true;
       natpmp = true;
       internalIPs = [ networks.lan.ifname ];
