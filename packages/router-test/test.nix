@@ -1,12 +1,17 @@
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
+  test-router = (import ./test-router.nix) { inherit primary-gateway; };
+
   primary-prefix = "10.11.0";
   primary-gateway = "${primary-prefix}.1";
-  router-config = (import ./test-router.nix) { inherit primary-gateway; };
-  secondary-gateway = router-config.networks.secondary.ip4-gateway;
-  secondary-adjacent = "${router-config.networks.secondary.ip4-prefix}.100";
-  common-address = "10.55.0.1";
+  secondary-gateway = test-router.networks.secondary.ip4-gateway;
+  secondary-adjacent = "${test-router.networks.secondary.ip4-prefix}.100";
+  common-gateway = "10.55.0.1";
+
+  router-lan0 = test-router.networks.lan0.ip4-address;
+  client0 = "${test-router.networks.lan0.ip4-prefix}.10";
+  client1 = "${test-router.networks.lan0.ip4-prefix}.11";
 
   useBase = cfg: recursiveUpdate cfg {
     networking.useDHCP = false;
@@ -33,7 +38,7 @@ pkgs.testers.runNixOSTest {
         networkConfig = {
           Address = [
             # to test traffic on the chosen network route
-            "${common-address}/24"
+            "${common-gateway}/24"
             # to test traffic to the gateway
             "${primary-gateway}/24"
           ];
@@ -64,18 +69,21 @@ pkgs.testers.runNixOSTest {
           Kind = "vlan";
           Name = "vlan";
         };
-        vlanConfig.Id = router-config.networks.secondary.vlan;
+        vlanConfig.Id = test-router.networks.secondary.vlan;
       };
       systemd.network.networks."10-vlan" = {
         matchConfig.Name = ifname;
-        networkConfig.VLAN = "vlan";
+        networkConfig = {
+          LinkLocalAddressing = "no";
+          VLAN = "vlan";
+        };
       };
       systemd.network.networks."10-downlink" = {
         matchConfig.Name = "vlan";
         networkConfig = {
           Address = [
             # to test traffic on the chosen network route
-            "${common-address}/24"
+            "${common-gateway}/24"
             # to test traffic to the gateway
             "${secondary-gateway}/24"
             # to test traffic to an address other than the gateway (simulates data usage)
@@ -90,24 +98,67 @@ pkgs.testers.runNixOSTest {
       };
     };
 
-    router = { pkgs, ... }: ({
+    router = { pkgs, ... }: {
       imports = [
         inputs.self.nixosModules.router
       ];
       virtualisation.interfaces = {
-        "${router-config.ifaces.primary}".vlan    = 1;
-        "${router-config.ifaces.vlan-trunk}".vlan = 2;
-        "${router-config.ifaces.lan-0}".vlan      = 3;
+        "${test-router.ifaces.primary}".vlan    = 1;
+        "${test-router.ifaces.vlan-trunk}".vlan = 2;
+        "${test-router.ifaces.lan-0}".vlan      = 3;
       };
-      router = router-config;
-    });
+      router = test-router;
+    };
+
+    client0 = { pkgs, ... }: let
+      ifname = "enp1s0";
+    in useBase {
+      networking.hostName = "client0";
+      virtualisation.interfaces = {
+        ${ifname}.vlan = 3;
+      };
+      systemd.network.networks."10-lan0" = {
+        matchConfig.Name = ifname;
+        networkConfig = {
+          DHCP = "yes";
+          Address = "${client0}/24";
+        };
+      };
+    };
+
+    client1 = { pkgs, ... }: let
+      ifname = "enp1s0";
+    in useBase {
+      networking.hostName = "client1";
+      virtualisation.interfaces = {
+        ${ifname}.vlan = 2;
+      };
+      systemd.network.netdevs."10-vlan" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "vlan";
+        };
+        vlanConfig.Id = test-router.networks.lan0.vlan;
+      };
+      systemd.network.networks."10-vlan" = {
+        matchConfig.Name = ifname;
+        networkConfig = {
+          LinkLocalAddressing = "no";
+          VLAN = "vlan";
+        };
+      };
+      systemd.network.networks."10-lan0" = {
+        matchConfig.Name = "vlan";
+        networkConfig = {
+          DHCP = "yes";
+          Address = "${client1}/24";
+        };
+      };
+    };
   };
 
   testScript = ''
     start_all()
-
-    primary_gw.wait_for_unit('dnsmasq')
-    secondary_gw.wait_for_unit('multi-user.target')
 
     # uplink is primary_gw
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 30)
@@ -118,30 +169,67 @@ pkgs.testers.runNixOSTest {
     # ping the secondary gateway
     router.wait_until_succeeds('ping -c 1 -I br-secondary ${secondary-gateway}', 10)
 
+    #########################################
+    ##               OUTPUT                ##
+    #########################################
+
     # curl the secondary gateway dashboard
-    router.succeed('curl -vis --interface br-secondary http://${secondary-gateway}:8787')
+    router.succeed('curl -m 2 -vis --interface br-secondary http://${secondary-gateway}:8787')
 
     # traffic to elsewhere on the secondary uplink
     # ping should succeed to anywhere
     # other traffic must be blocked
     router.succeed('ping -c 1 -I br-secondary ${secondary-adjacent}')
-    router.fail('curl -vis --interface br-secondary http://${secondary-adjacent}:8787')
+    router.fail('curl -m 2 -vis --interface br-secondary http://${secondary-adjacent}:8787')
 
-    # traffic without a specified interface should go through primary (and hit primary_gw)
-    router.succeed('curl -vis http://${common-address}:8787 | grep "dst=primary"')
+    # traffic without a specified interface should go through primary uplink
+    router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
 
-    # stop primary_gw responses (simulate offline)
-    primary_gw.succeed('iptables -A OUTPUT -j DROP')
+    # simulate primary uplink offline
+    primary_gw.succeed('iptables -t raw -A PREROUTING -j DROP')
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=DOWN', 10)
 
-    # traffic without a specified interface should go through secondary (and hit secondary_gw)
-    router.succeed('curl -vis http://${common-address}:8787 | grep "dst=secondary"')
+    # traffic without a specified interface should go through secondary uplink
+    router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=secondary"')
 
-    # restart primary_gw responses (simulate online)
-    primary_gw.succeed('iptables -D OUTPUT -j DROP')
+    # simulate primary uplink online
+    primary_gw.succeed('iptables -t raw -D PREROUTING -j DROP')
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 10)
 
-    # traffic without a specified interface should go through primary (and hit primary_gw)
-    router.succeed('curl -vis http://${common-address}:8787 | grep "dst=primary"')
+    # traffic without a specified interface should go through primary uplink
+    router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
+
+    #########################################
+    ##               BRIDGE                ##
+    #########################################
+
+    # traffic between clients on a bridge (untagged <> tagged vlan)
+    client0.wait_until_succeeds('ping -c 1 ${router-lan0}', 10)
+    client0.wait_until_succeeds('ping -c 1 ${client1}', 10)
+    client1.wait_until_succeeds('ping -c 1 ${router-lan0}', 10)
+    client1.wait_until_succeeds('ping -c 1 ${client0}', 10)
+
+    print(client0.succeed('ip -br a && ip rule && ip ro show table all'))
+
+    #########################################
+    ##               FORWARD               ##
+    #########################################
+
+    # traffic forwarded through the router should go through primary uplink
+    client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
+
+    # simulate primary uplink offline
+    primary_gw.succeed('iptables -t raw -A PREROUTING -j DROP')
+    router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=DOWN', 10)
+
+    # traffic forwarded through the router should go through secondary uplink
+    client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=secondary"')
+
+    # simulate primary uplink online
+    primary_gw.succeed('iptables -t raw -D PREROUTING -j DROP')
+    router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 10)
+
+    # traffic forwarded through the router should go through primary uplink
+    client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
   '';
 }
