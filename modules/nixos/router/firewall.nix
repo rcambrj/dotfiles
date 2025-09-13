@@ -24,10 +24,10 @@ with lib;
 
             ${firewall.input}
 
+            tcp flags syn / fin,syn,rst,ack jump flood
+            meta l4proto { icmp, icmpv6 } jump flood
             iifname { "${networks.lan.ifname}", "${networks.mgmt.ifname}" } accept
             iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct state { established, related } accept
-            tcp flags syn / fin,syn,rst,ack jump syn_flood
-            iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta l4proto { icmp, icmpv6 } limit rate 100/second accept
             iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
             iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
             iifname "lo" accept
@@ -37,9 +37,10 @@ with lib;
 
             ${firewall.forward}
 
+            tcp flags syn / fin,syn,rst,ack jump flood
+            meta l4proto { icmp, icmpv6 } jump flood
             iifname { "${networks.lan.ifname}" } oifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } accept
             iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } oifname { "${networks.lan.ifname}" } ct state { established, related } accept
-            tcp flags syn / fin,syn,rst,ack jump syn_flood
 
             ${concatMapStringsSep "\n" (pf:
               ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
@@ -50,7 +51,7 @@ with lib;
             iifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
             oifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
           }
-          chain syn_flood {
+          chain flood {
             limit rate 25/second burst 50 packets return
             drop
           }
