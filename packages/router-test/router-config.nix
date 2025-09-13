@@ -1,7 +1,7 @@
-{ wan-gateway, ... }:
+{ primary-gateway, ... }:
 let
   ifaces' = {
-    wan        = "enp1s0";
+    primary    = "enp1s0";
     vlan-trunk = "enp1s1";
     lan-0      = "enp1s2";
   };
@@ -12,8 +12,8 @@ in rec {
   telegram-group-path = "/dev/null";
 
   uplink-failover = {
-    primary = "wan";
-    secondary = "lte";
+    primary = "primary";
+    secondary = "secondary";
     rule-prio = {
       # main    = 32766
       # default = 32767
@@ -24,20 +24,20 @@ in rec {
   };
 
   networks = {
-    wan = rec {
+    primary = rec {
       rt   = 926;
       prio = uplink-failover.rule-prio.primary;
       mac  = "00:00:00:00:00:01";
-      ifname = "br-wan";
+      ifname = "br-primary";
       ifaces = {
         t = [];
-        u = [ ifaces'.wan ];
+        u = [ ifaces'.primary ];
       };
       mode = "dhcp-uplink";
-      ping-targets = [ wan-gateway ];
+      ping-targets = [ primary-gateway ];
     };
-    lte = rec {
-      ifname = "br-lte";
+    secondary = rec {
+      ifname = "br-secondary";
       mac  = "00:00:00:00:00:02";
       vlan = 44;
       ifaces = {
@@ -55,8 +55,8 @@ in rec {
       ct          = "0x02000000";
     };
 
-    lan = rec {
-      ifname = "br-lan";
+    lan0 = rec {
+      ifname = "br-lan0";
       mac  = "00:00:00:00:00:03";
       vlan = 142;
       ifaces = {
@@ -76,8 +76,8 @@ in rec {
       ip6-cidr    = "${ip4-address}/${ip4-subnet}";
     };
 
-    mgmt = rec {
-      ifname = "br-mgmt";
+    lan1 = rec {
+      ifname = "br-lan1";
       mac  = "00:00:00:00:00:04";
       vlan = 1;
       ifaces = {
@@ -108,7 +108,7 @@ in rec {
     uplink-failover = {
       forward = '''';
       output = ''
-          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"
+        oifname "${networks.secondary.ifname}" ip daddr ${networks.secondary.ip4-gateway} accept comment "secondary modem dashboard"
       '';
     };
   };
@@ -122,7 +122,7 @@ in rec {
   };
 
   client-ips = {
-    test-client = "${networks.lan.ip4-prefix}.2";
+    test-client = "${networks.lan0.ip4-prefix}.2";
   };
 
   hosts = [

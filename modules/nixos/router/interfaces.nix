@@ -28,12 +28,11 @@ in {
 
     systemd.network = {
       config = {
-        routeTables = {
-          # these aliases are not used programmatically
-          # just nice-to-haves for monitoring/debugging
-          "wan" = networks.wan.rt;
-          "lte" = networks.lte.rt;
-        };
+        # these aliases are not used programmatically
+        # just nice-to-haves for monitoring/debugging
+        routeTables = concatMapAttrs (networkName: network:
+          optionalAttrs ((network.rt or "") != "") { "${networkName}" = network.rt; }
+        ) networks;
       };
 
       #

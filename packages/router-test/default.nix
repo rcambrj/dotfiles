@@ -1,9 +1,15 @@
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
-  wan-prefix = "10.11.0";
-  wan-gateway = "${wan-prefix}.1";
-  router-config = (import ./router-config.nix) { inherit wan-gateway; };
+  primary-prefix = "10.11.0";
+  primary-gateway = "${primary-prefix}.1";
+  router-config = (import ./router-config.nix) { inherit primary-gateway; };
+  webserver = {
+    services.static-web-server = {
+      enable = true;
+      root = pkgs.writeText "index.html" ''Hello World!'';
+    };
+  };
 in
 pkgs.testers.runNixOSTest {
   name = "router";
@@ -22,7 +28,7 @@ pkgs.testers.runNixOSTest {
       systemd.network.networks."10-downlink" = {
         matchConfig.Name = ifname;
         networkConfig = {
-          Address = "${wan-gateway}/24";
+          Address = "${primary-gateway}/24";
           ConfigureWithoutCarrier = true;
         };
       };
@@ -30,14 +36,14 @@ pkgs.testers.runNixOSTest {
         enable = true;
         settings = {
           interface = ifname;
-          dhcp-range = "${ifname},${wan-prefix}.101,${wan-prefix}.254";
+          dhcp-range = "${ifname},${primary-prefix}.101,${primary-prefix}.254";
         };
       };
     };
 
     secondary_gw = { pkgs, ... }: let
       ifname = "enp1s0";
-    in {
+    in webserver // {
       virtualisation.interfaces = {
         ${ifname}.vlan = 2;
       };
@@ -51,7 +57,7 @@ pkgs.testers.runNixOSTest {
           Kind = "vlan";
           Name = "vlan";
         };
-        vlanConfig.Id = router-config.networks.lte.vlan;
+        vlanConfig.Id = router-config.networks.secondary.vlan;
       };
       systemd.network.networks."10-vlan" = {
         matchConfig.Name = ifname;
@@ -64,9 +70,9 @@ pkgs.testers.runNixOSTest {
         networkConfig = {
           Address = [
             # to test traffic to the modem
-            "${router-config.networks.lte.ip4-gateway}/24"
+            "${router-config.networks.secondary.ip4-gateway}/24"
             # to test traffic to an address other than the modem (simulates data usage)
-            "${router-config.networks.lte.ip4-prefix}.100/24"
+            "${router-config.networks.secondary.ip4-prefix}.100/24"
           ];
           ConfigureWithoutCarrier = true;
         };
@@ -78,7 +84,7 @@ pkgs.testers.runNixOSTest {
         inputs.self.nixosModules.router
       ];
       virtualisation.interfaces = {
-        "${router-config.ifaces.wan}".vlan        = 1;
+        "${router-config.ifaces.primary}".vlan    = 1;
         "${router-config.ifaces.vlan-trunk}".vlan = 2;
         "${router-config.ifaces.lan-0}".vlan      = 3;
       };
@@ -94,9 +100,13 @@ pkgs.testers.runNixOSTest {
     secondary_gw.wait_for_unit("multi-user.target")
     print(secondary_gw.execute("ip -br a"))
 
-    router.wait_until_succeeds("ping -c 1 -I br-wan 10.11.0.1", 10)
-
-    router.wait_until_succeeds("ping -c 1 -I br-lte ${router-config.networks.lte.ip4-gateway}", 10)
+    # test traffic to the primary gateway
+    router.wait_until_succeeds("ping -c 1 -I br-primary 10.11.0.1", 10)
+    # test traffic to the secondary gateway
+    router.wait_until_succeeds("ping -c 1 -I br-secondary ${router-config.networks.secondary.ip4-gateway}", 10)
+    # test traffic to elsewhere on the secondary uplink (blocked)
+    router.succeed("curl --interface br-secondary http://${router-config.networks.secondary.ip4-gateway}:8787")
+    router.fail("curl --interface br-secondary http://${router-config.networks.secondary.ip4-prefix}.100:8787")
 
   '';
 }

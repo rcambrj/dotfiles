@@ -1,7 +1,9 @@
 { config, lib, pkgs, ... }:
 with config.router;
 with lib;
-{
+let
+  dhcpNetworks = filterAttrs (networkName: network: network.mode == "dhcp-server") networks;
+in {
   options = {};
   config = {
     services.resolved.enable = false;
@@ -34,15 +36,10 @@ with lib;
           "/*.netbird.cloud/127.0.0.62#5053"
         ];
 
-        interface = [
-          networks.lan.ifname
-          networks.mgmt.ifname
-        ];
-        dhcp-range = [
-          "${networks.lan.ifname},${networks.lan.ip4-prefix}.101,${networks.lan.ip4-prefix}.254"
-          "${networks.mgmt.ifname},${networks.mgmt.ip4-prefix}.101,${networks.mgmt.ip4-prefix}.254"
-          # "::,constructor:pppoe-wan"
-        ];
+        interface = mapAttrsToList (networkName: network: network.ifname) dhcpNetworks;
+        dhcp-range = mapAttrsToList (networkName: network:
+          "${network.ifname},${network.ip4-prefix}.101,${network.ip4-prefix}.254"
+        ) dhcpNetworks;
 
         domain = "cambridge.me";
         expand-hosts = true;

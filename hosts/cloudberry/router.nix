@@ -152,7 +152,7 @@ in {
       uplink-failover = {
         forward = '''';
         output = ''
-            oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"
+          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"
         '';
       };
     };
