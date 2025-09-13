@@ -6,7 +6,16 @@
 { config, lib, pkgs, ... }:
 with config.router;
 with lib;
-{
+let
+  uplinks = filterAttrs (networkName: network: elem network.mode [
+    "dhcp-uplink" "pppoe-uplink" "static-uplink"
+  ]) networks;
+  uplinkIfnames = concatMapAttrsStringSep "," (networkName: network: ''"${network.ifname}"'') uplinks;
+  downlinks = filterAttrs (networkName: network: elem network.mode [
+    "dhcp-server"
+  ]) networks;
+  downlinkIfnames = concatMapAttrsStringSep "," (networkName: network: ''"${network.ifname}"'') downlinks;
+in {
   options = {};
   config = {
     # networking.nat.externalInterface only supports one uplink
@@ -26,10 +35,10 @@ with lib;
 
             tcp flags syn / fin,syn,rst,ack jump flood
             meta l4proto { icmp, icmpv6 } jump flood
-            iifname { "${networks.lan.ifname}", "${networks.mgmt.ifname}" } accept
-            iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct state { established, related } accept
-            iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
-            iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
+            iifname { ${downlinkIfnames} } accept
+            iifname { ${uplinkIfnames} } ct state { established, related } accept
+            iifname { ${uplinkIfnames} } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
+            iifname { ${uplinkIfnames} } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
             iifname "lo" accept
           }
           chain forward {
@@ -39,17 +48,17 @@ with lib;
 
             tcp flags syn / fin,syn,rst,ack jump flood
             meta l4proto { icmp, icmpv6 } jump flood
-            iifname { "${networks.lan.ifname}" } oifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } accept
-            iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } oifname { "${networks.lan.ifname}" } ct state { established, related } accept
+            iifname { ${downlinkIfnames} } oifname { ${uplinkIfnames} } accept
+            iifname { ${uplinkIfnames} } oifname { ${downlinkIfnames} } ct state { established, related } accept
 
             ${concatMapStringsSep "\n" (pf:
-              ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
+              ''iifname { ${uplinkIfnames} } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
             ) port-forwards}
           }
           chain mangle_forward {
             type filter hook forward priority mangle; policy accept;
-            iifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
-            oifname { "${networks.wan.ifname}" } tcp flags syn tcp option maxseg size set rt mtu
+            iifname { ${uplinkIfnames} } tcp flags syn tcp option maxseg size set rt mtu
+            oifname { ${uplinkIfnames} } tcp flags syn tcp option maxseg size set rt mtu
           }
           chain flood {
             limit rate 25/second burst 50 packets return
@@ -64,12 +73,12 @@ with lib;
             type nat hook prerouting priority dstnat;
 
             ${concatMapStringsSep "\n" (pf:
-              ''iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } ${pf.proto} dport { ${concatStringsSep "," pf.ports} } dnat to ${pf.to}''
+              ''iifname { ${uplinkIfnames} } ${pf.proto} dport { ${concatStringsSep "," pf.ports} } dnat to ${pf.to}''
             ) port-forwards}
           }
           chain srcnat {
             type nat hook postrouting priority srcnat;
-            oifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } masquerade
+            oifname { ${uplinkIfnames} } masquerade
           }
         '';
       };
