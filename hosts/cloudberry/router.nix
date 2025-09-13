@@ -143,7 +143,7 @@ in {
       forward = ''
         ip saddr ${client-ips.solar0} drop
         iifname "${networks.lan.ifname}" oifname "${netbird-netdev}" accept
-        iifname "${netbird-netdev}"}     oifname "${networks.lan.ifname}" accept
+        iifname "${netbird-netdev}"      oifname "${networks.lan.ifname}" accept
       '';
     };
     dns = {

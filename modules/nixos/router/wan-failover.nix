@@ -71,9 +71,9 @@ in {
 
       check-cmd = toString (pkgs.writeShellScript "wan-failover-check" ''
         set -eu
-        ${concatMapStringsSep " || " (target: ''
-          ${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 ${target} > /dev/null
-        '') networks.wan.ping-targets}
+        ${concatMapStringsSep " || " (target:
+          ''${pkgs.iputils}/bin/ping -I ${networks.wan.ifname} -c1 -W1 ${target} > /dev/null''
+        ) networks.wan.ping-targets}
       '');
 
       on-up-cmd = toString (pkgs.writeShellScript "wan-failover-up" ''
