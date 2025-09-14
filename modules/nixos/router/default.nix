@@ -4,6 +4,7 @@ with lib;
   imports = [
     ./dnsmasq.nix
     ./firewall.nix
+    ./forwarding.nix
     ./interfaces.nix
     ./pppd.nix
     ./uplink-failover.nix

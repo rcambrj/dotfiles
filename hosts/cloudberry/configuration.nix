@@ -65,8 +65,6 @@
 
   boot.kernel.sysctl = {
     "net.ipv6.conf.all.disable_ipv6" = true; # TODO: enable ipv6
-    "net.ipv4.conf.all.forwarding" = true;
-    "net.ipv6.conf.all.forwarding" = true;
   };
 
   environment.systemPackages = with pkgs; [
