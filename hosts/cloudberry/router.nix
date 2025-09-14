@@ -128,7 +128,7 @@ in {
         };
         mode        = "dhcp-server";
 
-        ip4-prefix  = "192.168.1";
+        ip4-prefix  = "192.168.99";
         ip4-subnet  = "24";
         ip4-address = "${ip4-prefix}.1";
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
@@ -209,8 +209,8 @@ in {
     client-ips = {
       switch-0 = "${networks.mgmt.ip4-prefix}.2"; # not assigned by dhcp
       switch-1 = "${networks.mgmt.ip4-prefix}.3"; # not assigned by dhcp
-      ap-top   = "${networks.mgmt.ip4-prefix}.5";
-      ap-gnd   = "${networks.mgmt.ip4-prefix}.6";
+      ap-top   = "${networks.mgmt.ip4-prefix}.5"; # not assigned by dhcp
+      ap-gnd   = "${networks.mgmt.ip4-prefix}.6"; # not assigned by dhcp
       # servers
       cranberry  = "${networks.lan.ip4-prefix}.21";
       blueberry  = "${networks.lan.ip4-prefix}.22";
