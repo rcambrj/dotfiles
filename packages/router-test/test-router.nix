@@ -58,8 +58,8 @@ in rec {
       ct          = "0x02000000";
     };
 
-    lan0 = rec {
-      ifname = "br-lan0";
+    lan-0 = rec {
+      ifname = "br-lan-0";
       mac  = "00:00:00:00:00:03";
       vlan = 142;
       ifaces = {
@@ -79,8 +79,8 @@ in rec {
       ip6-cidr    = "${ip4-address}/${ip4-subnet}";
     };
 
-    lan1 = rec {
-      ifname = "br-lan1";
+    lan-1 = rec {
+      ifname = "br-lan-1";
       mac  = "00:00:00:00:00:04";
       vlan = 1;
       ifaces = {
@@ -125,7 +125,7 @@ in rec {
   };
 
   client-ips = {
-    test-client = "${networks.lan0.ip4-prefix}.2";
+    test-client = "${networks.lan-0.ip4-prefix}.2";
   };
 
   hosts = [

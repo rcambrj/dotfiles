@@ -10,11 +10,11 @@ let
   uplinks = filterAttrs (networkName: network: elem network.mode [
     "dhcp-uplink" "pppoe-uplink" "static-uplink"
   ]) networks;
-  uplinkIfnames = concatMapAttrsStringSep "," (networkName: network: ''"${network.ifname}"'') uplinks;
+  uplinkIfnames = concatMapAttrsStringSep ", " (networkName: network: ''"${network.ifname}"'') uplinks;
   downlinks = filterAttrs (networkName: network: elem network.mode [
     "dhcp-server"
   ]) networks;
-  downlinkIfnames = concatMapAttrsStringSep "," (networkName: network: ''"${network.ifname}"'') downlinks;
+  downlinkIfnames = concatMapAttrsStringSep ", " (networkName: network: ''"${network.ifname}"'') downlinks;
 in {
   options = {};
   config = {
@@ -51,6 +51,7 @@ in {
             iifname { ${downlinkIfnames} } oifname { ${uplinkIfnames} } accept
             iifname { ${uplinkIfnames} } oifname { ${downlinkIfnames} } ct state { established, related } accept
 
+            # port forwards
             ${concatMapStringsSep "\n" (pf:
               ''iifname { ${uplinkIfnames} } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
             ) port-forwards}
@@ -72,6 +73,7 @@ in {
           chain dstnat {
             type nat hook prerouting priority dstnat;
 
+            # port forwards
             ${concatMapStringsSep "\n" (pf:
               ''iifname { ${uplinkIfnames} } ${pf.proto} dport { ${concatStringsSep "," pf.ports} } dnat to ${pf.to}''
             ) port-forwards}
