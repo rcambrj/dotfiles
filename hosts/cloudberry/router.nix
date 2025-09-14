@@ -114,8 +114,8 @@ in {
 
         ip6-prefix  = "fd00:cafe:babe";
         ip6-subnet  = "48";
-        ip6-address = "${ip4-prefix}::1";
-        ip6-cidr    = "${ip4-address}/${ip4-subnet}";
+        ip6-address = "${ip6-prefix}::1";
+        ip6-cidr    = "${ip6-address}/${ip6-subnet}";
       };
 
       mgmt = rec {
@@ -135,8 +135,8 @@ in {
 
         ip6-prefix  = "fd00:dead:beef";
         ip6-subnet  = "48";
-        ip6-address = "${ip4-prefix}::1";
-        ip6-cidr    = "${ip4-address}/${ip4-subnet}";
+        ip6-address = "${ip6-prefix}::1";
+        ip6-cidr    = "${ip6-address}/${ip6-subnet}";
       };
     };
 
