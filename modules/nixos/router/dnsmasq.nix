@@ -35,24 +35,13 @@ in {
 
           "/*.netbird.cloud/127.0.0.62#5053"
         ];
-
-        interface = mapAttrsToList (networkName: network: network.ifname) dhcpNetworks;
-        dhcp-range = mapAttrsToList (networkName: network:
-          "${network.ifname},${network.ip4-prefix}.101,${network.ip4-prefix}.254"
-        ) dhcpNetworks;
-
         domain = "cambridge.me";
         expand-hosts = true;
-
         address = mapAttrsToList (host: ip: "/${host}/${ip}") dns;
         cname = "orange.cambridge.me,orange.netbird.cloud";
 
-        dhcp-option = [
-          # to debug: temporarily disable default route
-          # "option:router"
-        ];
-
-        dhcp-host = map (host: concatStringsSep "," (flatten [host.hwaddrs host.ip host.name])) hosts;
+        # resolve the static DHCP hosts
+        host-record = map (host: concatStringsSep "," [ host.name "${host.name}.cambridge.me" host.ip ]) hosts;
       };
     };
   };

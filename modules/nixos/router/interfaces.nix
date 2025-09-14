@@ -14,11 +14,6 @@ let
     LinkLocalAddressing = "no";
     IPv6AcceptRA = "no";
   };
-  noipv4 = {
-    # [Network]
-    DHCP = "no";
-  };
-  noip = noipv6 // noipv4;
 in {
   options = {};
   config = {
@@ -74,7 +69,7 @@ in {
               Name = iface;
               Type = "ether";
             };
-            networkConfig = base // noip // {
+            networkConfig = base // noipv6 // {
               VLAN = map (vlan: "${iface}-${toString vlan}") vlans;
             };
           };
@@ -110,7 +105,7 @@ in {
                 Name = "br-${networkName}";
               };
               networkConfig = base // noipv6 // {
-                DHCP = "yes";
+                DHCP = "ipv4";
               };
               dhcpV4Config = {
                 UseHostname = "no"; # Could not set hostname: Access denied
@@ -130,7 +125,7 @@ in {
                 Type = "bridge";
                 Name = "br-${networkName}";
               };
-              networkConfig = base // noip;
+              networkConfig = base // noipv6;
               routingPolicyRules = [
                 {
                   Family = "both";
@@ -164,14 +159,28 @@ in {
                 Type = "bridge";
                 Name = "br-${networkName}";
               };
-              networkConfig = base // {
-                Address = [ network.ip4-cidr network.ip6-cidr ];
+              networkConfig = base // noipv6 // {
+                Address = [
+                  network.ip4-cidr
+                  # network.ip6-cidr # TODO: enable ipv6
+                ];
                 ConfigureWithoutCarrier = true;
+                DHCPServer = "yes";
               };
               routingPolicyRules = [{
                 Priority = 100;
                 To = network.ip4-cidr;
               }];
+              dhcpServerConfig = {
+                PoolOffset = 101;
+                PoolSize = 150;
+                UplinkInterface = ":none";
+                DNS = [ network.ip4-address ];
+              };
+              dhcpServerStaticLeases = flatten (map (host: {
+                MACAddress = host.hwaddr;
+                Address = host.ip;
+              }) hosts);
             };
           }."${network.mode}" or {};
         }) networks);

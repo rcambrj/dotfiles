@@ -1,4 +1,4 @@
-{ primary-gateway, ... }:
+{ primary-gateway, client1-hwaddr, ... }:
 let
   ifaces' = {
     primary    = "enp1s0";
@@ -121,18 +121,18 @@ in rec {
   };
 
   mac = {
-    test-client = "00:00:00:00:00:10";
+    client1 = client1-hwaddr;
   };
 
   client-ips = {
-    test-client = "${networks.lan-0.ip4-prefix}.2";
+    client1 = "${networks.lan-0.ip4-prefix}.11";
   };
 
   hosts = [
-    { name = "test-client"; ip = client-ips.test-client; hwaddrs = [ mac.test-client ]; }
+    { name = "client1"; ip = client-ips.client1; hwaddr = mac.client1; }
   ];
 
   port-forwards = [
-    { proto = "tcp"; ports = [ "8080" ]; to = client-ips.test-client; }
+    { proto = "tcp"; ports = [ "8080" ]; to = client-ips.client1; }
   ];
 }

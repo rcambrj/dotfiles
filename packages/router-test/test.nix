@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
-  test-router = (import ./test-router.nix) { inherit primary-gateway; };
+  test-router = (import ./test-router.nix) { inherit primary-gateway client1-hwaddr; };
 
   primary-prefix = "10.11.0";
   primary-gateway = "${primary-prefix}.1";
@@ -10,7 +10,7 @@ let
   common-gateway = "10.55.0.1";
 
   router-lan-0 = test-router.networks.lan-0.ip4-address;
-  client0 = "${test-router.networks.lan-0.ip4-prefix}.10";
+  client1-hwaddr = "00:00:00:00:00:11";
   client1 = "${test-router.networks.lan-0.ip4-prefix}.11";
 
   useBase = cfg: recursiveUpdate cfg {
@@ -129,7 +129,6 @@ pkgs.testers.runNixOSTest {
         matchConfig.Name = ifname;
         networkConfig = {
           DHCP = "yes";
-          Address = "${client0}/24";
         };
       };
     };
@@ -145,6 +144,7 @@ pkgs.testers.runNixOSTest {
         netdevConfig = {
           Kind = "vlan";
           Name = "vlan";
+          MACAddress = client1-hwaddr;
         };
         vlanConfig.Id = test-router.networks.lan-0.vlan;
       };
@@ -159,7 +159,6 @@ pkgs.testers.runNixOSTest {
         matchConfig.Name = "vlan";
         networkConfig = {
           DHCP = "yes";
-          Address = "${client1}/24";
         };
       };
     };
@@ -171,17 +170,16 @@ pkgs.testers.runNixOSTest {
     # uplink is primary_gw
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 30)
 
-    # initial check: interface-specific pings
+    # interface-specific pings
     router.wait_until_succeeds('ping -c 1 -I br-primary ${primary-gateway}', 10)
     router.wait_until_succeeds('ping -c 1 -I br-secondary ${secondary-gateway}', 10)
 
-    # initial check: traffic between clients on a bridge (untagged <> tagged vlan)
+    # traffic between client and router
     client0.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
-    client1.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
+    # traffic between untagged <> tagged vlan clients, dst client has static dhcp host set
     client0.wait_until_succeeds('ping -c 1 ${client1}', 10)
-    client1.wait_until_succeeds('ping -c 1 ${client0}', 10)
 
-    # initial check: ssh to router
+    # ssh to router must always for nixos-rebuild
     client0.succeed('ssh root@${router-lan-0} -v -o ConnectTimeout=1 -o StrictHostKeyChecking=no -t "exit"')
 
     # curl the secondary gateway dashboard
