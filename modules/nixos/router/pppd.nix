@@ -53,8 +53,8 @@ in {
 
             # pppd aquires link local addresses
             # public IPv6 acquired via DHCPv6-PD
-            # "noipv6"
-            "+ipv6 ipv6cp-accept-local ipv6cp-use-persistent ipv6cp-accept-remote"
+            "noipv6" # TODO: enable ipv6
+            # "+ipv6 ipv6cp-accept-local ipv6cp-use-persistent ipv6cp-accept-remote"
 
             # pppd doesn't support specifying a routing table, use up/down script
             "nodefaultroute"
@@ -83,11 +83,14 @@ in {
           KeepConfiguration = "static";
           LLDP = "no";
           EmitLLDP = "no";
-          LinkLocalAddressing = "ipv6";
           IPv6AcceptRA = "no";
           IPv6SendRA = "no";
-          DHCP = "ipv6";
-          DHCPPrefixDelegation = "yes";
+          # TODO: enable ipv6
+          LinkLocalAddressing = "no";
+          DHCP = "no";
+          # LinkLocalAddressing = "ipv6";
+          # DHCP = "ipv6";
+          # DHCPPrefixDelegation = "yes";
         };
         dhcpV6Config = {
           SendHostname = "no";
