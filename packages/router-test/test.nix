@@ -108,6 +108,14 @@ pkgs.testers.runNixOSTest {
         "${test-router.ifaces.lan-0}".vlan      = 3;
       };
       router = test-router;
+      services.openssh = {
+        enable = true;
+        settings = {
+          PermitRootLogin = "yes";
+          PermitEmptyPasswords = "yes";
+        };
+      };
+      security.pam.services.sshd.allowNullPassword = true;
     };
 
     client0 = { pkgs, ... }: let
@@ -169,9 +177,12 @@ pkgs.testers.runNixOSTest {
 
     # initial check: traffic between clients on a bridge (untagged <> tagged vlan)
     client0.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
-    client0.wait_until_succeeds('ping -c 1 ${client1}', 10)
     client1.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
+    client0.wait_until_succeeds('ping -c 1 ${client1}', 10)
     client1.wait_until_succeeds('ping -c 1 ${client0}', 10)
+
+    # initial check: ssh to router
+    client0.succeed('ssh root@${router-lan-0} -v -o ConnectTimeout=1 -o StrictHostKeyChecking=no -t "exit"')
 
     # curl the secondary gateway dashboard
     router.succeed('curl -m 2 -vis --interface br-secondary http://${secondary-gateway}:8787')
