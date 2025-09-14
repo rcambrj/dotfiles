@@ -69,5 +69,8 @@
 
   environment.systemPackages = with pkgs; [
     speedtest-cli
+    iperf
+    # https://iperf.fr/iperf-servers.php
+    # iperf -c speedtest.serverius.net -p 5002
   ];
 }
