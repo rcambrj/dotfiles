@@ -31,10 +31,10 @@ in {
           chain input {
             type filter hook input priority filter; policy drop;
 
-            ${firewall.input}
-
             tcp flags syn / fin,syn,rst,ack jump flood
             meta l4proto { icmp, icmpv6 } jump flood
+            ${firewall.input}
+
             iifname { ${downlinkIfnames} } accept
             iifname { ${uplinkIfnames} } ct state { established, related } accept
             iifname { ${uplinkIfnames} } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
@@ -44,10 +44,10 @@ in {
           chain forward {
             type filter hook forward priority filter; policy drop;
 
-            ${firewall.forward}
-
             tcp flags syn / fin,syn,rst,ack jump flood
             meta l4proto { icmp, icmpv6 } jump flood
+            ${firewall.forward}
+
             iifname { ${downlinkIfnames} } oifname { ${uplinkIfnames} } accept
             iifname { ${uplinkIfnames} } oifname { ${downlinkIfnames} } ct state { established, related } accept
 

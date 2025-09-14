@@ -143,6 +143,7 @@ in {
     firewall = {
       input = ''
         tcp dport 22 accept
+        meta l4proto { icmp, icmpv6 } accept
         iifname != "lo" tcp dport 8443 drop comment "Unifi controller self-signed HTTPS"
         iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString netbird-port} accept
         iifname "${netbird-netdev}" accept
