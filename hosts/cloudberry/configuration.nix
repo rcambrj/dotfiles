@@ -73,4 +73,6 @@
     # https://iperf.fr/iperf-servers.php
     # iperf -c speedtest.serverius.net -p 5002
   ];
+
+  services.iperf3.enable = true;
 }
