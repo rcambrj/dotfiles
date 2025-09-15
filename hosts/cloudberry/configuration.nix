@@ -38,14 +38,14 @@
     enable = true;
     settings = {
       charger = {
-        # Dell Wyse 3040
-        # Intel(R) Atom(TM) x5-Z8350  CPU @ 1.44GHz
+        # TOPTON 4-port
+        # Intel(R) Celeron(R) N5105 @ 2.00GHz
 
         # powersave / balanced / performance
-        governor = "performance";
+        governor = "powersave";
 
         # never / auto / always
-        turbo = "auto";
+        turbo = "never";
       };
     };
   };
@@ -55,12 +55,6 @@
     paths = [ "/var/lib" ];
   };
 
-  # Dell Wyse 3040 doesn't have much RAM, but it does have 8GB internal MMC
-  swapDevices = [
-    {
-      device = "/dev/mmcblk0p1";
-    }
-  ];
   zramSwap.enable = true;
 
   boot.kernel.sysctl = {

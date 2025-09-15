@@ -2,12 +2,19 @@
 with lib;
 let
   # Dell Wyse 3040 (test machine)
+  # ifaces' = {
+  #   wan        = "enp1s0";    # builtin
+  #   vlan-trunk = "enp0s20u1"; # front right usb3
+  #   lan-0      = "enp0s20u2"; # front left usb2
+  #   lan-1      = "enp0s20u3"; # rear lower usb2
+  #   lan-2      = "enp0s20u4"; # rear upper usb2
+  # };
+  # TOPTON 4-port
   ifaces' = {
-    wan        = "enp1s0";    # builtin
-    vlan-trunk = "enp0s20u1"; # front right usb3
-    lan-0      = "enp0s20u2"; # front left usb2
-    lan-1      = "enp0s20u3"; # rear lower usb2
-    lan-2      = "enp0s20u4"; # rear upper usb2
+    wan        = "enp1s0";
+    vlan-trunk = "enp2s0";
+    lan-0      = "enp3s0";
+    lan-1      = "enp4s0";
   };
   dns-upstreams = [
     "1.1.1.1"
@@ -108,7 +115,7 @@ in {
         vlan = 142;
         ifaces = {
           t = [ ifaces'.vlan-trunk ];
-          u = [ ifaces'.lan-0 ifaces'.lan-1 ifaces'.lan-2 ];
+          u = [ ifaces'.lan-0 ifaces'.lan-1 ];
         };
         mode        = "dhcp-server";
 
