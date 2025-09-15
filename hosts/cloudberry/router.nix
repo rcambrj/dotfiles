@@ -169,6 +169,8 @@ in {
     firewall = {
       input = ''
         meta l4proto { icmp, icmpv6 } accept
+        iifname { ${netbird-netdev} } tcp dport 22 accept
+        iifname { ${netbird-netdev} } udp dport 53 accept
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 80 accept
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 443 accept
         iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString netbird-port} accept

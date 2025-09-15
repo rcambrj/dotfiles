@@ -36,6 +36,7 @@ in {
             ${firewall.input}
 
             iifname { ${downlinkIfnames} } tcp dport 22 accept
+            iifname { ${downlinkIfnames} } udp dport 53 accept
             iifname { ${downlinkIfnames} } meta l4proto { icmp, icmpv6 } accept
             iifname { ${downlinkIfnames} } meta nfproto ipv4 udp dport 67 accept comment "DHCPv4 server"
             iifname { ${uplinkIfnames}   } meta nfproto ipv4 udp dport 68 accept comment "DHCPv4 client"
