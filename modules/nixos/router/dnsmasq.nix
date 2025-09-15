@@ -28,20 +28,14 @@ in {
           "/localhost/"
           "/onion/"
           "/test/"
-
-          "9.9.9.9"
-          "1.1.1.1"
-          "8.8.8.8"
-
-          "/*.netbird.cloud/127.0.0.62#5053"
-        ];
-        domain = "cambridge.me";
+        ] ++ dns.upstreams;
+        domain = dns.domain;
         expand-hosts = true;
-        address = mapAttrsToList (host: ip: "/${host}/${ip}") dns;
-        cname = "orange.cambridge.me,orange.netbird.cloud";
+        address = mapAttrsToList (host: ip: "/${host}/${ip}") (dns.hosts or {});
+        cname = mapAttrsToList (host: target: "${host},${target}") (dns.cnames or {});
 
         # resolve the static DHCP hosts
-        host-record = map (host: concatStringsSep "," [ host.name "${host.name}.cambridge.me" host.ip ]) hosts;
+        host-record = map (host: concatStringsSep "," [ host.name "${host.name}.${dns.domain}" host.ip ]) hosts;
       };
     };
   };

@@ -1,4 +1,4 @@
-{ primary-gateway, client1-hwaddr, ... }:
+{ common-gateway, primary-gateway, client1-hwaddr, ... }:
 let
   ifaces' = {
     primary    = "enp1s0";
@@ -119,10 +119,14 @@ in rec {
   };
 
   dns = {
-    "test.example.com" = "10.0.0.0";
+    domain = "local";
+    upstreams = [ common-gateway ];
+    hosts = {
+      "test.example.com" = "10.0.0.0";
+    };
   };
 
-  mac = {
+  hwaddrs = {
     client1 = client1-hwaddr;
   };
 
@@ -131,7 +135,7 @@ in rec {
   };
 
   hosts = [
-    { name = "client1"; ip = client-ips.client1; hwaddr = mac.client1; }
+    { name = "client1"; ip = client-ips.client1; hwaddr = hwaddrs.client1; }
   ];
 
   port-forwards = [

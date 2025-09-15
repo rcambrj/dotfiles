@@ -9,6 +9,11 @@ let
     lan-1      = "enp0s20u3"; # rear lower usb2
     lan-2      = "enp0s20u4"; # rear upper usb2
   };
+  dns-upstreams = [
+    "1.1.1.1"
+    "8.8.8.8"
+    "9.9.9.9"
+  ];
   netbird-netdev = config.services.netbird.clients.default.interface;
   netbird-port   = config.services.netbird.clients.default.port;
 in {
@@ -47,7 +52,7 @@ in {
         rt   = 926;
         prio = uplink-failover.rule-prio.primary;
         mac  = "fe:d7:9c:98:73:d2";
-        ping-targets = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
+        ping-targets = dns-upstreams;
       } {
         dev-mode = rec {
           ifname = "br-wan";
@@ -182,11 +187,18 @@ in {
     };
 
     dns = {
-      "router.cambridge.me" = networks.lan.ip4-address;
-      "home.cambridge.me" = client-ips.kubernetes-lb;
+      domain = "cambridge.me";
+      upstreams = dns-upstreams ++ [ "/*.netbird.cloud/127.0.0.62#5053" ];
+      hosts = {
+        "router.cambridge.me" = networks.lan.ip4-address;
+        "home.cambridge.me" = client-ips.kubernetes-lb;
+      };
+      cnames = {
+        "orange.cambridge.me" = "orange.netbird.cloud";
+      };
     };
 
-    mac = {
+    hwaddrs = {
       switch-0     = "60:83:E7:2E:7D:76";
       switch-1     = "28:87:BA:98:89:72";
       ap-top       = "70:a7:41:7f:6d:41";
@@ -256,28 +268,28 @@ in {
 
     hosts = [
       # infra
-      { name = "switch-0";     ip = client-ips.switch-0;   hwaddr = mac.switch-0; }
-      { name = "switch-1";     ip = client-ips.switch-1;   hwaddr = mac.switch-1; }
-      { name = "ap-top";       ip = client-ips.ap-top;     hwaddr = mac.ap-top; }
-      { name = "ap-gnd";       ip = client-ips.ap-gnd;     hwaddr = mac.ap-gnd; }
+      { name = "switch-0";     ip = client-ips.switch-0;   hwaddr = hwaddrs.switch-0; }
+      { name = "switch-1";     ip = client-ips.switch-1;   hwaddr = hwaddrs.switch-1; }
+      { name = "ap-top";       ip = client-ips.ap-top;     hwaddr = hwaddrs.ap-top; }
+      { name = "ap-gnd";       ip = client-ips.ap-gnd;     hwaddr = hwaddrs.ap-gnd; }
       # servers
-      { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = mac.br-cranberry; }
-      { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = mac.macmini-2011; }
-      { name = "elderberry";   ip = client-ips.elderberry; hwaddr = mac.dell-wyse-a; }
-      { name = "cloudberry";   ip = client-ips.cloudberry; hwaddr = mac.dell-wyse-b; }
-      { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = mac.aorus-b450; }
+      { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = hwaddrs.br-cranberry; }
+      { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.macmini-2011; }
+      { name = "elderberry";   ip = client-ips.elderberry; hwaddr = hwaddrs.dell-wyse-a; }
+      { name = "cloudberry";   ip = client-ips.cloudberry; hwaddr = hwaddrs.dell-wyse-b; }
+      { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.aorus-b450; }
       # switches
-      { name = "sonoff-s20-1"; ip = client-ips.sonoff-s20-1; hwaddr = mac.sonoff-s20-1; }
-      { name = "sonoff-s20-2"; ip = client-ips.sonoff-s20-2; hwaddr = mac.sonoff-s20-2; }
-      { name = "sonoff-s20-3"; ip = client-ips.sonoff-s20-3; hwaddr = mac.sonoff-s20-3; }
-      { name = "sonoff-s20-4"; ip = client-ips.sonoff-s20-4; hwaddr = mac.sonoff-s20-4; }
-      { name = "sonoff-s20-5"; ip = client-ips.sonoff-s20-5; hwaddr = mac.sonoff-s20-5; }
-      { name = "sonoff-s20-6"; ip = client-ips.sonoff-s20-6; hwaddr = mac.sonoff-s20-6; }
+      { name = "sonoff-s20-1"; ip = client-ips.sonoff-s20-1; hwaddr = hwaddrs.sonoff-s20-1; }
+      { name = "sonoff-s20-2"; ip = client-ips.sonoff-s20-2; hwaddr = hwaddrs.sonoff-s20-2; }
+      { name = "sonoff-s20-3"; ip = client-ips.sonoff-s20-3; hwaddr = hwaddrs.sonoff-s20-3; }
+      { name = "sonoff-s20-4"; ip = client-ips.sonoff-s20-4; hwaddr = hwaddrs.sonoff-s20-4; }
+      { name = "sonoff-s20-5"; ip = client-ips.sonoff-s20-5; hwaddr = hwaddrs.sonoff-s20-5; }
+      { name = "sonoff-s20-6"; ip = client-ips.sonoff-s20-6; hwaddr = hwaddrs.sonoff-s20-6; }
       # sensors
-      { name = "ventilator";   ip = client-ips.ventilator;   hwaddr = mac.esp8266-a; }
-      { name = "dsmr";         ip = client-ips.dsmr;         hwaddr = mac.esp8266-b; }
-      { name = "somfy-tahoma"; ip = client-ips.somfy-tahoma; hwaddr = mac.somfy-tahoma; }
-      { name = "solar0";       ip = client-ips.solar0;       hwaddr = mac.solar; }
+      { name = "ventilator";   ip = client-ips.ventilator;   hwaddr = hwaddrs.esp8266-a; }
+      { name = "dsmr";         ip = client-ips.dsmr;         hwaddr = hwaddrs.esp8266-b; }
+      { name = "somfy-tahoma"; ip = client-ips.somfy-tahoma; hwaddr = hwaddrs.somfy-tahoma; }
+      { name = "solar0";       ip = client-ips.solar0;       hwaddr = hwaddrs.solar; }
     ];
 
     port-forwards = [

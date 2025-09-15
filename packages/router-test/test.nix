@@ -1,7 +1,7 @@
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
-  test-router = (import ./test-router.nix) { inherit primary-gateway client1-hwaddr; };
+  test-router = (import ./test-router.nix) { inherit common-gateway primary-gateway client1-hwaddr; };
 
   primary-prefix = "10.11.0";
   primary-gateway = "${primary-prefix}.1";
