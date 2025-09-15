@@ -42,7 +42,7 @@ in rec {
     secondary = rec {
       ifname = "br-secondary";
       mac  = "00:00:00:00:00:02";
-      vlan = 44;
+      vlan = 3;
       ifaces = {
         t = [ ifaces'.vlan-trunk ];
         u = [];
@@ -61,7 +61,7 @@ in rec {
     lan-0 = rec {
       ifname = "br-lan-0";
       mac  = "00:00:00:00:00:03";
-      vlan = 142;
+      vlan = 2;
       ifaces = {
         t = [ ifaces'.vlan-trunk ];
         u = [ ifaces'.lan-0 ];
