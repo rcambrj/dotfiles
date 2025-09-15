@@ -28,15 +28,15 @@ in rec {
 
   networks = {
     primary = rec {
-      rt   = 926;
-      prio = uplink-failover.rule-prio.primary;
-      mac  = "00:00:00:00:00:01";
       ifname = "br-primary";
+      mac  = "00:00:00:00:00:01";
       ifaces = {
         t = [];
         u = [ ifaces'.primary ];
       };
       mode = "dhcp-uplink";
+      rt   = 926;
+      prio = uplink-failover.rule-prio.primary;
       ping-targets = [ primary-gateway ];
     };
     secondary = rec {
@@ -103,13 +103,15 @@ in rec {
 
   firewall = {
     input = ''
-      # TODO
+      # no custom rules
     '';
     forward = ''
-      # TODO
+      # no custom rules
     '';
     uplink-failover = {
-      forward = '''';
+      forward = ''
+        # no custom rules
+      '';
       output = ''
         oifname "${networks.secondary.ifname}" ip daddr ${networks.secondary.ip4-gateway} accept comment "secondary modem dashboard"
       '';

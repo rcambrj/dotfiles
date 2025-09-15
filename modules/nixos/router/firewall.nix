@@ -35,10 +35,13 @@ in {
             meta l4proto { icmp, icmpv6 } jump flood
             ${firewall.input}
 
-            iifname { ${downlinkIfnames} } accept
-            iifname { ${uplinkIfnames} } ct state { established, related } accept
-            iifname { ${uplinkIfnames} } meta nfproto ipv4 udp dport 68 accept comment DHCPv4
-            iifname { ${uplinkIfnames} } meta nfproto ipv6 udp dport 546 accept comment DHCPv6
+            iifname { ${downlinkIfnames} } tcp dport 22 accept
+            iifname { ${downlinkIfnames} } meta l4proto { icmp, icmpv6 } accept
+            iifname { ${downlinkIfnames} } meta nfproto ipv4 udp dport 67 accept comment "DHCPv4 server"
+            iifname { ${uplinkIfnames}   } meta nfproto ipv4 udp dport 68 accept comment "DHCPv4 client"
+            iifname { ${downlinkIfnames} } meta nfproto ipv6 udp dport 547 accept comment "DHCPv6 server"
+            iifname { ${uplinkIfnames}   } meta nfproto ipv6 udp dport 546 accept comment "DHCPv6 client"
+            iifname { ${uplinkIfnames}   } ct state { established, related } accept
             iifname "lo" accept
           }
           chain forward {
