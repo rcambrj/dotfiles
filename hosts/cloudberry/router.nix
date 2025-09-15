@@ -113,7 +113,7 @@ in {
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
 
         ip6-prefix  = "fd00:cafe:babe";
-        ip6-subnet  = "48";
+        ip6-subnet  = "64";
         ip6-address = "${ip6-prefix}::1";
         ip6-cidr    = "${ip6-address}/${ip6-subnet}";
       };
@@ -134,7 +134,28 @@ in {
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
 
         ip6-prefix  = "fd00:dead:beef";
-        ip6-subnet  = "48";
+        ip6-subnet  = "64";
+        ip6-address = "${ip6-prefix}::1";
+        ip6-cidr    = "${ip6-address}/${ip6-subnet}";
+      };
+
+      guest = rec {
+        ifname = "br-guest";
+        mac  = "f5:0f:cB:b9:bF:e3";
+        vlan = 83;
+        ifaces = {
+          t = [ ifaces'.vlan-trunk ];
+          u = [];
+        };
+        mode        = "dhcp-server";
+
+        ip4-prefix  = "192.168.83";
+        ip4-subnet  = "24";
+        ip4-address = "${ip4-prefix}.1";
+        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+
+        ip6-prefix  = "fd00:f005:ba11";
+        ip6-subnet  = "64";
         ip6-address = "${ip6-prefix}::1";
         ip6-cidr    = "${ip6-address}/${ip6-subnet}";
       };
