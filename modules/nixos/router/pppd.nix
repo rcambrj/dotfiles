@@ -48,8 +48,8 @@ in {
             "lcp-echo-failure 5"
             "lcp-echo-adaptive"
             "maxfail 1"
-            "mtu 1492"
-            "mru 1492"
+            "mtu 1500"
+            "mru 1500"
 
             # pppd aquires link local addresses
             # public IPv6 acquired via DHCPv6-PD
