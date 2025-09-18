@@ -180,7 +180,9 @@ in {
         iifname { ${netbird-netdev} } udp dport 53 accept
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 80 accept
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 443 accept
-        iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString netbird-port} accept
+        iifname { ${networks.wan.ifname}, ${networks.lte.ifname} } udp dport ${toString netbird-port} accept
+        iifname { ${networks.mgmt.ifname} } udp dport { 3478, 10001 } accept comment "Unifi controller"
+        iifname { ${networks.mgmt.ifname} } tcp dport { 8080, 8880, 8843, 6789 } accept comment "Unifi controller"
         iifname { ${netbird-netdev} } ct state { established, related } accept
       '';
       forward = ''
