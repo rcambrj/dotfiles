@@ -42,7 +42,7 @@ in {
             iifname { ${uplinkIfnames}   } meta nfproto ipv4 udp dport 68 accept comment "DHCPv4 client"
             iifname { ${downlinkIfnames} } meta nfproto ipv6 udp dport 547 accept comment "DHCPv6 server"
             iifname { ${uplinkIfnames}   } meta nfproto ipv6 udp dport 546 accept comment "DHCPv6 client"
-            iifname { ${uplinkIfnames}   } ct state { established, related } accept
+            iifname { ${downlinkIfnames}, ${uplinkIfnames} } ct state { established, related } accept
             iifname "lo" accept
           }
           chain forward {

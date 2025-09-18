@@ -181,6 +181,7 @@ in {
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 80 accept
         iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 443 accept
         iifname { "${networks.wan.ifname}", "${networks.lte.ifname}" } udp dport ${toString netbird-port} accept
+        iifname { ${netbird-netdev} } ct state { established, related } accept
       '';
       forward = ''
         ip saddr ${client-ips.solar0} drop
