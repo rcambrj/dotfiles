@@ -3,7 +3,6 @@
 in {
   imports = [
     ./argocd.nix
-    # ./metallb.nix
     ./secrets.nix
   ];
 
