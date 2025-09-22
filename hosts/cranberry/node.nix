@@ -36,5 +36,8 @@
     bindsTo = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
     requires = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
     after = [ "${config.disk-savers.etcd-store.targetMountName}.mount" ];
+    postStop = ''
+      ${pkgs.systemd}/bin/systemctl start disk-saver-etcd-store.service
+    '';
   };
 }
