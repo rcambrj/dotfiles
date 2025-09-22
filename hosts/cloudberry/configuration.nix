@@ -63,9 +63,26 @@
 
   environment.systemPackages = with pkgs; [
     speedtest-cli
-    iperf
+
     # https://iperf.fr/iperf-servers.php
     # iperf -c speedtest.serverius.net -p 5002
+    iperf
+
+    (writeShellScriptBin "networkd-leases" ''
+      # https://askubuntu.com/a/1506644
+      # TODO: some hardware addresses come out garbled
+      if=$1
+      link_id="$(${iproute2}/bin/ip --oneline link show dev "$if" | cut -f 1 -d:)";
+      ${systemd}/bin/busctl --system -j get-property org.freedesktop.network1 \
+        "/org/freedesktop/network1/link/''${link_id}" \
+        org.freedesktop.network1.DHCPServer \
+        Leases \
+      | ${jq}/bin/jq -r 'def bytehex:
+              [(./16|floor), .%16] | map(if . < 10 then 48 + . else . + 87 end) | implode;
+          def formatentry:
+              (.[2]|map(tostring)|join(".")) as $ip | (.[1][1:]|map(bytehex)|join(":")) as $mac | "\($ip) \($mac)";
+          .data[] | formatentry'
+    '')
   ];
 
   services.iperf3.enable = true;
