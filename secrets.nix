@@ -82,4 +82,7 @@ in {
   "secrets/cloudberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
   "secrets/cloudberry-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
   "secrets/cloudberry-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+
+  # continue config (no darwin support in age-template)
+  "secrets/continue-config.age".publicKeys = defaults;
 }

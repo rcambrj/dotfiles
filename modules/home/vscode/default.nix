@@ -1,4 +1,4 @@
-{ inputs, ... }: { lib, pkgs, ... }: {
+{ inputs, ... }: { config, lib, pkgs, ... }: {
   home.packages = with pkgs; [
     # for language servers
     biome
@@ -146,5 +146,10 @@
         }
       ];
     };
+  };
+
+  age.secrets.continue-config = {
+    file = ../../../secrets/continue-config.age;
+    path = "${config.home.homeDirectory}/.continue/config.yaml";
   };
 }
