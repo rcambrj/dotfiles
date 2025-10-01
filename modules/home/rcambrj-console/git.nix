@@ -64,6 +64,6 @@ in {
     gcia = "git commit --amend";
     gp   = "git push";
     gpf  = "git push --force-with-lease";
-    gh   = "git rev-parse --short HEAD";
+    ghd  = "git rev-parse --short HEAD";
   };
 }
