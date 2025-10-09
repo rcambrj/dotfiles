@@ -41,7 +41,7 @@ spec:
       serviceAccountName: enable-downloads
       containers:
       - name: enable-downloads
-        image: nixery.dev/shell/curl/gnugrep/jq@sha256:3f2a5d139787fedf88f22e9015afd91979a8de7218d23df88a7423e33d15d759
+        image: nixery.dev/shell/curl/gnugrep/jq
         command:
         - /bin/bash
         - -c
