@@ -28,7 +28,7 @@ in rec {
 
   networks = {
     primary = rec {
-      ifname = "br-primary";
+      ifname = ifaces'.primary;
       mac  = "00:00:00:00:00:01";
       ifaces = {
         t = [];
@@ -40,7 +40,7 @@ in rec {
       ping-targets = [ primary-gateway ];
     };
     secondary = rec {
-      ifname = "br-secondary";
+      ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
       mac  = "00:00:00:00:00:02";
       vlan = 3;
       ifaces = {

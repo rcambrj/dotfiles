@@ -3,8 +3,10 @@ with pkgs.lib;
 let
   test-router = (import ./test-router.nix) { inherit common-gateway primary-gateway client1-hwaddr; };
 
+  primary-ifname = test-router.networks.primary.ifname;
   primary-prefix = "10.11.0";
   primary-gateway = "${primary-prefix}.1";
+  secondary-ifname = test-router.networks.secondary.ifname;
   secondary-gateway = test-router.networks.secondary.ip4-gateway;
   secondary-adjacent = "${test-router.networks.secondary.ip4-prefix}.100";
   common-gateway = "10.55.0.1";
@@ -171,8 +173,8 @@ pkgs.testers.runNixOSTest {
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 30)
 
     # interface-specific pings
-    router.wait_until_succeeds('ping -c 1 -I br-primary ${primary-gateway}', 10)
-    router.wait_until_succeeds('ping -c 1 -I br-secondary ${secondary-gateway}', 10)
+    router.wait_until_succeeds('ping -c 1 -I ${primary-ifname} ${primary-gateway}', 10)
+    router.wait_until_succeeds('ping -c 1 -I ${secondary-ifname} ${secondary-gateway}', 10)
 
     # traffic between client and router
     client0.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
@@ -183,13 +185,13 @@ pkgs.testers.runNixOSTest {
     client0.succeed('ssh root@${router-lan-0} -v -o ConnectTimeout=1 -o StrictHostKeyChecking=no -t "exit"')
 
     # curl the secondary gateway dashboard
-    router.succeed('curl -m 2 -vis --interface br-secondary http://${secondary-gateway}:8787')
+    router.succeed('curl -m 2 -vis --interface ${secondary-ifname} http://${secondary-gateway}:8787')
 
     # traffic to elsewhere on the secondary uplink
     # ping should succeed to anywhere
     # other traffic must be blocked
-    router.succeed('ping -c 1 -I br-secondary ${secondary-adjacent}')
-    router.fail('curl -m 2 -vis --interface br-secondary http://${secondary-adjacent}:8787')
+    router.succeed('ping -c 1 -I ${secondary-ifname} ${secondary-adjacent}')
+    router.fail('curl -m 2 -vis --interface ${secondary-ifname} http://${secondary-adjacent}:8787')
 
     # simulate internet traffic: through primary uplink
     router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')

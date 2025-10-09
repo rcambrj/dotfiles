@@ -37,7 +37,7 @@ in {
       # but it's probably marginal.
       #
 
-      netdevs = concatMapAttrs (networkName: network: {}
+      netdevs = (concatMapAttrs (networkName: network: {}
         # netdevs for tagged vlans
         // listToAttrs (map (iface: nameValuePair "10-${iface}-${networkName}" {
           netdevConfig = {
@@ -46,18 +46,18 @@ in {
           };
           vlanConfig.Id = network.vlan;
         }) network.ifaces.t)
+      ) networks)
 
-        # netdevs for bridges
-        // {
-          "20-br-${networkName}" = {
-            netdevConfig = {
-              Kind = "bridge";
-              Name = "br-${networkName}";
-              MACAddress = network.mac;
-            };
+      # netdevs for bridges
+      // concatMapAttrs (networkName: network: {
+        "20-br-${networkName}" = {
+          netdevConfig = {
+            Kind = "bridge";
+            Name = "br-${networkName}";
+            MACAddress = network.mac;
           };
-        }
-      ) networks;
+        };
+      }) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks);
 
       networks = {}
         # attach vlans to physical ports
@@ -75,7 +75,7 @@ in {
           };
         }) ifaces)
 
-        # attach networks to bridges
+        # attach networks to bridges for mode == dhcp-server
         // (concatMapAttrs (networkName: network: {}
           # tagged vlans
           // listToAttrs (map (iface: nameValuePair "20-${iface}-${networkName}" {
@@ -94,15 +94,14 @@ in {
             };
             networkConfig.Bridge = "br-${networkName}";
           }) (network.ifaces.u or []))
-        ) networks)
+        ) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks))
 
-        # configure bridges
+        # configure interfaces for mode != dhcp-server
         // (concatMapAttrs (networkName: network: {
-          "40-${"br-${networkName}"}" = {
+          "40-${networkName}" = {
             dhcp-uplink = {
               matchConfig = {
-                Type = "bridge";
-                Name = "br-${networkName}";
+                Name = network.ifname;
               };
               networkConfig = base // noipv6 // {
                 DHCP = "ipv4";
@@ -122,8 +121,7 @@ in {
             };
             pppoe-uplink = {
               matchConfig = {
-                Type = "bridge";
-                Name = "br-${networkName}";
+                Name = network.ifname;
               };
               networkConfig = base // noipv6;
               routingPolicyRules = [
@@ -136,8 +134,7 @@ in {
             };
             static-uplink = {
               matchConfig = {
-                Type = "bridge";
-                Name = "br-${networkName}";
+                Name = network.ifname;
               };
               networkConfig = base // noipv6 // {
                 Address = network.ip4-cidr;
@@ -154,6 +151,12 @@ in {
                 }
               ];
             };
+          }."${network.mode}" or {};
+        }) (filterAttrs (networkName: network: network.mode != "dhcp-server") networks))
+
+        # configure bridges for mode == dhcp-server
+        // (concatMapAttrs (networkName: network: {
+          "50-br-${networkName}" = {
             dhcp-server = {
               matchConfig = {
                 Type = "bridge";
@@ -183,7 +186,7 @@ in {
               }) hosts);
             };
           }."${network.mode}" or {};
-        }) networks);
+        }) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks));
     };
   };
 }

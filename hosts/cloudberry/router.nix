@@ -62,7 +62,7 @@ in {
         ping-targets = dns-upstreams;
       } {
         dev-mode = rec {
-          ifname = "br-wan";
+          ifname = ifaces'.wan;
           ifaces = {
             t = [];
             u = [ ifaces'.wan ];
@@ -71,7 +71,7 @@ in {
         };
         kpn-zakelijk = rec {
           ifname = "pppoe-wan";
-          ifname-pppoe = "br-wan";
+          ifname-pppoe = "${ifaces'.wan}-${toString vlan}";
           vlan   = 6;
           ifaces = {
             t = [ ifaces'.wan ];
@@ -80,18 +80,18 @@ in {
           mode = "pppoe-uplink";
         };
         odido-consument = rec {
-          ifname = "br-wan";
+          ifname = "${ifaces'.wan}-${toString vlan}";
           vlan   = 300;
           ifaces = {
-            t = [];
-            u = [ ifaces'.wan ];
+            t = [ ifaces'.wan ];
+            u = [];
           };
           mode = "dhcp-uplink";
         };
-      }."kpn-zakelijk";
+      }."odido-consument";
 
       lte = rec {
-        ifname = "br-lte";
+        ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
         mac  = "16:0c:9e:d1:b3:72";
         vlan = 44;
         ifaces = {
@@ -206,6 +206,7 @@ in {
         "home.cambridge.me" = client-ips.kubernetes-lb;
       };
       cnames = {
+        "cloudberry.cambridge.me" = "router.cambridge.me";
         "orange.cambridge.me" = "orange.netbird.cloud";
       };
     };
@@ -258,8 +259,6 @@ in {
       # servers
       cranberry  = "${networks.lan.ip4-prefix}.21";
       blueberry  = "${networks.lan.ip4-prefix}.22";
-      elderberry = "${networks.lan.ip4-prefix}.23";
-      cloudberry = "${networks.lan.ip4-prefix}.34";
       gaming-pc  = "${networks.lan.ip4-prefix}.26";
       # not assigned by dhcp, metallb arps this address into existence
       kubernetes-lb = "${networks.lan.ip4-prefix}.50";
@@ -280,15 +279,16 @@ in {
 
     hosts = [
       # infra
+      # { name = "cloudberry";   ip = networks.mgmt.ip4-address; hwaddr = networks.mgmt.mac; }
       { name = "switch-0";     ip = client-ips.switch-0;   hwaddr = hwaddrs.switch-0; }
       { name = "switch-1";     ip = client-ips.switch-1;   hwaddr = hwaddrs.switch-1; }
       { name = "ap-top";       ip = client-ips.ap-top;     hwaddr = hwaddrs.ap-top; }
       { name = "ap-gnd";       ip = client-ips.ap-gnd;     hwaddr = hwaddrs.ap-gnd; }
+
       # servers
+      # { name = "cloudberry";   ip = networks.lan.ip4-address; hwaddr = networks.lan.mac; }
       { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = hwaddrs.br-cranberry; }
       { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.macmini-2011; }
-      { name = "elderberry";   ip = client-ips.elderberry; hwaddr = hwaddrs.dell-wyse-a; }
-      { name = "cloudberry";   ip = client-ips.cloudberry; hwaddr = hwaddrs.dell-wyse-b; }
       { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.aorus-b450; }
       # switches
       { name = "sonoff-s20-1"; ip = client-ips.sonoff-s20-1; hwaddr = hwaddrs.sonoff-s20-1; }
