@@ -4,7 +4,7 @@ let
 in {
   age.secrets = {
     cloudflare-token.file = ../../secrets/cloudflare-token.age;
-    cloudflare-zone-id.file = ../../secrets/cloudflare-token.age;
+    cloudflare-zone-id.file = ../../secrets/cloudflare-zone-id.age;
     cloudflare-ddns-host.file = ../../secrets/cloudflare-ddns-host.age;
   };
 
@@ -42,6 +42,7 @@ in {
   services.ddns-updater = {
     enable = true;
     environment = {
+      PERIOD = "1m";
       SERVER_ENABLED = "no";
       RESOLVER_ADDRESS = "1.1.1.1:53";
       CONFIG_FILEPATH = config.age-template.files.ddns-updater.path;
