@@ -108,13 +108,12 @@ in {
               };
               dhcpV4Config = {
                 UseHostname = "no"; # Could not set hostname: Access denied
+                SendHostname = "no";
                 RouteTable = network.rt;
-                SendHostname = "yes";
+
+                # odido-consument fixes:
                 ClientIdentifier = "mac";
-                UseMTU = "yes";
-                RequestBroadcast = "no";
                 RapidCommit = "no";
-                RequestOptions = [ "1" "3" "6" "15" "28" "42" "121" ]; # keep it simple; drop 33/114/120/162 for now
               };
               routingPolicyRules = [
                 {

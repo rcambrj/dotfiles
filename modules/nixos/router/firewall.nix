@@ -60,10 +60,7 @@ in {
               ''iifname { ${uplinkIfnames} } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
             ) port-forwards}
           }
-          chain mangle_output {
-            type filter hook output priority mangle; policy accept;
-            udp sport 68 udp dport 67 ip dscp set cs0
-          }
+
           chain mangle_forward {
             type filter hook forward priority mangle; policy accept;
             iifname { ${uplinkIfnames} } tcp flags syn tcp option maxseg size set rt mtu
