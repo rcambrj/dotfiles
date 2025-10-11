@@ -29,7 +29,6 @@ in rec {
   networks = {
     primary = rec {
       ifname = ifaces'.primary;
-      mac  = "00:00:00:00:00:01";
       ifaces = {
         t = [];
         u = [ ifaces'.primary ];
@@ -41,7 +40,6 @@ in rec {
     };
     secondary = rec {
       ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
-      mac  = "00:00:00:00:00:02";
       vlan = 3;
       ifaces = {
         t = [ ifaces'.vlan-trunk ];

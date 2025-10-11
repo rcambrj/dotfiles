@@ -58,7 +58,6 @@ in {
       wan = recursiveUpdate rec {
         rt   = 926;
         prio = uplink-failover.rule-prio.primary;
-        mac  = "fe:d7:9c:98:73:d2";
         ping-targets = dns-upstreams;
       } {
         dev-mode = rec {
@@ -92,7 +91,6 @@ in {
 
       lte = rec {
         ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
-        mac  = "16:0c:9e:d1:b3:72";
         vlan = 44;
         ifaces = {
           t = [ ifaces'.vlan-trunk ];
@@ -111,7 +109,6 @@ in {
 
       ont = rec {
         ifname = ifaces'.wan;
-        mac  = "9c:db:28:f4:e5:3d";
         ifaces = {
           t = [];
           u = [ ifaces'.wan ];
