@@ -117,7 +117,7 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [ ifaces'.lan-0 ifaces'.lan-1 ];
         };
-        mode        = "dhcp-server";
+        mode        = "dhcp-downlink";
 
         ip4-prefix  = "192.168.142";
         ip4-subnet  = "24";
@@ -138,7 +138,7 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [];
         };
-        mode        = "dhcp-server";
+        mode        = "dhcp-downlink";
 
         ip4-prefix  = "192.168.99";
         ip4-subnet  = "24";
@@ -159,7 +159,7 @@ in {
           t = [ ifaces'.vlan-trunk ];
           u = [];
         };
-        mode        = "dhcp-server";
+        mode        = "dhcp-downlink";
 
         ip4-prefix  = "192.168.83";
         ip4-subnet  = "24";
@@ -259,6 +259,7 @@ in {
       # servers
       cranberry  = "${networks.lan.ip4-prefix}.21";
       blueberry  = "${networks.lan.ip4-prefix}.22";
+      elderberry = "${networks.lan.ip4-prefix}.23";
       gaming-pc  = "${networks.lan.ip4-prefix}.26";
       # not assigned by dhcp, metallb arps this address into existence
       kubernetes-lb = "${networks.lan.ip4-prefix}.50";
@@ -289,6 +290,7 @@ in {
       # { name = "cloudberry";   ip = networks.lan.ip4-address; hwaddr = networks.lan.mac; }
       { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = hwaddrs.br-cranberry; }
       { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.macmini-2011; }
+      { name = "elderberry";   ip = client-ips.elderberry; hwaddr = hwaddrs.dell-wyse-a; }
       { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.aorus-b450; }
       # switches
       { name = "sonoff-s20-1"; ip = client-ips.sonoff-s20-1; hwaddr = hwaddrs.sonoff-s20-1; }

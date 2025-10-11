@@ -12,7 +12,7 @@ let
   ]) networks;
   uplinkIfnames = concatMapAttrsStringSep ", " (networkName: network: ''"${network.ifname}"'') uplinks;
   downlinks = filterAttrs (networkName: network: elem network.mode [
-    "dhcp-server"
+    "dhcp-downlink"
   ]) networks;
   downlinkIfnames = concatMapAttrsStringSep ", " (networkName: network: ''"${network.ifname}"'') downlinks;
 in {
@@ -59,6 +59,10 @@ in {
             ${concatMapStringsSep "\n" (pf:
               ''iifname { ${uplinkIfnames} } ct status dnat ip daddr ${pf.to} ${pf.proto} dport { ${concatStringsSep "," pf.ports} } accept''
             ) port-forwards}
+          }
+          chain mangle_output {
+            type filter hook output priority mangle; policy accept;
+            udp sport 68 udp dport 67 ip dscp set cs0
           }
           chain mangle_forward {
             type filter hook forward priority mangle; policy accept;

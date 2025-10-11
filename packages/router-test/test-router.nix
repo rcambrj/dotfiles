@@ -66,7 +66,7 @@ in rec {
         t = [ ifaces'.vlan-trunk ];
         u = [ ifaces'.lan-0 ];
       };
-      mode        = "dhcp-server";
+      mode        = "dhcp-downlink";
 
       ip4-prefix  = "10.33.0";
       ip4-subnet  = "24";
@@ -87,7 +87,7 @@ in rec {
         t = [ ifaces'.vlan-trunk ];
         u = [];
       };
-      mode        = "dhcp-server";
+      mode        = "dhcp-downlink";
 
       ip4-prefix  = "10.44.0";
       ip4-subnet  = "24";

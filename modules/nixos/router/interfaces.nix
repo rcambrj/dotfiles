@@ -57,7 +57,7 @@ in {
             MACAddress = network.mac;
           };
         };
-      }) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks);
+      }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks);
 
       networks = {}
         # attach vlans to physical ports
@@ -75,7 +75,7 @@ in {
           };
         }) ifaces)
 
-        # attach networks to bridges for mode == dhcp-server
+        # attach networks to bridges for mode == dhcp-downlink
         // (concatMapAttrs (networkName: network: {}
           # tagged vlans
           // listToAttrs (map (iface: nameValuePair "20-${iface}-${networkName}" {
@@ -94,9 +94,9 @@ in {
             };
             networkConfig.Bridge = "br-${networkName}";
           }) (network.ifaces.u or []))
-        ) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks))
+        ) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks))
 
-        # configure interfaces for mode != dhcp-server
+        # configure interfaces for mode != dhcp-downlink
         // (concatMapAttrs (networkName: network: {
           "40-${networkName}" = {
             dhcp-uplink = {
@@ -109,7 +109,12 @@ in {
               dhcpV4Config = {
                 UseHostname = "no"; # Could not set hostname: Access denied
                 RouteTable = network.rt;
-                SendHostname = "no";
+                SendHostname = "yes";
+                ClientIdentifier = "mac";
+                UseMTU = "yes";
+                RequestBroadcast = "no";
+                RapidCommit = "no";
+                RequestOptions = [ "1" "3" "6" "15" "28" "42" "121" ]; # keep it simple; drop 33/114/120/162 for now
               };
               routingPolicyRules = [
                 {
@@ -152,12 +157,11 @@ in {
               ];
             };
           }."${network.mode}" or {};
-        }) (filterAttrs (networkName: network: network.mode != "dhcp-server") networks))
+        }) (filterAttrs (networkName: network: network.mode != "dhcp-downlink") networks))
 
-        # configure bridges for mode == dhcp-server
         // (concatMapAttrs (networkName: network: {
           "50-br-${networkName}" = {
-            dhcp-server = {
+            dhcp-downlink = {
               matchConfig = {
                 Type = "bridge";
                 Name = "br-${networkName}";
@@ -186,7 +190,7 @@ in {
               }) hosts);
             };
           }."${network.mode}" or {};
-        }) (filterAttrs (networkName: network: network.mode == "dhcp-server") networks));
+        }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks));
     };
   };
 }

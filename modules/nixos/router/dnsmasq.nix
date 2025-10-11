@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 with config.router;
 with lib;
-let
-  dhcpNetworks = filterAttrs (networkName: network: network.mode == "dhcp-server") networks;
-in {
+{
   options = {};
   config = {
     services.resolved.enable = false;
