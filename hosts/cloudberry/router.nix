@@ -109,6 +109,23 @@ in {
         ct          = "0x02000000";
       };
 
+      # ont = rec {
+      #   ifname = "br-ont";
+      #   mac  = "9c:db:28:f4:e5:3d";
+      #   ifaces = {
+      #     t = [];
+      #     u = [ ifaces'.wan ];
+      #   };
+      #   mode        = "static-uplink";
+      #   ip4-prefix  = "192.168.100";
+      #   ip4-subnet  = "24";
+      #   ip4-address = "${ip4-prefix}.2";
+      #   ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+      #   ip4-gateway = "${ip4-prefix}.1";
+      #   rt          = 668;
+      #   prio        = 65535; # never used
+      # };
+
       lan = rec {
         ifname = "br-lan";
         mac  = "42:b9:31:e0:f6:5f";
