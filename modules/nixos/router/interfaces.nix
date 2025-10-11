@@ -14,6 +14,84 @@ let
     LinkLocalAddressing = "no";
     IPv6AcceptRA = "no";
   };
+
+  mkNetworkConfig = (network: {
+    dhcp-uplink = {
+      # Type=ether
+      networkConfig = base // noipv6 // {
+        DHCP = "ipv4";
+      };
+      dhcpV4Config = {
+        UseHostname = "no"; # Could not set hostname: Access denied
+        SendHostname = "no";
+        RouteTable = network.rt;
+
+        # odido-consument fixes:
+        ClientIdentifier = "mac";
+        RapidCommit = "no";
+      };
+      routingPolicyRules = [
+        {
+          Priority = network.prio;
+          Table = network.rt;
+        }
+      ];
+      # dhcpV6Config = {}; # TODO
+    };
+    pppoe-uplink = {
+      # Type=ether
+      networkConfig = base // noipv6;
+      routingPolicyRules = [
+        {
+          Family = "both";
+          Priority = network.prio;
+          Table = network.rt;
+        }
+      ];
+    };
+    static-uplink = {
+      # Type=ether
+      networkConfig = base // noipv6 // {
+        Address = network.ip4-cidr;
+      };
+      routes = [{
+        Gateway = network.ip4-gateway;
+        PreferredSource = network.ip4-address;
+        Table = network.rt;
+      }];
+      routingPolicyRules = [
+        {
+          Priority = network.prio;
+          Table = network.rt;
+        }
+      ];
+    };
+    dhcp-downlink = {
+      # Type=bridge
+      networkConfig = base // noipv6 // {
+        Address = [
+          network.ip4-cidr
+          # network.ip6-cidr # TODO: enable ipv6
+        ];
+        ConfigureWithoutCarrier = true;
+        DHCPServer = "yes";
+      };
+      routingPolicyRules = [{
+        Priority = 100;
+        To = network.ip4-cidr;
+      }];
+      dhcpServerConfig = {
+        PoolOffset = 101;
+        PoolSize = 150;
+        UplinkInterface = ":none";
+        DNS = [ network.ip4-address ];
+      };
+      dhcpServerStaticLeases = flatten (map (host: {
+        MACAddress = host.hwaddr;
+        Address = host.ip;
+      }) hosts);
+    };
+  }."${network.mode}" or {});
 in {
   options = {};
   config = {
@@ -32,9 +110,6 @@ in {
 
       #
       # processes config.router.networks into something meaningful for networkd.
-      # for simplicity, every network gets its own bridge network interface.
-      # this likely has a performance impact on networks with just one port.
-      # but it's probably marginal.
       #
 
       netdevs = (concatMapAttrs (networkName: network: {}
@@ -60,135 +135,55 @@ in {
       }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks);
 
       networks = {}
-        # attach vlans to physical ports
+        # configure physical ports
         // (concatMapAttrs (ifaceFriendly: iface: let
-          vlans = attrValues (mapAttrs (networkName: network: network.vlan) (filterAttrs (networkName: network: elem iface network.ifaces.t) networks));
-        in optionalAttrs (length vlans > 0) {
-          "10-${iface}" = {
+          # find all vlans for this iface
+          taggedVLANs = attrValues (mapAttrs (networkName: network: network.vlan) (filterAttrs (networkName: network: elem iface network.ifaces.t) networks));
+          untaggedBridges = attrNames (mapAttrs (networkName: network: network.vlan) (filterAttrs (networkName: network: network.mode == "dhcp-downlink" && elem iface network.ifaces.u) networks));
+          # find network declaring this iface as main (ignore > 1)
+          network = findFirst (network: iface == network.ifname || iface == (network.ifname-pppoe or "")) null (attrValues networks);
+        in {
+          "30-${iface}" = recursiveUpdate {
             matchConfig = {
               Name = iface;
               Type = "ether";
             };
-            networkConfig = base // noipv6 // {
-              VLAN = map (vlan: "${iface}-${toString vlan}") vlans;
-            };
-          };
+            networkConfig = base // noipv6
+              // (optionalAttrs (length taggedVLANs > 0) {
+                VLAN = map (vlan: "${iface}-${toString vlan}") taggedVLANs;
+              })
+              // (optionalAttrs (length untaggedBridges > 0) {
+                Bridge = "br-${elemAt untaggedBridges 0}";
+              });
+          } (optionalAttrs (network != null) (mkNetworkConfig network));
         }) ifaces)
 
-        # attach networks to bridges for mode == dhcp-downlink
+        # configure tagged vlans
         // (concatMapAttrs (networkName: network: {}
-          # tagged vlans
-          // listToAttrs (map (iface: nameValuePair "20-${iface}-${networkName}" {
-            matchConfig = {
-              Type = "vlan";
-              Name = "${iface}-${toString network.vlan}";
-            };
-            networkConfig.Bridge = "br-${networkName}";
-          }) (network.ifaces.t or []))
+          // listToAttrs (map (iface: let
+              vlanIface = "${iface}-${toString network.vlan}";
+              # is network declaring this iface as main?
+              isMain = vlanIface == network.ifname || vlanIface == (network.ifname-pppoe or "");
+            in (nameValuePair "40-${iface}-${networkName}" (recursiveUpdate {
+              matchConfig = {
+                Type = "vlan";
+                Name = vlanIface;
+              };
+              networkConfig = optionalAttrs (network.mode == "dhcp-downlink") {
+                Bridge = "br-${networkName}";
+              };
+            } (optionalAttrs isMain (mkNetworkConfig network))))
+          ) (network.ifaces.t or []))
+        ) networks)
 
-          # untagged ports
-          // listToAttrs (map (iface: nameValuePair "30-${iface}" {
-            matchConfig = {
-              Type = "ether";
-              Name = iface;
-            };
-            networkConfig.Bridge = "br-${networkName}";
-          }) (network.ifaces.u or []))
-        ) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks))
-
-        # configure interfaces for mode != dhcp-downlink
+        # configure bridges
         // (concatMapAttrs (networkName: network: {
-          "40-${networkName}" = {
-            dhcp-uplink = {
-              matchConfig = {
-                Name = network.ifname;
-              };
-              networkConfig = base // noipv6 // {
-                DHCP = "ipv4";
-              };
-              dhcpV4Config = {
-                UseHostname = "no"; # Could not set hostname: Access denied
-                SendHostname = "no";
-                RouteTable = network.rt;
-
-                # odido-consument fixes:
-                ClientIdentifier = "mac";
-                RapidCommit = "no";
-              };
-              routingPolicyRules = [
-                {
-                  Priority = network.prio;
-                  Table = network.rt;
-                }
-              ];
-              # dhcpV6Config = {}; # TODO
+          "50-br-${networkName}" = recursiveUpdate {
+            matchConfig = {
+              Name = "br-${networkName}";
+              Type = "bridge";
             };
-            pppoe-uplink = {
-              matchConfig = {
-                Name = network.ifname;
-              };
-              networkConfig = base // noipv6;
-              routingPolicyRules = [
-                {
-                  Family = "both";
-                  Priority = network.prio;
-                  Table = network.rt;
-                }
-              ];
-            };
-            static-uplink = {
-              matchConfig = {
-                Name = network.ifname;
-              };
-              networkConfig = base // noipv6 // {
-                Address = network.ip4-cidr;
-              };
-              routes = [{
-                Gateway = network.ip4-gateway;
-                PreferredSource = network.ip4-address;
-                Table = network.rt;
-              }];
-              routingPolicyRules = [
-                {
-                  Priority = network.prio;
-                  Table = network.rt;
-                }
-              ];
-            };
-          }."${network.mode}" or {};
-        }) (filterAttrs (networkName: network: network.mode != "dhcp-downlink") networks))
-
-        // (concatMapAttrs (networkName: network: {
-          "50-br-${networkName}" = {
-            dhcp-downlink = {
-              matchConfig = {
-                Type = "bridge";
-                Name = "br-${networkName}";
-              };
-              networkConfig = base // noipv6 // {
-                Address = [
-                  network.ip4-cidr
-                  # network.ip6-cidr # TODO: enable ipv6
-                ];
-                ConfigureWithoutCarrier = true;
-                DHCPServer = "yes";
-              };
-              routingPolicyRules = [{
-                Priority = 100;
-                To = network.ip4-cidr;
-              }];
-              dhcpServerConfig = {
-                PoolOffset = 101;
-                PoolSize = 150;
-                UplinkInterface = ":none";
-                DNS = [ network.ip4-address ];
-              };
-              dhcpServerStaticLeases = flatten (map (host: {
-                MACAddress = host.hwaddr;
-                Address = host.ip;
-              }) hosts);
-            };
-          }."${network.mode}" or {};
+          } (mkNetworkConfig network);
         }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks));
     };
   };
