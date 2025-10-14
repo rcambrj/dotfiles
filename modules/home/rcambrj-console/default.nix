@@ -21,13 +21,14 @@ in {
     certstrap
     coreutils
     curl
+    dive # docker image explorer
     dtc # device-tree-compiler
     gnupg
     gnumake
     gnutar zstd
     htop btop
     iftop
-    kubectl kubernetes-helm k9s
+    kubectl kubernetes-helm k9s minikube
     nodePackages.localtunnel
     ncdu
     nix-output-monitor
