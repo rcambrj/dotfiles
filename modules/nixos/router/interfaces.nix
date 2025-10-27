@@ -1,3 +1,7 @@
+
+#
+# processes config.router.networks into something meaningful for networkd.
+#
 { config, lib, pkgs, ... }:
 with config.router;
 with lib;
@@ -15,83 +19,93 @@ let
     IPv6AcceptRA = "no";
   };
 
-  mkNetworkConfig = (network: {
-    dhcp-uplink = {
-      # Type=ether
-      networkConfig = base // noipv6 // {
-        DHCP = "ipv4";
-      };
-      dhcpV4Config = {
-        UseHostname = "no"; # Could not set hostname: Access denied
-        SendHostname = "no";
-        RouteTable = network.rt;
+  mkCakeConfig = network: direction: optionalAttrs (hasAttrByPath ["bw-${direction}"] network) {
+    # configures egress only. ingress is configured on IFB
+    NAT = "yes";
+    Bandwidth = network."bw-${direction}";
 
-        # odido-consument fixes:
-        ClientIdentifier = "mac";
-        RapidCommit = "no";
-      };
-      routingPolicyRules = [
-        {
-          Priority = network.prio;
-          Table = network.rt;
-        }
-      ];
-      # dhcpV6Config = {}; # TODO
-    };
-    pppoe-uplink = {
-      # Type=ether
+    # https://www.freedesktop.org/software/systemd/man/latest/systemd.network.html#PriorityQueueingPreset=
+    # PriorityQueueingPreset = "besteffort";
+    PriorityQueueingPreset = "diffserv3";
+  };
+
+  mkNetworkConfig = (network: (recursiveUpdate rec
+    {
       networkConfig = base // noipv6;
-      routingPolicyRules = [
-        {
-          Family = "both";
-          Priority = network.prio;
-          Table = network.rt;
-        }
-      ];
-    };
-    static-uplink = {
-      # Type=ether
-      networkConfig = base // noipv6 // {
-        Address = network.ip4-cidr;
-      };
-      routes = [{
-        Gateway = network.ip4-gateway;
-        PreferredSource = network.ip4-address;
-        Table = network.rt;
-      }];
-      routingPolicyRules = [
-        {
-          Priority = network.prio;
-          Table = network.rt;
-        }
-      ];
-    };
-    dhcp-downlink = {
-      # Type=bridge
-      networkConfig = base // noipv6 // {
-        Address = [
-          network.ip4-cidr
-          # network.ip6-cidr # TODO: enable ipv6
+
+      cakeConfig = mkCakeConfig network "egress";
+    } {
+      dhcp-uplink = {
+        networkConfig = {
+          DHCP = "ipv4";
+        };
+        dhcpV4Config = {
+          UseHostname = "no"; # Could not set hostname: Access denied
+          SendHostname = "no";
+          RouteTable = network.rt;
+
+          # odido-consument fixes:
+          ClientIdentifier = "mac";
+          RapidCommit = "no";
+        };
+        routingPolicyRules = [
+          {
+            Priority = network.prio;
+            Table = network.rt;
+          }
         ];
-        ConfigureWithoutCarrier = true;
-        DHCPServer = "yes";
+        # dhcpV6Config = {}; # TODO
       };
-      routingPolicyRules = [{
-        Priority = 100;
-        To = network.ip4-cidr;
-      }];
-      dhcpServerConfig = {
-        PoolOffset = 101;
-        PoolSize = 150;
-        UplinkInterface = ":none";
-        DNS = [ network.ip4-address ];
+      pppoe-uplink = {
+        routingPolicyRules = [
+          {
+            Family = "both";
+            Priority = network.prio;
+            Table = network.rt;
+          }
+        ];
       };
-      dhcpServerStaticLeases = flatten (map (host: {
-        MACAddress = host.hwaddr;
-        Address = host.ip;
-      }) hosts);
-    };
-  }."${network.mode}" or {});
+      static-uplink = {
+        networkConfig = {
+          Address = network.ip4-cidr;
+        };
+        routes = [{
+          Gateway = network.ip4-gateway;
+          PreferredSource = network.ip4-address;
+          Table = network.rt;
+        }];
+        routingPolicyRules = [
+          {
+            Priority = network.prio;
+            Table = network.rt;
+          }
+        ];
+      };
+      dhcp-downlink = {
+        networkConfig = {
+          Address = [
+            network.ip4-cidr
+            # network.ip6-cidr # TODO: enable ipv6
+          ];
+          ConfigureWithoutCarrier = true;
+          DHCPServer = "yes";
+        };
+        routingPolicyRules = [{
+          Priority = 100;
+          To = network.ip4-cidr;
+        }];
+        dhcpServerConfig = {
+          PoolOffset = 101;
+          PoolSize = 150;
+          UplinkInterface = ":none";
+          DNS = [ network.ip4-address ];
+        };
+        dhcpServerStaticLeases = flatten (map (host: {
+          MACAddress = host.hwaddr;
+          Address = host.ip;
+        }) hosts);
+      };
+    }."${network.mode}" or {}));
 in {
   options = {};
   config = {
@@ -107,10 +121,6 @@ in {
           optionalAttrs ((network.rt or "") != "") { "${networkName}" = network.rt; }
         ) networks;
       };
-
-      #
-      # processes config.router.networks into something meaningful for networkd.
-      #
 
       netdevs = (concatMapAttrs (networkName: network: {}
         # netdevs for tagged vlans
@@ -132,7 +142,17 @@ in {
             MACAddress = network.mac;
           };
         };
-      }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks);
+      }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks)
+
+      # netdevs for CAKE SQM QoS (ingress)
+      // concatMapAttrs (networkName: network: {
+        "30-sqm-${networkName}" = {
+          netdevConfig = {
+            Kind = "ifb";
+            Name = "sqm-${networkName}";
+          };
+        };
+      }) (filterAttrs (networkName: network: hasAttrByPath ["bw-ingress"] network) networks);
 
       networks = {}
         # configure physical ports
@@ -184,7 +204,18 @@ in {
               Type = "bridge";
             };
           } (mkNetworkConfig network);
-        }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks));
+        }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks))
+
+        # configure CAKE SQM QoS (ingress)
+        // (concatMapAttrs (networkName: network: {
+          "60-sqm-${networkName}" = {
+            matchConfig = {
+              Name = "sqm-${networkName}";
+            };
+
+            cakeConfig = mkCakeConfig network "ingress";
+          };
+        }) (filterAttrs (networkName: network: hasAttrByPath ["bw-ingress"] network) networks));
     };
   };
 }

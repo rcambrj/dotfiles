@@ -37,6 +37,8 @@ in rec {
       rt   = 926;
       prio = uplink-failover.rule-prio.primary;
       ping-targets = [ primary-gateway ];
+      bw-egress = "10M";
+      bw-ingress = "10M";
     };
     secondary = rec {
       ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
@@ -54,6 +56,8 @@ in rec {
       rt          = 583;
       prio        = uplink-failover.rule-prio.secondary;
       ct          = "0x02000000";
+      bw-egress = "10M";
+      bw-ingress = "10M";
     };
 
     lan-0 = rec {

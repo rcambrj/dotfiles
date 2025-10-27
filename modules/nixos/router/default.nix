@@ -7,6 +7,7 @@ with lib;
     ./forwarding.nix
     ./interfaces.nix
     ./pppd.nix
+    ./sqm-ifb-redirect.nix
     ./uplink-failover.nix
     ./upnp.nix
   ];

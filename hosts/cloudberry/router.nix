@@ -34,6 +34,26 @@ in {
   };
 
   router = rec {
+    # this configuration shape is still undocumented. sorry.
+    # each router.networks configures:
+    # * a CIDR network, where the machine has one address
+    # * a single interface or multiple interfaces on a bridge (possibly VLAN'd)
+    # it's not currently possible to configure more than one CIDR or IP
+    # address per router.networks value
+    #
+    # the router.networks.mode attribute can be:
+    # * dhcp-uplink
+    # * pppoe-uplink
+    # * static-uplink
+    # * dhcp-downlink
+    # this attribute conflates a few things (which I want to separate):
+    # * uplink or downlink (for firewall rules - what OpenWRT calls "zones")
+    # * dhcp / static / pppoe (IP identity acquisition)
+    #
+    # the router.uplink-failover system only supports 2 uplinks - a primary
+    # and secondary, I'd like to improve it to support n uplinks.
+    #
+
     telegram-token-path = config.age.secrets.telegram-router-bot-key.path;
     telegram-group-path = config.age.secrets.telegram-group.path;
 
@@ -66,7 +86,9 @@ in {
             t = [];
             u = [ ifaces'.wan ];
           };
-          mode = "dhcp-uplink";
+          mode       = "dhcp-uplink";
+          bw-egress  = "1G";
+          bw-ingress = "1G";
         };
         kpn-zakelijk = rec {
           ifname = "pppoe-wan";
@@ -76,7 +98,9 @@ in {
             t = [ ifaces'.wan ];
             u = [];
           };
-          mode = "pppoe-uplink";
+          mode       = "pppoe-uplink";
+          bw-egress  = "1G";
+          bw-ingress = "1G";
         };
         odido-consument = rec {
           ifname = "${ifaces'.wan}-${toString vlan}";
@@ -85,7 +109,9 @@ in {
             t = [ ifaces'.wan ];
             u = [];
           };
-          mode = "dhcp-uplink";
+          mode       = "dhcp-uplink";
+          bw-egress  = "400M";
+          bw-ingress = "400M";
         };
       }."odido-consument";
 
@@ -105,6 +131,8 @@ in {
         rt          = 583;
         prio        = uplink-failover.rule-prio.secondary;
         ct          = "0x02000000";
+        bw-egress   = "10M";
+        bw-ingress  = "10M";
       };
 
       ont = rec {
