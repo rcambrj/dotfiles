@@ -12,7 +12,7 @@ in {
     title = "Overview";
     views = [
       {
-        title = "Lights";
+        title = "Overview";
         cards = [
           {
             type = "entities";
@@ -59,6 +59,19 @@ in {
             show_header_toggle = false;
             entities = [
               "switch.3d_printer"
+            ];
+          }
+        ]
+        ++ [
+          {
+            type = "entities";
+            title = "Windows";
+            icon = "mdi:window-closed";
+            entities = [
+              "binary_sensor.bathroom_window"
+              "binary_sensor.attic_window_nw"
+              "binary_sensor.attic_window_ne"
+              "binary_sensor.attic_window_se"
             ];
           }
         ];
