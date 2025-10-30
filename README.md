@@ -1,8 +1,39 @@
 # dotfiles
 
-Records configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
+Contains configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
 
-## Prepare a headless bare metal machine on split USB storage
+## Repository structure
+Follows [numtide/blueprint](https://github.com/numtide/blueprint/) with some extras:
+
+* `hosts/` for `nixosConfigurations` and `darwinConfigurations`
+* `modules/` for `nixosModules` and `darwinModules`
+* `packages/` for `packages`
+* `kubernetes/` for ArgoCD apps
+* `secrets/` for age secrets, see `secrets.nix`
+
+### Machine configurations
+Located in `hosts/`
+
+* `blueberry`: a kubernetes and gluster node
+* `cloudberry`: the uplink router with WAN failover
+* `cranberry`: a kubernetes and gluster node
+* `elderberry`: a 3D printer
+* `mango`: a NixOS laptop (abandoned for now, main workstation is a [Macbook](https://github.com/rcambrj/nix-macbook), maybe I'll come back to it some day)
+* `minimal-*`: NixOS configurations for debugging and adopting new machines
+* `orange`: a kubernetes (no workloads) and gluster (no storage) node located offsite
+
+> [!NOTE]
+> Why is [Macbook](https://github.com/rcambrj/nix-macbook) in a different repository? It used to be that `nixos-unstable` would frequently break for darwin - much more frequently than for nixos proper, so in order to keep darwin on a working version, it's in a different flake with its own nixpkgs input. `nixos-unstable` has been better on darwin recently, but I haven't got around to merging the two.
+
+### Home Manager configurations
+
+* `modules/home/rcambrj-console`: a portable configuration for use on workstations and servers (although I think it's somewhat bloated for use on servers). This is consumed by [Macbook](https://github.com/rcambrj/nix-macbook).
+* `modules/home/rcambrj-graphical`: a configuration for my workstation's graphical interface (originally built for `mango`)
+* `modules/home/vscode`: the configuration for my text editor. Consumed by `rcambrj-graphical` and [Macbook](https://github.com/rcambrj/nix-macbook)
+
+## Preparing a new machine
+
+### Prepare a headless bare metal machine on split USB storage
 
 > Requires two USB sticks.
 
@@ -31,7 +62,7 @@ Records configuration for nix machines, builds images for bare metal machines an
 1. SSH to `minimal-intel-nomad` or `minimal-raspi-nomad`
 1. Run `sudo nixos-rebuild switch --flake github:rcambrj/dotfiles#{hostname}`
 
-## Prepare a headless bare metal machine with AIO disk
+### Prepare a headless bare metal machine with AIO disk
 
 1. Create a new configuration in `/hosts` which uses `disk-aio.nix`
 1. Boot `minimal-intel` with two-USB method (aarch64/raspi untested)
@@ -87,9 +118,3 @@ Records configuration for nix machines, builds images for bare metal machines an
     ```shell
     make build machine=blueberry
     ```
-
-## Edit a secret
-
-```
-make edit-secret name=foo
-```
