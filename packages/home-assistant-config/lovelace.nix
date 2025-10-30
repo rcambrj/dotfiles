@@ -54,11 +54,12 @@ in {
           }
           {
             type = "entities";
-            title = "3D Printer";
-            icon = "mdi:printer-3d-nozzle-outline";
+            title = "Systems";
+            icon = "mdi:desktop-classic";
             show_header_toggle = false;
             entities = [
               "switch.3d_printer"
+              "switch.gaming_pc"
             ];
           }
         ]

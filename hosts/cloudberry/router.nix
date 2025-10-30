@@ -286,6 +286,7 @@ in {
       sonoff-s20-4 = "5C:CF:7F:7F:54:8F";
       sonoff-s20-5 = "DC:4F:22:37:F0:D4";
       sonoff-s20-6 = "68:C6:3A:D5:AF:08";
+      sonoff-s20-7 = "EC:FA:BC:13:1F:1F";
 
       esp8266-a    = "4C:11:AE:10:BE:0E";
       esp8266-b    = "84:F3:EB:FB:53:A5";
@@ -313,6 +314,7 @@ in {
       sonoff-s20-4 = "${networks.lan.ip4-prefix}.54";
       sonoff-s20-5 = "${networks.lan.ip4-prefix}.55";
       sonoff-s20-6 = "${networks.lan.ip4-prefix}.56";
+      sonoff-s20-7 = "${networks.lan.ip4-prefix}.57";
       # sensors
       ventilator   = "${networks.lan.ip4-prefix}.71";
       dsmr         = "${networks.lan.ip4-prefix}.72";
@@ -341,6 +343,7 @@ in {
       { name = "sonoff-s20-4"; ip = client-ips.sonoff-s20-4; hwaddr = hwaddrs.sonoff-s20-4; }
       { name = "sonoff-s20-5"; ip = client-ips.sonoff-s20-5; hwaddr = hwaddrs.sonoff-s20-5; }
       { name = "sonoff-s20-6"; ip = client-ips.sonoff-s20-6; hwaddr = hwaddrs.sonoff-s20-6; }
+      { name = "sonoff-s20-7"; ip = client-ips.sonoff-s20-7; hwaddr = hwaddrs.sonoff-s20-7; }
       # sensors
       { name = "ventilator";   ip = client-ips.ventilator;   hwaddr = hwaddrs.esp8266-a; }
       { name = "dsmr";         ip = client-ips.dsmr;         hwaddr = hwaddrs.esp8266-b; }
