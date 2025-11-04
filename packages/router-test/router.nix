@@ -141,6 +141,6 @@ in rec {
   ];
 
   port-forwards = [
-    { proto = "tcp"; ports = [ "8080" ]; to = client-ips.client1; }
+    { proto = "tcp"; ports = [ "8787" ]; to = client-ips.client1; }
   ];
 }

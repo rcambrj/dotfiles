@@ -6,9 +6,13 @@ let
   primary-ifname = test-router.networks.primary.ifname;
   primary-prefix = "10.11.0";
   primary-gateway = "${primary-prefix}.1";
+  router-primary = "${primary-prefix}.101";
+
   secondary-ifname = test-router.networks.secondary.ifname;
   secondary-gateway = test-router.networks.secondary.ip4-gateway;
   secondary-adjacent = "${test-router.networks.secondary.ip4-prefix}.100";
+  router-secondary = "${test-router.networks.secondary.ip4-prefix}.101";
+
   common-gateway = "10.55.0.1";
 
   router-lan-0 = test-router.networks.lan-0.ip4-address;
@@ -51,7 +55,8 @@ pkgs.testers.runNixOSTest {
         enable = true;
         settings = {
           interface = ifname;
-          dhcp-range = "${ifname},${primary-prefix}.101,${primary-prefix}.254";
+          # quick fix: restrict dhcp range to one IP, easily identify the router
+          dhcp-range = "${ifname},${router-primary},${router-primary}";
         };
       };
       services.static-web-server = {
@@ -163,6 +168,10 @@ pkgs.testers.runNixOSTest {
           DHCP = "yes";
         };
       };
+      services.static-web-server = {
+        enable = true;
+        root = pkgs.writeTextDir "index.html" "dst=client1";
+      };
     };
   };
 
@@ -176,24 +185,28 @@ pkgs.testers.runNixOSTest {
     router.wait_until_succeeds('ping -c 1 -I ${primary-ifname} ${primary-gateway}', 10)
     router.wait_until_succeeds('ping -c 1 -I ${secondary-ifname} ${secondary-gateway}', 10)
 
-    # traffic between client and router
+    # icmp between client and router
     client0.wait_until_succeeds('ping -c 1 ${router-lan-0}', 10)
-    # traffic between untagged <> tagged vlan clients, dst client has static dhcp host set
+    # icmp between untagged <> tagged vlan clients (bridged)
     client0.wait_until_succeeds('ping -c 1 ${client1}', 10)
 
-    # ssh to router must always for nixos-rebuild
+    # ssh to router must work for nixos-rebuild
     client0.succeed('ssh root@${router-lan-0} -v -o ConnectTimeout=1 -o StrictHostKeyChecking=no -t "exit"')
 
-    # curl the secondary gateway dashboard
+    # tcp from router to downlink clients
+    router.succeed('curl -m 2 -vis http://${client1}:8787 | grep "dst=client1"')
+    # tcp from uplink to downlink clients
+    primary_gw.succeed('curl -m 2 -vis http://${router-primary}:8787 | grep "dst=client1"')
+
+    # tcp from router to secondary gateway (custom rule)
     router.succeed('curl -m 2 -vis --interface ${secondary-ifname} http://${secondary-gateway}:8787')
 
-    # traffic to elsewhere on the secondary uplink
-    # ping should succeed to anywhere
-    # other traffic must be blocked
+    # icmp from router to elsewhere on secondary uplink
     router.succeed('ping -c 1 -I ${secondary-ifname} ${secondary-adjacent}')
+    # tcp from router to elsewhere on secondary uplink
     router.fail('curl -m 2 -vis --interface ${secondary-ifname} http://${secondary-adjacent}:8787')
 
-    # simulate internet traffic: through primary uplink
+    # simulate internet traffic: tcp through primary uplink
     router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
     client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
 
@@ -201,7 +214,7 @@ pkgs.testers.runNixOSTest {
     primary_gw.succeed('iptables -t raw -A PREROUTING -j DROP')
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=DOWN', 10)
 
-    # simulate internet traffic: through secondary uplink
+    # simulate internet traffic: tcp through secondary uplink
     router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=secondary"')
     client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=secondary"')
 
@@ -209,7 +222,7 @@ pkgs.testers.runNixOSTest {
     primary_gw.succeed('iptables -t raw -D PREROUTING -j DROP')
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 10)
 
-    # simulate internet traffic: through primary uplink
+    # simulate internet traffic: tcp through primary uplink
     router.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
     client0.succeed('curl -m 2 -vis http://${common-gateway}:8787 | grep "dst=primary"')
   '';
