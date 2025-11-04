@@ -21,8 +21,10 @@ in {
       lldap-jwt-secret.file      = ../../../secrets/lldap-jwt-secret.age;
       mailgun-smtp-password.file = ../../../secrets/mailgun-smtp-password.age;
 
-      ldap-admin-ro-password.file                = ../../../secrets/ldap-admin-ro-password.age;
-      argocd-client-secret.file                  = ../../../secrets/argocd-client-secret.age;
+      ldap-admin-ro-password.file = ../../../secrets/ldap-admin-ro-password.age;
+      argocd-client-secret.file   = ../../../secrets/argocd-client-secret.age;
+
+      grafana-secret-key.file = ../../../secrets/grafana-secret-key.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -177,5 +179,25 @@ in {
             app_secret_argocd: $app_secret_argocd
       '';
     };
+
+    age-template.files."20-grafana" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-grafana.yaml";
+      vars = {
+        ldap_admin_pass = config.age.secrets.ldap-admin-ro-password.path;
+        secret_key      = config.age.secrets.grafana-secret-key.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: grafana-secrets
+          namespace: monitoring
+        stringData:
+          ldap-admin-pass.yaml: $ldap_admin_pass
+          secret-key.yaml: $secret_key
+      '';
+    };
+
+    #
   });
 }

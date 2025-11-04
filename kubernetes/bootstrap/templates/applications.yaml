@@ -14,7 +14,7 @@ spec:
   destination:
     namespace: {{ .namespace | default .name | quote }}
     server: {{ $config.spec.destination.server | quote }}
-  project: default
+  project: dotfiles
   source:
     path: {{ (printf "%s/%s" $config.spec.source.path (.path | default .name)) | quote }}
     repoURL: {{ $config.spec.source.repoURL }}
@@ -24,6 +24,7 @@ spec:
     {{- end }}
   syncPolicy:
     syncOptions:
+      - ServerSideApply=true
       - CreateNamespace=true
     automated:
       prune: true

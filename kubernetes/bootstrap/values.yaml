@@ -21,6 +21,6 @@ applications:
 - name: landing
 - name: media
 - name: metallb-system
+- name: monitoring
 - name: node-feature-discovery
 - name: priorities
-- name: telemetry

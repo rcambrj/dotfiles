@@ -160,7 +160,7 @@ spec:
   secretName: ldap-server
   dnsNames:
   - lldap.home.cambridge.me
-  - lldap.auth.svc.cluster.local
+  - lldap-ldaps.auth.svc.cluster.local
   issuerRef:
     name: ldap-ca
     kind: ClusterIssuer

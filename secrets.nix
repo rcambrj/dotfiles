@@ -50,6 +50,9 @@ in {
   "secrets/google-assistant-client-email.age".publicKeys = defaults ++ kubenodes;
   "secrets/google-assistant-private-key.age".publicKeys = defaults ++ kubenodes;
 
+  # grafana
+  "secrets/grafana-secret-key.age".publicKeys = defaults ++ kubenodes;
+
   # telegram bot
   "secrets/telegram-router-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
   "secrets/telegram-telly-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];

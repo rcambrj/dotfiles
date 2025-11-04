@@ -143,6 +143,30 @@ in {
       source = allNamespaces;
     };
 
+    services.k3s.manifests."35-argocd-dotfiles-project".content = {
+      apiVersion =  "argoproj.io/v1alpha1";
+      kind = "AppProject";
+      metadata = {
+        name = "dotfiles";
+        namespace = "argocd";
+        finalizers = [
+          "resources-finalizer.argocd.argoproj.io"
+        ];
+      };
+      spec = {
+        clusterResourceWhitelist = [{
+          group = "*";
+          kind = "*";
+        }];
+        destinations = [{
+          namespace = "*";
+          server = "*";
+        }];
+        sourceRepos = [ "*" ];
+        sourceNamespaces = [ "*" ];
+      };
+    };
+
     services.k3s.manifests."40-argocd-dotfiles-application".content = {
       apiVersion =  "argoproj.io/v1alpha1";
       kind = "Application";
@@ -165,6 +189,7 @@ in {
           namespace = "argocd";
         };
         syncOptions = [
+          "ServerSideApply=true"
           "CreateNamespace=true"
         ];
         syncPolicy = {
