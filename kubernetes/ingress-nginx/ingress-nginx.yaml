@@ -16,3 +16,19 @@ spec:
         annotations:
           metallb.io/loadBalancerIPs: 192.168.142.50
           metallb.io/allow-shared-ip: 192.168.142.50
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - metallb
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - controller
+            namespaces:
+              - metallb-system
+            topologyKey: kubernetes.io/hostname
