@@ -1,0 +1,35 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: descheduler
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://github.com/kubernetes-sigs/descheduler/blob/master/charts/descheduler/README.md
+  repo: https://kubernetes-sigs.github.io/descheduler
+  chart: descheduler
+  version: 0.34.0
+  targetNamespace: descheduler
+  createNamespace: true
+  # valuesContent: |-
+---
+apiVersion: descheduler/v1alpha2
+kind: DeschedulerPolicy
+metadata:
+  name: default
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+profiles:
+  - name: default
+    plugins:
+      deschedule:
+        enabled:
+        - RemoveDuplicates
+        - LowNodeUtilization
+        - HighNodeUtilization
+        - RemovePodsViolatingInterPodAntiAffinity
+        - RemovePodsViolatingNodeAffinity
+        - RemovePodsViolatingNodeTaints
+        - RemovePodsViolatingTopologySpreadConstraint

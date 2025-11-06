@@ -11,6 +11,7 @@ applications:
 - name: auth
 - name: cert-manager
 - name: copyparty
+- name: descheduler
 - name: esphome
 - name: fdm
 - name: generic-device-plugin
