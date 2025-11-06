@@ -242,7 +242,7 @@ in {
 
     dns = {
       domain = "cambridge.me";
-      upstreams = dns-upstreams ++ [ "/*.netbird.cloud/127.0.0.62#5053" ];
+      upstreams = dns-upstreams ++ [ "/*.netbird.cloud/127.0.0.62#${toString config.services.netbird.clients.default.dns-resolver.port}" ];
       hosts = {
         "router.cambridge.me" = networks.lan.ip4-address;
         "home.cambridge.me" = client-ips.kubernetes-lb;

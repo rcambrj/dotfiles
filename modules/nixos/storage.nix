@@ -3,14 +3,18 @@
 # mkfs.xfs -f /dev/pool/DATA
 #
 # gluster peer probe cranberry.cambridge.me
-# gluster peer probe strawberry.cambridge.me
 # gluster peer probe blueberry.cambridge.me
+# gluster peer probe orange.netbird.cloud
+#
+# # use *.netbird.cloud for cloud servers because of this error:
+# #   Failed to convert hostname orange.cambridge.me to uuid
+# # probably because that host resolves differently for orange vs other hosts
 #
 # gluster volume create gv0 \
 #   replica 3 arbiter 1 \
 #   cranberry.cambridge.me:/mnt/gluster/brick \
-#   strawberry.cambridge.me:/mnt/gluster/brick \
-#   blueberry.cambridge.me:/var/lib/glusterd-brick-arbiter \
+#   blueberry.cambridge.me:/mnt/gluster/brick \
+#   orange.netbird.cloud:/var/lib/glusterd-brick \
 #   force
 #
 # gluster volume set gv0 client.ssl on

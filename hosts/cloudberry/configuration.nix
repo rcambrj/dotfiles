@@ -13,14 +13,14 @@
     flake.nixosModules.base
     flake.nixosModules.common
     flake.nixosModules.config-intel
-    flake.nixosModules.netbird
     flake.nixosModules.server-backup
 
-    ./router.nix
     ./ddns.nix
     ./http
-    ./unifi.nix
+    ./netbird.nix
     ./proxies.nix
+    ./router.nix
+    ./unifi.nix
     ./wan-status.nix
   ];
 
