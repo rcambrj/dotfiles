@@ -34,11 +34,10 @@
       # dd: 480MB/s dropping to 170MB/s after heat soak
     }
     {
-      fqdn = "strawberry.cambridge.me";
-      # dd: 220MB/s stable
+      fqdn = "blueberry.cambridge.me";
     }
     {
-      fqdn = "blueberry.cambridge.me";
+      fqdn = "orange.netbird.cloud";
     }
   ];
   cfg = config.services.gluster-node;
