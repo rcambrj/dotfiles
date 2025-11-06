@@ -271,7 +271,7 @@ in {
       topton-b-3   = "00:e2:69:59:2e:74";
       topton-b-4   = "00:e2:69:59:2e:75";
 
-      macmini-2011 = "3C:07:54:49:5D:D6";
+      macmini-2011 = "3C:07:54:49:5D:D6"; # this network card is fried
       dell-wyse-a  = "54:48:10:c2:25:b5";
       dell-wyse-b  = "54:48:10:AB:71:0C";
       aorus-b450   = "B4:2E:99:CB:8E:CB";
@@ -333,7 +333,7 @@ in {
       # servers
       # { name = "cloudberry";   ip = networks.lan.ip4-address; hwaddr = networks.lan.mac; }
       { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = hwaddrs.br-cranberry; }
-      { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.macmini-2011; }
+      { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.dongle-white; } # was hwadders.macmini-2011
       { name = "elderberry";   ip = client-ips.elderberry; hwaddr = hwaddrs.dell-wyse-a; }
       { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.aorus-b450; }
       # switches
