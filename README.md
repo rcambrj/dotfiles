@@ -1,6 +1,6 @@
 # dotfiles
 
-Contains configuration for nix machines, builds images for bare metal machines and deploys updates to cloud machines. Probably also has some useful modules and packages.
+This repository contains my NixOS-based homelab infrastructure implementing a Kubernetes cluster with GlusterFS storage, network routing with WAN failover, home automation via Home Assistant, media services, 3D printer management, GitOps deployment through ArgoCD, LDAP authentication with OAuth2/OIDC integration, monitoring with Prometheus/Grafana, automated backups to cloud storage, and infrastructure-as-code using Nix flakes. The system spans multiple physical nodes with both on-premises and off-site components, using age encryption for secrets management and supporting both x86_64 and ARM architectures.
 
 ## Repository structure
 Follows [numtide/blueprint](https://github.com/numtide/blueprint/) with some extras:
