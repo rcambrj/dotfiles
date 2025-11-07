@@ -28,7 +28,7 @@
         base_dn = "dc=cambridge,dc=me";
         bind_dn = "uid=admin-ro,ou=people,dc=cambridge,dc=me";
         bind_password = "{secrets.ldap.bind_password}";
-        group_dn = "cn=fdm,ou=groups,dc=cambridge,dc=me";
+        user_filter = "(&(uid=USERNAME)(memberOf=cn=fdm,ou=groups,dc=cambridge,dc=me))";
       };
       authorization = {
         cors_domains = [ "https://fdm.home.cambridge.me" ];
@@ -48,8 +48,14 @@
   };
 
   systemd.services.moonraker = {
-    # disable logging to disk, rely on journald
-    environment.MOONRAKER_LOG_PATH = "/dev/null";
+    environment = {
+      # verbose for debug
+      MOONRAKER_VERBOSE_LOGGING = "y";
+
+      # disable logging to disk, rely on journald
+      MOONRAKER_DISABLE_FILE_LOG = "y";
+      MOONRAKER_LOG_PATH = "/dev/null";
+    };
 
     # restart moonraker when config changes (excludes secrets)
     restartTriggers = [
