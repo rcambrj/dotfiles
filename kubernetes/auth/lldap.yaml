@@ -29,7 +29,7 @@ spec:
           secretName: ldap-server
       containers:
       - name: lldap
-        image: lldap/lldap:2025-07-29
+        image: lldap/lldap:2025-10-14
         envFrom:
         - configMapRef:
             name: lldap-env
