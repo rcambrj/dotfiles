@@ -88,7 +88,7 @@ data:
       config:
         host: lldap-ldaps.auth.svc.cluster.local
         insecureNoSSL: false
-        insecureSkipVerify: true
+        insecureSkipVerify: false
         rootCA: /ldap-ca.pem
         bindDN: uid=admin-ro,ou=people,dc=cambridge,dc=me
         bindPW: {{ (datasource "secrets").ldap_admin_pass }}
