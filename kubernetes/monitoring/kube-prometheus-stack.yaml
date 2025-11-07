@@ -130,7 +130,7 @@ spec:
         config: |-
           [[servers]]
           host = "lldap-ldaps.auth.svc.cluster.local"
-          port = 6360
+          port = 636
           # start_tls = true
           use_ssl = true
           root_ca_cert = "/ldap-ca.pem"

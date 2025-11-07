@@ -22,8 +22,8 @@
     stateDir = "/var/lib/printer_data";
     settings = {
       ldap = {
-        ldap_host = "ldap.home.cambridge.me";
-        ldap_port = 6360;
+        ldap_host = "lldap.home.cambridge.me";
+        ldap_port = 636;
         ldap_secure = true;
         base_dn = "dc=cambridge,dc=me";
         bind_dn = "uid=admin-ro,ou=people,dc=cambridge,dc=me";

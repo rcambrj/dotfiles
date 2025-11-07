@@ -57,7 +57,7 @@ spec:
         - name: ldap
           containerPort: 3890
         - name: ldaps
-          containerPort: 6360
+          containerPort: 636
         - name: http
           containerPort: 17170
 ---
@@ -81,7 +81,7 @@ data:
   LLDAP_LDAP_USER_EMAIL: team+admin@cambridge.me
   # LLDAP_LDAP_USER_PASS: password # uncomment to bootstrap
   LLDAP_LDAPS_OPTIONS__ENABLED: "true"
-  LLDAP_LDAPS_OPTIONS__PORT: "6360"
+  LLDAP_LDAPS_OPTIONS__PORT: "636"
   LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: "true"
   LLDAP_SMTP_OPTIONS__FROM: ldap@cambridge.me
   LLDAP_SMTP_OPTIONS__PORT: "465"
@@ -122,7 +122,7 @@ spec:
   ports:
   - name: ldaps
     protocol: TCP
-    port: 6360
+    port: 636
     targetPort: ldaps
   type: LoadBalancer
 ---

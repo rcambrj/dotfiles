@@ -86,7 +86,7 @@ data:
       id: ldap
       name: LDAP
       config:
-        host: lldap.home.cambridge.me:6360
+        host: lldap-ldaps.auth.svc.cluster.local
         insecureNoSSL: false
         insecureSkipVerify: true
         rootCA: /ldap-ca.pem

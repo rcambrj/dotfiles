@@ -64,6 +64,7 @@ in {
           10250     # kubelet
           7946      # metallb
           9100      # prometheus
+          636       # ldaps
         ];
         allowedUDPPorts = [
           8472      # flannel
