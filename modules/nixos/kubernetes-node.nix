@@ -63,6 +63,7 @@ in {
           80 443    # ingress-nginx
           10250     # kubelet
           7946      # metallb
+          9100      # prometheus
         ];
         allowedUDPPorts = [
           8472      # flannel
