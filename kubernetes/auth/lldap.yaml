@@ -79,7 +79,7 @@ data:
   LLDAP_LDAP_PORT: "3890"
   LLDAP_LDAP_USER_DN: admin
   LLDAP_LDAP_USER_EMAIL: team+admin@cambridge.me
-  LLDAP_LDAP_USER_PASS: password
+  # LLDAP_LDAP_USER_PASS: password # uncomment to bootstrap
   LLDAP_LDAPS_OPTIONS__ENABLED: "true"
   LLDAP_LDAPS_OPTIONS__PORT: "6360"
   LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: "true"
