@@ -29,7 +29,9 @@ with lib;
   services.journald.extraConfig = ''
     Storage=volatile
   '';
-  systemd.extraConfig = "DefaultLimitNOFILE=4096";
+  systemd.settings.Manager = {
+    LimitNOFILE = 4096;
+  };
   networking.firewall.enable = true;
   nixpkgs.config.allowUnfree = true;
 
