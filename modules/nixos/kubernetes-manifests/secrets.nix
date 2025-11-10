@@ -5,6 +5,7 @@ in {
   config = mkIf cfg.enable ({
     age.secrets = {
       cloudflare-token.file = ../../../secrets/cloudflare-token.age;
+      cloudflare-tunnel.file = ../../../secrets/cloudflare-tunnel.age;
 
       kubernetes-oauth2-proxy-client-secret.file = ../../../secrets/kubernetes-oauth2-proxy-client-secret.age;
       kubernetes-oauth2-proxy-cookie-secret.file = ../../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
@@ -198,6 +199,20 @@ in {
       '';
     };
 
-    #
+    age-template.files."20-cloudflare-tunnel" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-cloudflare-tunnel.yaml";
+      vars = {
+        token = config.age.secrets.cloudflare-tunnel.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: cloudflare-tunnel
+          namespace: ingress-nginx
+        stringData:
+          token: $token
+      '';
+    };
   });
 }

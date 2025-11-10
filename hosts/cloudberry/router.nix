@@ -352,7 +352,7 @@ in {
     ];
 
     port-forwards = [
-      { proto = "tcp"; ports = [ "443" ]; to = client-ips.kubernetes-lb; }
+      # { proto = "tcp"; ports = [ "443" ]; to = client-ips.kubernetes-lb; }
 
       # wreckfest
       { proto = "tcp"; ports = [ "27015-27016" "33540" ]; to = client-ips.gaming-pc; }
