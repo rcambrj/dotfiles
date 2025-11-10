@@ -4,12 +4,23 @@ let
 in {
   programs.ssh = {
     enable = true;
-    extraConfig = ''
-      TCPKeepAlive = yes
-      ServerAliveInterval = 60
-      ConnectTimeout = 60
-    '';
+    enableDefaultConfig = false;
     matchBlocks = {
+      "*" = {
+        # defaults
+        extraOptions = {
+          ForwardAgent = "no";
+          ServerAliveCountMax = "3";
+          Compression = "no";
+          AddKeysToAgent = "no";
+          HashKnownHosts = "no";
+          ControlMaster = "no";
+          ControlPersist = "no";
+          TCPKeepAlive = "yes";
+          ServerAliveInterval = "60";
+          ConnectTimeout = "60";
+        };
+      };
       "vm" = {
         hostname = "localhost";
         user = me.user;

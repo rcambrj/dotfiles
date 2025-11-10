@@ -4,16 +4,9 @@ let
 in {
   programs.git = {
     enable = true;
-    userName = me.name;
-    userEmail = me.email;
-    ignores = [
-      ".envrc"
-      ".vscode"
-    ];
-    lfs = {
-      enable = true;
-    };
-    extraConfig = {
+    settings = {
+      user.name = me.name;
+      user.email = me.email;
       init.defaultBranch = "main";
       core.abbrev = 7;
       core.editor = "vim";
@@ -26,6 +19,13 @@ in {
       mergetool.prompt = false;
       pull.rebase = true;
       url."ssh://git@github.com/".insteadOf = "https://github.com/";
+    };
+    ignores = [
+      ".envrc"
+      ".vscode"
+    ];
+    lfs = {
+      enable = true;
     };
   };
 

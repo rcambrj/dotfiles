@@ -98,7 +98,7 @@
           "hashicorp.terraform"
           "jnoortheen.nix-ide"
           "ms-vscode.makefile-tools"
-          "orsenkucher.vscode-graphql"
+          # "orsenkucher.vscode-graphql"
           "tamasfe.even-better-toml"
           "pinage404.rust-extension-pack"
           # "biomejs.biome" # pkg needs installing on remote host
@@ -127,7 +127,7 @@
         vscode-marketplace.jnoortheen.nix-ide
         # vscode-marketplace.bbenoist.nix
         vscode-marketplace.ms-vscode.makefile-tools
-        vscode-marketplace.orsenkucher.vscode-graphql
+        # vscode-marketplace.orsenkucher.vscode-graphql
         vscode-marketplace.tamasfe.even-better-toml
         vscode-marketplace.pinage404.rust-extension-pack
         # vscode-marketplace.esbenp.prettier-vscode
