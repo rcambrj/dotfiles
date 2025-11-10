@@ -23,12 +23,6 @@
 
   networking.hostName = "blueberry";
 
-  facter.detected = {
-    # wifi driver broadcom-sta-6.30.223.271-57-6.12.39 is compromised
-    # not needed anyway, stop facter installing it
-    networking.broadcom.sta.enable = false;
-  };
-
   disko.devices.disk.disk1.device = "/dev/disk/by-id/ata-PNY_1TB_SATA_SSD_PNB17255012860100073";
   fileSystems = {
     "/var/lib" = {
