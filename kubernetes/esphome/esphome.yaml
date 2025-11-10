@@ -29,7 +29,8 @@ spec:
           path: /data/esphome/.temp
       containers:
       - name: esphome
-        image: ghcr.io/esphome/esphome:2025.7
+        # https://github.com/esphome/esphome/releases
+        image: ghcr.io/esphome/esphome:2025.10.4
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000

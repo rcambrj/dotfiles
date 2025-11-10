@@ -52,7 +52,7 @@ spec:
           path: /data
       containers:
       - name: gluster-mount-watcher
-        image: bitnami/kubectl:1.33.4
+        image: nixery.dev/shell/kubectl@sha256:fa9050fc59f5c1fd3ba2ec27857f6e0a051fc9fcf7bbaaa8ff969941017ab99a
         env:
         - name: NODE_NAME
           valueFrom:

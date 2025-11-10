@@ -31,6 +31,7 @@ spec:
         emptyDir:
       initContainers:
       - name: create-configs
+        # https://github.com/hairyhenderson/gomplate/pkgs/container/gomplate/versions
         image: hairyhenderson/gomplate:v4.3.3-alpine
         args: [
           "-d", "secrets=/secrets.yaml",

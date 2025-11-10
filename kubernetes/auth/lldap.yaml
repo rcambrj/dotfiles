@@ -29,7 +29,8 @@ spec:
           secretName: ldap-server
       containers:
       - name: lldap
-        image: lldap/lldap:2025-10-14
+        # https://github.com/lldap/lldap/pkgs/container/lldap/versions
+        image: lldap/lldap:2025-11-09-alpine
         envFrom:
         - configMapRef:
             name: lldap-env

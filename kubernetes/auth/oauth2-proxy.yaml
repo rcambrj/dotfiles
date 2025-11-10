@@ -20,7 +20,8 @@ spec:
           name: oauth2-proxy
       containers:
       - name: oauth2-proxy
-        image: quay.io/oauth2-proxy/oauth2-proxy:v7.9.0-amd64
+        # https://quay.io/repository/oauth2-proxy/oauth2-proxy?tab=tags&tag=latest
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.13.0-amd64
         ports:
         - name: http
           containerPort: 4180

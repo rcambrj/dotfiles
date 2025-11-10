@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }: with lib; let
   # argoVersion should equal the one provided by the chart
-  chartVersion = "v8.1.2";
-  argoVersion = "v3.0.6";
+  # https://artifacthub.io/packages/helm/argo/argo-cd
+  chartVersion = "v9.1.0";
+  argoVersion = "v3.2.0";
 
   cfg = config.services.kubernetes-manifests;
 in {

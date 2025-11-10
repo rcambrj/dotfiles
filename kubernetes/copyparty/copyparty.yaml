@@ -24,7 +24,8 @@ spec:
           path: /data
       containers:
       - name: copyparty
-        image: ghcr.io/9001/copyparty-ac:1.18.8
+        # https://github.com/9001/copyparty/pkgs/container/copyparty-ac/versions
+        image: ghcr.io/9001/copyparty-ac:1.19.20
         volumeMounts:
         - name: copyparty-config
           mountPath: /cfg

@@ -30,6 +30,7 @@ spec:
           path: /data/media/downloads/transmission
       initContainers:
       - name: create-dirs
+        # https://hub.docker.com/_/busybox
         image: busybox:1.37.0
         volumeMounts:
         - name: downloads
@@ -45,7 +46,8 @@ spec:
       {{- end }}
       containers:
       - name: sync-forwarded-port
-        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
+        # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
+        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls317
         env:
         - name: TR_AUTH
           value: "transmission:password"
@@ -73,7 +75,8 @@ spec:
             cpu: "100m"
             memory: "10Mi"
       - name: transmission
-        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls300
+        # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
+        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls317
         env:
         - name: TZ
           value: Europe/Amsterdam

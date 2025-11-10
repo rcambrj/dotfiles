@@ -10,6 +10,7 @@ vpnsidecar:
 #   - name: gluetun
 #     mountPath: /gluetun
 - name: vpn
+  # https://github.com/qdm12/gluetun/releases
   image: ghcr.io/qdm12/gluetun:v3.40.0
   restartPolicy: Always
   securityContext:

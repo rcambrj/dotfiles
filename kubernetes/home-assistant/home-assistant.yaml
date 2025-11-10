@@ -42,7 +42,7 @@ spec:
           secretName: webos-dev-mode-curl
       initContainers:
       - name: download-custom-components
-        image: nixery.dev/shell/curl/gzip/gnutar@sha256:4b5f094af50de7060c1cb01389697c9c289d20bd84bff8daf84fb627dfea84d3
+        image: nixery.dev/shell/curl/gzip/gnutar@sha256:0c9f58e0f6a35ca45dce4bbc344c1718e8577fc66f1b4a01b410901ee94301dc
         volumeMounts:
         - name: custom-components
           mountPath: /custom_components
@@ -51,12 +51,13 @@ spec:
         - |-
           set -ex
 
-          # https://github.com/j9brown/scenery
+          # https://github.com/j9brown/scenery/releases
           curl -s -L https://github.com/j9brown/scenery/archive/refs/tags/v0.5.0.tar.gz | gunzip | tar -xvf - \
             -C /custom_components \
             --strip-components=2 scenery-0.5.0/custom_components/
       - name: create-configs
-        image: nixos/nix:2.30.2
+        # https://hub.docker.com/r/nixos/nix/tags
+        image: nixos/nix:2.32.3
         volumeMounts:
         - name: configs
           mountPath: /configs
@@ -76,12 +77,14 @@ spec:
           cp -RL result/* /configs/
           ls -lR /configs/
 
+          # https://github.com/lldap/lldap/commits/main/example_configs/lldap-ha-auth.sh
           wget https://raw.githubusercontent.com/lldap/lldap/9ac96e8c6e4b015ee10ddcc978ece6da34d38911/example_configs/lldap-ha-auth.sh \
             --output-document /lldap-ha-auth/lldap-ha-auth.sh
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       containers:
       - name: home-assistant
-        image: homeassistant/home-assistant:2025.9.0.dev202508010256
+        # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
+        image: homeassistant/home-assistant:2025.11.1
         resources:
           requests:
             cpu: "100m"

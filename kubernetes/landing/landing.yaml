@@ -21,7 +21,8 @@ spec:
           name: var-www
       containers:
       - name: landing
-        image: nginx:1.29.0
+        # https://hub.docker.com/_/nginx
+        image: nginx:1.29.3
         volumeMounts:
         - name: var-www
           mountPath: /usr/share/nginx/html

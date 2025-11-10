@@ -1,5 +1,6 @@
 { pkgs, ... }: pkgs.stdenv.mkDerivation rec {
   name = "fluidd-config";
+  # https://github.com/fluidd-core/fluidd-config/tags
   version = "v1.2.1";
   src = pkgs.fetchFromGitHub {
     owner = "fluidd-core";

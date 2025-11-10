@@ -26,6 +26,7 @@ spec:
           path: /data/media
       initContainers:
       - name: lock-logs-dir
+        # https://hub.docker.com/_/busybox
         image: busybox:1.37.0
         volumeMounts:
         - name: radarr-config
@@ -37,7 +38,8 @@ spec:
             chmod 000 /config/logs
       containers:
       - name: radarr
-        image: lscr.io/linuxserver/radarr:5.26.2.10099-ls277
+        # https://github.com/linuxserver/docker-radarr/pkgs/container/transmission
+        image: lscr.io/linuxserver/radarr:5.28.0.10274-ls286
         env:
         - name: TZ
           value: Europe/Amsterdam

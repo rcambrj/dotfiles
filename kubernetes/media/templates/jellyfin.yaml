@@ -33,6 +33,7 @@ spec:
         emptyDir:
       initContainers:
       - name: create-dirs
+        # https://hub.docker.com/_/busybox
         image: busybox:1.37.0
         volumeMounts:
         - name: media
@@ -48,7 +49,8 @@ spec:
             chown -R 1000:1000 /logs
       containers:
       - name: jellyfin
-        image: ghcr.io/jellyfin/jellyfin:10.10.7
+        # https://github.com/jellyfin/jellyfin/releases
+        image: ghcr.io/jellyfin/jellyfin:10.11.2
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000

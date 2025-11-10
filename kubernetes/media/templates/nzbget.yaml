@@ -28,6 +28,7 @@ spec:
           path: /data/media/downloads/nzbget
       initContainers:
       - name: create-dirs
+        # https://hub.docker.com/_/busybox
         image: busybox:1.37.0
         volumeMounts:
         - name: downloads
@@ -40,7 +41,8 @@ spec:
             chown -R 1000:1000 /downloads/*
       containers:
       - name: nzbget
-        image: lscr.io/linuxserver/nzbget:v25.2-ls204
+        # https://github.com/linuxserver/docker-nzbget/pkgs/container/transmission
+        image: lscr.io/linuxserver/nzbget:v25.4-ls219
         env:
         - name: TZ
           value: Europe/Amsterdam

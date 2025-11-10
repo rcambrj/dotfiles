@@ -30,6 +30,7 @@ spec:
       {{- . | toYaml | nindent 6 }}
       {{- end }}
       - name: lock-logs-file
+        # https://hub.docker.com/_/busybox
         image: busybox:1.37.0
         volumeMounts:
         - name: jackett-config
@@ -42,7 +43,8 @@ spec:
             chmod 000 /config/Jackett/log.txt
       containers:
       - name: jackett
-        image: lscr.io/linuxserver/jackett:v0.22.2123-ls82
+        # https://github.com/linuxserver/docker-jackett/pkgs/container/transmission
+        image: lscr.io/linuxserver/jackett:v0.24.270-ls211
         env:
         - name: TZ
           value: Europe/Amsterdam

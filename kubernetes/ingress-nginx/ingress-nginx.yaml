@@ -5,9 +5,10 @@ metadata:
   finalizers:
   - wrangler.cattle.io/on-helm-chart-remove
 spec:
+  # https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
   repo: https://kubernetes.github.io/ingress-nginx
   chart: ingress-nginx
-  version: 4.13.0
+  version: 4.14.0
   targetNamespace: ingress-nginx
   createNamespace: true
   valuesContent: |-
