@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dsmr
+spec:
+  type: ExternalName
+  externalName: dsmr.cambridge.me
+  ports:
+  - protocol: TCP
+    name: http
+    port: 80
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: dsmr
+  labels:
+    release: kube-prometheus-stack # serviceMonitorSelector
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dsmr
+  endpoints:
+  - interval: 60s
+    port: http
+    path: /metrics
