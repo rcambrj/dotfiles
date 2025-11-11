@@ -29,9 +29,6 @@ with lib;
   services.journald.extraConfig = ''
     Storage=volatile
   '';
-  systemd.settings.Manager = {
-    LimitNOFILE = 4096;
-  };
   networking.firewall.enable = true;
   nixpkgs.config.allowUnfree = true;
 
@@ -83,21 +80,24 @@ with lib;
 
     # For more detail, see:
     #   https://0pointer.de/blog/projects/watchdog.html
-    settings.Manager = {
-      # systemd will send a signal to the hardware watchdog at half
-      # the interval defined here, so every 7.5s.
-      # If the hardware watchdog does not get a signal for 15s,
-      # it will forcefully reboot the system.
-      RuntimeWatchdogSec = lib.mkDefault "15s";
-      # Forcefully reboot if the final stage of the reboot
-      # hangs without progress for more than 30s.
-      # For more info, see:
-      #   https://utcc.utoronto.ca/~cks/space/blog/linux/SystemdShutdownWatchdog
-      RebootWatchdogSec = lib.mkDefault "30s";
-      # Forcefully reboot when a host hangs after kexec.
-      # This may be the case when the firmware does not support kexec.
-      KExecWatchdogSec = lib.mkDefault "1m";
-    };
+    # settings.Manager = {
+    #   # systemd will send a signal to the hardware watchdog at half
+    #   # the interval defined here, so every 7.5s.
+    #   # If the hardware watchdog does not get a signal for 15s,
+    #   # it will forcefully reboot the system.
+    #   RuntimeWatchdogSec = lib.mkDefault "15s";
+    #   # Forcefully reboot if the final stage of the reboot
+    #   # hangs without progress for more than 30s.
+    #   # For more info, see:
+    #   #   https://utcc.utoronto.ca/~cks/space/blog/linux/SystemdShutdownWatchdog
+    #   RebootWatchdogSec = lib.mkDefault "30s";
+    #   # Forcefully reboot when a host hangs after kexec.
+    #   # This may be the case when the firmware does not support kexec.
+    #   KExecWatchdogSec = lib.mkDefault "1m";
+    #
+    #   # increase open file limit
+    #   LimitNOFILE = 4096;
+    # };
   };
 
   # Make sure the serial console is visible in qemu when testing the server configuration
