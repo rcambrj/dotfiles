@@ -29,7 +29,7 @@ with lib;
       requires = [ "systemd-networkd.service" ];
       bindsTo = [ "systemd-networkd.service" ];
       partOf = [ "systemd-networkd.service" ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "network.target" ];
 
       script = ''
         set -x
@@ -40,6 +40,7 @@ with lib;
         ${pkgs.iproute2}/bin/ip link set dev ${ifb} up
         ${pkgs.iproute2}/bin/tc qdisc add dev ${network.ifname} handle ffff: ingress
         ${pkgs.iproute2}/bin/tc filter add dev ${network.ifname} parent ffff: protocol all prio 10 u32 match u32 0 0 flowid 1:1 action mirred egress redirect dev ${ifb}
+        ${pkgs.iproute2}/bin/tc qdisc add dev ${ifb} root cake bandwidth ${network.bw-ingress}bit nat diffserv3
       '';
 
       serviceConfig = {

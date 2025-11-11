@@ -20,7 +20,6 @@ let
   };
 
   mkCakeConfig = network: direction: optionalAttrs (hasAttrByPath ["bw-${direction}"] network) {
-    # configures egress only. ingress is configured on IFB
     NAT = "yes";
     Bandwidth = network."bw-${direction}";
 
@@ -204,18 +203,21 @@ in {
               Type = "bridge";
             };
           } (mkNetworkConfig network);
-        }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks))
+        }) (filterAttrs (networkName: network: network.mode == "dhcp-downlink") networks));
 
         # configure CAKE SQM QoS (ingress)
-        // (concatMapAttrs (networkName: network: {
-          "60-sqm-${networkName}" = {
-            matchConfig = {
-              Name = "sqm-${networkName}";
-            };
+        # TODO: this appears to fail sometimes, probably racing against the IFB creation script
+        # // (concatMapAttrs (networkName: network: {
+        #   "60-sqm-${networkName}" = {
+        #     matchConfig = {
+        #       Name = "sqm-${networkName}";
+        #     };
 
-            cakeConfig = mkCakeConfig network "ingress";
-          };
-        }) (filterAttrs (networkName: network: hasAttrByPath ["bw-ingress"] network) networks));
+        #     networkConfig.ConfigureWithoutCarrier = true;
+        #     networkConfig.Activate = true;
+        #     cakeConfig = mkCakeConfig network "ingress";
+        #   };
+        # }) (filterAttrs (networkName: network: hasAttrByPath ["bw-ingress"] network) networks));
     };
   };
 }
