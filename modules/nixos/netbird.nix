@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with lib; {
+{ config, lib, perSystem, pkgs, ... }: with lib; {
   # TODO: try configuring PrivateKey first https://wg.orz.tools/
   # netbird up --setup-key=<setup key>
   # then take /var/lib/netbird-default/config.json::PrivateKey
@@ -17,6 +17,9 @@
       }
     '';
   };
+
+  # netbird is broken as of https://github.com/NixOS/nixpkgs/pull/453040
+  services.netbird.package = perSystem.nixpkgs-netbird.netbird;
 
   services.netbird.clients.default = {
     # default wireguard port 51820 for k3s flannel-wg

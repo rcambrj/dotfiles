@@ -15,7 +15,7 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:numtide/nixpkgs-unfree?ref=f2f599e1be75ff7d00a1e9320b190fcd603c0581";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     systems.url = "github:nix-systems/default";
 
     blueprint.url = "github:numtide/blueprint";
@@ -42,6 +42,11 @@
     fusuma-plugin-appmatcher.inputs.nixpkgs.follows = "nixpkgs";
     nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
+
+    # netbird is broken as of https://github.com/NixOS/nixpkgs/pull/453040
+    # breaks netbird: 0cbfca7acd0bac87c34bb184130e4542c27da52c
+    # parent: 26afda1803886eab9161182bf169e6e43f3f6aed
+    nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=26afda1803886eab9161182bf169e6e43f3f6aed";
   };
 
   outputs = inputs: (inputs.blueprint {

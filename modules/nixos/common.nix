@@ -20,7 +20,7 @@ with lib;
     sysstat
     sysz
     tcpdump ngrep
-    usbtop
+    # usbtop # unmaintained
     usbutils
     vim
     wget
