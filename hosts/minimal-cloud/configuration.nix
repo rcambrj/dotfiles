@@ -1,4 +1,4 @@
-{ flake, inputs, modulesPath, ... }: {
+{ flake, inputs, modulesPath, pkgs, ... }: {
   imports = [
     "${toString modulesPath}/profiles/qemu-guest.nix"
 
@@ -16,4 +16,6 @@
 
   disko.devices.disk.disk1.device = "/dev/sda";
   # disko.devices.disk.disk1.device = "/dev/vda";
+
+  environment.systemPackages = with pkgs; [ vim ];
 }
