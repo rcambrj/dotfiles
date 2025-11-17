@@ -2,7 +2,6 @@
   imports = [
     "${toString modulesPath}/profiles/all-hardware.nix"
 
-    inputs.agenix-template.nixosModules.default
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.common

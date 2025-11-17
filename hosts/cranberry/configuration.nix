@@ -6,7 +6,6 @@
     # inputs.nixos-facter-modules.nixosModules.facter
     # { config.facter.reportPath = ./facter.json; }
     (modulesPath + "/profiles/all-hardware.nix")
-    inputs.agenix-template.nixosModules.default
 
     flake.nixosModules.access-server
     flake.nixosModules.bare-metal

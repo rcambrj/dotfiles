@@ -64,6 +64,7 @@ in {
 
   # netbird
   "secrets/orange-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.orange ];
+  "secrets/lemon-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.lemon ];
   "secrets/cloudberry-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
 
   # == machine-specific ==

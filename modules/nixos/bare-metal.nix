@@ -50,6 +50,7 @@
 in {
   imports = [
     inputs.agenix.nixosModules.default
+    inputs.agenix-template.nixosModules.default
     "${toString modulesPath}/profiles/base.nix"
   ];
 

@@ -5,7 +5,6 @@
   imports = [
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
-    inputs.agenix-template.nixosModules.default
 
     flake.nixosModules.access-server
     flake.nixosModules.bare-metal

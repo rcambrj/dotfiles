@@ -4,8 +4,6 @@
     inputs.nixos-facter-modules.nixosModules.facter
     { config.facter.reportPath = ./facter.json; }
 
-    inputs.agenix-template.nixosModules.default
-
     flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.disko-standard
