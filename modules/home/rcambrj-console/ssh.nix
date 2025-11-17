@@ -74,6 +74,11 @@ in {
         hostname = "orange-external.cambridge.me";
         user = "nixos";
       };
+      "lemon" = {
+        # oracle cloud free aarch64
+        hostname = "lemon-external.cambridge.me";
+        user = "nixos";
+      };
     };
   };
 }
