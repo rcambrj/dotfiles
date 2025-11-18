@@ -2,39 +2,47 @@
   imports = [
     "${toString modulesPath}/profiles/qemu-guest.nix"
 
-    inputs.agenix.nixosModules.default
-    inputs.agenix-template.nixosModules.default
-
+    flake.nixosModules.base
     flake.nixosModules.access-server
     flake.nixosModules.disko-standard
+    flake.nixosModules.common
+    flake.nixosModules.cloud-vps
+    flake.nixosModules.netbird
   ];
 
-  nixpkgs.config.allowUnfree = true;
-  age.identityPaths = [ "/root/.ssh/id_ed25519" ];
   networking.hostName = "lemon";
   nixpkgs.hostPlatform = "aarch64-linux";
   disko.devices.disk.disk1.device = "/dev/sda";
 
-  services.netbird.package = let
-    broken = true;
-  in
-    lib.mkForce (if broken then pkgs.netbird else perSystem.nixpkgs-netbird.netbird);
-
-  age.secrets.netbird-private-key.file = ./. + "/../../secrets/${config.networking.hostName}-netbird-privatekey.age";
-  age-template.files.netbird-secrets = {
-    path = "/etc/${config.services.netbird.clients.default.dir.baseName}/config.d/60-secrets.json";
-    vars = {
-      privatekey = config.age.secrets.netbird-private-key.path;
-    };
-    content = ''
-      {
-        "PrivateKey": "$privatekey"
-      }
+  systemd.network.enable = true;
+  networking.useDHCP = false;
+  networking.useNetworkd = true;
+  services.resolved = {
+    enable = true;
+    llmnr = "false";
+    extraConfig = ''
+      MulticastDNS=false
+      DNS=1.1.1.1#cloudflare-dns.com 8.8.8.8#dns.google 1.0.0.1#cloudflare-dns.com 8.8.4.4#dns.google 2606:4700:4700::1111#cloudflare-dns.com 2001:4860:4860::8888#dns.google 2606:4700:4700::1001#cloudflare-dns.com 2001:4860:4860::8844#dns.google
+      [Resolve]
+      DNS=127.0.0.62
+      Domains=~cambridge.me ~netbird.cloud
     '';
   };
-  services.netbird.clients.default = {
-    port = 51820;
-    openFirewall = true;
-    hardened = false;
+  systemd.network.networks = {
+    "10-wired" = {
+      matchConfig.Name = "e*";
+      dhcpV4Config.UseDNS = "no";
+      dhcpV6Config.UseDNS = "no";
+      networkConfig = {
+        LinkLocalAddressing = "no";
+        MulticastDNS = "no";
+        LLMNR = "no";
+        DHCP = "yes";
+      };
+    };
   };
+
+  services.netbird.package = lib.mkForce (perSystem.self.netbird.override {
+    broken = true;
+  });
 }
