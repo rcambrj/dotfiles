@@ -21,7 +21,7 @@ in {
 
       # send traffic over netbird
       "--flannel-iface=${iface}"
-      "--node-ip=100.68.241.89"
+      "--node-ip=100.121.0.11"
     ];
   };
   services.kubernetes-manifests.enable = false;

@@ -68,7 +68,7 @@ in {
             DeviceAuthEndpoint = "${issuer}/oauth/device/code";
             Domain = issuer;
             TokenEndpoint = "${issuer}/oauth/token";
-            UseIDToken = true;
+            UseIDToken = false;
           };
         };
         PKCEAuthorizationFlow = {
@@ -78,7 +78,7 @@ in {
             ClientSecret = clientSecret;
             AuthorizationEndpoint = "${issuer}/authorize";
             TokenEndpoint = "${issuer}/oauth/token";
-            UseIDToken = true;
+            UseIDToken = false;
           };
         };
         Stuns = [

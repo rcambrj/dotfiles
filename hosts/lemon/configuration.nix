@@ -8,6 +8,8 @@
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     flake.nixosModules.netbird
+    ./http
+    ./netbird-mgmt.nix
   ];
 
   networking.hostName = "lemon";
