@@ -14,7 +14,7 @@ let
   # consumer facing auth
   clientId = "4UZs4FOtOD7VhMQFpinXPfcs00al9luh";
   clientSecret = "qgTL6vPoVBc5WoNSOfslEWdsWll4k3gsjODC34TQUQARiqVXRqPtofnmJ66E9NSQ";
-  audience = clientId;
+  audience = "https://netbird.cambridge.me";
   # netbird <> auth0 (machine to machine) auth
   mgmtClientIdFile = config.age.secrets.netbird-mgmt-client-id.path;
   mgmtClientSecretFile = config.age.secrets.netbird-mgmt-client-secret.path;
@@ -48,7 +48,7 @@ in {
       settings = {
         DataStoreEncryptionKey._secret = datastoreKeyFile;
         HttpConfig = {
-          AuthAudience = audience;
+          AuthAudience = clientId;
         };
         IdpManagerConfig = {
           ManagerType = "auth0";
