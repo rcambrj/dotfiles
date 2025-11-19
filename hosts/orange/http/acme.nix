@@ -20,9 +20,9 @@
     # because DHCP-provided NS mangles the response for these domains
     defaults.dnsResolver = "1.1.1.1:53";
 
-    certs."router.cambridge.me" = {
-      domain = "router.cambridge.me";
-      extraDomainNames = [ "*.router.cambridge.me" ];
+    certs."netbird.cambridge.me" = {
+      domain = "netbird.cambridge.me";
+      extraDomainNames = [ "*.netbird.cambridge.me" ];
       dnsProvider = "cloudflare";
       environmentFile = config.age-template.files.acme-env-cloudflare.path;
     };

@@ -1,6 +1,10 @@
 { config, ... }: {
   users.groups.acme.members = ["nginx"];
 
+  age.secrets = {
+    cloudflare-token.file = ../../../secrets/cloudflare-token.age;
+  };
+
   age-template.files.acme-env-cloudflare = {
     vars = {
       token = config.age.secrets.cloudflare-token.path;

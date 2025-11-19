@@ -4,9 +4,9 @@
 #
 # gluster peer probe cranberry.cambridge.me
 # gluster peer probe blueberry.cambridge.me
-# gluster peer probe orange.netbird.cloud
+# gluster peer probe orange.cambridge.netbird
 #
-# # use *.netbird.cloud for cloud servers because of this error:
+# # use *.cambridge.netbird for cloud servers because of this error:
 # #   Failed to convert hostname orange.cambridge.me to uuid
 # # probably because that host resolves differently for orange vs other hosts
 #
@@ -14,7 +14,7 @@
 #   replica 3 arbiter 1 \
 #   cranberry.cambridge.me:/mnt/gluster/brick \
 #   blueberry.cambridge.me:/mnt/gluster/brick \
-#   orange.netbird.cloud:/var/lib/glusterd-brick \
+#   orange.cambridge.netbird:/var/lib/glusterd-brick \
 #   force
 #
 # gluster volume set gv0 client.ssl on
@@ -37,7 +37,7 @@
       fqdn = "blueberry.cambridge.me";
     }
     {
-      fqdn = "orange.netbird.cloud";
+      fqdn = "orange.cambridge.netbird";
     }
   ];
   cfg = config.services.gluster-node;

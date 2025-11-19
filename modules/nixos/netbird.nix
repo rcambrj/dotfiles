@@ -18,7 +18,10 @@
   };
 
   # netbird is broken as of https://github.com/NixOS/nixpkgs/pull/453040
-  services.netbird.package = perSystem.nixpkgs-netbird.netbird;
+  # but it only impacts netbird.io (hosted).
+  # read more https://github.com/rcambrj/netbird-repro
+  # I've switched to selfhosted, which is unaffected
+  # services.netbird.package = perSystem.nixpkgs-netbird.netbird;
 
   services.netbird.clients.default = {
     # default wireguard port 51820 for k3s flannel-wg
@@ -35,7 +38,7 @@
       #   DNS=1.1.1.1#cloudflare-dns.com 8.8.8.8#dns.google 1.0.0.1#cloudflare-dns.com 8.8.4.4#dns.google 2606:4700:4700::1111#cloudflare-dns.com 2001:4860:4860::8888#dns.google 2606:4700:4700::1001#cloudflare-dns.com 2001:4860:4860::8844#dns.google
       #   [Resolve]
       #   DNS=127.0.0.62
-      #   Domains=~cambridge.me ~netbird.cloud
+      #   Domains=~cambridge.me ~cambridge.netbird
       # '';
     };
   };

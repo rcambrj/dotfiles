@@ -26,6 +26,7 @@ with lib;
           "/localhost/"
           "/onion/"
           "/test/"
+          "/netbird/"
         ] ++ dns.upstreams;
         domain = dns.domain;
         expand-hosts = true;
