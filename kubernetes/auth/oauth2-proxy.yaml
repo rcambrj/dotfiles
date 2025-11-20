@@ -47,6 +47,13 @@ spec:
             secretKeyRef:
               name: oauth2-proxy
               key: cookie-secret
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "10Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
 ---
 apiVersion: v1
 kind: ConfigMap

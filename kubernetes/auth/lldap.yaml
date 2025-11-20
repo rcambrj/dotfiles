@@ -62,6 +62,14 @@ spec:
           containerPort: 636
         - name: http
           containerPort: 17170
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "10Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
+
 ---
 apiVersion: v1
 kind: ConfigMap

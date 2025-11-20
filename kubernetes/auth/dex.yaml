@@ -51,6 +51,13 @@ spec:
           mountPath: /secrets.yaml
         - name: config
           mountPath: /etc/dex
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "10Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
       containers:
       - name: dex
         image: ghcr.io/dexidp/dex:v2.43.1
@@ -63,6 +70,13 @@ spec:
         ports:
         - name: http
           containerPort: 5556
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "10Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
 ---
 apiVersion: v1
 kind: ConfigMap
