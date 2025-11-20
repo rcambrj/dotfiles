@@ -8,6 +8,7 @@
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
     flake.nixosModules.netbird
+    flake.nixosModules.server-backup
     ./http
     ./netbird-mgmt.nix
   ];
@@ -42,6 +43,13 @@
         DHCP = "yes";
       };
     };
+  };
+
+  services.server-backup = {
+    enable = true;
+    paths = [
+      "/var/lib/netbird-mgmt"
+    ];
   };
 
   # services.netbird.package = lib.mkForce (perSystem.self.netbird.override {
