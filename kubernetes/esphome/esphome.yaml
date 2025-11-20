@@ -24,9 +24,10 @@ spec:
       - name: platformio
         hostPath:
           path: /data/esphome/.platformio
+      - name: builds
+        emptyDir:
       - name: temp
-        hostPath:
-          path: /data/esphome/.temp
+        emptyDir:
       containers:
       - name: esphome
         # https://github.com/esphome/esphome/releases
@@ -42,6 +43,8 @@ spec:
           mountPath: /config
         - name: platformio
           mountPath: /.platformio
+        - name: builds
+          mountPath: /config/.esphome
         - name: temp
           mountPath: /.temp
         ports:
