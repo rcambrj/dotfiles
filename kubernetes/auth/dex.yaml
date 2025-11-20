@@ -17,6 +17,10 @@ spec:
       labels:
         app: dex
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10339
+        runAsGroup: 12884
       volumes:
       - name: config-template
         configMap:

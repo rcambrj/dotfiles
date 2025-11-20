@@ -17,6 +17,10 @@ spec:
       labels:
         app: lldap
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 55327
+        runAsGroup: 12884
       volumes:
       - name: data
         hostPath:
@@ -42,9 +46,6 @@ spec:
             secretKeyRef:
               name: lldap-secrets
               key: smtp-pass
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
         command: [ "/app/lldap" ] # skip the default entrypoint checks
         args: [ "run", "--config-file", "/secrets/lldap_config.toml" ]
         volumeMounts:
