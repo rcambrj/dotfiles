@@ -61,6 +61,8 @@ in {
         "NzbDrone/MediaCover"
         "Radarr/MediaCover"
         "/data/media"
+        "netbird-mgmt/data/GeoLite2-City_*.mmdb"
+        "netbird-mgmt/data/geonames_*.db"
       ];
     };
   };
