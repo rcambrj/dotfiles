@@ -67,8 +67,9 @@ spec:
             cpu: "10m"
             memory: "10Mi"
           limits:
-            cpu: "100m"
-            memory: "50Mi"
+            # bursts during authentication
+            cpu: "1000m"
+            memory: "200Mi"
 
 ---
 apiVersion: v1
