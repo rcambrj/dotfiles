@@ -24,4 +24,5 @@ applications:
 - name: metallb-system
 - name: monitoring
 - name: node-feature-discovery
+- name: postgres
 - name: priorities

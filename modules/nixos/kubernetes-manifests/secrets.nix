@@ -26,6 +26,9 @@ in {
       argocd-client-secret.file   = ../../../secrets/argocd-client-secret.age;
 
       grafana-secret-key.file = ../../../secrets/grafana-secret-key.age;
+
+      postgres-user-radarr.file = ../../../secrets/postgres-user-radarr.age;
+      postgres-user-sonarr.file = ../../../secrets/postgres-user-sonarr.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -212,6 +215,61 @@ in {
           namespace: ingress-nginx
         stringData:
           token: $token
+      '';
+    };
+
+    age-template.files."20-postgres-user-radarr" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-postgres-user-radarr.yaml";
+      vars = {
+        password = config.age.secrets.postgres-user-radarr.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-radarr
+          namespace: postgres
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: radarr
+          password: $password
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-radarr
+          namespace: media
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: radarr
+          password: $password
+      '';
+    };
+    age-template.files."20-postgres-user-sonarr" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-postgres-user-sonarr.yaml";
+      vars = {
+        password = config.age.secrets.postgres-user-sonarr.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-sonarr
+          namespace: postgres
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: sonarr
+          password: $password
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-sonarr
+          namespace: media
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: sonarr
+          password: $password
       '';
     };
   });

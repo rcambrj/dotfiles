@@ -47,6 +47,21 @@ spec:
           value: "1000"
         - name: PGID
           value: "1000"
+        - name: Sonarr__Log__DbEnabled
+          value: "false"
+        - name: Sonarr__Postgres__Host
+          value: postgres-rw.postgres.svc.cluster.local
+        - name: Sonarr__Postgres__Port
+          value: "5432"
+        - name: Sonarr__Postgres__MainDb
+          value: sonarr
+        - name: Sonarr__Postgres__User
+          value: sonarr
+        - name: Sonarr__Postgres__Password
+          valueFrom:
+            secretKeyRef:
+              name: postgres-user-sonarr
+              key: password
         volumeMounts:
         - name: sonarr-config
           mountPath: /config

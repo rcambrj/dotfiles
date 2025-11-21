@@ -1,0 +1,75 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: cnpg
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://github.com/cloudnative-pg/charts/releases
+  repo: https://cloudnative-pg.github.io/charts
+  chart: cloudnative-pg
+  version: 0.26.1
+  targetNamespace: postgres
+  createNamespace: true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17
+  instances: 1
+  storage:
+    pvcTemplate:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: local-path
+      volumeMode: Filesystem
+      volumeName: glusterfs-postgres
+  managed:
+    roles:
+      - name: radarr
+        passwordSecret:
+          name: postgres-user-radarr
+        login: true
+        ensure: present
+        connectionLimit: -1
+        inherit: true
+      - name: sonarr
+        passwordSecret:
+          name: postgres-user-sonarr
+        login: true
+        ensure: present
+        connectionLimit: -1
+        inherit: true
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: radarr
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  name: radarr
+  owner: radarr
+  cluster:
+    name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sonarr
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  name: sonarr
+  owner: sonarr
+  cluster:
+    name: postgres
