@@ -72,6 +72,9 @@ in {
   "secrets/lemon-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.lemon ];
   "secrets/cloudberry-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
 
+  # postgres
+  "secrets/postgres-user-radarr.age".publicKeys = defaults ++ kubenodes;
+
   # == machine-specific ==
   # cranberry
   "secrets/cranberry-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.cranberry ];
