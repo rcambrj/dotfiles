@@ -28,7 +28,7 @@ in {
     gnutar zstd
     htop btop
     iftop
-    kubectl kubernetes-helm k9s minikube
+    kubectl kubernetes-helm k9s minikube kubectx
     nodePackages.localtunnel
     ncdu
     nix-output-monitor
