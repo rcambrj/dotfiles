@@ -15,6 +15,7 @@ let
     vlan-trunk = "enp2s0";
     lan-0      = "enp3s0";
     lan-1      = "enp4s0";
+    usblte     = "enp0s20f0u1";
   };
   dns-upstreams = [
     "1.1.1.1"
@@ -115,25 +116,37 @@ in {
         };
       }."odido-consument";
 
-      lte = rec {
-        ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
-        vlan = 44;
-        ifaces = {
-          t = [ ifaces'.vlan-trunk ];
-          u = [];
+      lte = recursiveUpdate rec {
+        ct         = "0x02000000";
+        bw-egress  = "10M";
+        bw-ingress = "10M";
+        rt         = 583;
+        prio       = uplink-failover.rule-prio.secondary;
+      } {
+        strong = rec {
+          ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
+          vlan = 44;
+          ifaces = {
+            t = [ ifaces'.vlan-trunk ];
+            u = [];
+          };
+          mode        = "static-uplink";
+          ip4-prefix  = "192.168.44";
+          ip4-subnet  = "24";
+          ip4-address = "${ip4-prefix}.3";
+          ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+          ip4-gateway = "${ip4-prefix}.1";
         };
-        mode        = "static-uplink";
-        ip4-prefix  = "192.168.44";
-        ip4-subnet  = "24";
-        ip4-address = "${ip4-prefix}.3";
-        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
-        ip4-gateway = "${ip4-prefix}.1";
-        rt          = 583;
-        prio        = uplink-failover.rule-prio.secondary;
-        ct          = "0x02000000";
-        bw-egress   = "10M";
-        bw-ingress  = "10M";
-      };
+        samsung = rec {
+          # 192.168.42.0/24 via 192.168.42.129
+          ifname = ifaces'.usblte;
+          ifaces = {
+            t = [];
+            u = [ ifaces'.usblte ];
+          };
+          mode = "dhcp-uplink";
+        };
+      }."samsung";
 
       ont = rec {
         ifname = ifaces'.wan;
@@ -234,9 +247,9 @@ in {
       '';
       uplink-failover = {
         forward = '''';
-        output = ''
-          oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"
-        '';
+        output = join "\n" [
+          # ''oifname "${networks.lte.ifname}" ip daddr ${networks.lte.ip4-gateway} accept comment "LTE modem dashboard"'';
+        ];
       };
     };
 

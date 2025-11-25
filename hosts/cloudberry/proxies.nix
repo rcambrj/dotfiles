@@ -14,21 +14,22 @@ with lib;
     };
   };
 
-  services.nginx.virtualHosts."lte.router.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "router.cambridge.me";
-    locations."= /" = {
-      # fix javascript redirect
-      return = "301 /index.html";
-    };
-    locations."/" = {
-      proxyPass = "http://${networks.lte.ip4-gateway}/";
-      recommendedProxySettings = false;
-      extraConfig = ''
-        proxy_set_header Host $proxy_host;
-      '';
-    };
-  };
+  # for when the lte uplink uses a router with a dashboard
+  # services.nginx.virtualHosts."lte.router.cambridge.me" = {
+  #   forceSSL = true;
+  #   useACMEHost = "router.cambridge.me";
+  #   locations."= /" = {
+  #     # fix javascript redirect
+  #     return = "301 /index.html";
+  #   };
+  #   locations."/" = {
+  #     proxyPass = "http://${networks.lte.ip4-gateway}/";
+  #     recommendedProxySettings = false;
+  #     extraConfig = ''
+  #       proxy_set_header Host $proxy_host;
+  #     '';
+  #   };
+  # };
 
   services.nginx.virtualHosts."switch-0.router.cambridge.me" = {
     forceSSL = true;
