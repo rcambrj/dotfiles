@@ -15,7 +15,10 @@ let
     vlan-trunk = "enp2s0";
     lan-0      = "enp3s0";
     lan-1      = "enp4s0";
-    usblte     = "enp0s20f0u1";
+    #          = "enp0s20f0u1"; # rear lower usb
+    #          = "enp0s20f0u2"; # rear upper usb
+    usblte     = "enp0s20f0u3"; # mb header A
+    #          = "enp0s20f0u4"; # mb header B
   };
   dns-upstreams = [
     "1.1.1.1"
