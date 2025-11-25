@@ -8,7 +8,8 @@ with lib;
     ./interfaces.nix
     ./pppd.nix
     ./sqm-ifb-redirect.nix
-    ./uplink-failover.nix
+    ./uplink-primary.nix
+    ./uplink-secondary.nix
     ./upnp.nix
   ];
 

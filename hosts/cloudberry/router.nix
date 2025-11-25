@@ -121,10 +121,11 @@ in {
 
       lte = recursiveUpdate rec {
         ct         = "0x02000000";
-        bw-egress  = "10M";
-        bw-ingress = "10M";
+        bw-egress  = "6M";
+        bw-ingress = "12M";
         rt         = 583;
         prio       = uplink-failover.rule-prio.secondary;
+        ping-targets = dns-upstreams;
       } {
         strong = rec {
           ifname = "${ifaces'.vlan-trunk}-${toString vlan}";

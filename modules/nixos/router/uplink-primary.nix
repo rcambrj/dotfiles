@@ -99,7 +99,7 @@ in {
         echo "interface wan is online" > ${wan-status-file} || true
 
         echo "Notifying telegram..."
-        ${notify-telegram} "wan online" || true
+        ${notify-telegram} "🛜✅ wan online" || true
       '');
 
       on-down-cmd = toString (pkgs.writeShellScript "uplink-failover-down" ''
@@ -113,7 +113,7 @@ in {
         echo "interface wan is offline" > ${wan-status-file} || true
 
         echo "Notifying telegram..."
-        ${notify-telegram} "wan offline" || true
+        ${notify-telegram} "🛜⚠️ wan offline" || true
       '');
     };
 
