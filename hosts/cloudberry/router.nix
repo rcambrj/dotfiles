@@ -16,7 +16,7 @@ let
     lan-0      = "enp3s0";
     lan-1      = "enp4s0";
     #          = "enp0s20f0u1"; # rear lower usb
-    #          = "enp0s20f0u2"; # rear upper usb
+    usblte     = "enp0s20f0u2"; # rear upper usb
     #          = "enp0s20f0u3"; # mb header A
     #          = "enp0s20f0u4"; # mb header B
   };
@@ -141,8 +141,7 @@ in {
           ip4-cidr    = "${ip4-address}/${ip4-subnet}";
           ip4-gateway = "${ip4-prefix}.1";
         };
-        samsung = rec {
-          # 192.168.42.0/24 via 192.168.42.129
+        usb-rndis-tethering = rec {
           ifname = ifaces'.usblte;
           ifaces = {
             t = [];
@@ -150,8 +149,7 @@ in {
           };
           mode = "dhcp-uplink";
         };
-        realme = rec {
-          # 192.168.*.0/24 via 192.168.*.*
+        ethernet-tethering = rec {
           ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
           vlan = 44;
           ifaces = {
@@ -160,7 +158,7 @@ in {
           };
           mode = "dhcp-uplink";
         };
-      }."realme";
+      }."usb-rndis-tethering";
 
       ont = rec {
         ifname = ifaces'.wan;
