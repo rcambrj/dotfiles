@@ -96,7 +96,7 @@ let
         }];
         dhcpServerConfig = {
           PoolOffset = 128;
-          PoolSize = 223;
+          PoolSize = 127;
           UplinkInterface = ":none";
           DNS = [ network.ip4-address ];
         };
