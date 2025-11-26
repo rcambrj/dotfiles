@@ -22,6 +22,7 @@ let
   mkCakeConfig = network: direction: optionalAttrs (hasAttrByPath ["bw-${direction}"] network) {
     NAT = "yes";
     Bandwidth = network."bw-${direction}";
+    AutoRateIngress = network."bw-${direction}-auto" or false;
 
     # https://www.freedesktop.org/software/systemd/man/latest/systemd.network.html#PriorityQueueingPreset=
     # PriorityQueueingPreset = "besteffort";
@@ -94,8 +95,8 @@ let
           To = network.ip4-cidr;
         }];
         dhcpServerConfig = {
-          PoolOffset = 101;
-          PoolSize = 150;
+          PoolOffset = 128;
+          PoolSize = 223;
           UplinkInterface = ":none";
           DNS = [ network.ip4-address ];
         };
