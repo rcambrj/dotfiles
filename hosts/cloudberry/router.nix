@@ -17,7 +17,7 @@ let
     lan-1      = "enp4s0";
     #          = "enp0s20f0u1"; # rear lower usb
     #          = "enp0s20f0u2"; # rear upper usb
-    usblte     = "enp0s20f0u3"; # mb header A
+    #          = "enp0s20f0u3"; # mb header A
     #          = "enp0s20f0u4"; # mb header B
   };
   dns-upstreams = [
@@ -150,7 +150,17 @@ in {
           };
           mode = "dhcp-uplink";
         };
-      }."samsung";
+        realme = rec {
+          # 192.168.*.0/24 via 192.168.*.*
+          ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
+          vlan = 44;
+          ifaces = {
+            t = [ ifaces'.vlan-trunk ];
+            u = [];
+          };
+          mode = "dhcp-uplink";
+        };
+      }."realme";
 
       ont = rec {
         ifname = ifaces'.wan;
