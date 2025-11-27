@@ -33,7 +33,7 @@ in {
       };
       "cloudberry" = {
         # use IP because it runs the DNS server
-        hostname =  "192.168.142.1";
+        hostname =  "10.226.56.1";
         user = "nixos";
       };
       "blueberry" = {

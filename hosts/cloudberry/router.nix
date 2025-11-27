@@ -129,7 +129,7 @@ in {
         prio            = uplink-failover.rule-prio.secondary;
         ping-targets    = dns-upstreams;
       } {
-        strong = rec {
+        strong-router = rec {
           ifname = "${ifaces'.vlan-trunk}-${toString vlan}";
           vlan = 44;
           ifaces = {
@@ -137,7 +137,7 @@ in {
             u = [];
           };
           mode        = "static-uplink";
-          ip4-prefix  = "192.168.44";
+          ip4-prefix  = "10.226.44";
           ip4-subnet  = "24";
           ip4-address = "${ip4-prefix}.3";
           ip4-cidr    = "${ip4-address}/${ip4-subnet}";
@@ -162,33 +162,35 @@ in {
         };
       }."usb-rndis-tethering";
 
-      ont = rec {
-        ifname = ifaces'.wan;
-        ifaces = {
-          t = [];
-          u = [ ifaces'.wan ];
-        };
-        mode        = "static-uplink";
-        ip4-prefix  = "192.168.100";
-        ip4-subnet  = "24";
-        ip4-address = "${ip4-prefix}.2";
-        ip4-cidr    = "${ip4-address}/${ip4-subnet}";
-        ip4-gateway = "${ip4-prefix}.1";
-        rt          = 668;
-        prio        = 65535; # never used
-      };
+      # potential conflict with Android's random 192.168.*.0/24
+      # enable only when necessary
+      # ont = rec {
+      #   ifname = ifaces'.wan;
+      #   ifaces = {
+      #     t = [];
+      #     u = [ ifaces'.wan ];
+      #   };
+      #   mode        = "static-uplink";
+      #   ip4-prefix  = "192.168.100";
+      #   ip4-subnet  = "24";
+      #   ip4-address = "${ip4-prefix}.2";
+      #   ip4-cidr    = "${ip4-address}/${ip4-subnet}";
+      #   ip4-gateway = "${ip4-prefix}.1";
+      #   rt          = 668;
+      #   prio        = 65535; # never used
+      # };
 
       lan = rec {
         ifname = "br-lan";
         mac  = "42:b9:31:e0:f6:5f";
-        vlan = 142;
+        vlan = 56;
         ifaces = {
           t = [ ifaces'.vlan-trunk ];
           u = [ ifaces'.lan-0 ifaces'.lan-1 ];
         };
         mode        = "dhcp-downlink";
 
-        ip4-prefix  = "192.168.142";
+        ip4-prefix  = "10.226.56";
         ip4-subnet  = "24";
         ip4-address = "${ip4-prefix}.1";
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
@@ -209,7 +211,7 @@ in {
         };
         mode        = "dhcp-downlink";
 
-        ip4-prefix  = "192.168.99";
+        ip4-prefix  = "10.226.1";
         ip4-subnet  = "24";
         ip4-address = "${ip4-prefix}.1";
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";
@@ -222,7 +224,7 @@ in {
 
       guest = rec {
         ifname = "br-guest";
-        mac  = "f5:0f:cB:b9:bF:e3";
+        mac  = "f5:0f:cB:b9:bf:e3";
         vlan = 83;
         ifaces = {
           t = [ ifaces'.vlan-trunk ];
@@ -230,7 +232,7 @@ in {
         };
         mode        = "dhcp-downlink";
 
-        ip4-prefix  = "192.168.83";
+        ip4-prefix  = "10.226.83";
         ip4-subnet  = "24";
         ip4-address = "${ip4-prefix}.1";
         ip4-cidr    = "${ip4-address}/${ip4-subnet}";

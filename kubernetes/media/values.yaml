@@ -74,7 +74,7 @@ vpnsidecar:
   - name: DNS_ADDRESS
     value: "10.43.0.10"
   - name: FIREWALL_OUTBOUND_SUBNETS
-    value: 192.168.142.0/24,10.42.0.0/16,10.43.0.0/16
+    value: 10.226.56.0/24,10.42.0.0/16,10.43.0.0/16
   - name: VPN_PORT_FORWARDING
     value: "on"
   - name: VPN_PORT_FORWARDING_STATUS_FILE

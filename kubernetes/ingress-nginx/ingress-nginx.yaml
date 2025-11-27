@@ -15,8 +15,8 @@ spec:
     controller:
       service:
         annotations:
-          metallb.io/loadBalancerIPs: 192.168.142.50
-          metallb.io/allow-shared-ip: 192.168.142.50
+          metallb.io/loadBalancerIPs: 10.226.56.50
+          metallb.io/allow-shared-ip: 10.226.56.50
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

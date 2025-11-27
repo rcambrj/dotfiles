@@ -2,17 +2,19 @@
 with config.router;
 with lib;
 {
-  services.nginx.virtualHosts."ont.router.cambridge.me" = {
-    forceSSL = true;
-    useACMEHost = "router.cambridge.me";
-    locations."/" = {
-      proxyPass = "http://${networks.ont.ip4-gateway}/";
-      recommendedProxySettings = false;
-      extraConfig = ''
-        proxy_set_header Host $proxy_host;
-      '';
-    };
-  };
+  # potential conflict with Android's random 192.168.*.0/24
+  # enable only when needed
+  # services.nginx.virtualHosts."ont.router.cambridge.me" = {
+  #   forceSSL = true;
+  #   useACMEHost = "router.cambridge.me";
+  #   locations."/" = {
+  #     proxyPass = "http://${networks.ont.ip4-gateway}/";
+  #     recommendedProxySettings = false;
+  #     extraConfig = ''
+  #       proxy_set_header Host $proxy_host;
+  #     '';
+  #   };
+  # };
 
   # for when the lte uplink uses a router with a dashboard
   # services.nginx.virtualHosts."lte.router.cambridge.me" = {

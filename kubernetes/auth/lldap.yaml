@@ -125,8 +125,8 @@ kind: Service
 metadata:
   name: lldap-ldaps
   annotations:
-    metallb.io/loadBalancerIPs: 192.168.142.50
-    metallb.io/allow-shared-ip: 192.168.142.50
+    metallb.io/loadBalancerIPs: 10.226.56.50
+    metallb.io/allow-shared-ip: 10.226.56.50
 spec:
   selector:
     app: lldap
