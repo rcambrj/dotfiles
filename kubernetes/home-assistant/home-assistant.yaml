@@ -22,6 +22,8 @@ spec:
         feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
       priorityClassName: home-automation
       securityContext:
+        runAsUser: 42770
+        runAsGroup: 42770
         supplementalGroups:
         - 27 # "video" group for generic-device-plugin
       volumes:
@@ -46,41 +48,49 @@ spec:
         volumeMounts:
         - name: custom-components
           mountPath: /custom_components
+        - name: lldap-ha-auth
+          mountPath: /lldap-ha-auth
         command: ["/bin/sh", "-c"]
         args:
         - |-
-          set -ex
+          set -xeuo pipefail
 
           # https://github.com/j9brown/scenery/releases
           curl -s -L https://github.com/j9brown/scenery/archive/refs/tags/v0.5.0.tar.gz | gunzip | tar -xvf - \
             -C /custom_components \
             --strip-components=2 scenery-0.5.0/custom_components/
+
+          # https://github.com/lldap/lldap/commits/main/example_configs/lldap-ha-auth.sh
+          curl -s -L https://raw.githubusercontent.com/lldap/lldap/9ac96e8c6e4b015ee10ddcc978ece6da34d38911/example_configs/lldap-ha-auth.sh \
+            > /lldap-ha-auth/lldap-ha-auth.sh
+          chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       - name: create-configs
         # https://hub.docker.com/r/nixos/nix/tags
         image: nixos/nix:2.32.3
         volumeMounts:
         - name: configs
           mountPath: /configs
-        - name: lldap-ha-auth
-          mountPath: /lldap-ha-auth
         command: ["/bin/sh", "-c"]
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          privileged: true
         args:
         # this is quite janky and slow to start
         # TODO: use gh actions + ghcr, or a better alternative
         - |-
           set -ex
-          nix build github:rcambrj/dotfiles#packages.x86_64-linux.home-assistant-config \
-            --extra-experimental-features "flakes nix-command" \
+
+          echo "sandbox = true" >> /etc/nix/nix.conf
+
+          nix --extra-experimental-features "flakes nix-command" \
+            build github:rcambrj/dotfiles#packages.x86_64-linux.home-assistant-config \
             --accept-flake-config
 
           ls -lR result/
           cp -RL result/* /configs/
+          chown -R 42770:42770 /configs/
           ls -lR /configs/
-
-          # https://github.com/lldap/lldap/commits/main/example_configs/lldap-ha-auth.sh
-          wget https://raw.githubusercontent.com/lldap/lldap/9ac96e8c6e4b015ee10ddcc978ece6da34d38911/example_configs/lldap-ha-auth.sh \
-            --output-document /lldap-ha-auth/lldap-ha-auth.sh
-          chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       containers:
       - name: home-assistant
         # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
@@ -94,9 +104,6 @@ spec:
             cpu: "1000m"
             memory: "600Mi"
             squat.ai/zigbee: 1
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
         env:
         - name: TZ
           value: Europe/Amsterdam
