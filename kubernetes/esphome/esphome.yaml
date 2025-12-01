@@ -33,8 +33,8 @@ spec:
         # https://github.com/esphome/esphome/releases
         image: ghcr.io/esphome/esphome:2025.10.4
         securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
+          runAsUser: 37746
+          runAsGroup: 37746
         env:
         - name: ESPHOME_DASHBOARD_USE_PING
           value: "true"
