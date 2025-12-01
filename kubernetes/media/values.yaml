@@ -14,6 +14,10 @@ vpnsidecar:
   image: ghcr.io/qdm12/gluetun:v3.40.0
   restartPolicy: Always
   securityContext:
+    # rootless not possible https://github.com/qdm12/gluetun/issues/1519
+    privileged: false
+    runAsUser: 0
+    runAsGroup: 0
     capabilities:
       add: ["NET_ADMIN"]
   resources:

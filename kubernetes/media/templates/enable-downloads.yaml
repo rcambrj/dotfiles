@@ -38,6 +38,9 @@ spec:
       labels:
         app: enable-downloads
     spec:
+      securityContext:
+        runAsUser: 10926 # 10wan
+        runAsGroup: 63342 # media
       serviceAccountName: enable-downloads
       containers:
       - name: enable-downloads

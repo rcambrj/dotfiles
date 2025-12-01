@@ -17,6 +17,9 @@ spec:
       labels:
         app: jackett
     spec:
+      securityContext:
+        runAsUser: 52253 # jacke
+        runAsGroup: 63342 # media
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
@@ -40,7 +43,7 @@ spec:
           - |-
             mkdir -p /config/Jackett
             touch /config/Jackett/log.txt
-            chmod 000 /config/Jackett/log.txt
+            chmod 400 /config/Jackett/log.txt
       containers:
       - name: jackett
         # https://github.com/linuxserver/docker-jackett/pkgs/container/transmission
@@ -48,10 +51,10 @@ spec:
         env:
         - name: TZ
           value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        # - name: PUID
+        #   value: "1000"
+        # - name: PGID
+        #   value: "1000"
         volumeMounts:
         - name: jackett-config
           mountPath: /config

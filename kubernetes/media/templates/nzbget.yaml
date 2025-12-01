@@ -17,6 +17,9 @@ spec:
       labels:
         app: nzbget
     spec:
+      securityContext:
+        runAsUser: 16924 # 1nzbg
+        runAsGroup: 63342 # media
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
@@ -38,7 +41,6 @@ spec:
           - |-
             mkdir -p /downloads/complete/radarr
             mkdir -p /downloads/complete/sonarr
-            chown -R 1000:1000 /downloads/*
       containers:
       - name: nzbget
         # https://github.com/linuxserver/docker-nzbget/pkgs/container/transmission
@@ -46,10 +48,10 @@ spec:
         env:
         - name: TZ
           value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        # - name: PUID
+        #   value: "1000"
+        # - name: PGID
+        #   value: "1000"
         volumeMounts:
         - name: nzbget-config
           mountPath: /config

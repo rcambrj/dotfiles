@@ -15,6 +15,9 @@ spec:
       labels:
         app: radarr
     spec:
+      securityContext:
+        runAsUser: 17232 # 1rada
+        runAsGroup: 63342 # media
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
@@ -35,7 +38,7 @@ spec:
         args:
           - |-
             mkdir -p /config/logs
-            chmod 000 /config/logs
+            chmod 400 /config/logs
       containers:
       - name: radarr
         # https://github.com/linuxserver/docker-radarr/pkgs/container/transmission
@@ -43,10 +46,10 @@ spec:
         env:
         - name: TZ
           value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        # - name: PUID
+        #   value: "1000"
+        # - name: PGID
+        #   value: "1000"
         - name: Radarr__Log__DbEnabled
           value: "false"
         - name: Radarr__Postgres__Host

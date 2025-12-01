@@ -15,6 +15,9 @@ spec:
       labels:
         app: jellyfin
     spec:
+      securityContext:
+        runAsUser: 53559 # jelly
+        runAsGroup: 63342 # media
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
@@ -45,15 +48,10 @@ spec:
           - |-
             mkdir -p /data/tvshows
             mkdir -p /data/movies
-            chown -R 1000:1000 /data/*
-            chown -R 1000:1000 /logs
       containers:
       - name: jellyfin
         # https://github.com/jellyfin/jellyfin/releases
         image: ghcr.io/jellyfin/jellyfin:10.11.2
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
         volumeMounts:
         - name: jellyfin-config
           mountPath: /config

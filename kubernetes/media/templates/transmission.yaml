@@ -17,6 +17,9 @@ spec:
       labels:
         app: transmission
     spec:
+      securityContext:
+        runAsUser: 18726 # 1tran
+        runAsGroup: 63342 # media
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
@@ -40,7 +43,6 @@ spec:
           - |-
             mkdir -p /downloads/complete/radarr
             mkdir -p /downloads/complete/sonarr
-            chown -R 1000:1000 /downloads/*
       {{- with .Values.vpnsidecar }}
       {{- . | toYaml | nindent 6 }}
       {{- end }}
@@ -80,10 +82,10 @@ spec:
         env:
         - name: TZ
           value: Europe/Amsterdam
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
+        # - name: PUID
+        #   value: "1000"
+        # - name: PGID
+        #   value: "1000"
         volumeMounts:
         - name: transmission-config
           mountPath: /config
