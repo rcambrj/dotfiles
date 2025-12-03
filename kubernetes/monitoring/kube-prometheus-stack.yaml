@@ -23,7 +23,7 @@ spec:
         enabled: false
     kubelet:
       serviceMonitor:
-        enabled: false
+        enabled: true
     kubeControllerManager:
       serviceMonitor:
         enabled: false
@@ -43,7 +43,7 @@ spec:
       serviceMonitor:
         enabled: false
     kubeStateMetrics:
-      enabled: false
+      enabled: true
     nodeExporter:
       enabled: true
     prometheusOperator:
