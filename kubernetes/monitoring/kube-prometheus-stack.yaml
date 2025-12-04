@@ -86,6 +86,12 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
+        additionalScrapeConfigs:
+        - job_name: node-exporter-extra
+          scrape_interval: 60s
+          static_configs:
+          - targets:
+            - cloudberry.cambridge.me:9100
 
     grafana:
       serviceMonitor:
