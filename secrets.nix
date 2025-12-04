@@ -53,6 +53,7 @@ in {
 
   # grafana
   "secrets/grafana-secret-key.age".publicKeys = defaults ++ kubenodes;
+  "secrets/grafana-admin-password.age".publicKeys = defaults ++ kubenodes;
 
   # telegram bot
   "secrets/telegram-router-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];

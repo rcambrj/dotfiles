@@ -25,7 +25,8 @@ in {
       ldap-admin-ro-password.file = ../../../secrets/ldap-admin-ro-password.age;
       argocd-client-secret.file   = ../../../secrets/argocd-client-secret.age;
 
-      grafana-secret-key.file = ../../../secrets/grafana-secret-key.age;
+      grafana-secret-key.file     = ../../../secrets/grafana-secret-key.age;
+      grafana-admin-password.file = ../../../secrets/grafana-admin-password.age;
 
       postgres-user-radarr.file = ../../../secrets/postgres-user-radarr.age;
       postgres-user-sonarr.file = ../../../secrets/postgres-user-sonarr.age;
@@ -189,6 +190,7 @@ in {
       vars = {
         ldap_admin_pass = config.age.secrets.ldap-admin-ro-password.path;
         secret_key      = config.age.secrets.grafana-secret-key.path;
+        admin_password  = config.age.secrets.grafana-admin-password.path;
       };
       content = ''
         apiVersion: v1
@@ -199,6 +201,7 @@ in {
         stringData:
           ldap-admin-pass.yaml: $ldap_admin_pass
           secret-key.yaml: $secret_key
+          admin-password.yaml: $admin_password
       '';
     };
 

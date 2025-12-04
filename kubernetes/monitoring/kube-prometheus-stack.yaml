@@ -123,10 +123,13 @@ spec:
         readOnly: true
       grafana.ini:
         security:
-          disable_initial_admin_creation: true
           secret_key: "$__file{/secrets/secret-key.yaml}"
+          # datasources & dashboards sidecars use this admin user
+          disable_initial_admin_creation: false
+          admin_user: admin
+          admin_password: "$__file{/secrets/admin-password.yaml}"
         auth.basic:
-          enabled: false
+          enabled: true
         auth.ldap:
           enabled: true
           config_file: /etc/grafana/ldap.toml
