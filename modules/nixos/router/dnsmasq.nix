@@ -30,7 +30,7 @@ with lib;
         ] ++ dns.upstreams;
         domain = dns.domain;
         expand-hosts = true;
-        address = mapAttrsToList (host: ip: "/${host}/${ip}") (dns.hosts or {});
+        address = flatten (mapAttrsToList (host: ips: (map (ip: "/${host}/${ip}") ips)) (dns.hosts or {}));
         cname = mapAttrsToList (host: target: "${host},${target}") (dns.cnames or {});
 
         # resolve the static DHCP hosts

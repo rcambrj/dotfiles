@@ -273,12 +273,18 @@ in {
     dns = {
       domain = "cambridge.me";
       upstreams = dns-upstreams ++ [ "/*.cambridge.netbird/127.0.0.62#${toString config.services.netbird.clients.default.dns-resolver.port}" ];
-      hosts = {
-        "cloudberry.cambridge.me" = networks.lan.ip4-address;
-        "home.cambridge.me" = client-ips.kubernetes-lb;
+      hosts = let
+        downlink-ips = [
+          networks.lan.ip4-address
+          networks.mgmt.ip4-address
+          networks.guest.ip4-address
+        ];
+      in {
+        "cloudberry.cambridge.me" = downlink-ips;
+        "router.cambridge.me" = downlink-ips;
+        "home.cambridge.me" = [ client-ips.kubernetes-lb ];
       };
       cnames = {
-        "router.cambridge.me" = "cloudberry.cambridge.me";
         "orange.cambridge.me" = "orange.cambridge.netbird";
         "lemon.cambridge.me" = "lemon.cambridge.netbird";
       };

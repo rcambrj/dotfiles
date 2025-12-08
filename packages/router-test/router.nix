@@ -1,4 +1,4 @@
-{ common-gateway, primary-gateway, client1-hwaddr, ... }:
+{ common-gateway, primary-gateway, secondary-gateway, client1-hwaddr, ... }:
 let
   ifaces' = {
     primary    = "enp1s0";
@@ -56,6 +56,7 @@ in rec {
       rt          = 583;
       prio        = uplink-failover.rule-prio.secondary;
       ct          = "0x02000000";
+      ping-targets = [ secondary-gateway ];
       bw-egress = "10M";
       bw-ingress = "10M";
     };
@@ -124,7 +125,7 @@ in rec {
     domain = "local";
     upstreams = [ common-gateway ];
     hosts = {
-      "test.example.com" = "10.0.0.0";
+      "test.example.com" = [ "10.0.0.0" ];
     };
   };
 
