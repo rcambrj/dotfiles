@@ -30,6 +30,9 @@ with lib;
         ] ++ dns.upstreams;
         domain = dns.domain;
         expand-hosts = true;
+        interface-name = let
+          downlink-ifs = concatMapAttrs (networkName: network: (optionalAttrs (network.mode == "dhcp-downlink") { "${networkName}" = network.ifname; })) networks;
+        in flatten (map (ifname: (map (host: "${host},${ifname}") dns.self)) (attrValues downlink-ifs));
         address = flatten (mapAttrsToList (host: ips: (map (ip: "/${host}/${ip}") ips)) (dns.hosts or {}));
         cname = mapAttrsToList (host: target: "${host},${target}") (dns.cnames or {});
 
