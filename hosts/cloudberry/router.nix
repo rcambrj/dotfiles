@@ -273,10 +273,12 @@ in {
     dns = {
       domain = "cambridge.me";
       upstreams = dns-upstreams ++ [ "/*.cambridge.netbird/127.0.0.62#${toString config.services.netbird.clients.default.dns-resolver.port}" ];
-      self = [
+      self = let
+        nginxVirtualHostNames = attrNames config.services.nginx.virtualHosts;
+      in [
         "cloudberry.cambridge.me"
         "router.cambridge.me"
-      ];
+      ] ++ nginxVirtualHostNames;
       hosts = {
         "home.cambridge.me" = [ client-ips.kubernetes-lb ];
       };
