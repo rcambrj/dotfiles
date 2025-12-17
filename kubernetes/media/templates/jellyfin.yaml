@@ -51,7 +51,7 @@ spec:
       containers:
       - name: jellyfin
         # https://github.com/jellyfin/jellyfin/releases
-        image: ghcr.io/jellyfin/jellyfin:10.11.2
+        image: ghcr.io/jellyfin/jellyfin:10.11.5
         volumeMounts:
         - name: jellyfin-config
           mountPath: /config
