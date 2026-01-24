@@ -90,6 +90,8 @@
         "continue.enableTabAutocomplete" = false;
         "continue.showInlineTip" = false;
         "continue.telemetryEnabled" = false;
+        # configure models at ~/.continue/config.yaml
+
         # workaround https://github.com/nix-community/nixos-vscode-server/issues/82
         "remote.SSH.defaultExtensions" = [
           "ms-vsliveshare.vsliveshare"
@@ -146,10 +148,5 @@
         }
       ];
     };
-  };
-
-  age.secrets.continue-config = {
-    file = ../../../secrets/continue-config.age;
-    path = "${config.home.homeDirectory}/.continue/config.yaml";
   };
 }

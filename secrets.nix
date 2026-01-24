@@ -102,7 +102,4 @@ in {
   "secrets/lemon-backup-bucket.age".publicKeys = defaults ++ [ sshKeys.lemon ];
   "secrets/lemon-backup-credentials.age".publicKeys = defaults ++ [ sshKeys.lemon ];
   "secrets/lemon-backup-encryption-key.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-
-  # continue config (no darwin support in age-template)
-  "secrets/continue-config.age".publicKeys = defaults;
 }
