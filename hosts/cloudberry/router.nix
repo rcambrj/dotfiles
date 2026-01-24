@@ -327,6 +327,7 @@ in {
       esp8266-b    = "84:F3:EB:FB:53:A5";
       somfy-tahoma = "68:4E:05:C5:DD:BC";
       solar        = "e0:02:02:01:96:06";
+      opentherm    = "4C:11:AE:10:C8:AC";
     };
 
     client-ips = {
@@ -355,6 +356,7 @@ in {
       dsmr         = "${networks.lan.ip4-prefix}.72";
       somfy-tahoma = "${networks.lan.ip4-prefix}.73";
       solar0       = "${networks.lan.ip4-prefix}.74";
+      opentherm    = "${networks.lan.ip4-prefix}.75";
     };
 
     hosts = [
@@ -384,6 +386,7 @@ in {
       { name = "dsmr";         ip = client-ips.dsmr;         hwaddr = hwaddrs.esp8266-b; }
       { name = "somfy-tahoma"; ip = client-ips.somfy-tahoma; hwaddr = hwaddrs.somfy-tahoma; }
       { name = "solar0";       ip = client-ips.solar0;       hwaddr = hwaddrs.solar; }
+      { name = "opentherm";    ip = client-ips.opentherm;    hwaddr = hwaddrs.opentherm; }
     ];
 
     port-forwards = [
