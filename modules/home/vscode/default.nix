@@ -49,6 +49,7 @@
           "**/node_modules/**" = true;
         };
         "makefile.configureOnOpen" = true;
+        "workbench.secondarySideBar.defaultVisibility" = "hidden";
 
         # jnoortheen.nix-ide
         "nix.enableLanguageServer" = false; # keeps crashing
