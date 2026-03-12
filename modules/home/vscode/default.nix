@@ -124,6 +124,7 @@
         # open-vsx.jeanp413.open-remote-ssh
 
         # language-specific
+        vscode-marketplace.mxsdev.typescript-explorer
         vscode-marketplace.ms-python.python
         vscode-marketplace.golang.go
         vscode-marketplace.hashicorp.terraform
