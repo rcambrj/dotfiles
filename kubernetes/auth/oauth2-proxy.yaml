@@ -72,6 +72,12 @@ data:
     cookie_domains=[".home.cambridge.me"]
     whitelist_domains=[".home.cambridge.me"]
     email_domains=["*"]
+    pass_access_token="true"
+    pass_user_headers="true"
+    set_xauthrequest="true"
+
+    # just return 200 when authenticated (no real upstreams)
+    upstreams = ["static://200"]
 
     skip_oidc_discovery="true"
     # why disable OIDC discovery?
@@ -115,96 +121,6 @@ spec:
     http:
       paths:
       - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: oauth2-proxy-vhosts
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-spec:
-  ingressClassName: traefik
-  rules:
-  - host: copyparty.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: esphome.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: jackett.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: landing.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: nzbget.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: radarr.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: sonarr.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              name: http
-  - host: transmission.home.cambridge.me
-    http:
-      paths:
-      - path: /oauth2
         pathType: Prefix
         backend:
           service:

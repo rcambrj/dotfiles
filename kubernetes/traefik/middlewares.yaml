@@ -6,8 +6,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   forwardAuth:
-    address: http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth
-    trustForwardHeader: true
+    address: http://oauth2-proxy.auth.svc.cluster.local/oauth2/
     authResponseHeaders:
       - X-Auth-Request-User
       - X-Auth-Request-Email
