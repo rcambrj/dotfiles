@@ -97,6 +97,8 @@ spec:
               job: 'node-exporter'
 
     grafana:
+      deploymentAnnotations:
+        reloader.stakater.com/auto: "true"
       serviceMonitor:
         enabled: false
       ingress:

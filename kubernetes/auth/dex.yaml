@@ -4,6 +4,8 @@ metadata:
   name: dex
   labels:
     app: dex
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 1
   replicas: 1
