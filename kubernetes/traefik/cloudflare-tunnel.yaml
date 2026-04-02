@@ -54,11 +54,7 @@ spec:
               - key: app.kubernetes.io/name
                 operator: In
                 values:
-                - ingress-nginx
-              - key: app.kubernetes.io/component
-                operator: In
-                values:
-                - controller
+                - traefik
             namespaces:
-              - ingress-nginx
+              - traefik
             topologyKey: kubernetes.io/hostname

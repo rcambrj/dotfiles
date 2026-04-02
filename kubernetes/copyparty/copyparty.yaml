@@ -64,10 +64,9 @@ metadata:
   name: copyparty
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.auth.svc.cluster.local/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://oauth2-proxy.home.cambridge.me/oauth2/start"
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-oauth2-proxy-forward-auth@kubernetescrd
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "copyparty.home.cambridge.me"

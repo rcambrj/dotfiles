@@ -173,12 +173,11 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "home.cambridge.me"
     secretName: home-cambridge-me-tls
-  ingressClassName: nginx
   rules:
   - host: home.cambridge.me
     http:

@@ -18,7 +18,28 @@ kind: Secret
 metadata:
   name: webcam-auth
 stringData:
-  auth: user:$apr1$ml.4JaRX$Uz.5TseJ/4BlA4/Dzv9yN1
+  users: user:$apr1$ml.4JaRX$Uz.5TseJ/4BlA4/Dzv9yN1
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: fdm-webcam-basic-auth
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  basicAuth:
+    secret: webcam-auth
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: fdm-webcam-strip-prefix
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  replacePathRegex:
+    regex: "^/webcam/(.*)"
+    replacement: "/$1"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -26,15 +47,13 @@ metadata:
   name: fdm-https
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
+    traefik.ingress.kubernetes.io/service.serversscheme: https
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "fdm.home.cambridge.me"
     secretName: fdm-home-cambridge-me-tls
-  ingressClassName: nginx
   rules:
   - host: fdm.home.cambridge.me
     http:
@@ -61,23 +80,19 @@ metadata:
   name: fdm-webcam
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/auth-type: basic
-    nginx.ingress.kubernetes.io/auth-secret: webcam-auth
-    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    traefik.ingress.kubernetes.io/router.middlewares: fdm-fdm-webcam-basic-auth@kubernetescrd,fdm-fdm-webcam-strip-prefix@kubernetescrd
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "fdm.home.cambridge.me"
     secretName: fdm-home-cambridge-me-tls
-  ingressClassName: nginx
   rules:
   - host: fdm.home.cambridge.me
     http:
       paths:
-      - path: /webcam(/|$)(.*)
-        pathType: ImplementationSpecific
+      - path: /webcam
+        pathType: Prefix
         backend:
           service:
             name: elderberry

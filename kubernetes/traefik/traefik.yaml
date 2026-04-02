@@ -1,0 +1,49 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: traefik
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/traefik/traefik
+  repo: https://traefik.github.io/charts
+  chart: traefik
+  version: 34.5.0
+  targetNamespace: traefik
+  createNamespace: true
+  valuesContent: |-
+    providers:
+      kubernetesIngress:
+        enabled: true
+        publishedService:
+          enabled: true
+        allowExternalNameServices: true
+      kubernetesCRD:
+        enabled: true
+        allowCrossNamespace: true
+
+    ingressClass:
+      enabled: true
+      isDefaultClass: false
+
+    service:
+      annotations:
+        metallb.io/loadBalancerIPs: 10.226.56.50
+        metallb.io/allow-shared-ip: 10.226.56.50
+
+    affinity:
+      podAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - metallb
+            - key: app.kubernetes.io/component
+              operator: In
+              values:
+              - controller
+          namespaces:
+            - metallb-system
+          topologyKey: kubernetes.io/hostname

@@ -17,7 +17,7 @@ applications:
 - name: generic-device-plugin
 - name: gluster-mount-watcher
 - name: home-assistant
-- name: ingress-nginx
+- name: traefik
 - name: intel-gpu
 - name: landing
 - name: media

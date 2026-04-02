@@ -4,7 +4,7 @@
 # creates a ConfigMap where the contents is the YAML for a DeschedulerPolicy CR.
 #
 # Desires:
-# * keep ingress-nginx & metallb-controller on the same node (podAffinity)
+# * keep traefik & metallb-controller on the same node (podAffinity)
 # * rebalance workloads across nodes
 #
 

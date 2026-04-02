@@ -215,7 +215,7 @@ in {
         kind: Secret
         metadata:
           name: cloudflare-tunnel
-          namespace: ingress-nginx
+          namespace: traefik
         stringData:
           token: $token
       '';

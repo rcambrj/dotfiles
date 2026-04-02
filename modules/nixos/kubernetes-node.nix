@@ -60,7 +60,7 @@ in {
         allowedTCPPorts = [
           6443      # apiserver
           2379 2380 # etcd
-          80 443    # ingress-nginx
+          80 443    # traefik
           10250     # kubelet
           7946      # metallb
           9100      # prometheus

@@ -157,7 +157,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "dex.home.cambridge.me"

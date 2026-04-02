@@ -105,7 +105,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   tls:
   - hosts:
       - "oauth2-proxy.home.cambridge.me"
@@ -129,7 +129,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
   rules:
   - host: copyparty.home.cambridge.me
     http:

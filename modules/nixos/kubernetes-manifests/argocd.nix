@@ -119,7 +119,7 @@ in {
           '';
           server.ingress = {
             enabled = true;
-            ingressClassName = "nginx";
+            ingressClassName = "traefik";
             annotations = {
               "cert-manager.io/cluster-issuer" = "letsencrypt";
             };
