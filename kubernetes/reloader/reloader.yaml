@@ -1,0 +1,13 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: reloader
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://github.com/stakater/Reloader
+  repo: https://stakater.github.io/stakater-charts
+  chart: reloader
+  version: 2.1.3
+  targetNamespace: reloader
+  createNamespace: true

@@ -26,3 +26,4 @@ applications:
 - name: node-feature-discovery
 - name: postgres
 - name: priorities
+- name: reloader

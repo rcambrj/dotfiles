@@ -4,6 +4,8 @@ metadata:
   name: lldap
   labels:
     app: lldap
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 1
   replicas: 1
