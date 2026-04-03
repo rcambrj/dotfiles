@@ -44,7 +44,7 @@ spec:
           secretName: webos-dev-mode-curl
       initContainers:
       - name: download-custom-components
-        image: nixery.dev/shell/curl/gzip/gnutar@sha256:0c9f58e0f6a35ca45dce4bbc344c1718e8577fc66f1b4a01b410901ee94301dc
+        image: nixery.dev/shell/curl/gzip/gnutar
         volumeMounts:
         - name: custom-components
           mountPath: /custom_components

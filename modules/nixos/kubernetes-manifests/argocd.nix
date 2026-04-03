@@ -73,6 +73,7 @@ in {
         ];
       };
       spec = {
+        bootstrap = true;
         targetNamespace = "argocd";
         createNamespace = true;
         version = chartVersion;
@@ -82,7 +83,14 @@ in {
           image = {
             tag = chartVersion;
           };
-          global.domain = "argocd.home.cambridge.me";
+          global = {
+            tolerations = [{
+              # taint used by gluster-mount-watcher
+              key = "CriticalAddonsOnly";
+              operator = "Exists";
+            }];
+            domain = "argocd.home.cambridge.me";
+          };
           dex.enabled = false;
           configs.secret.createSecret = false;
           configs.params."server.insecure" = true;

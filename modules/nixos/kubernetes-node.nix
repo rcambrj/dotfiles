@@ -39,11 +39,20 @@ in {
           ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
       '';
     };
-    k3s-init = mkOption {
+    k3s-init-etcd = mkOption {
       readOnly = true;
-      default = pkgs.writeShellScriptBin "k3s-init" ''
+      default = pkgs.writeShellScriptBin "k3s-init-etcd" ''
         ${pkgs.k3s}/bin/k3s server \
           --cluster-init \
+          --token-file ${config.age.secrets.k3s-token.path} \
+          ${builtins.concatStringsSep " " serverFlags} \
+          ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
+      '';
+    };
+    k3s-init-sqlite = mkOption {
+      readOnly = true;
+      default = pkgs.writeShellScriptBin "k3s-init-sqlite" ''
+        ${pkgs.k3s}/bin/k3s server \
           --token-file ${config.age.secrets.k3s-token.path} \
           ${builtins.concatStringsSep " " serverFlags} \
           ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
@@ -79,15 +88,17 @@ in {
       enable = true;
       tokenFile = config.age.secrets.k3s-token.path;
       role = cfg.role;
-      serverAddr = "https://127.0.0.1:7443";
+      # serverAddr = "https://127.0.0.1:7443";
       extraFlags = (
         []
         ++ (optionals (cfg.role == "server") serverFlags)
         ++ cfg.k3sExtraFlags
       );
-    };
+    } // (optionalAttrs (cfg.role == "agent") {
+      serverAddr = "https://blueberry.cambridge.me:6443";
+    });
 
-    environment.systemPackages = [ cfg.k3s-reset cfg.k3s-init ];
+    environment.systemPackages = [ cfg.k3s-reset cfg.k3s-init-etcd cfg.k3s-init-sqlite ];
 
     services.nginx = {
       # poor man's load balancer (requires no separate machine)

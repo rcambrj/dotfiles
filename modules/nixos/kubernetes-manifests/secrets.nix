@@ -53,6 +53,21 @@ in {
         kind = "Namespace";
         metadata.name = "home-assistant";
       }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "postgres";
+      }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "monitoring";
+      }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "traefik";
+      }
     ];
 
     age-template.files."20-media-vpn-secret" = {
