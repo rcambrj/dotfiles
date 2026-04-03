@@ -135,7 +135,12 @@
         vscode-marketplace.tamasfe.even-better-toml
         vscode-marketplace.pinage404.rust-extension-pack
         # vscode-marketplace.esbenp.prettier-vscode
-        vscode-marketplace.biomejs.biome
+
+        # TODO: fix biome
+        #  > Running phase: unpackPhase
+        #  > unpacking source archive /nix/store/754yy2kvkm429ibwbf0lv4nxd27m9dk4-biome-1.7.20231109.zip
+        #  > do not know how to unpack source archive /nix/store/754yy2kvkm429ibwbf0lv4nxd27m9dk4-biome-1.7.20231109.zip
+        # vscode-marketplace.biomejs.biome
 
         # dotnet
         # vscode-marketplace.ms-dotnettools.vscode-dotnet-runtime

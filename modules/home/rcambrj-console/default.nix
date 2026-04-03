@@ -29,7 +29,7 @@ in {
     htop btop
     iftop
     kubectl kubernetes-helm k9s minikube kubectx
-    nodePackages.localtunnel
+    localtunnel
     ncdu
     nix-output-monitor
     openocd

@@ -73,10 +73,12 @@ with lib;
     # that we can hopefully still access it remotely.
     enableEmergencyMode = false;
 
-    sleep.extraConfig = ''
-      AllowSuspend=no
-      AllowHibernation=no
-    '';
+    sleep.settings = {
+      Sleep = {
+        AllowSuspend = "no";
+        AllowHibernation = "no";
+      };
+    };
 
     # For more detail, see:
     #   https://0pointer.de/blog/projects/watchdog.html
