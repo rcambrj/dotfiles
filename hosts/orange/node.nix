@@ -13,7 +13,7 @@ in {
     openFirewallOnInterface = iface;
   };
   services.kubernetes-node = {
-    enable = true;
+    enable = false;
     role = "server";
     openFirewallOnInterface = iface;
     k3sExtraFlags = [
