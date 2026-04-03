@@ -43,10 +43,8 @@
     nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
 
-    # netbird is broken as of https://github.com/NixOS/nixpkgs/pull/453040
-    # breaks netbird: 0cbfca7acd0bac87c34bb184130e4542c27da52c
-    # parent: 26afda1803886eab9161182bf169e6e43f3f6aed
-    nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=26afda1803886eab9161182bf169e6e43f3f6aed";
+    # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
+    nixpkgs-netbird-management.url = "github:nixos/nixpkgs?ref=c04833a1e584401bb63c1a63ddc51a71e6aa457a";
   };
 
   outputs = inputs: (inputs.blueprint {

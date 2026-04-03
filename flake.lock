@@ -408,18 +408,18 @@
         "type": "github"
       }
     },
-    "nixpkgs-netbird": {
+    "nixpkgs-netbird-management": {
       "locked": {
-        "lastModified": 1761059551,
-        "narHash": "sha256-ro3FQvF/zv37BS+s3K0DhA+9Dtnbb65pHTJ4G8t+Sns=",
+        "lastModified": 1767242400,
+        "narHash": "sha256-knFaYjeg7swqG1dljj1hOxfg39zrIy8pfGuicjm9s+o=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "26afda1803886eab9161182bf169e6e43f3f6aed",
+        "rev": "c04833a1e584401bb63c1a63ddc51a71e6aa457a",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
-        "ref": "26afda1803886eab9161182bf169e6e43f3f6aed",
+        "ref": "c04833a1e584401bb63c1a63ddc51a71e6aa457a",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -439,7 +439,7 @@
         "nixos-facter-modules": "nixos-facter-modules",
         "nixos-hardware": "nixos-hardware_2",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-netbird": "nixpkgs-netbird",
+        "nixpkgs-netbird-management": "nixpkgs-netbird-management",
         "systems": "systems_6",
         "vscode-server": "vscode-server"
       }

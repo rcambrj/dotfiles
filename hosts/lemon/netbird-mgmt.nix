@@ -1,7 +1,7 @@
 #
 # netbird-default up --management-url https://netbird.cambridge.me --setup-key ...
 #
-{ config, inputs, lib, pkgs, ... }:
+{ config, inputs, lib, perSystem, pkgs, ... }:
 with lib;
 let
   externalDomain = "netbird.cambridge.me";
@@ -41,6 +41,9 @@ in {
     domain = "netbird.cambridge.me";
     enableNginx = true;
     management = {
+      # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
+      package = perSystem.nixpkgs-netbird-management.netbird-management;
+
       dnsDomain = internalDomain;
       singleAccountModeDomain = internalDomain;
       disableAnonymousMetrics = true;
