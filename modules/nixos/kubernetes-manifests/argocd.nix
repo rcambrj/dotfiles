@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }: with lib; let
   # argoVersion should equal the one provided by the chart
   # https://artifacthub.io/packages/helm/argo/argo-cd
-  chartVersion = "v9.1.0";
-  argoVersion = "v3.2.0";
+  chartVersion = "v9.4.17";
+  argoVersion = "v3.3.6";
 
   cfg = config.services.kubernetes-manifests;
 in {
@@ -134,7 +134,7 @@ in {
         owner = "argoproj";
         repo = "argo-cd";
         tag = argoVersion;
-        hash = "sha256-I5xO66ZDinEoljT18kXukEW+rmcXaKui/Ha9nvEjxgA";
+        hash = "sha256-84GlX9m1+Af9EPPdvLJcZIqhw7a1DBj1xKmUpNnngbk=";
       };
       allNamespaces = pkgs.runCommand "argocd-all-namespaces" {} ''
         ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
