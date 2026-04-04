@@ -36,7 +36,7 @@ spec:
       containers:
       - name: lldap
         # https://github.com/lldap/lldap/pkgs/container/lldap/versions
-        image: lldap/lldap:2025-11-09-alpine
+        image: lldap/lldap:2026-03-04-alpine
         envFrom:
         - configMapRef:
             name: lldap-env

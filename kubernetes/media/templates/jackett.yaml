@@ -47,7 +47,7 @@ spec:
       containers:
       - name: jackett
         # https://github.com/linuxserver/docker-jackett/pkgs/container/transmission
-        image: lscr.io/linuxserver/jackett:v0.24.270-ls211
+        image: lscr.io/linuxserver/jackett:v0.24.1537-ls364
         env:
         - name: TZ
           value: Europe/Amsterdam

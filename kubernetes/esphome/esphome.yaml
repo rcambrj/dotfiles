@@ -31,7 +31,7 @@ spec:
       containers:
       - name: esphome
         # https://github.com/esphome/esphome/releases
-        image: ghcr.io/esphome/esphome:2025.10.4
+        image: ghcr.io/esphome/esphome:2026.3.2
         securityContext:
           runAsUser: 37746
           runAsGroup: 37746

@@ -8,7 +8,7 @@ spec:
   # https://artifacthub.io/packages/helm/intel/intel-device-plugins-operator
   repo: https://intel.github.io/helm-charts/
   chart: intel-device-plugins-operator
-  version: 0.32.1
+  version: 0.35.0
   targetNamespace: intel-device-plugins-operator
   createNamespace: true
 ---
@@ -22,7 +22,7 @@ spec:
   # https://artifacthub.io/packages/helm/intel/intel-device-plugins-gpu
   repo: https://intel.github.io/helm-charts/
   chart: intel-device-plugins-gpu
-  version: 0.32.1
+  version: 0.35.0
   targetNamespace: intel-device-plugins-operator
   createNamespace: true
   valuesContent: |-

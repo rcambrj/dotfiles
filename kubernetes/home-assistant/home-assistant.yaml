@@ -66,7 +66,7 @@ spec:
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       - name: create-configs
         # https://hub.docker.com/r/nixos/nix/tags
-        image: nixos/nix:2.32.3
+        image: nixos/nix:2.34.4
         volumeMounts:
         - name: configs
           mountPath: /configs
@@ -94,7 +94,7 @@ spec:
       containers:
       - name: home-assistant
         # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
-        image: homeassistant/home-assistant:2025.11.1
+        image: homeassistant/home-assistant:2026.4.1
         resources:
           requests:
             cpu: "100m"
