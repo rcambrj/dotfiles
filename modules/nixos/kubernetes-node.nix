@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }: with builtins; with lib; let
+  # TODO: make nodes configurable (but not using atm so yolo)
   nodes = [
-    "cranberry.cambridge.me"
-    "blueberry.cambridge.me"
+    # "cranberry.cambridge.me"
+    # "blueberry.cambridge.me"
     "orange.cambridge.me"
   ];
 
@@ -16,13 +17,18 @@ in {
   options.services.kubernetes-node = {
     enable = mkEnableOption "Start a kubernetes node on this host";
     role = mkOption {
-      type = types.enum [ "server" "agent" ];
+      type = types.enum [ "singular-server" "server" "agent" ];
       default = "agent";
     };
     openFirewallOnInterface = mkOption {
       type = types.str;
       default = "";
       description = "If specified, only open ports on this interface. Otherwise, open ports on all interfaces";
+    };
+    connectToServer = mkOption {
+      type = types.str;
+      default = "https://127.0.0.1:7443";
+      description = "If specified, connect to this server. Otherwise, defaults to an nginx load balancer pointing to all server nodes (this load balancer doesn't work for agents, only servers connecting to other servers)";
     };
     k3sExtraFlags = mkOption {
       description = "Extra flags to pass to the k3s command. Don't modify services.k3s.extraFlags directly if you want k3s-reset and k3s-init to be consistent with these flags";
@@ -39,9 +45,9 @@ in {
           ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
       '';
     };
-    k3s-init-etcd = mkOption {
+    k3s-init-cluster = mkOption {
       readOnly = true;
-      default = pkgs.writeShellScriptBin "k3s-init-etcd" ''
+      default = pkgs.writeShellScriptBin "k3s-init-cluster" ''
         ${pkgs.k3s}/bin/k3s server \
           --cluster-init \
           --token-file ${config.age.secrets.k3s-token.path} \
@@ -49,9 +55,9 @@ in {
           ${builtins.concatStringsSep " " cfg.k3sExtraFlags}
       '';
     };
-    k3s-init-sqlite = mkOption {
+    k3s-init-singular = mkOption {
       readOnly = true;
-      default = pkgs.writeShellScriptBin "k3s-init-sqlite" ''
+      default = pkgs.writeShellScriptBin "k3s-init-singular" ''
         ${pkgs.k3s}/bin/k3s server \
           --token-file ${config.age.secrets.k3s-token.path} \
           ${builtins.concatStringsSep " " serverFlags} \
@@ -87,18 +93,17 @@ in {
     services.k3s = {
       enable = true;
       tokenFile = config.age.secrets.k3s-token.path;
-      role = cfg.role;
-      # serverAddr = "https://127.0.0.1:7443";
+      role = if cfg.role == "singular-server" then "server" else cfg.role;
       extraFlags = (
         []
-        ++ (optionals (cfg.role == "server") serverFlags)
+        ++ (optionals (cfg.role == "singular-server" || cfg.role == "server") serverFlags)
         ++ cfg.k3sExtraFlags
       );
-    } // (optionalAttrs (cfg.role == "agent") {
-      serverAddr = "https://blueberry.cambridge.me:6443";
+    } // (optionalAttrs (cfg.role != "singular-server") {
+      serverAddr = cfg.connectToServer;
     });
 
-    environment.systemPackages = [ cfg.k3s-reset cfg.k3s-init-etcd cfg.k3s-init-sqlite ];
+    environment.systemPackages = [ cfg.k3s-reset cfg.k3s-init-cluster cfg.k3s-init-singular ];
 
     services.nginx = {
       # poor man's load balancer (requires no separate machine)

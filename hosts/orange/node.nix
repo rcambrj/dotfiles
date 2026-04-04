@@ -13,16 +13,16 @@ in {
     openFirewallOnInterface = iface;
   };
   services.kubernetes-node = {
-    enable = false;
-    role = "server";
+    enable = true;
+    role = "singular-server";
     openFirewallOnInterface = iface;
     k3sExtraFlags = [
-      "--node-taint=remote-via-netbird:NoSchedule"
+      "--node-taint=CriticalAddonsOnly:NoExecute"
 
       # send traffic over netbird
       "--flannel-iface=${iface}"
       "--node-ip=100.121.0.11"
     ];
   };
-  services.kubernetes-manifests.enable = false;
+  services.kubernetes-manifests.enable = true;
 }

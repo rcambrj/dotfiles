@@ -12,17 +12,18 @@
   };
   services.kubernetes-node = {
     enable = true;
-    role = "server";
+    role = "agent";
+    connectToServer = "https://orange.cambridge.me:6443";
     k3sExtraFlags = [
       # has the gluster volume at /data
       "--node-label=gluster-volume-mount/configured=true"
-      "--node-taint=CriticalAddonsOnly=true:NoExecute"
+      "--node-taint=CriticalAddonsOnly:NoExecute"
 
       # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
       "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
     ];
   };
-  services.kubernetes-manifests.enable = true;
+  services.kubernetes-manifests.enable = false;
 
   # not using etcd anymore
   # disk-savers.etcd-store = {

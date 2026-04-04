@@ -36,14 +36,16 @@ in {
     };
   };
 
+  # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
+  services.netbird.server.management.package = perSystem.nixpkgs-netbird.netbird-management;
+  services.netbird.server.signal.package = perSystem.nixpkgs-netbird.netbird-signal;
+  services.netbird.server.dashboard.package = perSystem.nixpkgs-netbird.netbird-dashboard;
+
   services.netbird.server = {
     enable = true;
     domain = "netbird.cambridge.me";
     enableNginx = true;
     management = {
-      # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
-      package = perSystem.nixpkgs-netbird-management.netbird-management;
-
       dnsDomain = internalDomain;
       singleAccountModeDomain = internalDomain;
       disableAnonymousMetrics = true;

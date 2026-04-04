@@ -23,6 +23,9 @@
   # I've switched to selfhosted, which is unaffected
   # services.netbird.package = perSystem.nixpkgs-netbird.netbird;
 
+  # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
+  services.netbird.package = perSystem.nixpkgs-netbird.netbird;
+
   services.netbird.clients.default = {
     # default wireguard port 51820 for k3s flannel-wg
     port = 51821;
