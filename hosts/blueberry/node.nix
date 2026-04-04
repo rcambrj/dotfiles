@@ -19,8 +19,7 @@
       "--node-label=gluster-volume-mount/configured=true"
       "--node-taint=CriticalAddonsOnly:NoExecute"
 
-      # https://docs.k3s.io/networking/networking-services#creating-servicelb-node-pools
-      "--node-label=svccontroller.k3s.cattle.io/enablelb=true"
+      "--node-label=metallb-candidate=true"
     ];
   };
   services.kubernetes-manifests.enable = false;
