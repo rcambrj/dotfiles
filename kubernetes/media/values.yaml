@@ -11,7 +11,7 @@ vpnsidecar:
 #     mountPath: /gluetun
 - name: vpn
   # https://github.com/qdm12/gluetun/releases
-  image: ghcr.io/qdm12/gluetun:v3.40.0
+  image: ghcr.io/qdm12/gluetun:v3.41.1
   restartPolicy: Always
   securityContext:
     # rootless not possible https://github.com/qdm12/gluetun/issues/1519

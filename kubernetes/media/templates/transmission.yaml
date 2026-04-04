@@ -49,7 +49,7 @@ spec:
       containers:
       - name: sync-forwarded-port
         # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
-        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls317
+        image: lscr.io/linuxserver/transmission:4.1.1-r1-ls337
         env:
         - name: TR_AUTH
           value: "transmission:password"
@@ -78,7 +78,7 @@ spec:
             memory: "10Mi"
       - name: transmission
         # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
-        image: lscr.io/linuxserver/transmission:4.0.6-r4-ls317
+        image: lscr.io/linuxserver/transmission:4.1.1-r1-ls337
         env:
         - name: TZ
           value: Europe/Amsterdam

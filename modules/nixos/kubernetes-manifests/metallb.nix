@@ -24,7 +24,7 @@ in {
         # https://artifacthub.io/packages/helm/metallb/metallb
         repo = "https://metallb.github.io/metallb";
         chart = "metallb";
-        version = "0.15.2";
+        version = "0.15.3";
         targetNamespace = "metallb-system";
         valuesContent = builtins.toJSON {
           controller.tolerations = [{
