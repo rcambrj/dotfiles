@@ -49,6 +49,16 @@ spec:
         ensure: present
         connectionLimit: -1
         inherit: true
+      - name: backup
+        passwordSecret:
+          name: postgres-user-backup
+        login: true
+        ensure: present
+        connectionLimit: -1
+        inherit: true
+        inRoles:
+          - radarr
+          - sonarr
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database

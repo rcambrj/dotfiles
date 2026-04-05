@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-dumps
+  namespace: postgres
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-path
+  volumeName: glusterfs-postgres-dumps
+  resources:
+    requests:
+      storage: 10Gi

@@ -76,6 +76,7 @@ in {
   # postgres
   "secrets/postgres-user-radarr.age".publicKeys = defaults ++ kubenodes;
   "secrets/postgres-user-sonarr.age".publicKeys = defaults ++ kubenodes;
+  "secrets/postgres-user-backup.age".publicKeys = defaults ++ kubenodes;
 
   # == machine-specific ==
   # cranberry

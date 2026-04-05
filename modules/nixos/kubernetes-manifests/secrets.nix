@@ -30,6 +30,7 @@ in {
 
       postgres-user-radarr.file = ../../../secrets/postgres-user-radarr.age;
       postgres-user-sonarr.file = ../../../secrets/postgres-user-sonarr.age;
+      postgres-user-backup.file = ../../../secrets/postgres-user-backup.age;
     };
 
     services.k3s.manifests."10-secrets-ns".content = [
@@ -287,6 +288,23 @@ in {
         type: kubernetes.io/basic-auth
         stringData:
           username: sonarr
+          password: $password
+      '';
+    };
+    age-template.files."20-postgres-user-backup" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-postgres-user-backup.yaml";
+      vars = {
+        password = config.age.secrets.postgres-user-backup.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-backup
+          namespace: postgres
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: backup
           password: $password
       '';
     };

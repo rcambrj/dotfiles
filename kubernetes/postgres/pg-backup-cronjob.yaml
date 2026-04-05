@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-backup
+  namespace: postgres
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup
+  namespace: postgres
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          serviceAccountName: postgres-backup
+          restartPolicy: OnFailure
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: gluster-volume-mount/ready
+                    operator: In
+                    values: ["true"]
+          volumes:
+          - name: postgres-dumps
+            persistentVolumeClaim:
+              claimName: postgres-dumps
+          - name: backup-password
+            secret:
+              secretName: postgres-user-backup
+          containers:
+          - name: pg-backup
+            image: ghcr.io/cloudnative-pg/postgresql:17
+            command: ["/bin/sh", "-c"]
+            args:
+            - |
+              set -euo pipefail
+
+              DATABASES="radarr sonarr"
+
+              DB_HOST="postgres-rw.postgres.svc.cluster.local"
+              DB_USER_FILE="/var/run/secrets/postgres-user-backup/username"
+              DB_PASS_FILE="/var/run/secrets/postgres-user-backup/password"
+              BACKUP_BASE="/postgres-dumps"
+              DB_USER=$(cat "$DB_USER_FILE")
+              DB_PASS=$(cat "$DB_PASS_FILE")
+              export PGPASSWORD="$DB_PASS"
+              for db in $DATABASES; do
+                echo "Backing up: $db"
+                pg_dump -h "$DB_HOST" -U "$DB_USER" -d "$db" -Fc \
+                  -f "$BACKUP_BASE/$db.dump"
+                echo "Completed: $db"
+              done
+            resources:
+              requests:
+                cpu: "100m"
+                memory: "128Mi"
+              limits:
+                cpu: "500m"
+                memory: "512Mi"
+            volumeMounts:
+            - name: postgres-dumps
+              mountPath: /postgres-dumps
+            - name: backup-password
+              mountPath: /var/run/secrets/postgres-user-backup
+              readOnly: true
