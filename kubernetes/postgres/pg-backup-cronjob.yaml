@@ -39,7 +39,7 @@ spec:
           containers:
           - name: pg-backup
             image: ghcr.io/cloudnative-pg/postgresql:17
-            command: ["/bin/sh", "-c"]
+            command: ["/bin/bash", "-c"]
             args:
             - |
               set -euo pipefail
