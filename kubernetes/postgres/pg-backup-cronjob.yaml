@@ -20,6 +20,9 @@ spec:
       template:
         spec:
           serviceAccountName: postgres-backup
+          securityContext:
+            runAsUser: 6428
+            runAsGroup: 6428
           restartPolicy: OnFailure
           affinity:
             nodeAffinity:
