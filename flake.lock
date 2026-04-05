@@ -408,22 +408,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-dnsmasq": {
-      "locked": {
-        "lastModified": 1762844143,
-        "narHash": "sha256-SlybxLZ1/e4T2lb1czEtWVzDCVSTvk9WLwGhmxFmBxI=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-netbird": {
       "locked": {
         "lastModified": 1762844143,
@@ -455,7 +439,6 @@
         "nixos-facter-modules": "nixos-facter-modules",
         "nixos-hardware": "nixos-hardware_2",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-dnsmasq": "nixpkgs-dnsmasq",
         "nixpkgs-netbird": "nixpkgs-netbird",
         "systems": "systems_6",
         "vscode-server": "vscode-server"

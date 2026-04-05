@@ -47,9 +47,6 @@
     # nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=c04833a1e584401bb63c1a63ddc51a71e6aa457a";
     # but then cross-network traffic is broken until:
     nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4";
-
-    # dnsmasq-2.92 introduces some DNSSEC checks which break the responses from netbird
-    nixpkgs-dnsmasq.url = "github:nixos/nixpkgs?ref=9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4";
   };
 
   outputs = inputs: (inputs.blueprint {

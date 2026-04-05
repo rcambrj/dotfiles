@@ -6,9 +6,6 @@ with lib;
   config = {
     services.resolved.enable = false;
     services.dnsmasq = {
-      # dnsmasq-2.92 introduces some DNSSEC checks which break the responses from netbird
-      package = perSystem.nixpkgs-dnsmasq.dnsmasq;
-
       enable = true;
       resolveLocalQueries = false;
       settings = {
@@ -20,7 +17,9 @@ with lib;
         localise-queries = true;
         stop-dns-rebind = true;
         rebind-localhost-ok = true;
-        dnssec-check-unsigned = false; # support netbird dns
+        rebind-domain-ok = [
+          "/cambridge.netbird/"
+        ];
 
         server = [
           # RFC6761 domains that should not be forwarded to Internet name servers, asking questions that they won't know the answer to.
