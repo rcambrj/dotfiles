@@ -6,7 +6,8 @@
 # gluster peer probe blueberry.cambridge.me
 # gluster peer probe orange.cambridge.netbird
 #
-# # use *.cambridge.netbird for cloud servers because of this error:
+# # use *.cambridge.netbird for cloud servers. when using *.cambridge.me,
+# # the CNAME to *.cambridge.netbird appears to cause this error:
 # #   Failed to convert hostname orange.cambridge.me to uuid
 # # probably because that host resolves differently for orange vs other hosts
 #

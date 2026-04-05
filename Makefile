@@ -13,4 +13,4 @@ edit-secret:
 	agenix -e secrets/${name}.age
 
 remote-switch:
-	nixos-rebuild switch --target-host ${machine} --build-host ${machine} --flake .#${machine} --use-remote-sudo
+	nixos-rebuild switch --target-host ${machine} --flake .#${machine} --use-remote-sudo
