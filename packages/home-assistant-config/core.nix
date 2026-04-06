@@ -32,7 +32,7 @@
     sun = {};
     usb = {}; # required for esphome
     webhook = {};
-    # zeroconf = {}; # device discovery (enable temporarily to add homekit/mDNS devices)
+    zeroconf = {}; # device discovery (homekit/mDNS devices)
 
     recorder = {
       # in-memory recorder is no longer supported
