@@ -1,3 +1,4 @@
+# nix build .#packages.aarch64-darwin.router-test -L --show-trace
 { inputs, pkgs, ... }:
 with pkgs.lib;
 let
@@ -158,7 +159,7 @@ pkgs.testers.runNixOSTest {
       systemd.network.networks."10-vlan" = {
         matchConfig.Name = ifname;
         networkConfig = {
-          LinkLocalAddressing = "no";
+          LinkLocalAddressing = "ipv4";
           VLAN = "vlan";
         };
       };

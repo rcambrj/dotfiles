@@ -123,6 +123,7 @@ in rec {
 
   dns = {
     domain = "local";
+    self = ["router.local"];
     upstreams = [ common-gateway ];
     hosts = {
       "test.example.com" = [ "10.0.0.0" ];

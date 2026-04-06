@@ -4,7 +4,10 @@
     flake.nixosModules.kubernetes-manifests
     flake.nixosModules.kubernetes-node
     flake.nixosModules.storage
+    flake.nixosModules.avahi-reflector
   ];
+
+  services.avahi-reflector.enable = true;
 
   services.gluster-node = {
     enable = true;

@@ -58,6 +58,7 @@
   systemd.network.wait-online.enable = mkForce true; # so gluster volume doesnt mount too early
   networking.useDHCP = false;
   networking.useNetworkd = true;
+  services.resolved.settings.Resolve.MulticastDNS = false;
   systemd.network = {
     # TOPTON 4-port bridge
     netdevs."10-br0".netdevConfig = {

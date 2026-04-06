@@ -21,6 +21,7 @@
   # since this machine config will be plugged into machines which potentially
   # have static routes and NS configurations already, enable avahi so that the
   # hostname can be broadcast via zeroconf name resolution.
+  services.resolved.settings.Resolve.MulticastDNS = false;
   services.avahi = {
     enable = true;
     hostName = "minimal-raspi-nomad"; # minimal-raspi-nomad.local

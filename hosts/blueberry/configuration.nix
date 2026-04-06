@@ -54,6 +54,7 @@
   systemd.network.wait-online.enable = mkForce true; # so gluster volume doesnt mount too early
   networking.useDHCP = false;
   networking.useNetworkd = true;
+  services.resolved.settings.Resolve.MulticastDNS = false;
   systemd.network.networks = {
     "10-disable-enp2s0f0" = {
       # the built-in network port is fried
@@ -63,7 +64,7 @@
     "20-wired" = {
       matchConfig.Name = "e*";
       networkConfig.DHCP = "yes";
-      networkConfig.LinkLocalAddressing = "no";
+      networkConfig.LinkLocalAddressing = "ipv4"; # required for mDNS, but IPv6 disabled
       linkConfig.RequiredForOnline = "routable";
     };
   };
