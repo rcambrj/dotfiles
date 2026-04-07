@@ -127,5 +127,17 @@ in {
         }
       '';
     };
+
+    # agents persist data to /etc/rancher, which is ephemeral. persist it.
+    systemd.tmpfiles.settings."10-rancher-etc"."/var/lib/rancher-etc".d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
+    fileSystems."/etc/rancher" = {
+      device = "/var/lib/rancher-etc";
+      fsType = "none";
+      options = [ "bind" ];
+    };
   };
 }
