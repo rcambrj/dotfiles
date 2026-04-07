@@ -63,11 +63,16 @@
       ];
     };
     lovelace = {
-      # reproducible
-      mode = "yaml";
-
-      # for designing in UI
-      # mode = "storage";
+      resource_mode = "yaml";
+      dashboards = {
+        lovelace = {
+          mode = "yaml";
+          filename = "ui-lovelace.yaml";
+          title = "Overview";
+          icon = "mdi:view-dashboard";
+          show_in_sidebar = true;
+        };
+      };
     };
   };
 }
