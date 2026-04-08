@@ -23,6 +23,7 @@ in {
     ignores = [
       ".envrc"
       ".vscode"
+      ".opencode"
     ];
     lfs = {
       enable = true;
