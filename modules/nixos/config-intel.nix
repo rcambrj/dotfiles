@@ -50,6 +50,7 @@
     };
     "/nix" = lib.mkDefault {
       device = "/mnt/root/nix";
+      fsType = "auto";
       neededForBoot = true;
       options = [ "defaults" "bind" ];
       depends = [ "/mnt/root" ];
