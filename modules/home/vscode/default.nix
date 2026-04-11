@@ -91,6 +91,7 @@
         # vscode-marketplace.orsenkucher.vscode-graphql
         vscode-marketplace.tamasfe.even-better-toml
         vscode-marketplace.pinage404.rust-extension-pack
+        vscode-marketplace.platformio.platformio-ide
 
         # use the nixpkgs version because https://github.com/nix-community/nix-vscode-extensions/blob/674d9cb4cfe1a4a989921221b4a2d0e0a4e898a9/nix/removed.nix#L6
         pkgs.vscode-extensions.ms-vscode.cpptools
