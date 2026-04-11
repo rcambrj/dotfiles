@@ -135,6 +135,7 @@
         vscode-marketplace.tamasfe.even-better-toml
         vscode-marketplace.pinage404.rust-extension-pack
         # vscode-marketplace.esbenp.prettier-vscode
+        vscode-marketplace.ms-vscode.cpptools
 
         # TODO: fix biome
         #  > Running phase: unpackPhase
