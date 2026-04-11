@@ -56,24 +56,6 @@
         "nix.serverPath" = "nixd"; # or nil
 
         "workbench.colorTheme" = "Dark+ (contrast)";
-        "[javascript]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
-        "[javascriptreact]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
-        "[typescript]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
-        "[typescriptreact]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
-        "[json]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
-        "[graphql]" = {
-          "editor.defaultFormatter" = "biomejs.biome";
-        };
         "[markdown]" = {
           "files.trimTrailingWhitespace" = false;
         };
@@ -87,41 +69,16 @@
           "editor.defaultFormatter" = "golang.go";
           "formatting.gofumpt" = true;
         };
-        # AI
-        "continue.enableTabAutocomplete" = false;
-        "continue.showInlineTip" = false;
-        "continue.telemetryEnabled" = false;
-        # configure models at ~/.continue/config.yaml
-
-        # workaround https://github.com/nix-community/nixos-vscode-server/issues/82
-        "remote.SSH.defaultExtensions" = [
-          "ms-vsliveshare.vsliveshare"
-          "mkhl.direnv"
-          "golang.go"
-          "hashicorp.terraform"
-          "jnoortheen.nix-ide"
-          "ms-vscode.makefile-tools"
-          # "orsenkucher.vscode-graphql"
-          "tamasfe.even-better-toml"
-          "pinage404.rust-extension-pack"
-          # "biomejs.biome" # pkg needs installing on remote host
-          "ms-python.python"
-          "dingzhaojie.bit-peek"
-        ];
       };
       extensions =
         with inputs.nix-vscode-extensions.extensions.${pkgs.stdenv.hostPlatform.system}; [
         # general
         vscode-marketplace.ms-vsliveshare.vsliveshare
-        (vscode-marketplace.ms-vscode-remote.remote-ssh.override { meta.licence = []; })
         vscode-marketplace.k3a.theme-dark-plus-contrast
         vscode-marketplace.mkhl.direnv
         vscode-marketplace.stkb.rewrap # alt+q to wrap
-        vscode-marketplace.continue.continue
         vscode-marketplace.github.vscode-github-actions
-        vscode-marketplace.github.vscode-pull-request-github
         vscode-marketplace.dingzhaojie.bit-peek
-        # open-vsx.jeanp413.open-remote-ssh
 
         # language-specific
         vscode-marketplace.mxsdev.typescript-explorer
@@ -134,26 +91,12 @@
         # vscode-marketplace.orsenkucher.vscode-graphql
         vscode-marketplace.tamasfe.even-better-toml
         vscode-marketplace.pinage404.rust-extension-pack
-        # vscode-marketplace.esbenp.prettier-vscode
         vscode-marketplace.ms-vscode.cpptools
-
-        # TODO: fix biome
-        #  > Running phase: unpackPhase
-        #  > unpacking source archive /nix/store/754yy2kvkm429ibwbf0lv4nxd27m9dk4-biome-1.7.20231109.zip
-        #  > do not know how to unpack source archive /nix/store/754yy2kvkm429ibwbf0lv4nxd27m9dk4-biome-1.7.20231109.zip
-        # vscode-marketplace.biomejs.biome
 
         # dotnet
         # vscode-marketplace.ms-dotnettools.vscode-dotnet-runtime
         # vscode-marketplace.ms-dotnettools.csharp
         # vscode-marketplace.ms-dotnettools.csdevkit
-      ];
-      keybindings = [
-        {
-          # https://github.com/continuedev/continue/issues/2913
-          command = "editor.action.insertLineBefore";
-          key = "shift+cmd+enter";
-        }
       ];
     };
   };
