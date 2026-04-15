@@ -23,6 +23,7 @@ in {
     curl
     dive # docker image explorer
     dtc # device-tree-compiler
+    gh
     gnupg
     gnumake
     gnutar zstd
