@@ -37,6 +37,7 @@ in {
     openssh
     pciutils
     qemu
+    restic
     ripgrep
     sysz
     tig
