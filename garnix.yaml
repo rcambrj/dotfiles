@@ -1,0 +1,17 @@
+builds:
+  include:
+    # nixosConfigurations
+    - "checks.x86_64-linux.nixos-blueberry"
+    - "checks.x86_64-linux.nixos-cloudberry"
+    - "checks.x86_64-linux.nixos-cranberry"
+    - "checks.x86_64-linux.nixos-elderberry"
+    # - "checks.x86_64-linux.nixos-strawberry"
+    - "checks.x86_64-linux.nixos-minimal-cloud"
+    - "checks.x86_64-linux.nixos-minimal-intel"
+    # - "checks.aarch64-linux.nixos.minimal-raspi"
+    - "checks.aarch64-linux.nixos-lemon"
+    - "checks.aarch64-linux.nixos-orange"
+    # - "checks.x86_64-linux.nixos-mango"
+
+    # tests
+    - "checks.x86_64-linux.pkgs-router-test"
