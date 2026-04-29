@@ -40,7 +40,7 @@ in {
     restic
     ripgrep
     sysz
-    tig
+    tig gitui
     tmate
     tmux
     tree
