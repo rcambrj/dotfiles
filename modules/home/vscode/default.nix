@@ -30,11 +30,12 @@
         "files.trimFinalNewlines" = true;
         "files.trimTrailingWhitespace" = true;
         "editor.parameterHints.enabled" = false;
-        "editor.suggestSelection" = "recentlyUsedByPrefix";
         "editor.rulers" = [ 80 100 120 ];
+        "editor.fontSize" = 14;
+        "editor.suggestSelection" = "recentlyUsedByPrefix";
         "editor.acceptSuggestionOnEnter" = "off";
         "editor.acceptSuggestionOnCommitCharacter" = false;
-        "editor.fontSize" = 14;
+        "editor.inlineSuggest.minShowDelay" = 2500;
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
@@ -47,6 +48,7 @@
         "files.watcherExclude" = {
           "**/.git/objects/**" = true;
           "**/node_modules/**" = true;
+          "**/.direnv/**" = true;
         };
         "makefile.configureOnOpen" = true;
         "workbench.secondarySideBar.defaultVisibility" = "hidden";
