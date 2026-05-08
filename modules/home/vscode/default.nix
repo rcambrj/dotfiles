@@ -35,7 +35,7 @@
         "editor.suggestSelection" = "recentlyUsedByPrefix";
         "editor.acceptSuggestionOnEnter" = "off";
         "editor.acceptSuggestionOnCommitCharacter" = false;
-        "editor.inlineSuggest.minShowDelay" = 2500;
+        "editor.inlineSuggest.minShowDelay" = 1500;
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
