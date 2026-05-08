@@ -42,6 +42,8 @@
     fusuma-plugin-appmatcher.inputs.nixpkgs.follows = "nixpkgs";
     nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
+    unifi-os-server.url = "github:rcambrj/unifi-os-server";
+    unifi-os-server.inputs.nixpkgs.follows = "nixpkgs";
 
     # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
     # nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=c04833a1e584401bb63c1a63ddc51a71e6aa457a";

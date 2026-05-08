@@ -35,6 +35,7 @@ in {
             meta l4proto { icmp, icmpv6 } jump flood
             ${firewall.input}
 
+            ct state { established, related } accept
             iifname { ${downlinkIfnames} } tcp dport 22 accept
             iifname { ${downlinkIfnames} } udp dport 53 accept
             iifname { ${downlinkIfnames} } meta l4proto { icmp, icmpv6 } accept
@@ -42,7 +43,6 @@ in {
             iifname { ${uplinkIfnames}   } meta nfproto ipv4 udp dport 68 accept comment "DHCPv4 client"
             iifname { ${downlinkIfnames} } meta nfproto ipv6 udp dport 547 accept comment "DHCPv6 server"
             iifname { ${uplinkIfnames}   } meta nfproto ipv6 udp dport 546 accept comment "DHCPv6 client"
-            iifname { ${downlinkIfnames}, ${uplinkIfnames} } ct state { established, related } accept
             iifname "lo" accept
           }
           chain forward {
@@ -53,7 +53,7 @@ in {
             ${firewall.forward}
 
             iifname { ${downlinkIfnames} } oifname { ${uplinkIfnames} } accept
-            iifname { ${uplinkIfnames} } oifname { ${downlinkIfnames} } ct state { established, related } accept
+            ct state { established, related } accept
 
             # port forwards
             ${concatMapStringsSep "\n" (pf:

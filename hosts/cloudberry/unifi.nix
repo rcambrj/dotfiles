@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 with lib;
-let
-in {
-  services.unifi = {
+{
+  imports = [
+    inputs.unifi-os-server.nixosModules.unifi-os-server
+  ];
+
+  services.unifi-os-server = {
     enable = true;
-    unifiPackage = pkgs.unifi;
-    # MongoDB only supports migrating one major version at a time
-    mongodbPackage = pkgs.mongodb-7_0;
+    uosSystemIP = config.router.networks.mgmt.ip4-address;
   };
 
   services.nginx.virtualHosts."unifi.router.cambridge.me" = {
@@ -14,7 +15,7 @@ in {
     useACMEHost = "router.cambridge.me";
     locations."/" = {
       proxyWebsockets = true;
-      proxyPass = "https://127.0.0.1:8443";
+      proxyPass = "https://127.0.0.1:${toString config.services.unifi-os-server.ports.ui}";
       extraConfig = ''
         proxy_ssl_verify off;
       '';
