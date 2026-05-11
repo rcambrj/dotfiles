@@ -37,6 +37,7 @@
         "editor.acceptSuggestionOnCommitCharacter" = false;
         "editor.inlineSuggest.minShowDelay" = 10;
         "github.copilot.nextEditSuggestions.enabled" = false;
+        "continue.showInlineTip" = false;
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
