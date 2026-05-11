@@ -38,6 +38,16 @@
         "editor.inlineSuggest.minShowDelay" = 10;
         "github.copilot.nextEditSuggestions.enabled" = false;
         "continue.showInlineTip" = false;
+        keybindings = [ # https://github.com/continuedev/continue/issues/2913
+          {
+            command = "editor.action.insertLineBefore";
+            key = "shift+cmd+enter";
+          }
+          {
+            command = "continue.acceptDiff";
+            key = "shift+cmd+option+enter";
+          }
+        ];
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
