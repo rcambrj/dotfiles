@@ -35,7 +35,8 @@
         "editor.suggestSelection" = "recentlyUsedByPrefix";
         "editor.acceptSuggestionOnEnter" = "off";
         "editor.acceptSuggestionOnCommitCharacter" = false;
-        "editor.inlineSuggest.minShowDelay" = 1500;
+        "editor.inlineSuggest.minShowDelay" = 10;
+        "github.copilot.nextEditSuggestions.enabled" = false;
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
@@ -81,6 +82,7 @@
         vscode-marketplace.stkb.rewrap # alt+q to wrap
         vscode-marketplace.github.vscode-github-actions
         vscode-marketplace.dingzhaojie.bit-peek
+        vscode-marketplace.continue.continue
 
         # language-specific
         vscode-marketplace.mxsdev.typescript-explorer
