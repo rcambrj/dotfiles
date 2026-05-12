@@ -12,10 +12,21 @@
   programs.vscode = {
     enable = true;
     mutableExtensionsDir = false;
+
     profiles.default = {
       # package = pkgs.vscodium; # want liveshare goddamnit
       enableUpdateCheck = false;
       enableExtensionUpdateCheck = false;
+      keybindings = [
+        {
+          command = "continue.forceAutocomplete";
+          key = "ctrl+cmd+alt+space";
+        }
+        { # https://github.com/continuedev/continue/issues/2913
+          command = "editor.action.insertLineBefore";
+          key = "shift+cmd+enter";
+        }
+      ];
       userSettings = {
         "editor.tabSize" = 4;
         "editor.insertSpaces" = false;
@@ -32,22 +43,6 @@
         "editor.parameterHints.enabled" = false;
         "editor.rulers" = [ 80 100 120 ];
         "editor.fontSize" = 14;
-        "editor.suggestSelection" = "recentlyUsedByPrefix";
-        "editor.acceptSuggestionOnEnter" = "off";
-        "editor.acceptSuggestionOnCommitCharacter" = false;
-        "editor.inlineSuggest.minShowDelay" = 10;
-        "github.copilot.nextEditSuggestions.enabled" = false;
-        "continue.showInlineTip" = false;
-        keybindings = [ # https://github.com/continuedev/continue/issues/2913
-          {
-            command = "editor.action.insertLineBefore";
-            key = "shift+cmd+enter";
-          }
-          {
-            command = "continue.acceptDiff";
-            key = "shift+cmd+option+enter";
-          }
-        ];
         "telemetry.telemetryLevel" = "off";
         "telemetry.enableCrashReporter" = false;
         "telemetry.enableTelemetry" = false;
@@ -64,6 +59,17 @@
         };
         "makefile.configureOnOpen" = true;
         "workbench.secondarySideBar.defaultVisibility" = "hidden";
+
+        # suggestions / autocomplete
+        "editor.suggestSelection" = "recentlyUsedByPrefix";
+        "editor.acceptSuggestionOnEnter" = "off";
+        "editor.acceptSuggestionOnCommitCharacter" = false;
+        # "editor.inlineSuggest.minShowDelay" = 0;
+        "editor.inlineSuggest.enabled" = false;
+        "github.copilot.nextEditSuggestions.enabled" = false;
+        "github.copilot.nextEditSuggestions.fixes" = false;
+        "continue.enableNextEdit" = false;
+        "continue.showInlineTip" = false;
 
         # jnoortheen.nix-ide
         "nix.enableLanguageServer" = false; # keeps crashing
