@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dsmr
+  labels:
+    app.kubernetes.io/name: dsmr
 spec:
   type: ExternalName
   externalName: dsmr.cambridge.me
@@ -23,6 +25,6 @@ spec:
     matchLabels:
       app.kubernetes.io/name: dsmr
   endpoints:
-  - interval: 60s
+  - interval: 5m
     port: http
     path: /metrics
