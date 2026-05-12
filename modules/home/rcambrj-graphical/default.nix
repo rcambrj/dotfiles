@@ -16,8 +16,6 @@ in vscode // {
     slack
     discord-canary
     spotify
-    telegram-desktop
-    whatsapp-for-linux
     signal-desktop
     element-desktop
     # orca-slicer # doesnt build
