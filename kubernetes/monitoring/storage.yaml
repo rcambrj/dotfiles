@@ -15,6 +15,10 @@ spec:
     required:
       nodeSelectorTerms:
       - matchExpressions:
+        - key: gluster-volume-mount/configured
+          operator: In
+          values:
+          - "true"
         - key: gluster-volume-mount/ready
           operator: In
           values:
