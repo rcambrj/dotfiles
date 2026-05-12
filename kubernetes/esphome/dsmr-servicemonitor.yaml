@@ -17,6 +17,8 @@ spec:
       containers:
       - name: caddy
         image: caddy:2.10.2-alpine
+        command:
+        - caddy
         args:
         - reverse-proxy
         - --from
