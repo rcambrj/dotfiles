@@ -140,7 +140,7 @@ data:
       "refresh": "5m",
       "schemaVersion": 39,
       "tags": ["energy", "home"],
-      "templating": {"list": [{"current": {"selected": true, "text": "1h", "value": "1h"}, "hide": 0, "includeAll": false, "label": "Bar duration", "multi": false, "name": "bar_interval", "options": [{"selected": true, "text": "1h", "value": "1h"}, {"selected": false, "text": "6h", "value": "6h"}, {"selected": false, "text": "24h", "value": "24h"}, {"selected": false, "text": "1d", "value": "1d"}, {"selected": false, "text": "7d", "value": "7d"}, {"selected": false, "text": "1mo", "value": "30d"}], "query": "1h,6h,24h,1d,7d,1mo : 30d", "skipUrlSync": false, "type": "custom"}]},
+      "templating": {"list": [{"current": {"selected": true, "text": "1h", "value": "1h"}, "hide": 0, "includeAll": false, "label": "Bar duration", "multi": false, "name": "bar_interval", "options": [{"selected": true, "text": "1h", "value": "1h"}, {"selected": false, "text": "6h", "value": "6h"}, {"selected": false, "text": "1d", "value": "1d"}, {"selected": false, "text": "7d", "value": "7d"}, {"selected": false, "text": "30d", "value": "30d"}, {"selected": false, "text": "max", "value": "$__range"}], "query": "1h,6h,1d,7d,30d,max : $__range", "skipUrlSync": false, "type": "custom"}]},
       "time": {"from": "now-7d", "to": "now"},
       "timepicker": {},
       "timezone": "browser",
