@@ -84,40 +84,41 @@ data:
         },
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "description": "Real grid energy per selected interval. Export is shown as negative.",
           "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "kwatth"}, "overrides": []},
           "gridPos": {"h": 9, "w": 16, "x": 0, "y": 4},
           "id": 7,
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(solar_energy_total_kwh[$bar_interval])", "interval": "$bar_interval", "legendFormat": "solar produced", "refId": "A"},
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$bar_interval]))", "interval": "$bar_interval", "legendFormat": "grid import", "refId": "B"},
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$bar_interval]))", "interval": "$bar_interval", "legendFormat": "grid export", "refId": "C"}
+            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$energy_interval]))", "interval": "$energy_interval", "legendFormat": "grid import", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "-sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$energy_interval]))", "interval": "$energy_interval", "legendFormat": "grid export", "refId": "B"}
           ],
-          "title": "Electricity Flows",
+          "title": "Grid Import / Export",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "description": "Real solar production per selected interval.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "kwatth"}, "overrides": []},
+          "gridPos": {"h": 9, "w": 8, "x": 16, "y": 4},
+          "id": 8,
+          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(solar_energy_total_kwh[$energy_interval])", "interval": "$energy_interval", "legendFormat": "solar production", "refId": "A"}],
+          "title": "Solar Production",
           "type": "timeseries"
         },
         {
           "datasource": {"type": "prometheus", "uid": "prometheus"},
           "description": "Estimated as grid import + solar production - grid export. Assumes no battery and no other generation.",
           "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "kwatth"}, "overrides": []},
-          "gridPos": {"h": 9, "w": 8, "x": 16, "y": 4},
-          "id": 8,
-          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
-          "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$bar_interval])) + increase(solar_energy_total_kwh[$bar_interval]) - sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$bar_interval]))", "interval": "$bar_interval", "legendFormat": "home consumption", "refId": "A"}],
-          "title": "Home Consumption",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "m3"}, "overrides": []},
           "gridPos": {"h": 8, "w": 8, "x": 0, "y": 13},
           "id": 9,
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(esphome_sensor_value{service=\"dsmr\", id=\"gas_delivered\"}[$bar_interval])", "interval": "$bar_interval", "legendFormat": "gas", "refId": "A"}],
-          "title": "Gas",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$energy_interval])) + increase(solar_energy_total_kwh[$energy_interval]) - sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$energy_interval]))", "interval": "$energy_interval", "legendFormat": "home consumption", "refId": "A"}],
+          "title": "Estimated Home Consumption",
           "type": "timeseries"
         },
         {
@@ -140,7 +141,7 @@ data:
       "refresh": "5m",
       "schemaVersion": 39,
       "tags": ["energy", "home"],
-      "templating": {"list": [{"current": {"selected": true, "text": "1h", "value": "1h"}, "hide": 0, "includeAll": false, "label": "Bar duration", "multi": false, "name": "bar_interval", "options": [{"selected": true, "text": "1h", "value": "1h"}, {"selected": false, "text": "6h", "value": "6h"}, {"selected": false, "text": "1d", "value": "1d"}, {"selected": false, "text": "7d", "value": "7d"}, {"selected": false, "text": "30d", "value": "30d"}], "query": "1h,6h,1d,7d,30d", "skipUrlSync": false, "type": "custom"}]},
+      "templating": {"list": [{"current": {"selected": true, "text": "1h", "value": "1h"}, "hide": 0, "includeAll": false, "label": "Energy interval", "multi": false, "name": "energy_interval", "options": [{"selected": true, "text": "1h", "value": "1h"}, {"selected": false, "text": "6h", "value": "6h"}, {"selected": false, "text": "1d", "value": "1d"}, {"selected": false, "text": "7d", "value": "7d"}, {"selected": false, "text": "30d", "value": "30d"}], "query": "1h,6h,1d,7d,30d", "skipUrlSync": false, "type": "custom"}]},
       "time": {"from": "now-7d", "to": "now"},
       "timepicker": {},
       "timezone": "browser",
