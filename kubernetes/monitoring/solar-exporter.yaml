@@ -1,0 +1,152 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: solar-exporter
+data:
+  telegraf.conf: |-
+    [agent]
+      omit_hostname = true
+
+    [[inputs.http]]
+      urls = ["http://solar0.cambridge.me/real_time_data.xml"]
+      interval = "5m"
+      timeout = "3s"
+      data_format = "xml"
+      name_override = "solar"
+      tagexclude = ["url"]
+
+      [[inputs.http.xpath]]
+        [inputs.http.xpath.fields]
+          # DC Input Phase 1
+          # pv1_voltage = "number(/real_time_data/v-pv1)"
+          # pv11_current = "number(/real_time_data/i-pv11)"
+          # pv12_current = "number(/real_time_data/i-pv12)"
+          # pv13_current = "number(/real_time_data/i-pv13)"
+          # pv14_current = "number(/real_time_data/i-pv14)"
+
+          # DC Input Phase 2
+          # pv2_voltage = "number(/real_time_data/v-pv2)"
+          # pv21_current = "number(/real_time_data/i-pv21)"
+          # pv22_current = "number(/real_time_data/i-pv22)"
+          # pv23_current = "number(/real_time_data/i-pv23)"
+          # pv24_current = "number(/real_time_data/i-pv24)"
+
+          # DC Input Phase 3
+          # pv3_voltage = "number(/real_time_data/v-pv3)"
+          # pv31_current = "number(/real_time_data/i-pv31)"
+          # pv32_current = "number(/real_time_data/i-pv32)"
+          # pv33_current = "number(/real_time_data/i-pv33)"
+          # pv34_current = "number(/real_time_data/i-pv34)"
+
+          # AC Output Phase 1
+          # ac_l1_voltage = "number(/real_time_data/Vac_l1)" # Grid voltage
+          # ac_l1_current = "number(/real_time_data/Iac_l1)" # Grid current
+          # ac_l1_power = "number(/real_time_data/pac1)" # Grid power
+          # ac_l1_frequency = "number(/real_time_data/Freq1)" # Grid frequency
+
+          # AC Output Phase 2
+          # ac_l2_voltage = "number(/real_time_data/Vac_l2)"
+          # ac_l2_current = "number(/real_time_data/Iac_l2)"
+          # ac_l2_power = "number(/real_time_data/pac2)"
+          # ac_l2_frequency = "number(/real_time_data/Freq2)"
+
+          # AC Output Phase 3
+          # ac_l3_voltage = "number(/real_time_data/Vac_l3)"
+          # ac_l3_current = "number(/real_time_data/Iac_l3)"
+          # ac_l3_power = "number(/real_time_data/pac3)"
+          # ac_l3_frequency = "number(/real_time_data/Freq3)"
+
+          # Statistics
+          # ac_total_power = "number(/real_time_data/p-ac)" # Grid total power, W
+          # energy_today_kwh = "number(/real_time_data/e-today)" # Today's energy, kWh
+          energy_total_kwh = "number(/real_time_data/e-total)" # Cumulative lifetime energy, kWh
+          # runtime_today = "number(/real_time_data/t-today)" # Today's running time
+          # runtime_total = "number(/real_time_data/t-total)" # Total running time
+
+          # Inverter metadata and derived statistics
+          # state = "string(/real_time_data/state)" # Inverter state
+          # inverter_temperature = "number(/real_time_data/temp)" # Inverter temperature
+          # bus_voltage = "number(/real_time_data/v-bus)" # Bus voltage
+          # co2_avoided = "number(/real_time_data/CO2)" # CO2 emission reduction
+          # max_power_today = "number(/real_time_data/maxPower)" # Today's max power
+
+    [[outputs.prometheus_client]]
+      listen = ":9126"
+      path = "/metrics"
+      expiration_interval = "10m"
+      string_as_label = false
+      collectors_exclude = ["gocollector", "process"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solar-exporter
+  labels:
+    app.kubernetes.io/name: solar-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: solar-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: solar-exporter
+    spec:
+      containers:
+      - name: telegraf
+        image: telegraf:1.36-alpine
+        args:
+        - --config
+        - /etc/telegraf/telegraf.conf
+        ports:
+        - name: metrics
+          containerPort: 9126
+        volumeMounts:
+        - name: config
+          mountPath: /etc/telegraf/telegraf.conf
+          subPath: telegraf.conf
+          readOnly: true
+        resources:
+          requests:
+            cpu: 5m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+      volumes:
+      - name: config
+        configMap:
+          name: solar-exporter
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solar-exporter
+  labels:
+    app.kubernetes.io/name: solar-exporter
+spec:
+  selector:
+    app.kubernetes.io/name: solar-exporter
+  ports:
+  - protocol: TCP
+    name: metrics
+    port: 9126
+    targetPort: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: solar-exporter
+  labels:
+    release: kube-prometheus-stack # serviceMonitorSelector
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: solar-exporter
+  endpoints:
+  - interval: 5m
+    scrapeTimeout: 10s
+    port: metrics
+    path: /metrics
