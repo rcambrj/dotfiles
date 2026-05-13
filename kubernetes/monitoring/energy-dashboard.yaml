@@ -90,11 +90,11 @@ data:
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(solar_energy_total_kwh[1d])", "legendFormat": "solar produced", "refId": "A"},
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[1d]))", "legendFormat": "grid import", "refId": "B"},
-            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[1d]))", "legendFormat": "grid export", "refId": "C"}
+            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(solar_energy_total_kwh[$bar_interval])", "legendFormat": "solar produced", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$bar_interval]))", "legendFormat": "grid import", "refId": "B"},
+            {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$bar_interval]))", "legendFormat": "grid export", "refId": "C"}
           ],
-          "title": "Daily Electricity Flows",
+          "title": "Electricity Flows",
           "type": "timeseries"
         },
         {
@@ -105,8 +105,8 @@ data:
           "id": 8,
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[1d])) + increase(solar_energy_total_kwh[1d]) - sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[1d]))", "legendFormat": "home consumption", "refId": "A"}],
-          "title": "Daily Home Consumption",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$bar_interval])) + increase(solar_energy_total_kwh[$bar_interval]) - sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$bar_interval]))", "legendFormat": "home consumption", "refId": "A"}],
+          "title": "Home Consumption",
           "type": "timeseries"
         },
         {
@@ -116,8 +116,8 @@ data:
           "id": 9,
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(esphome_sensor_value{service=\"dsmr\", id=\"gas_delivered\"}[1d])", "legendFormat": "gas", "refId": "A"}],
-          "title": "Daily Gas",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(esphome_sensor_value{service=\"dsmr\", id=\"gas_delivered\"}[$bar_interval])", "legendFormat": "gas", "refId": "A"}],
+          "title": "Gas",
           "type": "timeseries"
         },
         {
@@ -140,7 +140,7 @@ data:
       "refresh": "5m",
       "schemaVersion": 39,
       "tags": ["energy", "home"],
-      "templating": {"list": []},
+      "templating": {"list": [{"current": {"selected": true, "text": "1h", "value": "1h"}, "hide": 0, "includeAll": false, "label": "Bar duration", "multi": false, "name": "bar_interval", "options": [{"selected": true, "text": "1h", "value": "1h"}, {"selected": false, "text": "6h", "value": "6h"}, {"selected": false, "text": "24h", "value": "24h"}, {"selected": false, "text": "1d", "value": "1d"}, {"selected": false, "text": "7d", "value": "7d"}, {"selected": false, "text": "1mo", "value": "1mo"}], "query": "1h,6h,24h,1d,7d,1mo", "skipUrlSync": false, "type": "custom"}]},
       "time": {"from": "now-7d", "to": "now"},
       "timepicker": {},
       "timezone": "browser",
