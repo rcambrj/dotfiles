@@ -12,9 +12,9 @@ in {
 
   # Philips Hue Dimmer Switch (4 buttons)
   # button 1: turn_on
-  # button 1: dim_up
-  # button 1: dim_down
-  # button 1: turn_off
+  # button 2: dim_up
+  # button 3: dim_down
+  # button 4: turn_off
 
   "configuration.yaml".automation = (map (group: {
     alias = "Toggle group " + group.name;
@@ -53,6 +53,52 @@ in {
           action = "scene.turn_on";
           target = {
             entity_id = "scene.in_bed";
+          };
+        }
+      ];
+    }
+    {
+      alias = "Toggle bedroom light";
+      mode = "single";
+      trigger = [
+        {
+          device_id = buttons.bedroom;
+          domain = "zha";
+          platform = "device";
+          type = "remote_button_short_press";
+          subtype = "dim_up";
+        }
+      ];
+      action = [
+        {
+          action = "light.toggle";
+          target = {
+            entity_id = [
+              "light.bedroom_light"
+            ];
+          };
+        }
+      ];
+    }
+    {
+      alias = "Toggle bedroom lamp";
+      mode = "single";
+      trigger = [
+        {
+          device_id = buttons.bedroom;
+          domain = "zha";
+          platform = "device";
+          type = "remote_button_short_press";
+          subtype = "dim_down";
+        }
+      ];
+      action = [
+        {
+          action = "switch.toggle";
+          target = {
+            entity_id = [
+              "switch.bedroom_lamp"
+            ];
           };
         }
       ];
