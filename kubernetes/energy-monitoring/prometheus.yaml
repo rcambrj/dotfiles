@@ -82,4 +82,4 @@ spec:
   ports:
   - name: http-web
     port: 9090
-    targetPort: http-web
+    targetPort: web
