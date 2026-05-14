@@ -36,6 +36,12 @@ data:
       <p>&nbsp;</p>
       <p><a href="https://lldap.home.cambridge.me/">LDAP</a></p>
       <p><a href="https://esphome.home.cambridge.me">esphome</a></p>
+      <p><a href="https://grafana.home.cambridge.me">grafana</a></p>
+      <p><a href="https://prometheus.home.cambridge.me">prometheus</a></p>
+      <p><a href="https://alertmanager.home.cambridge.me">alertmanager</a></p>
+      <p><a href="https://prometheus-energy.home.cambridge.me">prometheus-energy</a></p>
+      <p><a href="https://argocd.home.cambridge.me">argocd</a></p>
+      <p><a href="https://fdm.home.cambridge.me">fdm</a></p>
       <p>&nbsp;</p>
       <p><a href="https://wan-status.router.cambridge.me">wan status</a></p>
       <p><a href="https://unifi.router.cambridge.me">Unifi</a></p>
