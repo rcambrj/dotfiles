@@ -5,8 +5,7 @@ metadata:
   labels:
     app: home-assistant
   annotations:
-    # TODO: make home-assistant less sensitive to hard shutdowns
-    # reloader.stakater.com/auto: "true"
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 1
   replicas: 1
@@ -24,6 +23,7 @@ spec:
         gluster-volume-mount/ready: "true"
         feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
       priorityClassName: home-automation
+      terminationGracePeriodSeconds: 120 # try to prevent zigbee.db corruption
       securityContext:
         runAsUser: 42770
         runAsGroup: 42770
