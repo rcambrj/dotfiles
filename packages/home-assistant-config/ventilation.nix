@@ -35,23 +35,18 @@
         target = {
           entity_id = "light.mechanical_ventilation";
         };
-        # const humidity = msg.payload;
-        # const humidityLower = 65;
-        # const humidityRange = 80 - humidityLower;
-        # const speedLower = 30;
-        # const speedRange = 100 - speedLower;
-        # const speed = Math.max(speedLower, (
-        #           humidity - humidityLower
-        #     ) / humidityRange * speedRange + speedLower);
-        # TODO: how to make this more maintainable?
-        data = let
+        data.brightness_pct = let
           humidityUpper = 80;
           humidityLower = 65;
           humidityRange = humidityUpper - humidityLower;
           speedUpper = 100;
           speedLower = 30;
           speedRange = speedUpper - speedLower;
-        in ''{"brightness_pct":"{{ max(min((states.sensor.bathroom_environmental_sensor_humidity.state|float(0) - ${toString humidityLower}) / ${toString humidityRange} * ${toString speedUpper} + ${toString speedLower}, ${toString speedUpper}), ${toString speedLower}) }}"}'';
+        in ''
+          {% set humidity = states('sensor.bathroom_environmental_sensor_humidity') | float(0) %}
+          {% set speed = (humidity - ${toString humidityLower}) / ${toString humidityRange} * ${toString speedRange} + ${toString speedLower} %}
+          {{ max(min(speed, ${toString speedUpper}), ${toString speedLower}) | round(0) }}
+        '';
       }
     ];
   }];
