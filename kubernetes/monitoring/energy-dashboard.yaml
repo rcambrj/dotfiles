@@ -88,7 +88,7 @@ data:
           "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1, "stacking": {"group": "A", "mode": "normal"}}, "unit": "kwatth"}, "overrides": [{"matcher": {"id": "byName", "options": "grid import"}, "properties": [{"id": "color", "value": {"fixedColor": "red", "mode": "fixed"}}]}, {"matcher": {"id": "byName", "options": "solar consumed"}, "properties": [{"id": "color", "value": {"fixedColor": "yellow", "mode": "fixed"}}]}, {"matcher": {"id": "byName", "options": "grid export"}, "properties": [{"id": "color", "value": {"fixedColor": "blue", "mode": "fixed"}}]}]},
           "gridPos": {"h": 9, "w": 24, "x": 0, "y": 4},
           "id": 9,
-          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
+          "options": {"legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [
             {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "clamp_min(sum(increase(solar_energy_total_kwh[$energy_interval])) - sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$energy_interval])), 0)", "interval": "$energy_interval", "legendFormat": "solar consumed", "refId": "A"},
@@ -104,7 +104,7 @@ data:
           "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "m3"}, "overrides": []},
           "gridPos": {"h": 8, "w": 24, "x": 0, "y": 13},
           "id": 10,
-          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+          "options": {"legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(esphome_sensor_value{service=\"dsmr\", id=\"gas_delivered\"}[$energy_interval])", "interval": "$energy_interval", "legendFormat": "gas consumed", "refId": "A"}],
           "title": "Gas",
