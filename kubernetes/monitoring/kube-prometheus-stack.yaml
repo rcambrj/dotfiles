@@ -100,6 +100,9 @@ spec:
         reloader.stakater.com/auto: "true"
       serviceMonitor:
         enabled: false
+      sidecar:
+        datasources:
+          searchNamespace: ALL
       ingress:
         enabled: true
         ingressClassName: traefik

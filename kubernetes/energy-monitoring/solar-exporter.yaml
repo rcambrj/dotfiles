@@ -138,7 +138,7 @@ kind: ServiceMonitor
 metadata:
   name: solar-exporter
   labels:
-    release: kube-prometheus-stack # serviceMonitorSelector
+    prometheus: energy
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:

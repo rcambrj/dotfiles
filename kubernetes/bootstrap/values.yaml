@@ -12,6 +12,7 @@ applications:
 - name: cert-manager
 - name: copyparty
 - name: descheduler
+- name: energy-monitoring
 - name: esphome
 - name: fdm
 - name: generic-device-plugin
