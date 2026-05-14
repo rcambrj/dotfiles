@@ -49,6 +49,12 @@ spec:
   replicas: 1
   retention: 100y
   serviceAccountName: energy-prometheus
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 36374
+    runAsGroup: 36374
+    fsGroup: 36374
+    fsGroupChangePolicy: OnRootMismatch
   serviceMonitorSelector:
     matchLabels:
       prometheus: energy
