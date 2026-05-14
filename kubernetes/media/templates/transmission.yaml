@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: transmission
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 1
   # do not specify replicas because cronjobs/enable-downloads changes this value

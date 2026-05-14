@@ -83,6 +83,8 @@ metadata:
   name: solar-exporter
   labels:
     app.kubernetes.io/name: solar-exporter
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

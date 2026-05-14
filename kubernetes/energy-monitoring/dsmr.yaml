@@ -4,6 +4,8 @@ metadata:
   name: dsmr-metrics-proxy
   labels:
     app.kubernetes.io/name: dsmr-metrics-proxy
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

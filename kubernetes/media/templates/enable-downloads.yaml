@@ -27,6 +27,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: enable-downloads
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   revisionHistoryLimit: 1
   replicas: 1

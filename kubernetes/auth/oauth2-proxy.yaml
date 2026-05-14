@@ -4,6 +4,8 @@ metadata:
   name: oauth2-proxy
   labels:
     app: oauth2-proxy
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:
