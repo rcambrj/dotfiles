@@ -95,7 +95,19 @@ data:
             {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_delivered_tariff_(low|high)\"}[$energy_interval]))", "interval": "$energy_interval", "legendFormat": "grid import", "refId": "B"},
             {"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "-sum(increase(esphome_sensor_value{service=\"dsmr\", id=~\"energy_returned_tariff_(low|high)\"}[$energy_interval]))", "interval": "$energy_interval", "legendFormat": "grid export", "refId": "C"}
           ],
-          "title": "Energy Balance",
+          "title": "Electricity",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "description": "Real gas consumption per selected interval.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "bars", "fillOpacity": 60, "lineWidth": 1}, "unit": "m3"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 13},
+          "id": 10,
+          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "prometheus"}, "expr": "increase(esphome_sensor_value{service=\"dsmr\", id=\"gas_delivered\"}[$energy_interval])", "interval": "$energy_interval", "legendFormat": "gas consumed", "refId": "A"}],
+          "title": "Gas",
           "type": "timeseries"
         }
       ],
