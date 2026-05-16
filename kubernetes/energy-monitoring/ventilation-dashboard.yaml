@@ -24,8 +24,8 @@ data:
           "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [
-            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_indoor_humidity", "legendFormat": "indoor humidity", "refId": "A"},
-            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_outdoor_humidity", "legendFormat": "outdoor humidity", "refId": "B"}
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_indoor_humidity)", "legendFormat": "indoor humidity", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_outdoor_humidity)", "legendFormat": "outdoor humidity", "refId": "B"}
           ],
           "title": "Humidity",
           "type": "timeseries"
@@ -39,8 +39,8 @@ data:
           "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
           "pluginVersion": "12.2.1",
           "targets": [
-            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_indoor_temperature", "legendFormat": "indoor temperature", "refId": "A"},
-            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_outdoor_temperature", "legendFormat": "outdoor temperature", "refId": "B"}
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_indoor_temperature)", "legendFormat": "indoor temperature", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_outdoor_temperature)", "legendFormat": "outdoor temperature", "refId": "B"}
           ],
           "title": "Temperature",
           "type": "timeseries"
@@ -53,7 +53,7 @@ data:
           "id": 3,
           "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_ventilation_speed", "legendFormat": "ventilation speed", "refId": "A"}],
+          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_ventilation_speed)", "legendFormat": "ventilation speed", "refId": "A"}],
           "title": "Ventilation Speed",
           "type": "timeseries"
         },
@@ -65,7 +65,7 @@ data:
           "id": 4,
           "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
           "pluginVersion": "12.2.1",
-          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "home_ventilation_auto_enabled", "legendFormat": "auto enabled", "refId": "A"}],
+          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "avg(home_ventilation_auto_enabled)", "legendFormat": "auto enabled", "refId": "A"}],
           "title": "Ventilation Auto",
           "type": "timeseries"
         }
@@ -75,7 +75,7 @@ data:
       "schemaVersion": 39,
       "tags": ["home", "ventilation"],
       "templating": {"list": []},
-      "time": {"from": "now-30d", "to": "now"},
+      "time": {"from": "now-7d", "to": "now"},
       "timepicker": {},
       "timezone": "browser",
       "title": "Home Ventilation",
