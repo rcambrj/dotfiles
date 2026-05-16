@@ -44,13 +44,14 @@
         name = "Ventilation Speed";
         unique_id = "ventilation_speed";
         default_entity_id = "sensor.ventilation_speed";
+        unit_of_measurement = "%";
         state_class = "measurement";
         availability = "{{ is_state('light.mechanical_ventilation', 'off') or state_attr('light.mechanical_ventilation', 'brightness') is number }}";
         state = ''
           {% if is_state('light.mechanical_ventilation', 'off') %}
             0
           {% else %}
-            {{ state_attr('light.mechanical_ventilation', 'brightness') }}
+            {{ (state_attr('light.mechanical_ventilation', 'brightness') / 255 * 100) | round(0) }}
           {% endif %}
         '';
       }

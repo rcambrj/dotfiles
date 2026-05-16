@@ -47,8 +47,8 @@ data:
         },
         {
           "datasource": {"type": "prometheus", "uid": "energy-prometheus"},
-          "description": "Raw Home Assistant light brightness for light.mechanical_ventilation, recorded as 0 when off.",
-          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 2}, "unit": "none"}, "overrides": []},
+          "description": "Ventilation speed percentage derived from light.mechanical_ventilation brightness, recorded as 0 when off.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 2}, "max": 100, "min": 0, "unit": "percent"}, "overrides": []},
           "gridPos": {"h": 8, "w": 16, "x": 0, "y": 16},
           "id": 3,
           "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
