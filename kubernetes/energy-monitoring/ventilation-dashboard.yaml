@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ventilation-dashboard
+  labels:
+    grafana_dashboard: "1"
+data:
+  ventilation.json: |-
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {"type": "prometheus", "uid": "energy-prometheus"},
+          "description": "Indoor bathroom humidity compared with outdoor humidity from weather.forecast_home.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 2}, "unit": "percent"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+          "id": 1,
+          "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_sensor_humidity_percent{entity=\"sensor.bathroom_environmental_sensor_humidity\"} or homeassistant_sensor_unit_percent{entity=\"sensor.bathroom_environmental_sensor_humidity\"}", "legendFormat": "indoor humidity", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_sensor_humidity_percent{entity=\"sensor.outdoor_humidity\"} or homeassistant_sensor_unit_percent{entity=\"sensor.outdoor_humidity\"}", "legendFormat": "outdoor humidity", "refId": "B"}
+          ],
+          "title": "Humidity",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "energy-prometheus"},
+          "description": "Indoor bathroom temperature compared with outdoor temperature from weather.forecast_home.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 2}, "unit": "celsius"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8},
+          "id": 2,
+          "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "multi", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_sensor_temperature_celsius{entity=\"sensor.bathroom_environmental_sensor_temperature\"} or homeassistant_sensor_unit_celsius{entity=\"sensor.bathroom_environmental_sensor_temperature\"}", "legendFormat": "indoor temperature", "refId": "A"},
+            {"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_sensor_temperature_celsius{entity=\"sensor.outdoor_temperature\"} or homeassistant_sensor_unit_celsius{entity=\"sensor.outdoor_temperature\"}", "legendFormat": "outdoor temperature", "refId": "B"}
+          ],
+          "title": "Temperature",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "energy-prometheus"},
+          "description": "Raw Home Assistant light brightness for light.mechanical_ventilation, recorded as 0 when off.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 10, "lineWidth": 2}, "unit": "none"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 16, "x": 0, "y": 16},
+          "id": 3,
+          "options": {"legend": {"calcs": ["lastNotNull", "mean"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_sensor_state{entity=\"sensor.ventilation_speed\"}", "legendFormat": "ventilation speed", "refId": "A"}],
+          "title": "Ventilation Speed",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "energy-prometheus"},
+          "description": "Ventilation auto speed toggle, 1 is on and 0 is off.",
+          "fieldConfig": {"defaults": {"custom": {"drawStyle": "line", "fillOpacity": 20, "lineWidth": 2}, "max": 1, "min": 0, "unit": "bool_on_off"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 8, "x": 16, "y": 16},
+          "id": 4,
+          "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+          "pluginVersion": "12.2.1",
+          "targets": [{"datasource": {"type": "prometheus", "uid": "energy-prometheus"}, "expr": "homeassistant_input_boolean_state{entity=\"input_boolean.ventilation_auto_speed_enabled\"}", "legendFormat": "auto enabled", "refId": "A"}],
+          "title": "Ventilation Auto",
+          "type": "timeseries"
+        }
+      ],
+      "preload": false,
+      "refresh": "5m",
+      "schemaVersion": 39,
+      "tags": ["home", "ventilation"],
+      "templating": {"list": []},
+      "time": {"from": "now-30d", "to": "now"},
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "Home Ventilation",
+      "uid": "home-ventilation",
+      "version": 1,
+      "weekStart": ""
+    }
