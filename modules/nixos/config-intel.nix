@@ -31,7 +31,10 @@
     "root=LABEL=nixos" # see iso-image.nix for why this is useful
   ];
 
-  boot.growPartitionCustom.enable = true;
+  boot.growPartitionCustom = {
+    enable = true;
+    device = "/dev/disk/by-label/nixos";
+  };
   fileSystems = {
     # use mkDefault so that disko doesn't conflict during disko-install
     "/boot" = lib.mkDefault {
@@ -43,7 +46,7 @@
       options = [ "mode=0755" ];
     };
     "/mnt/root" = lib.mkDefault {
-      device = "/dev/root";
+      device = "/dev/disk/by-label/nixos";
       neededForBoot = true;
       autoResize = true; # resizes filesystem to occupy whole partition
       fsType = "ext4";

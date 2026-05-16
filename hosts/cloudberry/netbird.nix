@@ -3,7 +3,14 @@
     inputs.self.nixosModules.netbird
   ];
 
-  services.netbird.clients.default = {
-    dns-resolver.port = 5053; # not using systemd-resolved, and dnsmasq needs 53
+  services.netbird = {
+    # this option is a noop WRT nixos firewall because that's disabled
+    # but for correctness, override the default "client" value
+    useRoutingFeatures = mkForce "server";
+
+    clients.default = {
+      # not using systemd-resolved, and dnsmasq needs 53
+      dns-resolver.port = 5053;
+    };
   };
 }

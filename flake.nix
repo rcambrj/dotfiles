@@ -45,9 +45,7 @@
     unifi-os-server.url = "github:rcambrj/unifi-os-server";
     unifi-os-server.inputs.nixpkgs.follows = "nixpkgs";
 
-    # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
-    # nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=c04833a1e584401bb63c1a63ddc51a71e6aa457a";
-    # but then cross-network traffic is broken until:
+    # agentless => peer traffic broken: https://github.com/netbirdio/netbird/issues/5273
     nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4";
   };
 

@@ -36,7 +36,7 @@ in {
     };
   };
 
-  # https://github.com/netbirdio/netbird/issues/5063 affecting v0.62.0
+  # agentless => peer traffic broken: https://github.com/netbirdio/netbird/issues/5273
   services.netbird.server.management.package = perSystem.nixpkgs-netbird.netbird-management;
   services.netbird.server.signal.package = perSystem.nixpkgs-netbird.netbird-signal;
   services.netbird.server.dashboard.package = perSystem.nixpkgs-netbird.netbird-dashboard;

@@ -12,8 +12,7 @@ in {
       enable = mkEnableOption "growPartitionCustom";
       device = mkOption {
         description = "The partition device to grow";
-        default = "/dev/root";
-        example = "/dev/disk/by-label/nixos";
+        default = "/dev/disk/by-label/nixos";
       };
     };
   };
