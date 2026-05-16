@@ -160,6 +160,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: home-assistant
+  labels:
+    app.kubernetes.io/name: home-assistant
 spec:
   selector:
     app: home-assistant
@@ -168,6 +170,24 @@ spec:
     protocol: TCP
     port: 80
     targetPort: http
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: home-assistant
+  labels:
+    prometheus: energy
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: home-assistant
+  endpoints:
+  - interval: 5m
+    scrapeTimeout: 10s
+    port: http
+    path: /api/prometheus
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

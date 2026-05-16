@@ -4,7 +4,7 @@ metadata:
   name: energy-prometheus
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: energy-prometheus
 rules:
@@ -28,16 +28,17 @@ rules:
   - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: energy-prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: energy-prometheus
 subjects:
 - kind: ServiceAccount
   name: energy-prometheus
+  namespace: energy-monitoring
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -55,6 +56,7 @@ spec:
     runAsGroup: 36374
     fsGroup: 36374
     fsGroupChangePolicy: OnRootMismatch
+  serviceMonitorNamespaceSelector: {}
   serviceMonitorSelector:
     matchLabels:
       prometheus: energy

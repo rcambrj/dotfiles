@@ -11,6 +11,7 @@
         ./lights-and-switches.nix
         ./lovelace.nix
         ./mosquitos.nix
+        ./prometheus.nix
         ./scenery.nix
         ./scenes.nix
         ./ventilation.nix
