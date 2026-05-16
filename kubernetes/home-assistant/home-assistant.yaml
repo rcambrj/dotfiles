@@ -188,6 +188,13 @@ spec:
     scrapeTimeout: 10s
     port: http
     path: /api/prometheus
+    metricRelabelings:
+    # home-assistant exposes a bunch of useless metrics which can't be switched off
+    # expose wanted metrics with a known prefix, and filter them here
+    - action: keep
+      sourceLabels:
+      - __name__
+      regex: home_.*
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
