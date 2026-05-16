@@ -1,0 +1,76 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: home-assistant-zigbee-db-backup
+spec:
+  schedule: "0 1 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 42770
+            runAsGroup: 42770
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: gluster-volume-mount/ready
+                    operator: In
+                    values: ["true"]
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app: home-assistant
+                topologyKey: kubernetes.io/hostname
+          volumes:
+          - name: state
+            hostPath:
+              path: /data/home-assistant
+          containers:
+          - name: backup
+            image: nixery.dev/shell/sqlite/coreutils
+            command: ["/bin/sh", "-c"]
+            args:
+            - |-
+              set -euo pipefail
+
+              src=/config/zigbee.db
+              backup="${src}.backup"
+              tmp="${backup}.tmp"
+
+              if [ ! -s "$src" ]; then
+                echo "Skipping backup: $src does not exist or is empty"
+                exit 0
+              fi
+
+              rm -f "$tmp"
+
+              sqlite3 "$src" ".timeout 30000" ".backup main $tmp"
+
+              check=$(sqlite3 "$tmp" "PRAGMA quick_check;")
+              if [ "$check" != "ok" ]; then
+                echo "Backup validation failed: $check"
+                rm -f "$tmp"
+                exit 1
+              fi
+
+              mv -f "$tmp" "$backup"
+              echo "Wrote $backup"
+            resources:
+              requests:
+                cpu: "10m"
+                memory: "32Mi"
+              limits:
+                cpu: "200m"
+                memory: "128Mi"
+            volumeMounts:
+            - name: state
+              mountPath: /config
