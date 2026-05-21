@@ -144,6 +144,7 @@ in {
           ip4-gateway = "${ip4-prefix}.1";
         };
         usb-rndis-tethering = rec {
+          # 192.168.*.0/24 (random)
           ifname = ifaces'.usblte;
           ifaces = {
             t = [];
