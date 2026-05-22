@@ -32,8 +32,9 @@ in {
   "secrets/ldap-admin-rw-password.age".publicKeys = defaults ++ [ ]; # not used
   "secrets/ldap-admin-ro-password.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.elderberry ];
 
-  # mailgun
-  "secrets/mailgun-smtp-password.age".publicKeys = defaults ++ kubenodes;
+  # oracle email delivery
+  "secrets/oracle-cloud-smtp-username.age".publicKeys = defaults ++ kubenodes;
+  "secrets/oracle-cloud-smtp-password.age".publicKeys = defaults ++ kubenodes;
 
   # gluster
   "secrets/gluster-ca-key.age".publicKeys = defaults;

@@ -20,7 +20,8 @@ in {
 
       lldap-key-seed.file        = ../../../secrets/lldap-key-seed.age;
       lldap-jwt-secret.file      = ../../../secrets/lldap-jwt-secret.age;
-      mailgun-smtp-password.file = ../../../secrets/mailgun-smtp-password.age;
+      oracle-cloud-smtp-username.file = ../../../secrets/oracle-cloud-smtp-username.age;
+      oracle-cloud-smtp-password.file = ../../../secrets/oracle-cloud-smtp-password.age;
 
       ldap-admin-ro-password.file = ../../../secrets/ldap-admin-ro-password.age;
       argocd-client-secret.file   = ../../../secrets/argocd-client-secret.age;
@@ -129,7 +130,8 @@ in {
       vars = {
         keyseed = config.age.secrets.lldap-key-seed.path;
         jwtsecret = config.age.secrets.lldap-jwt-secret.path;
-        smtppass = config.age.secrets.mailgun-smtp-password.path;
+        smtpuser = config.age.secrets.oracle-cloud-smtp-username.path;
+        smtppass = config.age.secrets.oracle-cloud-smtp-password.path;
       };
       content = ''
         apiVersion: v1
@@ -140,6 +142,7 @@ in {
         stringData:
           key-seed: "$keyseed"
           jwt-secret: "$jwtsecret"
+          smtp-user: "$smtpuser"
           smtp-pass: "$smtppass"
       '';
     };

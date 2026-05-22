@@ -40,14 +40,6 @@ spec:
         envFrom:
         - configMapRef:
             name: lldap-env
-        env:
-        - name: LLDAP_SMTP_OPTIONS__PASSWORD
-          # TODO: don't use env for secrets
-          # proposal: initContainer generates config file from configmap + secret
-          valueFrom:
-            secretKeyRef:
-              name: lldap-secrets
-              key: smtp-pass
         command: [ "/app/lldap" ] # skip the default entrypoint checks
         args: [ "run", "--config-file", "/secrets/lldap_config.toml" ]
         volumeMounts:
@@ -97,10 +89,11 @@ data:
   LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET: "true"
   LLDAP_SMTP_OPTIONS__FROM: ldap@cambridge.me
   LLDAP_SMTP_OPTIONS__PORT: "465"
-  LLDAP_SMTP_OPTIONS__SERVER: smtp.eu.mailgun.org
+  LLDAP_SMTP_OPTIONS__SERVER: smtp.email.eu-amsterdam-1.oci.oraclecloud.com
   LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: TLS
-  LLDAP_SMTP_OPTIONS__TO: noreply@cambridge.me # reply to
-  LLDAP_SMTP_OPTIONS__USER: postmaster@mailgun.cambridge.me
+  LLDAP_SMTP_OPTIONS__REPLY_TO: noreply@cambridge.me
+  LLDAP_SMTP_OPTIONS__USER_FILE: /secrets/smtp-user
+  LLDAP_SMTP_OPTIONS__PASSWORD_FILE: /secrets/smtp-pass
   LLDAP_KEY_FILE: "" # use key_seed instead and silence warning
 
   LLDAP_KEY_SEED_FILE: /secrets/key-seed
