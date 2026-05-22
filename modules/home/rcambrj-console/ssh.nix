@@ -70,13 +70,15 @@ in {
         user = "nixos";
       };
       "orange" = {
-        # oracle cloud free aarch64
         hostname = "orange-external.cambridge.me";
         user = "nixos";
       };
       "lemon" = {
-        # oracle cloud free aarch64
         hostname = "lemon-external.cambridge.me";
+        user = "nixos";
+      };
+      "cherry" = {
+        hostname =  "cherry-external.cambridge.me";
         user = "nixos";
       };
     };
