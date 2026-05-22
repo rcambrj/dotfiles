@@ -15,6 +15,8 @@ in {
   ) (let
     primary   = networks."${uplink-failover.primary}";
     secondary = networks."${uplink-failover.secondary}";
+    tailscaleFwmark = "0x80000/0xff0000";
+    tailscaleRulePrio = uplink-failover.rule-prio.tailscale or 5240;
   in {
 
     networking.nftables = {
@@ -88,6 +90,8 @@ in {
       on-up-cmd = toString (pkgs.writeShellScript "uplink-failover-up" ''
         echo "Switching route rule priorities..."
         ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString uplink-failover.rule-prio.override} table ${toString secondary.rt} || true
+        ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString tailscaleRulePrio} fwmark ${tailscaleFwmark} || true
+        ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString tailscaleRulePrio} fwmark ${tailscaleFwmark} table ${toString primary.rt}
 
         echo "Blocking secondary uplink traffic..."
         ${pkgs.nftables}/bin/nft -f ${secondary-uplink-block-on} || true
@@ -105,6 +109,8 @@ in {
       on-down-cmd = toString (pkgs.writeShellScript "uplink-failover-down" ''
         echo "Switching route rule priorities..."
         ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString uplink-failover.rule-prio.override} table ${toString secondary.rt} || true
+        ${pkgs.iproute2}/bin/ip -4 rule delete priority ${toString tailscaleRulePrio} fwmark ${tailscaleFwmark} || true
+        ${pkgs.iproute2}/bin/ip -4 rule add priority ${toString tailscaleRulePrio} fwmark ${tailscaleFwmark} table ${toString secondary.rt}
 
         echo "Permitting secondary uplink traffic..."
         ${pkgs.nftables}/bin/nft -f ${secondary-uplink-block-off} || true

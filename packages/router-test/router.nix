@@ -20,6 +20,7 @@ in rec {
     rule-prio = {
       # main    = 32766
       # default = 32767
+      tailscale = 5240;
       override  = 32767 + 1000;
       primary   = 32767 + 1100;
       secondary = 32767 + 1200;
