@@ -29,6 +29,7 @@ in {
     gnutar zstd
     htop btop
     iftop
+    jq yq
     kubectl kubernetes-helm k9s minikube kubectx
     localtunnel
     ncdu
