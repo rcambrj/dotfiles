@@ -63,11 +63,12 @@ Each host directory contains the NixOS configuration for a specific machine, inc
 | Host | Role | Architecture | Notes |
 |------|------|--------------|-------|
 | `blueberry` | Kubernetes + Gluster node | x86_64 | Mac Mini 2011, Intel i7 |
-| `cloudberry` | Router / gateway | x86_64 | TOPTON 4-port, handles routing, WAN failover, VPN |
-| `cranberry` | Kubernetes + Gluster node | x86_64 | |
-| `elderberry` | 3D printer | x86_64 | Dell Wyse 3040, runs Klipper + Fluidd |
-| `lemon` | ??? | x86_64 | ??? |
+| `cranberry` | Kubernetes + Gluster node | x86_64 | TOPTON 4-port |
 | `orange` | Kubernetes + Gluster node | x86_64 | Off-site location, connected via VPN |
+| `cloudberry` | Router / gateway | x86_64 | TOPTON 4-port, handles routing, WAN failover, VPN |
+| `elderberry` | 3D printer | x86_64 | Dell Wyse 3040, runs Klipper + Fluidd |
+| `lemon` | spare | x86_64 |  |
+| `cherry` | spare | x86_64 |  |
 
 ### Ephemeral Hosts
 
@@ -87,178 +88,9 @@ Each host directory contains the NixOS configuration for a specific machine, inc
 > [!NOTE]
 > Why is the MacBook in a separate repository? `nixos-unstable` used to break for Darwin much more frequently than for NixOS proper. To keep Darwin on a working version, it's in a separate flake with its own nixpkgs input. `nixos-unstable` has been better on Darwin recently, but I haven't gotten around to merging the two.
 
-## Home Manager Configurations (`modules/home/`)
-
-Portable Home Manager configurations for user environments:
-
-- **`rcambrj-console/`** - Portable configuration for workstations and servers (shell, git, SSH, VS Code settings). Somewhat bloated for server use. Consumed by [MacBook](https://github.com/rcambrj/nix-macbook).
-- **`rcambrj-graphical/`** - Graphical interface configuration (originally built for `mango`). Includes GNOME, touchpad settings, brightness controls.
-- **`vscode/`** - VS Code editor configuration. Consumed by both `rcambrj-graphical` and [MacBook](https://github.com/rcambrj/nix-macbook).
-
-## NixOS Modules (`modules/nixos/`)
-
-Reusable NixOS modules that compose the infrastructure.
-
-### Core Modules
-
-| Module | Purpose |
-|--------|---------|
-| `base.nix` | Base system configuration (users, groups, basic services) |
-| `common.nix` | Common settings shared across hosts |
-| `bare-metal.nix` | Bare metal provisioning (bootloader, firmware) |
-| `cloud-vps.nix` | Cloud/VPS-specific configuration |
-
-### Hardware Configurations
-
-| Module | Purpose |
-|--------|---------|
-| `config-intel.nix` | Intel hardware configuration |
-| `config-raspi.nix` | Raspberry Pi configuration |
-| `gpu-intel.nix` | Intel GPU support (VA-API, etc.) |
-
-### Storage & Disk Management
-
-| Module | Purpose |
-|--------|---------|
-| `disko-node.nix` | Disk partitioning for Kubernetes/Gluster nodes |
-| `disko-standard.nix` | Standard disk partitioning scheme |
-| `disk-savers.nix` | Workaround to reduce etcd disk wear |
-| `storage.nix` | GlusterFS distributed storage setup |
-| `grow-partition.nix` | A better grow-partition than nixpkgs |
-
-### Networking
-
-| Module | Purpose |
-|--------|---------|
-| `router/` | **Full router stack** - bridging, VLANs, routing, dual WAN failover, SQM, DNS (dnsmasq), firewall, UPnP, PPPoE. Tested via `packages/router-test`. |
-| `tailscale.nix` | Tailscale VPN client configuration |
-| `primary-wan.nix` | systemd service intended to _bring down_ other services when backup WAN is active |
-| `up-or-down.nix` | Up/down monitoring with hysteria prevention |
-
-### Kubernetes
-
-| Module | Purpose |
-|--------|---------|
-| `kubernetes-node.nix` | Kubernetes node setup (k3s, CNI, etc.) |
-| `kubernetes-manifests/` | Kubernetes manifests deployed via ArgoCD (MetalLB, etc.) |
-
-### Backups & Monitoring
-
-| Module | Purpose |
-|--------|---------|
-| `server-backup.nix` | Restic backups to S3-compatible storage |
-| `telemetry.nix` | System telemetry and monitoring |
-
-### Access Control
-
-| Module | Purpose |
-|--------|---------|
-| `access-server.nix` | Server access configuration (SSH, sudo) |
-| `access-workstation.nix` | Workstation access configuration |
-| `root-keys.nix` | SSH authorized_keys helper |
-
-## Kubernetes Applications (`kubernetes/`)
-
-All Kubernetes applications are managed via ArgoCD (GitOps). Organized by function:
-
-### Infrastructure
-
-| Application | Purpose |
-|-------------|---------|
-| `bootstrap/` | Initial cluster bootstrap (applications, values) |
-| `reloader/` | Automatic reload of pods when ConfigMaps/Secrets change |
-| `priorities/` | PriorityClass definitions for workload scheduling |
-| `utils/` | Utility scripts (ArgoCD sync helper) |
-
-### Networking
-
-| Application | Purpose |
-|-------------|---------|
-| `traefik/` | Ingress controller with Cloudflare tunnel integration |
-| `descheduler/` | Kubernetes descheduler for workload rebalancing |
-| `node-feature-discovery/` | Node tagging with hardware features |
-| `generic-device-plugin/` | Node hardware resources (zigbee) |
-| `intel-gpu/` | Node hardware resources (Intel GPU) |
-
-### Authentication
-
-| Application | Purpose |
-|-------------|---------|
-| `auth/` | Authentication stack (dex, lldap, oauth2-proxy) |
-
-### Storage
-
-| Application | Purpose |
-|-------------|---------|
-| `postgres/` | CloudNative PostgreSQL with automated backups |
-| `gluster-mount-watcher/` | Monitor and recover GlusterFS mounts |
-
-### Monitoring
-
-| Application | Purpose |
-|-------------|---------|
-| `monitoring/` | kube-prometheus-stack (Prometheus, Grafana, Alertmanager) |
-
-### Home Automation
-
-| Application | Purpose |
-|-------------|---------|
-| `home-assistant/` | Home Assistant instance |
-| `esphome/` | ESPHome for IoT device management |
-
-### Media Stack
-
-| Application | Purpose |
-|-------------|---------|
-| `media/` | Media services (Jellyfin, Radarr, Sonarr, transmission, etc.) |
-
-### Other Applications
-
-| Application | Purpose |
-|-------------|---------|
-| `cert-manager/` | TLS certificate management (with LDAP integration) |
-| `copyparty/` | File management |
-| `fdm/` | Proxy for 3D (FDM) printer web interface |
-| `landing/` | Landing page / placeholder site |
-
-## Packages (`packages/`)
-
-Custom packages and reusable configurations:
-
-| Package | Purpose | Reusable? |
-|---------|---------|-----------|
-| `fluidd-config.nix` | Klipper 3D printer web interface configuration | ✅ Reusable |
-| `home-assistant-config/` | Modules include `core.nix`, `auth.nix`, `lights-and-switches.nix`, `lovelace.nix`, etc. | ❌ Highly specific |
-| `mobileraker-companion.nix` | Moonraker companion for Mobileraker mobile app | ✅ Reusable |
-| `router-test/` | Router testing environment for validating router module | ⚠️ Internal use |
-
-> The `home-assistant-config/` directory demonstrates using the Nix module system to generate YAML configuration files. Each module defines options that contribute to `configuration.yaml` or `ui-lovelace.yaml`. The derivation uses `pkgs.formats.yaml` and post-processes output to support Home Assistant YAML features (secrets, includes). It's converted to YAML at pod startup in a kubernetes initContainer.
-
 ## Secrets Management
 
 All secrets are encrypted using **agenix** with **agenix-template** for templating. Secrets are stored in `secrets/` and defined in `secrets.nix`, which maps each encrypted file to the SSH public keys that can decrypt it. Machine-specific secrets follow the pattern `{hostname}-{service}.age`.
-
-## Quick Start
-
-### Prerequisites
-
-- Nix with flakes enabled
-- agenix installed
-- Age key pair for decrypting secrets
-- Access to SSH keys listed in `lib/ssh-keys.nix`
-
-### Building a configuration
-
-```bash
-# Check flake validity
-nix flake check
-
-# Build a host configuration
-nix build .#nixosConfigurations.blueberry.config.system.build.toplevel
-
-# Build and run a VM (if available)
-nix run .#nixosConfigurations.blueberry.config.system.build.vm
-```
 
 ## Common Workflows
 
@@ -294,7 +126,17 @@ nixos-rebuild switch --target-host blueberry --flake .#blueberry --sudo
 
 ### Preparing a new machine
 
-#### Method 1: Headless with split USB storage (requires two USB sticks)
+#### Adopting a cloud machine
+
+```bash
+# install a minimal system
+nix run github:nix-community/nixos-anywhere -- --flake .#minimal-cloud --target-host ubuntu@fruit
+
+# then install the full system
+nixos-rebuild switch --flake .#host --target-host host --sudo
+```
+
+#### Bare metal machine with split USB storage (requires two USB sticks)
 
 1. Run the GitHub action to build `minimal-intel` or `minimal-raspi`
 2. Burn [the resulting image](https://github.com/rcambrj/dotfiles/releases/tag/release) to a USB stick
@@ -321,7 +163,7 @@ nixos-rebuild switch --target-host blueberry --flake .#blueberry --sudo
     sudo nixos-rebuild switch --flake github:rcambrj/dotfiles#{hostname}
     ```
 
-#### Method 2: Headless with AIO disk (single USB stick)
+#### Bare metal machine with AIO disk (single USB stick)
 
 1. Create a new configuration in `/hosts` that uses `disko-standard.nix`
 2. Boot `minimal-intel` with the two-USB method above
@@ -361,16 +203,6 @@ nixos-rebuild switch --target-host blueberry --flake .#blueberry --sudo
    sudo nixos-install --root /mnt/install --flake "github:rcambrj/dotfiles#host" --no-root-passwd
    ```
 
-### Editing secrets
-
-```bash
-# Edit an age-encrypted secret
-make edit-secret name=secret-name
-
-# Or more directly:
-agenix -e secrets/secret-name.age
-```
-
 ## Makefile Commands
 
 | Command | Description |
@@ -378,21 +210,7 @@ agenix -e secrets/secret-name.age
 | `make clean` | Remove build results (`result` symlink) |
 | `make check` | Validate flake (show outputs + run checks) |
 | `make build-image machine=NAME` | Build NixOS image for specified machine |
-| `make edit-secret name=NAME` | Edit age-encrypted secret |
 | `make remote-switch machine=NAME` | Deploy to remote host |
-
-## Checks & Validation
-
-```bash
-# Show flake outputs
-nix flake show
-
-# Run all checks
-nix flake check
-
-# Run specific check (e.g., router test)
-nix build .#checks.x86_64-linux.router
-```
 
 ## Notes & Quirks
 
@@ -416,12 +234,6 @@ systemd.network.networks."10-disable-enp2s0f0" = {
 };
 ```
 
-### GlusterFS notes
-
-- Use *.ts.net for cloud servers (CNAME resolution issues)
-- TLS required for cross-network communication
-- Replica 3 with arbiter for off-site node
-
 ### Router testing
 
 The router module (`modules/nixos/router/`) is tested via `packages/router-test/`. This allows validating router configurations without deploying to physical hardware.
@@ -433,13 +245,4 @@ Current ISP doesn't support IPv6 anyway: https://heeftodidoipv6.nl/
 
 ### Auto-cpufreq
 
-Most hosts run auto-cpufreq with conservative settings:
-```nix
-services.auto-cpufreq = {
-  enable = true;
-  settings.charger = {
-    governor = "powersave";
-    turbo = "never";
-  };
-};
-```
+Most bare metal hosts run auto-cpufreq with conservative settings to conserve energy.
