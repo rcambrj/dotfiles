@@ -63,16 +63,6 @@ in {
   # LG webos
   "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;
 
-  # netbird
-  "secrets/netbird-datastore-key.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/netbird-mgmt-client-id.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/netbird-mgmt-client-secret.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/netbird-coturn-password.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/netbird-coturn-secret.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/orange-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.orange ];
-  "secrets/lemon-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.lemon ];
-  "secrets/cloudberry-netbird-privatekey.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
-
   # postgres
   "secrets/postgres-user-radarr.age".publicKeys = defaults ++ kubenodes;
   "secrets/postgres-user-sonarr.age".publicKeys = defaults ++ kubenodes;

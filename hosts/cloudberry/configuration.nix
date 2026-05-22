@@ -16,7 +16,7 @@
 
     ./ddns.nix
     ./http
-    ./netbird.nix
+    ./tailscale.nix
     ./proxies.nix
     ./router.nix
     ./unifi.nix

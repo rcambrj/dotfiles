@@ -1,5 +1,5 @@
 { config, flake, inputs, lib, pkgs, ... }: with lib; let
-  iface = config.services.netbird.clients.default.interface;
+  iface = config.services.tailscale.interfaceName;
   nodeIP = "100.121.0.11";
   dnsUpstream = "10.226.56.1";
 in {
@@ -21,12 +21,11 @@ in {
     k3sExtraFlags = [
       "--node-taint=CriticalAddonsOnly:NoExecute"
 
-      # send traffic over netbird
+      # send traffic over VPN
       "--flannel-iface=${iface}"
       "--node-ip=${nodeIP}"
 
-      # 127.0.0.1:53 uses DNS resolvers provided by netbird (we want that)
-      # but core-dns has a different 127.0.0.1, so use the nodeIP
+      # host has DNS magic for hostnames across VPN and beyond (home LAN)
       "--resolv-conf=${pkgs.writeTextFile {
         name = "k3s-resolv.conf";
         text = ''

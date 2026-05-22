@@ -18,7 +18,7 @@ with lib;
         stop-dns-rebind = true;
         rebind-localhost-ok = true;
         rebind-domain-ok = [
-          "/cambridge.netbird/"
+          "/ts.net/"
         ];
 
         server = [
@@ -30,6 +30,7 @@ with lib;
           "/onion/"
           "/test/"
           "/netbird/"
+          "/ts.net/"
         ] ++ dns.upstreams;
         domain = dns.domain;
         expand-hosts = true;

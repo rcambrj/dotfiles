@@ -20,7 +20,6 @@ in vscode // {
     element-desktop
     # orca-slicer # doesnt build
     # TODO: pia vpn
-    netbird
     rustdesk
   ];
 }

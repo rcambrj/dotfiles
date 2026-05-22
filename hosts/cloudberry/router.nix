@@ -25,8 +25,9 @@ let
     "8.8.8.8"
     "9.9.9.9"
   ];
-  netbird-netdev = config.services.netbird.clients.default.interface;
-  netbird-port   = config.services.netbird.clients.default.port;
+  vpn-netdev = config.services.tailscale.interfaceName;
+  vpn-port   = config.services.tailscale.port;
+  vpn-domain = "tail7ee3a3.ts.net";
 in {
   imports = [
     inputs.self.nixosModules.router
@@ -248,19 +249,19 @@ in {
     firewall = {
       input = ''
         meta l4proto { icmp, icmpv6 } accept
-        iifname { ${netbird-netdev} } tcp dport 22 accept
-        iifname { ${netbird-netdev} } udp dport 53 accept
-        iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 80 accept
-        iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport 443 accept
-        iifname { ${networks.lan.ifname}, ${netbird-netdev} } tcp dport ${toString config.services.prometheus.exporters.node.port} accept
-        iifname { ${networks.wan.ifname}, ${networks.lte.ifname} } udp dport ${toString netbird-port} accept
-        iifname { ${netbird-netdev} } ct state { established, related } accept
+        iifname { ${vpn-netdev} } tcp dport 22 accept
+        iifname { ${vpn-netdev} } udp dport 53 accept
+        iifname { ${networks.lan.ifname}, ${vpn-netdev} } tcp dport 80 accept
+        iifname { ${networks.lan.ifname}, ${vpn-netdev} } tcp dport 443 accept
+        iifname { ${networks.lan.ifname}, ${vpn-netdev} } tcp dport ${toString config.services.prometheus.exporters.node.port} accept
+        iifname { ${networks.wan.ifname}, ${networks.lte.ifname} } udp dport ${toString vpn-port} accept
+        iifname { ${vpn-netdev} } ct state { established, related } accept
         iifname "podman0" accept
       '';
       forward = ''
         ip saddr ${client-ips.solar0} drop
-        iifname "${networks.lan.ifname}" oifname "${netbird-netdev}" accept
-        iifname "${netbird-netdev}"      oifname "${networks.lan.ifname}" accept
+        iifname "${networks.lan.ifname}" oifname "${vpn-netdev}" accept
+        iifname "${vpn-netdev}"      oifname "${networks.lan.ifname}" accept
         iifname "podman0" accept
         iifname { ${networks.mgmt.ifname} } oifname { "podman0" } tcp dport { 8080, 8443, 6789, 8880, 8843 } accept comment "Unifi service ports"
         iifname { ${networks.mgmt.ifname} } oifname { "podman0" } udp dport { 3478, 10001 } accept comment "Unifi service ports"
@@ -275,7 +276,7 @@ in {
 
     dns = {
       domain = "cambridge.me";
-      upstreams = dns-upstreams ++ [ "/*.cambridge.netbird/127.0.0.62#${toString config.services.netbird.clients.default.dns-resolver.port}" ];
+      upstreams = dns-upstreams ++ [ "/*.ts.net/100.100.100.100" ];
       self = let
         nginxVirtualHostNames = attrNames config.services.nginx.virtualHosts;
       in [
@@ -286,8 +287,8 @@ in {
         "home.cambridge.me" = [ client-ips.kubernetes-lb ];
       };
       cnames = {
-        "orange.cambridge.me" = "orange.cambridge.netbird";
-        "lemon.cambridge.me" = "lemon.cambridge.netbird";
+        "orange.cambridge.me" = "orange.${vpn-domain}";
+        "lemon.cambridge.me" = "lemon.${vpn-domain}";
       };
     };
 

@@ -44,9 +44,6 @@
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
     unifi-os-server.url = "github:rcambrj/unifi-os-server";
     unifi-os-server.inputs.nixpkgs.follows = "nixpkgs";
-
-    # agentless => peer traffic broken: https://github.com/netbirdio/netbird/issues/5273
-    nixpkgs-netbird.url = "github:nixos/nixpkgs?ref=9da7f1cf7f8a6e2a7cb3001b048546c92a8258b4";
   };
 
   outputs = inputs: (inputs.blueprint {

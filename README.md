@@ -66,8 +66,8 @@ Each host directory contains the NixOS configuration for a specific machine, inc
 | `cloudberry` | Router / gateway | x86_64 | TOPTON 4-port, handles routing, WAN failover, VPN |
 | `cranberry` | Kubernetes + Gluster node | x86_64 | |
 | `elderberry` | 3D printer | x86_64 | Dell Wyse 3040, runs Klipper + Fluidd |
-| `lemon` | NetBird management | x86_64 | Self-hosted NetBird coordination server |
-| `orange` | Kubernetes + Gluster node | x86_64 | Off-site location, connected via NetBird |
+| `lemon` | ??? | x86_64 | ??? |
+| `orange` | Kubernetes + Gluster node | x86_64 | Off-site location, connected via VPN |
 
 ### Ephemeral Hosts
 
@@ -131,7 +131,7 @@ Reusable NixOS modules that compose the infrastructure.
 | Module | Purpose |
 |--------|---------|
 | `router/` | **Full router stack** - bridging, VLANs, routing, dual WAN failover, SQM, DNS (dnsmasq), firewall, UPnP, PPPoE. Tested via `packages/router-test`. |
-| `netbird.nix` | NetBird VPN client configuration |
+| `tailscale.nix` | Tailscale VPN client configuration |
 | `primary-wan.nix` | systemd service intended to _bring down_ other services when backup WAN is active |
 | `up-or-down.nix` | Up/down monitoring with hysteria prevention |
 
@@ -418,7 +418,7 @@ systemd.network.networks."10-disable-enp2s0f0" = {
 
 ### GlusterFS notes
 
-- Use `*.cambridge.netbird` for cloud servers (CNAME resolution issues)
+- Use *.ts.net for cloud servers (CNAME resolution issues)
 - TLS required for cross-network communication
 - Replica 3 with arbiter for off-site node
 
