@@ -4,18 +4,16 @@
 #
 # gluster peer probe cranberry.cambridge.me
 # gluster peer probe blueberry.cambridge.me
-# gluster peer probe orange.tail7ee3a3.ts.net
+# gluster peer probe orange.cambridge.me
 #
-# # use *.tail7ee3a3.ts.net for cloud servers. when using *.cambridge.me,
-# # the CNAME to *.tail7ee3a3.ts.net appears to cause this error:
-# #   Failed to convert hostname orange.cambridge.me to uuid
-# # probably because that host resolves differently for orange vs other hosts
+# use A records because CNAMEs cause this error:
+#   Failed to convert hostname orange.cambridge.me to uuid
 #
 # gluster volume create gv0 \
 #   replica 3 arbiter 1 \
 #   cranberry.cambridge.me:/mnt/gluster/brick \
 #   blueberry.cambridge.me:/mnt/gluster/brick \
-#   orange.tail7ee3a3.ts.net:/var/lib/glusterd-brick \
+#   orange.cambridge.me:/var/lib/glusterd-brick \
 #   force
 #
 # gluster volume set gv0 client.ssl on
@@ -38,7 +36,7 @@
       fqdn = "blueberry.cambridge.me";
     }
     {
-      fqdn = "orange.tail7ee3a3.ts.net";
+      fqdn = "orange.cambridge.me";
     }
   ];
   cfg = config.services.gluster-node;

@@ -286,11 +286,14 @@ in {
       ] ++ nginxVirtualHostNames;
       hosts = {
         "home.cambridge.me" = [ client-ips.kubernetes-lb ];
+        "orange.cambridge.me" = [ "100.121.0.11" ];
+        "lemon.cambridge.me" = [ "100.121.0.12" ];
       };
-      cnames = {
-        "orange.cambridge.me" = "orange.${vpn-domain}";
-        "lemon.cambridge.me" = "lemon.${vpn-domain}";
-      };
+      # glusterfs struggles with CNAMEs
+      # cnames = {
+      #   "orange.cambridge.me" = "orange.${vpn-domain}";
+      #   "lemon.cambridge.me" = "lemon.${vpn-domain}";
+      # };
     };
 
     hwaddrs = {
