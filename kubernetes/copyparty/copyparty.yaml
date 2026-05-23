@@ -45,6 +45,8 @@ metadata:
 data:
   copyparty.conf: |-
     [global]
+    xff-src: lan
+    rproxy: -1
     v: .::A
 ---
 apiVersion: v1
