@@ -1,2 +1,2 @@
 * nixosConfigurations are applied with `nixos-rebuild switch --flake .#<host> --target-host <host> --sudo`
-* never run `kubectl apply`. kubernets manifests are applied with ArgoCD so must be committed + pushed to origin/main
+* never run `kubectl apply` or `kubectl create`. kubernets manifests are applied with ArgoCD so must be committed + pushed to origin/main

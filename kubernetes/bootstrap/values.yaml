@@ -21,6 +21,7 @@ applications:
 - name: traefik
 - name: intel-gpu
 - name: landing
+- name: kindle
 - name: media
 - name: monitoring
 - name: node-feature-discovery
