@@ -8,7 +8,8 @@ in {
   "secrets/cloudflare-token.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.cloudberry sshKeys.elderberry sshKeys.orange sshKeys.lemon ];
   "secrets/cloudflare-zone-id.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
   "secrets/cloudflare-ddns-host.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
-  "secrets/cloudflare-tunnel.age".publicKeys = defaults ++ kubenodes;
+  "secrets/cloudflare-tunnel-home.age".publicKeys = defaults ++ kubenodes;
+  "secrets/cloudflare-tunnel-hermes.age".publicKeys = defaults ++ [ sshKeys.cherry ];
 
   # oauth2 apps
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
@@ -58,8 +59,11 @@ in {
 
   # telegram bot
   "secrets/telegram-router-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/telegram-hermes-bot-key.age".publicKeys = defaults ++ [ sshKeys.cherry ];
   "secrets/telegram-telly-bot-key.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
-  "secrets/telegram-group.age".publicKeys = defaults  ++ [ sshKeys.cloudberry ];
+  "secrets/telegram-group.age".publicKeys = defaults  ++ [ sshKeys.cloudberry sshKeys.cherry ];
+  "secrets/telegram-rcambrj-user-id.age".publicKeys = defaults ++ [ sshKeys.cherry ];
+  "secrets/telegram-squidlizard-user-id.age".publicKeys = defaults ++ [ sshKeys.cherry ];
 
   # LG webos
   "secrets/webos-dev-mode-token.age".publicKeys = defaults ++ kubenodes;
@@ -68,6 +72,10 @@ in {
   "secrets/postgres-user-radarr.age".publicKeys = defaults ++ kubenodes;
   "secrets/postgres-user-sonarr.age".publicKeys = defaults ++ kubenodes;
   "secrets/postgres-user-backup.age".publicKeys = defaults ++ kubenodes;
+
+  # hermes-agent
+  "secrets/hermes-agent.age".publicKeys = defaults ++ [ sshKeys.cherry ];
+  "secrets/opencode-go-api-key.age".publicKeys = defaults ++ [ sshKeys.cherry ];
 
   # == machine-specific ==
   # cranberry

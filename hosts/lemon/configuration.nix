@@ -21,8 +21,10 @@
   networking.useNetworkd = true;
   services.resolved = {
     enable = true;
-    llmnr = "false";
-    settings.Resolve.MulticastDNS = false;
+    settings.Resolve = {
+      LLMNR = false;
+      MulticastDNS = false;
+    }
   };
   systemd.network.networks = {
     "10-wired" = {
