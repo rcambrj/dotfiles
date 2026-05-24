@@ -82,15 +82,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kindle
-  annotations:
-    metallb.io/loadBalancerIPs: 10.226.56.50
-    metallb.io/allow-shared-ip: 10.226.56.50
 spec:
   selector:
     app: kindle
   ports:
   - name: http
     protocol: TCP
-    port: 54635
+    port: 80
     targetPort: http
-  type: LoadBalancer

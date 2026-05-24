@@ -6,6 +6,7 @@ in {
     age.secrets = {
       cloudflare-token.file = ../../../secrets/cloudflare-token.age;
       cloudflare-tunnel.file = ../../../secrets/cloudflare-tunnel-home.age;
+      secret-host.file = ../../../secrets/secret-host.age;
 
       kubernetes-oauth2-proxy-client-secret.file = ../../../secrets/kubernetes-oauth2-proxy-client-secret.age;
       kubernetes-oauth2-proxy-cookie-secret.file = ../../../secrets/kubernetes-oauth2-proxy-cookie-secret.age;
@@ -69,6 +70,11 @@ in {
         apiVersion = "v1";
         kind = "Namespace";
         metadata.name = "traefik";
+      }
+      {
+        apiVersion = "v1";
+        kind = "Namespace";
+        metadata.name = "kindle";
       }
     ];
 
@@ -237,6 +243,33 @@ in {
           namespace: traefik
         stringData:
           token: $token
+      '';
+    };
+
+    age-template.files."50-secret-host" = {
+      path = "/var/lib/rancher/k3s/server/manifests/50-secret-host.yaml";
+      vars = {
+        host = config.age.secrets.secret-host.path;
+      };
+      content = ''
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: secret-host
+          namespace: kindle
+        spec:
+          ingressClassName: traefik
+          rules:
+          - host: $host
+            http:
+              paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: kindle
+                    port:
+                      number: 80
       '';
     };
 

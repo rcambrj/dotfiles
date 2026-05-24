@@ -25,7 +25,7 @@
     settings.Resolve = {
       LLMNR = false;
       MulticastDNS = false;
-    }
+    };
   };
   systemd.network.networks = {
     "10-wired" = {

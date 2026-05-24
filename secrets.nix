@@ -10,7 +10,7 @@ in {
   "secrets/cloudflare-ddns-host.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
   "secrets/cloudflare-tunnel-home.age".publicKeys = defaults ++ kubenodes;
   "secrets/cloudflare-tunnel-hermes.age".publicKeys = defaults ++ [ sshKeys.cherry ];
-  "secrets/secret-host.age".publicKeys = defaults ++ [ sshKeys.cloudberry ];
+  "secrets/secret-host.age".publicKeys = defaults ++ kubenodes ++ [ sshKeys.cloudberry ];
 
   # oauth2 apps
   "secrets/kubernetes-oauth2-proxy-cookie-secret.age".publicKeys = defaults ++ kubenodes;
