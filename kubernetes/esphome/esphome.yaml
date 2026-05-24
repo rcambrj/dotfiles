@@ -33,7 +33,7 @@ spec:
       containers:
       - name: esphome
         # https://github.com/esphome/esphome/releases
-        image: ghcr.io/esphome/esphome:2026.3.2
+        image: ghcr.io/esphome/esphome:2026.4.5
         securityContext:
           runAsUser: 37746
           runAsGroup: 37746
