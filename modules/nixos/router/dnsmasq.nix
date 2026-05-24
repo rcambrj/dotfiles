@@ -32,6 +32,7 @@ with lib;
           "/netbird/"
           "/ts.net/"
         ] ++ dns.upstreams;
+        conf-file = dns.config-files or [];
         domain = dns.domain;
         expand-hosts = true;
         interface-name = let

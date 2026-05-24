@@ -34,8 +34,16 @@ in {
   ];
 
   age.secrets = {
+    secret-host.file = ../../secrets/secret-host.age;
     telegram-router-bot-key.file = ../../secrets/telegram-router-bot-key.age;
     telegram-group.file = ../../secrets/telegram-group.age;
+  };
+
+  age-template.files.secret-host-dnsmasq = {
+    vars.host = config.age.secrets.secret-host.path;
+    content = ''
+      address=/$host/${config.router.client-ips.kubernetes-lb}
+    '';
   };
 
   router = rec {
@@ -278,6 +286,9 @@ in {
     dns = {
       domain = "cambridge.me";
       upstreams = dns-upstreams ++ [ "/*.ts.net/100.100.100.100" ];
+      config-files = [
+        config.age-template.files.secret-host-dnsmasq.path
+      ];
       self = let
         nginxVirtualHostNames = attrNames config.services.nginx.virtualHosts;
       in [
