@@ -40,6 +40,7 @@ let
           DHCP = "ipv4";
         };
         dhcpV4Config = {
+          UseNTP = "no";
           UseHostname = "no"; # Could not set hostname: Access denied
           SendHostname = "no";
           RouteTable = network.rt;
