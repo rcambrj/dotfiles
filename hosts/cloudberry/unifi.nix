@@ -8,6 +8,12 @@ with lib;
   services.unifi-os-server = {
     enable = true;
     uosSystemIP = config.router.networks.mgmt.ip4-address;
+    # The container inherits /etc/resolv.conf=127.0.0.1 from the host, which
+    # is useless inside its netns. Point it at the host's dnsmasq via the LAN
+    # address instead.
+    extraOptions = [
+      "--dns=${config.router.networks.lan.ip4-address}"
+    ];
   };
 
   services.nginx.virtualHosts."unifi.router.cambridge.me" = {

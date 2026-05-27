@@ -7,7 +7,7 @@ with lib;
     services.resolved.enable = false;
     services.dnsmasq = {
       enable = true;
-      resolveLocalQueries = false;
+      resolveLocalQueries = true;
       settings = {
         domain-needed = true;
         bogus-priv = true;
@@ -30,7 +30,6 @@ with lib;
           "/onion/"
           "/test/"
           "/netbird/"
-          "/ts.net/"
         ] ++ dns.upstreams;
         conf-file = dns.config-files or [];
         domain = dns.domain;

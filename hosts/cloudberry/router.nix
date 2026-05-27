@@ -285,7 +285,7 @@ in {
 
     dns = {
       domain = "cambridge.me";
-      upstreams = dns-upstreams ++ [ "/*.ts.net/100.100.100.100" ];
+      upstreams = dns-upstreams ++ [ "/ts.net/100.100.100.100" ];
       config-files = [
         config.age-template.files.secret-host-dnsmasq.path
       ];
