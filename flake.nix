@@ -43,6 +43,7 @@
     nix-pi-loader.url = "github:rcambrj/nix-pi-loader";
     nix-pi-loader.inputs.nixpkgs.follows = "nixpkgs";
     unifi-os-server.url = "github:rcambrj/unifi-os-server";
+    # unifi-os-server.url = "/Users/rcambrj/projects/nix/unifi-os-server";
     unifi-os-server.inputs.nixpkgs.follows = "nixpkgs";
     hermes-agent.url = "github:NousResearch/hermes-agent";
     hermes-agent.inputs.nixpkgs.follows = "nixpkgs";

@@ -734,11 +734,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1778253712,
-        "narHash": "sha256-kxsIFdRqNltGk/ze7zipYct9lFVZdDtfV4xxuH8ijvA=",
+        "lastModified": 1779905745,
+        "narHash": "sha256-mIrNCroVlpe1PAXYwTcvpHwZuSDMyggZ4Hmg0ptaPFw=",
         "owner": "rcambrj",
         "repo": "unifi-os-server",
-        "rev": "0822d513367ea1ee9e30bfa084d74b5ee92338eb",
+        "rev": "4d02e29ca94c59ee5ceb286f13705d039deb2f9b",
         "type": "github"
       },
       "original": {
