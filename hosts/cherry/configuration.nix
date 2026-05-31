@@ -9,7 +9,6 @@
     flake.nixosModules.disko-standard
     flake.nixosModules.common
     flake.nixosModules.cloud-vps
-    ./hermes-agent.nix
   ];
 
   networking.hostName = "cherry";
