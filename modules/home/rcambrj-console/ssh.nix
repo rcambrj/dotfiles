@@ -77,6 +77,10 @@ in {
         hostname = "lemon-external.cambridge.me";
         user = "nixos";
       };
+      "lime" = {
+        hostname = "lime-external.cambridge.me";
+        user = "ubuntu";
+      };
       "cherry" = {
         hostname =  "cherry-external.cambridge.me";
         user = "nixos";
