@@ -24,6 +24,7 @@ in {
       ".envrc"
       ".vscode"
       ".opencode"
+      ".zed"
     ];
     lfs = {
       enable = true;
