@@ -5,85 +5,77 @@ in {
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
         # defaults
-        extraOptions = {
-          ForwardAgent = "no";
-          ServerAliveCountMax = "3";
-          Compression = "no";
-          AddKeysToAgent = "no";
-          HashKnownHosts = "no";
-          ControlMaster = "no";
-          ControlPersist = "no";
-          TCPKeepAlive = "yes";
-          ServerAliveInterval = "60";
-          ConnectTimeout = "60";
-        };
+        ForwardAgent = false;
+        ServerAliveCountMax = 3;
+        Compression = false;
+        AddKeysToAgent = "no";
+        HashKnownHosts = false;
+        ControlMaster = "no";
+        ControlPersist = "no";
+        TCPKeepAlive = true;
+        ServerAliveInterval = 60;
+        ConnectTimeout = 60;
       };
       "vm" = {
-        hostname = "localhost";
-        user = me.user;
-        port = 2222;
-        extraOptions = {
-          # mitm unlikely to localhost
-          UserKnownHostsFile = "/dev/null";
-          StrictHostKeyChecking = "no";
-        };
+        HostName = "localhost";
+        User = me.user;
+        Port = 2222;
+        # mitm unlikely to localhost
+        UserKnownHostsFile = "/dev/null";
+        StrictHostKeyChecking = false;
       };
       "cloudberry" = {
         # use IP because it runs the DNS server
-        hostname =  "10.226.56.1";
-        user = "nixos";
+        HostName =  "10.226.56.1";
+        User = "nixos";
       };
       "blueberry" = {
         # kubernetes node
-        hostname =  "blueberry.cambridge.me";
-        user = "nixos";
+        HostName =  "blueberry.cambridge.me";
+        User = "nixos";
       };
       "cranberry" = {
         # kubernetes node
-        hostname =  "cranberry.cambridge.me";
-        user = "nixos";
+        HostName =  "cranberry.cambridge.me";
+        User = "nixos";
       };
       "minimal-intel" = {
-        hostname =  "minimal-intel-nomad.local";
-        user = "nixos";
-        extraOptions = {
-          # this will boot on a variety of shapes
-          UserKnownHostsFile = "/dev/null";
-          StrictHostKeyChecking = "no";
-        };
+        HostName =  "minimal-intel-nomad.local";
+        User = "nixos";
+        # this will boot on a variety of shapes
+        UserKnownHostsFile = "/dev/null";
+        StrictHostKeyChecking = false;
       };
       "minimal-raspi" = {
-        hostname =  "minimal-raspi-nomad.local";
-        user = "nixos";
-        extraOptions = {
-          # this will boot on a variety of shapes
-          UserKnownHostsFile = "/dev/null";
-          StrictHostKeyChecking = "no";
-        };
+        HostName =  "minimal-raspi-nomad.local";
+        User = "nixos";
+        # this will boot on a variety of shapes
+        UserKnownHostsFile = "/dev/null";
+        StrictHostKeyChecking = false;
       };
       "elderberry" = {
         # 3d printer (dell wyse)
-        hostname = "elderberry.cambridge.me";
-        user = "nixos";
+        HostName = "elderberry.cambridge.me";
+        User = "nixos";
       };
       "orange" = {
-        hostname = "orange-external.cambridge.me";
-        user = "nixos";
+        HostName = "orange-external.cambridge.me";
+        User = "nixos";
       };
       "lemon" = {
-        hostname = "lemon-external.cambridge.me";
-        user = "nixos";
+        HostName = "lemon-external.cambridge.me";
+        User = "nixos";
       };
       "lime" = {
-        hostname = "lime-external.cambridge.me";
-        user = "ubuntu";
+        HostName = "lime-external.cambridge.me";
+        User = "ubuntu";
       };
       "cherry" = {
-        hostname =  "cherry-external.cambridge.me";
-        user = "nixos";
+        HostName =  "cherry-external.cambridge.me";
+        User = "nixos";
       };
     };
   };
