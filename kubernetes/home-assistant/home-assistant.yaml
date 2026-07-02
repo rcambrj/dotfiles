@@ -97,7 +97,7 @@ spec:
       containers:
       - name: home-assistant
         # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
-        image: homeassistant/home-assistant:2026.4.1
+        image: homeassistant/home-assistant:2026.7.0
         resources:
           requests:
             cpu: "100m"
