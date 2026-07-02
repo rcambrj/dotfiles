@@ -7,6 +7,7 @@
 
         ./auth.nix
         ./fix-quirky-lidl-lights.nix
+        ./outdoor-lights.nix
         ./google-assistant.nix
         ./lights-and-switches.nix
         ./lovelace.nix

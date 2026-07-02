@@ -120,4 +120,15 @@ in [
     switch_targets = [];
     cover_targets = [];
   }
+  {
+    key = "garden";
+    name = "Garden";
+    icon = "mdi:flower-tulip";
+    button_devices = [];
+    light_targets = [
+      "light.garden_west_light"
+    ];
+    switch_targets = [];
+    cover_targets = [];
+  }
 ]
