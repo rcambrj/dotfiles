@@ -1,6 +1,7 @@
 { ... }: let
   groups = import ./lib/light-groups.nix;
   mosquitos = import ./lib/mosquitos.nix;
+  outdoor-lights = import ./lib/outdoor-lights.nix;
 in {
   "ui-lovelace.yaml" = {
     # show defaults. use this to temporarily see the shape of new integrations
@@ -40,6 +41,15 @@ in {
             entities = [
               "automation.mosquitos_on_at_sunset"
             ] ++ mosquitos;
+          }
+          {
+            type = "entities";
+            title = "Outdoor Lights";
+            icon = "mdi:flower-tulip";
+            show_header_toggle = false;
+            entities = [
+              "automation.outdoor_lights_on_at_night"
+            ] ++ outdoor-lights;
           }
           {
             type = "entities";

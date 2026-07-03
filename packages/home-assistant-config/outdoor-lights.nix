@@ -1,6 +1,7 @@
 { lib, ... }: let
   lightIds = [
     "light.garden_west_light"
+    "light.garden_east_light"
   ];
 
   elevationCurve = [
