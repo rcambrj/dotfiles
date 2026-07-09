@@ -44,7 +44,7 @@ in {
           }
           {
             type = "entities";
-            title = "Outdoor Lights";
+            title = "Outdoor";
             icon = "mdi:flower-tulip";
             show_header_toggle = false;
             entities = [

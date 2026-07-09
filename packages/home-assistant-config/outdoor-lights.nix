@@ -1,9 +1,5 @@
 { lib, ... }: let
-  lightIds = [
-    "light.porch_light"
-    "light.garden_west_light"
-    "light.garden_east_light"
-  ];
+  lightIds = import ./lib/outdoor-lights.nix;
 
   elevationCurve = [
     { elevation = 0; brightness = 0; }
