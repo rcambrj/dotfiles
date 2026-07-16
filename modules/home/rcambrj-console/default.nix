@@ -30,7 +30,7 @@ in {
     htop btop
     iftop
     jq yq
-    kubectl kubernetes-helm k9s minikube kubectx
+    kubectl kubernetes-helm k9s kubectx (lib.lowPrio minikube) # minikube wants to create bin/kubectl, conflicts
     localtunnel
     ncdu
     nix-output-monitor
