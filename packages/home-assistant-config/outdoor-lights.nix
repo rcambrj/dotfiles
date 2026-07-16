@@ -4,11 +4,11 @@
   elevationCurve = [
     { elevation = 0; brightness = 0; }
     { elevation = -1; brightness = 1; }
-    { elevation = -2; brightness = 5; }
-    { elevation = -3; brightness = 10; }
-    { elevation = -4; brightness = 30; }
-    { elevation = -5; brightness = 70; }
-    { elevation = -6; brightness = 100; }
+    { elevation = -2; brightness = 2; }
+    { elevation = -3; brightness = 4; }
+    { elevation = -4; brightness = 8; }
+    { elevation = -5; brightness = 16; }
+    { elevation = -6; brightness = 32; }
   ];
   elevationCurveTemplate = "[${lib.concatMapStringsSep ", " (point: "{'elevation': ${toString point.elevation}, 'brightness': ${toString point.brightness}}") elevationCurve}]";
 
