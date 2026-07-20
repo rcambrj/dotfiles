@@ -25,7 +25,6 @@ in {
       trigger = [{
         platform = "sun";
         event = "sunrise";
-        offset = "-02:00:00";
       }];
       action = [{
         action = "switch.turn_off";
