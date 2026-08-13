@@ -8,6 +8,9 @@ spec:
   isCA: true
   commonName: ldap
   secretName: ldap-ca
+  # Keep the CA signing key stable; rotating it requires reissuing all leaf certificates.
+  privateKey:
+    rotationPolicy: Never
   issuerRef:
     name: self-signed
 ---
