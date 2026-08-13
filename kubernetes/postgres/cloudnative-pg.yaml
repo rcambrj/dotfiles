@@ -49,6 +49,13 @@ spec:
         ensure: present
         connectionLimit: -1
         inherit: true
+      - name: seerr
+        passwordSecret:
+          name: postgres-user-seerr
+        login: true
+        ensure: present
+        connectionLimit: -1
+        inherit: true
       - name: backup
         passwordSecret:
           name: postgres-user-backup
@@ -81,5 +88,17 @@ metadata:
 spec:
   name: sonarr
   owner: sonarr
+  cluster:
+    name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: seerr
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  name: seerr
+  owner: seerr
   cluster:
     name: postgres

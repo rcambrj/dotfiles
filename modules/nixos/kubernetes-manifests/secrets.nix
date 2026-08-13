@@ -32,6 +32,7 @@ in {
 
       postgres-user-radarr.file = ../../../secrets/postgres-user-radarr.age;
       postgres-user-sonarr.file = ../../../secrets/postgres-user-sonarr.age;
+      postgres-user-seerr.file = ../../../secrets/postgres-user-seerr.age;
       postgres-user-backup.file = ../../../secrets/postgres-user-backup.age;
     };
 
@@ -324,6 +325,33 @@ in {
         type: kubernetes.io/basic-auth
         stringData:
           username: sonarr
+          password: $password
+      '';
+    };
+    age-template.files."20-postgres-user-seerr" = {
+      path = "/var/lib/rancher/k3s/server/manifests/20-postgres-user-seerr.yaml";
+      vars = {
+        password = config.age.secrets.postgres-user-seerr.path;
+      };
+      content = ''
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-seerr
+          namespace: postgres
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: seerr
+          password: $password
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: postgres-user-seerr
+          namespace: media
+        type: kubernetes.io/basic-auth
+        stringData:
+          username: seerr
           password: $password
       '';
     };
