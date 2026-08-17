@@ -181,6 +181,7 @@ pkgs.testers.runNixOSTest {
 
     # uplink is primary_gw
     router.wait_until_succeeds('systemctl show up-or-down-uplink-failover | grep StatusText= | grep state=UP', 30)
+    router.wait_until_succeeds('sleep 2; systemctl is-active --quiet up-or-down-uplink-secondary.service', 30)
 
     # interface-specific pings
     router.wait_until_succeeds('ping -c 1 -I ${primary-ifname} ${primary-gateway}', 10)

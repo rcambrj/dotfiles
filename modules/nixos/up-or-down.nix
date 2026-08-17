@@ -27,6 +27,11 @@ in {
         check-timeout = mkOption {
           default = "5s";
         };
+        run-hooks-while-stable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Run the matching hook after each health check while the state remains UP or DOWN";
+        };
         check-cmd = mkOption {
           type = types.str;
         };
@@ -57,6 +62,7 @@ in {
           CHECK_CMD = cfg'.check-cmd;
           ON_UP_CMD = cfg'.on-up-cmd;
           ON_DOWN_CMD = cfg'.on-down-cmd;
+          RUN_HOOKS_WHILE_STABLE = boolToString cfg'.run-hooks-while-stable;
         };
         script = toString (pkgs.writeShellScript "up-or-down-${name}" ''
           set -Eeuo pipefail
@@ -73,14 +79,27 @@ in {
             state="UP"
             ok_count=0
             echo "Transitioned to UP"
-            [[ -n "$ON_UP_CMD" ]] && $ON_UP_CMD || true
+            [[ -n "$ON_UP_CMD" ]] && $ON_UP_CMD true || true
           }
 
           transition_down() {
             state="DOWN"
             fail_count=0
             echo "Transitioned to DOWN"
-            [[ -n "$ON_DOWN_CMD" ]] && $ON_DOWN_CMD || true
+            [[ -n "$ON_DOWN_CMD" ]] && $ON_DOWN_CMD true || true
+          }
+
+          run_stable_hook() {
+            [[ "''${RUN_HOOKS_WHILE_STABLE:-}" == true ]] || return 0
+
+            case "$state" in
+              UP)
+                [[ -n "$ON_UP_CMD" ]] && $ON_UP_CMD false || true
+                ;;
+              DOWN)
+                [[ -n "$ON_DOWN_CMD" ]] && $ON_DOWN_CMD false || true
+                ;;
+            esac
           }
 
           trap 'echo "Exiting"; exit 0' INT TERM
@@ -94,6 +113,8 @@ in {
               ok_count=$((ok_count + 1))
               if [[ "$state" != "UP" && "$ok_count" -ge "$RISE_N" ]]; then
                 transition_up
+              else
+                run_stable_hook
               fi
               notify_status
             else
@@ -102,6 +123,8 @@ in {
               fail_count=$((fail_count + 1))
               if [[ "$state" != "DOWN" && "$fail_count" -ge "$FALL_N" ]]; then
                 transition_down
+              else
+                run_stable_hook
               fi
               notify_status
             fi
