@@ -328,7 +328,7 @@ in {
       macmini-2011 = "3C:07:54:49:5D:D6"; # this network card is fried
       dell-wyse-a  = "54:48:10:c2:25:b5";
       dell-wyse-b  = "54:48:10:AB:71:0C";
-      aorus-b450   = "B4:2E:99:CB:8E:CB";
+      gaming-pc    = "30:C5:99:5C:2E:3D";
 
       dongle-white = "28:87:ba:25:be:cf";
       dongle-black = "00:e0:4c:68:04:b5";
@@ -391,7 +391,7 @@ in {
       { name = "cranberry";    ip = client-ips.cranberry;  hwaddr = hwaddrs.br-cranberry; }
       { name = "blueberry";    ip = client-ips.blueberry;  hwaddr = hwaddrs.dongle-white; } # was hwadders.macmini-2011
       { name = "elderberry";   ip = client-ips.elderberry; hwaddr = hwaddrs.dell-wyse-a; }
-      { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.aorus-b450; }
+      { name = "gaming-pc";    ip = client-ips.gaming-pc;  hwaddr = hwaddrs.gaming-pc; }
       # switches
       { name = "sonoff-s20-1"; ip = client-ips.sonoff-s20-1; hwaddr = hwaddrs.sonoff-s20-1; }
       { name = "sonoff-s20-2"; ip = client-ips.sonoff-s20-2; hwaddr = hwaddrs.sonoff-s20-2; }
