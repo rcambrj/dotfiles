@@ -24,9 +24,8 @@ with lib;
   '';
 
   time.timeZone = "Europe/Amsterdam";
-  services.journald.extraConfig = ''
-    Storage=volatile
-  '';
+  services.journald.settings.Journal.Storage = "volatile";
+  boot.initrd.systemd.emergencyAccess = true;
   networking.firewall.enable = true;
   nixpkgs.config.allowUnfree = true;
 
