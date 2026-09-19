@@ -1,33 +1,53 @@
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: intel-device-plugins-operator
+  name: intel-gpu-crds
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   finalizers:
-  - wrangler.cattle.io/on-helm-chart-remove
+  - resources-finalizer.argocd.argoproj.io
 spec:
-  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-operator
-  repo: https://intel.github.io/helm-charts/
-  chart: intel-device-plugins-operator
-  version: 0.35.0
-  targetNamespace: intel-device-plugins-operator
-  createNamespace: true
-  valuesContent: |-
-    manager:
-      devices:
-        gpu: true
+  destination:
+    server: https://kubernetes.default.svc
+  project: dotfiles
+  source:
+    repoURL: https://github.com/intel/helm-charts.git
+    targetRevision: intel-device-plugins-operator-0.35.0
+    path: charts/device-plugin-operator/crds
+    directory:
+      include: deviceplugin.intel.com_gpudeviceplugins.yaml
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: false
 ---
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: intel-device-plugins-gpu
+  name: intel-gpu-plugin
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   finalizers:
-  - wrangler.cattle.io/on-helm-chart-remove
+  - resources-finalizer.argocd.argoproj.io
 spec:
-  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-gpu
-  repo: https://intel.github.io/helm-charts/
-  chart: intel-device-plugins-gpu
-  version: 0.35.0
-  targetNamespace: intel-device-plugins-operator
-  createNamespace: true
-  valuesContent: |-
-    sharedDevNum: 99
+  destination:
+    namespace: intel-gpu
+    server: https://kubernetes.default.svc
+  project: dotfiles
+  source:
+    repoURL: git@github.com:rcambrj/dotfiles
+    targetRevision: HEAD
+    path: kubernetes/intel-gpu/plugin
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+    - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: false

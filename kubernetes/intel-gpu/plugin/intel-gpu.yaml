@@ -1,0 +1,33 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: intel-device-plugins-operator
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-operator
+  repo: https://intel.github.io/helm-charts/
+  chart: intel-device-plugins-operator
+  version: 0.35.0
+  targetNamespace: intel-device-plugins-operator
+  createNamespace: true
+  valuesContent: |-
+    manager:
+      devices:
+        gpu: true
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: intel-device-plugins-gpu
+  finalizers:
+  - wrangler.cattle.io/on-helm-chart-remove
+spec:
+  # https://artifacthub.io/packages/helm/intel/intel-device-plugins-gpu
+  repo: https://intel.github.io/helm-charts/
+  chart: intel-device-plugins-gpu
+  version: 0.35.0
+  targetNamespace: intel-device-plugins-operator
+  createNamespace: true
+  valuesContent: |-
+    sharedDevNum: 99
