@@ -39,6 +39,14 @@
     };
   };
 
+  boot.initrd.kernelModules = [
+    # Work around systemd-udevd < v262 rejecting this Wyse 3040 eMMC's
+    # invalid MMC_NAME byte (0x92), which prevents MODALIAS=mmc:block
+    # from auto-loading mmc_block. Remove after upgrading to systemd >= 262.
+    # https://api.github.com/repos/systemd/systemd/pulls/43489
+    "mmc_block"
+  ];
+
   boot.extraModprobeConfig = ''
     # fix Dell Wyse 3040 hanging on reboot
     # https://github.com/up-board/up-community/wiki/Ubuntu_20.04#hang-on-shutdown-or-reboot-for-up-board
