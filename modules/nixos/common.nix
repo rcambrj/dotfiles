@@ -12,7 +12,6 @@ with lib;
     nettools # arp
     ncdu
     ripgrep
-    tmate
     tmux
     tree
     unrar

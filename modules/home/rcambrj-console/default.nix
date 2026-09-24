@@ -42,7 +42,6 @@ in {
     ripgrep
     sysz
     tig gitui
-    tmate
     tmux
     tree
     unrar
