@@ -272,8 +272,8 @@ in {
         iifname "${networks.lan.ifname}" oifname "${vpn-netdev}" accept
         iifname "${vpn-netdev}"      oifname "${networks.lan.ifname}" accept
         iifname "podman0" accept
-        iifname { ${networks.mgmt.ifname} } oifname { "podman0" } tcp dport { 8080, 8443, 6789, 8880, 8843 } accept comment "Unifi service ports"
-        iifname { ${networks.mgmt.ifname} } oifname { "podman0" } udp dport { 3478, 10001 } accept comment "Unifi service ports"
+        iifname { ${networks.mgmt.ifname} } oifname { "podman0" } tcp dport { ${concatMapStringsSep ", " toString config.services.unifi-os-server.serviceTCPPorts} } accept comment "Unifi service ports"
+        iifname { ${networks.mgmt.ifname} } oifname { "podman0" } udp dport { ${concatMapStringsSep ", " toString config.services.unifi-os-server.serviceUDPPorts} } accept comment "Unifi service ports"
       '';
       uplink-failover = {
         forward = '''';
