@@ -32,14 +32,52 @@ spec:
               name: google-home-volume
           - name: tmp
             emptyDir: {}
+          - name: dependencies
+            hostPath:
+              path: /tmp/change_volume_pychromecast
+              type: DirectoryOrCreate
+          initContainers:
+          - name: prepare-dependencies
+            image: busybox:1.37.0
+            command: ["/bin/sh", "-ec"]
+            args:
+            - mkdir -p /deps && chown 65532:65532 /deps
+            securityContext:
+              runAsNonRoot: false
+              runAsUser: 0
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+                add:
+                - CHOWN
+            volumeMounts:
+            - name: dependencies
+              mountPath: /deps
           containers:
           - name: set-volume
             image: python:3.13-slim
             command: ["/bin/sh", "-ec"]
             args:
             - |
-              python -m pip install --disable-pip-version-check --no-cache-dir \
-                --target /tmp/deps "PyChromecast==13.1.0"
+              cache=/deps/pychromecast-13.1.0
+              ready="$cache/.ready"
+              lock=/deps/.install.lock
+              if [ ! -f "$ready" ]; then
+                while ! mkdir "$lock" 2>/dev/null; do
+                  [ -f "$ready" ] && break
+                  sleep 1
+                done
+                if [ ! -f "$ready" ]; then
+                  trap 'rmdir "$lock"' 0
+                  python -m pip install --disable-pip-version-check --no-cache-dir \
+                    --target "$cache" "PyChromecast==13.1.0"
+                  touch "$ready"
+                  rmdir "$lock"
+                  trap - 0
+                fi
+              fi
               exec python /app/change_volume.py
             env:
             - name: SPEAKER_NAME
@@ -47,7 +85,7 @@ spec:
             - name: VOLUME_LEVEL
               value: {{ .volume | quote }}
             - name: PYTHONPATH
-              value: /tmp/deps
+              value: /deps/pychromecast-13.1.0
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -60,4 +98,6 @@ spec:
               readOnly: true
             - name: tmp
               mountPath: /tmp
+            - name: dependencies
+              mountPath: /deps
 {{- end }}
