@@ -1,0 +1,16 @@
+speakers:
+- name: kitchen
+  friendlyName: Kitchen
+  volume: "0.30"
+- name: living-room-n
+  friendlyName: Living Room N
+  volume: "0.30"
+- name: living-room-s
+  friendlyName: Living Room S
+  volume: "0.30"
+- name: bedroom
+  friendlyName: Bedroom
+  volume: "0.50"
+- name: bathroom
+  friendlyName: Bathroom
+  volume: "0.40"

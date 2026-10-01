@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: google-home-volume
+data:
+  change_volume.py: |
+    import os
+    import sys
+    import time
+
+    import pychromecast
+
+
+    def main():
+        speaker_name = os.environ["SPEAKER_NAME"]
+        target_volume = float(os.environ["VOLUME_LEVEL"])
+
+        try:
+            chromecasts, browser = pychromecast.get_listed_chromecasts(
+                friendly_names=[speaker_name],
+                discovery_timeout=30,
+            )
+        except Exception as err:
+            print(f"name={speaker_name} discovery_error={err}", file=sys.stderr)
+            return
+
+        try:
+            if not chromecasts:
+                print(f"name={speaker_name} status=not_discovered")
+                return
+
+            cast = chromecasts[0]
+            try:
+                cast.wait(timeout=15)
+            except Exception as err:
+                print(f"name={speaker_name} status=unavailable error={err}")
+                try:
+                    cast.disconnect()
+                except Exception as disconnect_err:
+                    print(
+                        f"name={speaker_name} disconnect_error={disconnect_err}",
+                        file=sys.stderr,
+                    )
+                return
+
+            try:
+                cast.set_volume(target_volume)
+            except Exception as err:
+                print(f"name={speaker_name} set_volume_error={err}", file=sys.stderr)
+                raise SystemExit(1) from err
+            finally:
+                try:
+                    cast.disconnect()
+                except Exception as err:
+                    print(f"name={speaker_name} disconnect_error={err}", file=sys.stderr)
+
+            time.sleep(1)
+            print(f"name={speaker_name} volume_level={target_volume:.2f}")
+        finally:
+            try:
+                browser.stop_discovery()
+            except Exception as err:
+                print(f"name={speaker_name} stop_discovery_error={err}", file=sys.stderr)
+
+
+    if __name__ == "__main__":
+        main()

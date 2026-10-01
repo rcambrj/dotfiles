@@ -17,6 +17,7 @@ applications:
 - name: fdm
 - name: generic-device-plugin
 - name: gluster-mount-watcher
+- name: google-home
 - name: home-assistant
 - name: traefik
 - name: intel-gpu

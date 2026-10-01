@@ -1,0 +1,63 @@
+{{- range .Values.speakers }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: google-home-volume-{{ .name }}
+spec:
+  schedule: "0 1 * * *"
+  timeZone: Europe/Amsterdam
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          automountServiceAccountToken: false
+          hostNetwork: true
+          dnsPolicy: ClusterFirstWithHostNet
+          restartPolicy: OnFailure
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            fsGroup: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+          - name: script
+            configMap:
+              name: google-home-volume
+          - name: tmp
+            emptyDir: {}
+          containers:
+          - name: set-volume
+            image: python:3.13-slim
+            command: ["/bin/sh", "-ec"]
+            args:
+            - |
+              python -m pip install --disable-pip-version-check --no-cache-dir \
+                --target /tmp/deps "PyChromecast==13.1.0"
+              exec python /app/change_volume.py
+            env:
+            - name: SPEAKER_NAME
+              value: {{ .friendlyName | quote }}
+            - name: VOLUME_LEVEL
+              value: {{ .volume | quote }}
+            - name: PYTHONPATH
+              value: /tmp/deps
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+            volumeMounts:
+            - name: script
+              mountPath: /app
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+{{- end }}
