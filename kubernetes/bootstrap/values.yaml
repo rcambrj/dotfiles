@@ -10,6 +10,7 @@ config:
 applications:
 - name: auth
 - name: cert-manager
+- name: changedetection
 - name: copyparty
 - name: descheduler
 - name: energy-monitoring
