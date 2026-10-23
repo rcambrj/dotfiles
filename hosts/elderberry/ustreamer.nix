@@ -11,6 +11,11 @@ in {
     port
   ];
 
+  # Make the camera available as dev-video0.device for ustreamer's dependency.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="video4linux", KERNEL=="video0", TAG+="systemd"
+  '';
+
   services.ustreamer = {
     enable = true;
     listenAddress = "0.0.0.0:${builtins.toString port}";
@@ -37,7 +42,13 @@ in {
     ];
   };
 
-  systemd.services.ustreamer.serviceConfig.Restart = "always";
+  systemd.services.ustreamer = {
+    # /dev/video0 is created after the USB camera initializes. Starting first
+    # leaves systemd's device cgroup rule unable to resolve the device node.
+    after = [ "dev-video0.device" ];
+    bindsTo = [ "dev-video0.device" ];
+    serviceConfig.Restart = "always";
+  };
 
   services.fluidd.nginx.locations = {
     "/webcam/snapshot" = {
