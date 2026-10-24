@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: zigbee-device-watcher
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: zigbee-device-watcher
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  resourceNames: ["home-assistant"]
+  verbs: ["patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: zigbee-device-watcher
+subjects:
+- kind: ServiceAccount
+  name: zigbee-device-watcher
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: zigbee-device-watcher
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zigbee-device-watcher
+  labels:
+    app: zigbee-device-watcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee-device-watcher
+  template:
+    metadata:
+      labels:
+        app: zigbee-device-watcher
+    spec:
+      serviceAccountName: zigbee-device-watcher
+      nodeSelector:
+        feature.node.kubernetes.io/usb-02_1cf1_0030.present: "true" # zigbee
+      volumes:
+      - name: host-devices
+        hostPath:
+          path: /dev
+          type: Directory
+      containers:
+      - name: watch-zigbee-device
+        image: nixery.dev/shell/bash/coreutils/kubectl
+        command: ["/bin/bash", "-c"]
+        args:
+        - |-
+          set -euo pipefail
+
+          device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2650375-if00
+          device_id() {
+            stat --format '%t:%T' "$device" 2>/dev/null || true
+          }
+
+          previous="$(device_id)"
+          while sleep 1; do
+            current="$(device_id)"
+            if [[ "$current" != "$previous" ]]; then
+              kubectl rollout restart deployment/home-assistant --namespace "$POD_NAMESPACE"
+              previous="$current"
+            fi
+          done
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "16Mi"
+          limits:
+            cpu: "50m"
+            memory: "32Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: ["ALL"]
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+          runAsGroup: 65534
+        volumeMounts:
+        - name: host-devices
+          mountPath: /dev
+          readOnly: true
