@@ -217,8 +217,11 @@ in {
 
   printer = {
     kinematics = "cartesian";
-    max_velocity = 500; # starts skipping at 600. speed test succeeds at 550
-    max_accel = 9000; # starts skipping at 11000. speed test succeeds at 10000
+    # SPEED_TEST determined rather fantastical values (500mm/s and 9000mm/s/s)
+    # this lowly Ender 3 can't quite do that without consistently skipping
+    # during an actual print. Perhaps the SPEED_TEST needs to run for longer?
+    max_velocity = 200;
+    max_accel = 1500;
     max_z_velocity = 10;
     max_z_accel = 100;
   };
