@@ -44,7 +44,7 @@ spec:
       containers:
       - name: radarr
         # https://github.com/linuxserver/docker-radarr/pkgs/container/transmission
-        image: lscr.io/linuxserver/radarr:6.1.1.10360-ls297
+        image: lscr.io/linuxserver/radarr:6.4.4.10685-ls324
         env:
         - name: TZ
           value: Europe/Amsterdam

@@ -54,6 +54,7 @@ spec:
       containers:
       - name: gluster-mount-watcher
         image: nixery.dev/shell/kubectl
+        imagePullPolicy: Always
         env:
         - name: NODE_NAME
           valueFrom:

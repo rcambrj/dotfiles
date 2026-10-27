@@ -25,6 +25,10 @@ spec:
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
+      # TODO(emudhra-2026): Remove after both Transmission mounts below and Gluetun's mount in ../values.yaml are gone.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: gluetun-port-forwarding
         emptyDir:
       - name: transmission-config
@@ -51,7 +55,7 @@ spec:
       containers:
       - name: sync-forwarded-port
         # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
-        image: lscr.io/linuxserver/transmission:4.1.1-r1-ls337
+        image: lscr.io/linuxserver/transmission:4.1.3-r0-ls365
         env:
         - name: TR_AUTH
           value: "transmission:password"
@@ -69,6 +73,10 @@ spec:
             echo "Updated with port: $port"
           done;
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the Transmission image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: gluetun-port-forwarding
           mountPath: /gluetun-port-forwarding
         resources:
@@ -80,7 +88,7 @@ spec:
             memory: "10Mi"
       - name: transmission
         # https://github.com/linuxserver/docker-transmission/pkgs/container/transmission
-        image: lscr.io/linuxserver/transmission:4.1.1-r1-ls337
+        image: lscr.io/linuxserver/transmission:4.1.3-r0-ls365
         env:
         - name: TZ
           value: Europe/Amsterdam
@@ -89,6 +97,10 @@ spec:
         # - name: PGID
         #   value: "1000"
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the Transmission image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: transmission-config
           mountPath: /config
         - name: downloads

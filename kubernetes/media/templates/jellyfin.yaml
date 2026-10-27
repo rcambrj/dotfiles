@@ -23,6 +23,10 @@ spec:
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: jellyfin-config
         hostPath:
           path: /data/jellyfin
@@ -55,6 +59,10 @@ spec:
         # https://github.com/jellyfin/jellyfin/releases
         image: ghcr.io/jellyfin/jellyfin:10.11.8
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: jellyfin-config
           mountPath: /config
         - name: ldap-ca

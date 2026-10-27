@@ -52,6 +52,7 @@ spec:
       containers:
       - name: watch-zigbee-device
         image: nixery.dev/shell/bash/coreutils/kubectl
+        imagePullPolicy: Always
         command: ["/bin/bash", "-c"]
         args:
         - |-

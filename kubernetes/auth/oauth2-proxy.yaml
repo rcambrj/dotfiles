@@ -21,19 +21,27 @@ spec:
         runAsUser: 62884
         runAsGroup: 12884
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: oauth2-proxy-config
         configMap:
           name: oauth2-proxy
       containers:
       - name: oauth2-proxy
         # https://quay.io/repository/oauth2-proxy/oauth2-proxy?tab=tags&tag=latest
-        image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.1-amd64
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.5-amd64
         ports:
         - name: http
           containerPort: 4180
         args:
         - --config=/config/oauth2-proxy.cfg
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: oauth2-proxy-config
           mountPath: /config
         env:

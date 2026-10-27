@@ -18,6 +18,10 @@ spec:
         app: copyparty
     spec:
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: copyparty-config
         configMap:
           name: copyparty-config
@@ -27,8 +31,12 @@ spec:
       containers:
       - name: copyparty
         # https://github.com/9001/copyparty/pkgs/container/copyparty-ac/versions
-        image: ghcr.io/9001/copyparty-ac:1.20.13
+        image: ghcr.io/9001/copyparty-ac:1.20.26
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: copyparty-config
           mountPath: /cfg
           readOnly: true

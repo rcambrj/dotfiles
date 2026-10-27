@@ -44,9 +44,24 @@ spec:
         runAsUser: 10926 # 10wan
         runAsGroup: 63342 # media
       serviceAccountName: enable-downloads
+      volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       containers:
       - name: enable-downloads
         image: nixery.dev/shell/curl/gnugrep/jq
+        imagePullPolicy: Always
+        env:
+        # TODO(emudhra-2026): Remove with the public-ca mount once Nixery's trust store is verified patched.
+        - name: SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
+        volumeMounts:
+        # TODO(emudhra-2026): Remove with SSL_CERT_FILE once Nixery's trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         command:
         - /bin/bash
         - -c

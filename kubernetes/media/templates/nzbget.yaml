@@ -46,7 +46,7 @@ spec:
       containers:
       - name: nzbget
         # https://github.com/linuxserver/docker-nzbget/pkgs/container/transmission
-        image: lscr.io/linuxserver/nzbget:v26.0-ls236
+        image: lscr.io/linuxserver/nzbget:v26.3-ls269
         env:
         - name: TZ
           value: Europe/Amsterdam

@@ -24,6 +24,10 @@ spec:
         runAsUser: 10339
         runAsGroup: 12884
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: config-template
         configMap:
           name: dex-config
@@ -38,13 +42,17 @@ spec:
       initContainers:
       - name: create-configs
         # https://github.com/hairyhenderson/gomplate/pkgs/container/gomplate/versions
-        image: hairyhenderson/gomplate:v5.0.0-alpine
+        image: hairyhenderson/gomplate:v5.3.1-alpine
         args: [
           "-d", "secrets=/secrets.yaml",
           "-f", "/config.tmpl",
           "-o", "/etc/dex/config.docker.yaml"
         ]
         volumeMounts:
+        # TODO(emudhra-2026): Remove once gomplate's image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: config-template
           subPath: config.tmpl
           mountPath: /config.tmpl
@@ -62,7 +70,7 @@ spec:
             memory: "50Mi"
       containers:
       - name: dex
-        image: ghcr.io/dexidp/dex:v2.45.1
+        image: ghcr.io/dexidp/dex:v2.46.1
         volumeMounts:
         - name: config
           mountPath: /etc/dex

@@ -57,7 +57,7 @@ spec:
               mountPath: /deps
           containers:
           - name: set-volume
-            image: python:3.13-slim
+            image: python:3.13.18-slim
             command: ["/bin/sh", "-ec"]
             args:
             - |

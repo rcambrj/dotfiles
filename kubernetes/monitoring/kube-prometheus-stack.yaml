@@ -73,6 +73,16 @@ spec:
             - "prometheus.home.cambridge.me"
           secretName: prometheus-home-cambridge-me-tls
       prometheusSpec:
+        volumes:
+        # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+        - name: public-ca
+          configMap:
+            name: public-ca
+        volumeMounts:
+        # TODO(emudhra-2026): Remove once the Prometheus image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         storageSpec:
           volumeClaimTemplate:
             apiVersion: v1
@@ -118,6 +128,11 @@ spec:
             - "grafana.home.cambridge.me"
           secretName: grafana-home-cambridge-me-tls
       extraConfigmapMounts:
+      # TODO(emudhra-2026): Remove once the Grafana image trust store is verified patched.
+      - name: public-ca
+        mountPath: /etc/ssl/certs
+        configMap: public-ca
+        readOnly: true
       - name: ldap-ca
         subPath: ca.pem
         mountPath: /ldap-ca.pem
@@ -173,6 +188,17 @@ spec:
           org_role = "Viewer"
 
     alertmanager:
+      alertmanagerSpec:
+        volumes:
+        # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+        - name: public-ca
+          configMap:
+            name: public-ca
+        volumeMounts:
+        # TODO(emudhra-2026): Remove once the Alertmanager image trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
       serviceMonitor:
         enabled: false
       ingress:

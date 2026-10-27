@@ -20,6 +20,10 @@ spec:
         app: esphome
     spec:
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: config
         hostPath:
           path: /data/esphome
@@ -33,7 +37,7 @@ spec:
       containers:
       - name: esphome
         # https://github.com/esphome/esphome/releases
-        image: ghcr.io/esphome/esphome:2026.4.5
+        image: ghcr.io/esphome/esphome:2026.10.0
         securityContext:
           runAsUser: 37746
           runAsGroup: 37746
@@ -41,6 +45,10 @@ spec:
         - name: ESPHOME_DASHBOARD_USE_PING
           value: "true"
         volumeMounts:
+        # TODO(emudhra-2026): Remove once the image's system trust store is verified patched, not just certifi.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: config
           mountPath: /config
         - name: platformio

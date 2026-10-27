@@ -25,6 +25,10 @@ spec:
       nodeSelector:
         gluster-volume-mount/ready: "true"
       volumes:
+      # TODO(emudhra-2026): Temporary CA override for the Gluetun mount in ../values.yaml; remove together.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: jackett-config
         hostPath:
           path: /data/jackett
@@ -49,7 +53,7 @@ spec:
       containers:
       - name: jackett
         # https://github.com/linuxserver/docker-jackett/pkgs/container/transmission
-        image: lscr.io/linuxserver/jackett:v0.24.1537-ls364
+        image: lscr.io/linuxserver/jackett:v0.24.2934-ls18
         env:
         - name: TZ
           value: Europe/Amsterdam

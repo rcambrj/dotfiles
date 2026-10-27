@@ -11,7 +11,7 @@ vpnsidecar:
 #     mountPath: /gluetun
 - name: vpn
   # https://github.com/qdm12/gluetun/releases
-  image: ghcr.io/qdm12/gluetun:v3.41.1
+  image: ghcr.io/qdm12/gluetun:v3.41.3
   restartPolicy: Always
   securityContext:
     # rootless not possible https://github.com/qdm12/gluetun/issues/1519
@@ -49,6 +49,10 @@ vpnsidecar:
       - -c
       - ping -c 1 -W 5 1.1.1.1 && cat /gluetun-port-forwarding/port
   volumeMounts:
+  # TODO(emudhra-2026): Remove once Gluetun's trust store is verified patched; also remove unused public-ca volumes in templates.
+  - name: public-ca
+    mountPath: /etc/ssl/certs
+    readOnly: true
   - name: gluetun-port-forwarding
     mountPath: /gluetun-port-forwarding
   env:

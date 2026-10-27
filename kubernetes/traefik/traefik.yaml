@@ -12,6 +12,21 @@ spec:
   targetNamespace: traefik
   createNamespace: true
   valuesContent: |-
+    deployment:
+      annotations:
+        # TODO(emudhra-2026): Remove alongside the temporary public-ca mounts if no other reloads are needed.
+        reloader.stakater.com/auto: "true"
+      additionalVolumes:
+      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+      - name: public-ca
+        configMap:
+          name: public-ca
+    additionalVolumeMounts:
+    # TODO(emudhra-2026): Remove once the Traefik image trust store is verified patched.
+    - name: public-ca
+      mountPath: /etc/ssl/certs
+      readOnly: true
+
     providers:
       kubernetesIngress:
         enabled: true

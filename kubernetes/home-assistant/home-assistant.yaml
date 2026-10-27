@@ -30,6 +30,10 @@ spec:
         supplementalGroups:
         - 27 # "video" group for generic-device-plugin
       volumes:
+      # TODO(emudhra-2026): Temporary CA override; remove after both init-container consumers below are patched.
+      - name: public-ca
+        configMap:
+          name: public-ca
       - name: state
         hostPath:
           path: /data/home-assistant
@@ -48,7 +52,16 @@ spec:
       initContainers:
       - name: download-custom-components
         image: nixery.dev/shell/curl/gzip/gnutar
+        imagePullPolicy: Always
+        env:
+        # TODO(emudhra-2026): Remove with the public-ca mount once Nixery's trust store is verified patched.
+        - name: SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
         volumeMounts:
+        # TODO(emudhra-2026): Remove with SSL_CERT_FILE once Nixery's trust store is verified patched.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: custom-components
           mountPath: /custom_components
         - name: lldap-ha-auth
@@ -69,8 +82,16 @@ spec:
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       - name: create-configs
         # https://hub.docker.com/r/nixos/nix/tags
-        image: nixos/nix:2.34.4
+        image: nixos/nix:2.35.4
+        env:
+        # TODO(emudhra-2026): Remove with the public-ca mount once the Nix image rejects both affected chains.
+        - name: NIX_SSL_CERT_FILE
+          value: /etc/ssl/certs/ca-certificates.crt
         volumeMounts:
+        # TODO(emudhra-2026): Remove with NIX_SSL_CERT_FILE once the Nix image rejects both affected chains.
+        - name: public-ca
+          mountPath: /etc/ssl/certs
+          readOnly: true
         - name: configs
           mountPath: /configs
         command: ["/bin/sh", "-c"]
@@ -97,7 +118,7 @@ spec:
       containers:
       - name: home-assistant
         # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
-        image: homeassistant/home-assistant:2026.7.0
+        image: homeassistant/home-assistant:2026.10.4
         resources:
           requests:
             cpu: "100m"

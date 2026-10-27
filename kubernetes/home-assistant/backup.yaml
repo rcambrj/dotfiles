@@ -37,6 +37,7 @@ spec:
           containers:
           - name: backup
             image: nixery.dev/shell/sqlite/coreutils
+            imagePullPolicy: Always
             command: ["/bin/sh", "-c"]
             args:
             - |-

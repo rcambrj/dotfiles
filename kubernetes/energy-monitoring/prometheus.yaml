@@ -49,6 +49,16 @@ metadata:
 spec:
   replicas: 1
   retention: 100y
+  volumes:
+  # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
+  - name: public-ca
+    configMap:
+      name: public-ca
+  volumeMounts:
+  # TODO(emudhra-2026): Remove once the image trust store is verified patched.
+  - name: public-ca
+    mountPath: /etc/ssl/certs
+    readOnly: true
   serviceAccountName: energy-prometheus
   securityContext:
     runAsNonRoot: true
