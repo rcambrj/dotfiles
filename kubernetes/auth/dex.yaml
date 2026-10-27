@@ -24,10 +24,6 @@ spec:
         runAsUser: 10339
         runAsGroup: 12884
       volumes:
-      # TODO(emudhra-2026): Temporary CA override; remove with the public-ca mount below.
-      - name: public-ca
-        configMap:
-          name: public-ca
       - name: config-template
         configMap:
           name: dex-config
@@ -49,10 +45,6 @@ spec:
           "-o", "/etc/dex/config.docker.yaml"
         ]
         volumeMounts:
-        # TODO(emudhra-2026): Remove once gomplate's image trust store is verified patched.
-        - name: public-ca
-          mountPath: /etc/ssl/certs
-          readOnly: true
         - name: config-template
           subPath: config.tmpl
           mountPath: /config.tmpl
