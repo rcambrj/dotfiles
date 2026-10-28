@@ -14,3 +14,6 @@ speakers:
 - name: bathroom
   friendlyName: Bathroom
   volume: "0.40"
+- name: attic
+  friendlyName: Attic
+  volume: "0.30"
