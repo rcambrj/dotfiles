@@ -48,6 +48,7 @@
     };
     "/nix" = {
       device = "/mnt/root/nix";
+      fsType = "none";
       neededForBoot = true;
       options = [ "defaults" "bind" ];
       depends = [ "/mnt/root" ];

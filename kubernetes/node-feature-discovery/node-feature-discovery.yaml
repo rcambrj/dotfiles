@@ -1,3 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-feature-discovery-crds
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: dotfiles
+  source:
+    repoURL: https://github.com/kubernetes-sigs/node-feature-discovery.git
+    targetRevision: v0.20.1
+    path: deployment/base/nfd-crds
+    directory:
+      include: nfd-api-crds.yaml
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true
+    automated:
+      selfHeal: false
+---
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
@@ -8,7 +31,7 @@ spec:
   # https://artifacthub.io/packages/helm/node-feature-discovery/node-feature-discovery
   repo: https://kubernetes-sigs.github.io/node-feature-discovery/charts
   chart: node-feature-discovery
-  version: v0.18.3
+  version: 0.20.1
   targetNamespace: node-feature-discovery
   createNamespace: true
 

@@ -18,7 +18,7 @@ spec:
   valuesContent: |-
     image:
       pullPolicy: IfNotPresent
-      tag: 0f7fddf166f17d58107d9811b53bec74e4d52e7c
+      tag: f7c3291
     config:
       data: |-
         devices:

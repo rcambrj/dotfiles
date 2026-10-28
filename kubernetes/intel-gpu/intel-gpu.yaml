@@ -14,7 +14,7 @@ spec:
   project: dotfiles
   source:
     repoURL: https://github.com/intel/helm-charts.git
-    targetRevision: intel-device-plugins-operator-0.35.0
+    targetRevision: intel-device-plugins-operator-0.37.1
     path: charts/device-plugin-operator/crds
     directory:
       include: deviceplugin.intel.com_gpudeviceplugins.yaml

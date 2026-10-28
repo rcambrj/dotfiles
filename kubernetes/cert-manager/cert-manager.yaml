@@ -29,14 +29,9 @@ spec:
   # https://artifacthub.io/packages/helm/cert-manager/trust-manager
   repo: https://charts.jetstack.io
   chart: trust-manager
-  version: 0.22.0
+  version: v0.26.0
   targetNamespace: cert-manager
   createNamespace: true
-  valuesContent: |-
-    # TODO(emudhra-2026): Remove this override once the chart defaults to a patched CA package.
-    defaultPackageImage:
-      repository: quay.io/jetstack/trust-pkg-debian-bookworm
-      tag: "20250419-deb12u2.0"
 ---
 # TODO(emudhra-2026): Temporary public trust bundle; remove after all public-ca consumers are gone.
 apiVersion: trust.cert-manager.io/v1alpha1

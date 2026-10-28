@@ -72,12 +72,12 @@ spec:
           set -xeuo pipefail
 
           # https://github.com/j9brown/scenery/releases
-          curl -s -L https://github.com/j9brown/scenery/archive/refs/tags/v0.5.0.tar.gz | gunzip | tar -xvf - \
+          curl -s -L https://github.com/j9brown/scenery/archive/refs/tags/v0.7.1.tar.gz | gunzip | tar -xvf - \
             -C /custom_components \
-            --strip-components=2 scenery-0.5.0/custom_components/
+            --strip-components=2 scenery-0.7.1/custom_components/
 
           # https://github.com/lldap/lldap/commits/main/example_configs/lldap-ha-auth.sh
-          curl -s -L https://raw.githubusercontent.com/lldap/lldap/9ac96e8c6e4b015ee10ddcc978ece6da34d38911/example_configs/lldap-ha-auth.sh \
+          curl -s -L https://raw.githubusercontent.com/lldap/lldap/aa1384939b6729cca0696d31ffcc4d69dee40696/example_configs/lldap-ha-auth.sh \
             > /lldap-ha-auth/lldap-ha-auth.sh
           chmod +x /lldap-ha-auth/lldap-ha-auth.sh
       - name: create-configs

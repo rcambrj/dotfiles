@@ -40,7 +40,7 @@ spec:
       {{- end }}
       - name: lock-logs-file
         # https://hub.docker.com/_/busybox
-        image: busybox:1.37.0
+        image: busybox:1.38.0
         volumeMounts:
         - name: jackett-config
           mountPath: /config

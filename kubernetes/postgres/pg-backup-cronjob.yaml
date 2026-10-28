@@ -41,7 +41,7 @@ spec:
               secretName: postgres-user-backup
           containers:
           - name: pg-backup
-            image: ghcr.io/cloudnative-pg/postgresql:17
+            image: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
             command: ["/bin/bash", "-c"]
             args:
             - |

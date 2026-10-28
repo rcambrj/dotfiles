@@ -1,5 +1,23 @@
 # PostgreSQL Database Restoration
 
+## Upgrade from PostgreSQL 17 to 18
+
+The cluster and backup clients now use `18.6-system-bullseye`. CloudNativePG
+1.30.1 performs an offline in-place `pg_upgrade` when Argo CD changes the
+cluster's image from major 17 to major 18. Radarr, Sonarr, and Seerr will lose
+database access during this operation.
+
+The Debian base stays on bullseye because CloudNativePG requires the same
+operating system distribution for an in-place major upgrade. A move to bookworm
+or trixie needs a separate migration and locale/collation review.
+
+Before syncing the image change, verify a recent backup. After the upgrade,
+update database statistics with `ANALYZE` and take fresh backups. PostgreSQL 18
+clients can restore existing logical dumps; restoring PostgreSQL 18 dumps into
+PostgreSQL 17 is not supported.
+
+See the [CloudNativePG upgrade documentation](https://cloudnative-pg.io/docs/1.30/postgres_upgrades/).
+
 ## Prerequisites
 
 - `kubectl` access to the cluster
@@ -29,7 +47,7 @@ spec:
           claimName: postgres-dumps
       containers:
       - name: list
-        image: ghcr.io/cloudnative-pg/postgresql:17
+        image: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
         command: ["ls", "-lh", "/postgres-dumps/"]
         volumeMounts:
         - name: data
@@ -67,7 +85,7 @@ spec:
           claimName: postgres-dumps
       containers:
       - name: verify
-        image: ghcr.io/cloudnative-pg/postgresql:17
+        image: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
         command: ["pg_restore", "--list", "/postgres-dumps/radarr.dump"]
         volumeMounts:
         - name: data
@@ -111,7 +129,7 @@ spec:
             path: password
       containers:
       - name: restore
-        image: ghcr.io/cloudnative-pg/postgresql:17
+        image: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
         command: ["bash", "-c"]
         args:
         - |
@@ -167,7 +185,7 @@ spec:
             path: password
       containers:
       - name: shell
-        image: ghcr.io/cloudnative-pg/postgresql:17
+        image: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
         command: ["sleep", "infinity"]
         volumeMounts:
         - name: data

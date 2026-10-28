@@ -10,7 +10,7 @@ spec:
   # https://github.com/cloudnative-pg/charts/releases
   repo: https://cloudnative-pg.github.io/charts
   chart: cloudnative-pg
-  version: 0.28.0
+  version: 0.29.1
   targetNamespace: postgres
   createNamespace: true
 ---
@@ -21,7 +21,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:17
+  # CNPG performs an offline pg_upgrade; keep the existing Debian base for compatibility.
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-system-bullseye
   instances: 1
   storage:
     pvcTemplate:

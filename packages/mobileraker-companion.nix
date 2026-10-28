@@ -20,7 +20,7 @@ let
 
   pythonEnv = pkgs.python3.withPackages reqs;
 
-  version = "1e866ae25278d574d38e779c1a31a9780a130761";
+  version = "d455af67d6e9bb5d194121616cd0863043bee2c7";
 in
   pkgs.stdenvNoCC.mkDerivation rec {
     pname = "mobileraker-companion";
@@ -30,7 +30,7 @@ in
       repo = "mobileraker_companion";
       rev = version;
       fetchSubmodules = false;
-      sha256 = "sha256-RcMe/KSN72RUXXGiDkumRIyoXsn0RGRDRZk9mAZCZTU=";
+      sha256 = "sha256-fyeFmaojVR2PvN+vMDSGLD/pJpzEhLJ61lF+/JzxRsc=";
     };
 
     nativeBuildInputs = [

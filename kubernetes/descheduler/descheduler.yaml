@@ -20,7 +20,7 @@
 #   # https://github.com/kubernetes-sigs/descheduler/blob/master/charts/descheduler/README.md
 #   repo: https://kubernetes-sigs.github.io/descheduler
 #   chart: descheduler
-#   version: 0.34.0
+#   version: 0.37.0
 #   targetNamespace: descheduler
 #   createNamespace: true
 #   # valuesContent: |-

@@ -38,7 +38,7 @@ spec:
               type: DirectoryOrCreate
           initContainers:
           - name: prepare-dependencies
-            image: busybox:1.37.0
+            image: busybox:1.38.0
             command: ["/bin/sh", "-ec"]
             args:
             - mkdir -p /deps && chown 65532:65532 /deps
@@ -57,11 +57,11 @@ spec:
               mountPath: /deps
           containers:
           - name: set-volume
-            image: python:3.13.18-slim
+            image: python:3.15.2-slim
             command: ["/bin/sh", "-ec"]
             args:
             - |
-              cache=/deps/pychromecast-13.1.0
+              cache=/deps/python-3.15-pychromecast-14.0.10
               ready="$cache/.ready"
               lock=/deps/.install.lock
               if [ ! -f "$ready" ]; then
@@ -72,7 +72,7 @@ spec:
                 if [ ! -f "$ready" ]; then
                   trap 'rmdir "$lock"' 0
                   python -m pip install --disable-pip-version-check --no-cache-dir \
-                    --target "$cache" "PyChromecast==13.1.0"
+                    --target "$cache" "PyChromecast==14.0.10"
                   touch "$ready"
                   rmdir "$lock"
                   trap - 0
@@ -85,7 +85,7 @@ spec:
             - name: VOLUME_LEVEL
               value: {{ .volume | quote }}
             - name: PYTHONPATH
-              value: /deps/pychromecast-13.1.0
+              value: /deps/python-3.15-pychromecast-14.0.10
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

@@ -8,6 +8,9 @@ spec:
   # https://github.com/stakater/Reloader
   repo: https://stakater.github.io/stakater-charts
   chart: reloader
-  version: 2.2.9
+  version: 2.2.18
   targetNamespace: reloader
   createNamespace: true
+  valuesContent: |-
+    image:
+      tag: v1.4.23

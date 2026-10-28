@@ -43,7 +43,7 @@ spec:
       initContainers:
       - name: create-dirs
         # https://hub.docker.com/_/busybox
-        image: busybox:1.37.0
+        image: busybox:1.38.0
         volumeMounts:
         - name: media
           mountPath: /data
@@ -57,7 +57,7 @@ spec:
       containers:
       - name: jellyfin
         # https://github.com/jellyfin/jellyfin/releases
-        image: ghcr.io/jellyfin/jellyfin:10.11.8
+        image: ghcr.io/jellyfin/jellyfin:12.4
         volumeMounts:
         # TODO(emudhra-2026): Remove once the image trust store is verified patched.
         - name: public-ca

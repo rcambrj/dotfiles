@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@75c75c31ebece974e48ebc36b4ad125bd97bd97b # v31.11.3
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           # Needed for "runAsRoot" capability
@@ -20,7 +20,7 @@ jobs:
             system-features = kvm
 
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v17
+        uses: DeterminateSystems/update-flake-lock@da03c0f078bc4b2c37ee4f7e072d34bf8f188bb3 # v29
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           path-to-flake-dir: .

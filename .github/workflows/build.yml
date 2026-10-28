@@ -17,13 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
 
       - name: Install nix
-        uses: cachix/install-nix-action@v27
+        uses: cachix/install-nix-action@75c75c31ebece974e48ebc36b4ad125bd97bd97b # v31.11.3
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           enable_kvm: true
@@ -34,7 +34,7 @@ jobs:
             extra-trusted-public-keys = nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE
 
       - name: Run the Magic Nix Cache
-        uses: DeterminateSystems/magic-nix-cache-action@v2
+        uses: DeterminateSystems/magic-nix-cache-action@84c0677f58dcedf3b91f8223ce36a9ea5b3c84b7 # v15
         with:
           diagnostic-endpoint: ""
 

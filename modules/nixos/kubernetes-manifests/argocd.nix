@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }: with lib; let
   # Pin the patched image and matching RBAC source independently of the chart.
   # https://artifacthub.io/packages/helm/argo/argo-cd
-  chartVersion = "v9.4.17";
-  argoVersion = "v3.3.18";
+  chartVersion = "10.11.6";
+  argoVersion = "v3.5.6";
 
   cfg = config.services.kubernetes-manifests;
 in {
@@ -140,7 +140,7 @@ in {
         owner = "argoproj";
         repo = "argo-cd";
         tag = argoVersion;
-        hash = "sha256-+HdMCcauiBRJoOIbWI/9s/LBelgjokUm5zdQffEpzrE=";
+        hash = "sha256-Gv/7K3eU80ncOyHq/OPKneQTOVcsuYkJ2F9YiqNOdEU=";
       };
       allNamespaces = pkgs.runCommand "argocd-all-namespaces" {} ''
         ${pkgs.kustomize}/bin/kustomize build ${argoRepo}/examples/k8s-rbac/argocd-server-applications -o $out
