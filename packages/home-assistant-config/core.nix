@@ -54,14 +54,6 @@
       internal_url = "https://home.cambridge.me";
       external_url = "https://home.cambridge.me";
     };
-    http = {
-      use_x_forwarded_for = true;
-      trusted_proxies = [
-        "10.42.0.0/16"
-        "127.0.0.1"
-        "::1"
-      ];
-    };
     lovelace = {
       resource_mode = "yaml";
       dashboards = {

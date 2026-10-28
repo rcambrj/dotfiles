@@ -94,6 +94,8 @@ spec:
           readOnly: true
         - name: configs
           mountPath: /configs
+        - name: state
+          mountPath: /state
         command: ["/bin/sh", "-c"]
         securityContext:
           runAsUser: 0
@@ -113,8 +115,12 @@ spec:
 
           ls -lR result/
           cp -RL result/* /configs/
+          mkdir -p /state/.storage
+          cp -L result/.storage/http /state/.storage/http
           chown -R 42770:42770 /configs/
+          chown 42770:42770 /state/.storage/http
           ls -lR /configs/
+          ls -l /state/.storage/http
       containers:
       - name: home-assistant
         # https://github.com/home-assistant/core/pkgs/container/home-assistant/versions
