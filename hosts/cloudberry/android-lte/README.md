@@ -24,6 +24,27 @@ Android also isn't intended to be an always-on machine with predictable settings
 * The RMX3085's stock software boots into Android upon connection of a USB cable while powered off, but crDroid's bootloader doesn't do that, unless the `/system/etc/init/hw/init.rc` diff is applied (`init.rc.diff`).
 * Android <=10 would use 192.168.42.0/24 or 192.168.43.0/24, depending on the tethering technology. Since Android 11 (API 30), any kind of tethering creates a private network for clients in the 192.168.*.0/24 range. This means that one cannot reliably use any 192.168.*.* subnet nearby, if one wants to route subnets correctly. So private subnets are limited to 10.0.0.0/8 or 172.168.0.0/16. Since Android 15, these random ranges can be 192.168.*.0/24, 172.16.*.0/24 or 10.0.*.0/24, effectively rendering Androids useless as deterministic routers.
 
+### USB tether watcher
+
+`termux-widget/usb-tether-enable.sh` and `termux-widget/usb-tether-disable.sh` are Termux:Widget background task scripts for the rooted RMX3085. Grant Termux root access in Magisk before enabling the watcher. Install Termux:Widget, then copy the watcher and both widget scripts to Termux:
+
+```sh
+mkdir -p ~/.shortcuts/tasks
+cp /path/to/usb-tether-watch.sh ~/.shortcuts/
+cp /path/to/termux-widget/usb-tether-{enable,disable}.sh ~/.shortcuts/tasks/
+chmod +x ~/.shortcuts/tasks/usb-tether-*.sh
+```
+
+The enable and disable widgets only set the persistent preference in `~/.local/state/usb-tether/enabled` explicitly. Install Termux:Boot and copy its entry separately:
+
+```sh
+mkdir -p ~/.termux/boot
+cp /path/to/termux-boot/usb-tether-watch.sh ~/.termux/boot/
+chmod +x ~/.termux/boot/usb-tether-watch.sh
+```
+
+The boot entry is the only launcher for the detached watcher, so it provides the singleton process. While enabled, the watcher checks for an active `rndisN` network interface every 10 seconds and runs `su -c 'svc usb setFunctions rndis'` if USB tethering is no longer enabled. When disabled, the watcher remains idle and makes no changes to USB functions; changing the state file is enough for the next enable action to take effect. The watcher log is stored in `~/.local/state/usb-tether/watch.log`.
+
 ## Why an Android phone
 
 I'd rather use an LTE router, but LTE providers where I live continue to make it difficult to connect routers to their service. I live in the EU, where it's illegal for service providers to block compliant devices, but that legislation hasn't stopped providers from hiding behind the vague "not supported" excuse, where a device might just stop working from one day to the next - guess how I know. Using an Android phone falls under these providers' "supported" umbrella, whilst serving as a _good enough_ hop. /rant
