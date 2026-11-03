@@ -14,17 +14,15 @@ The secondary WAN connection needs to be _just good enough_. That is, I'm not ex
 
 The batteries must be removed from an Android phone in order to use them in this way, because lithium batteries will inevitably eventually swell into spicy pillows.
 
-## IP ranges
-
-Previously, Android would use 192.168.42.0/24 or 192.168.43.0/24, depending on the tethering technology. Since Android 11 (API 30), any kind of tethering creates a private network for clients in the 192.168.*.0/24 range. This means that one cannot reliably use any 192.168.*.* subnet nearby, if one wants to route subnets correctly. So private subnets are limited to 10.0.0.0/8 or 172.168.0.0/16.
-
 ## Software quirks
 
-Android also isn't intended to be an always-on machine with predictable settings, as such, one must use tools like [Tasker] or Llamalab [Automate] to constantly monitor and fix settings which become automatically toggled by the system.
+Android also isn't intended to be an always-on machine with predictable settings, as such, there are a few quirks to workaround:
 
-* on Android 4 `USB tethering` becomes disabled and must be enabled upon connecting the USB cable. The LlamaLab [Automate] flow is stable on a `Samsung S4 Mini i9195`, I used this for many years. I connected the battery terminals to a 4.5V power supply (the phone will not boot without a voltage across the battery terminals). Abandoned because unfortunately this phone doesn't boot until the power button is held for a few seconds.
-* on Android 13 `Ethernet tethering` becomes disabled, because the `OTG connection` becomes disabled after 10 minutes, even with activity. I tried to get it to remain active, but failed. A [Tasker] task represents my attempt.
-* on Android 13 `USB tethering` becomes disabled and must be enabled upon connecting the USB cable, just like on Android 4. The Llamalab [Automate] flow does that and is stable on a `realme 8 4G`. I connected the battery terminals to a 4.5V power supply, and the phone boots as soon as power is presented on the USB connector. **This phone and flow is currently in use**.
+* on Android 4 `USB tethering` becomes disabled and must be enabled upon connecting the USB cable. I used a LlamaLab [Automate] flow on a `Samsung S4 Mini i9195` for many years. I connected the battery terminals to a 4.5V power supply (the phone will not boot without a voltage across the battery terminals). Abandoned because unfortunately this phone doesn't boot until the power button is held for a few seconds.
+* on Android 13 `Ethernet tethering` becomes disabled, because the `OTG connection` becomes disabled after 10 minutes, even with activity. I tried to get it to remain active, but failed.
+* on Android 13 `USB tethering` becomes disabled and must be enabled upon connecting the USB cable, just like on Android 4.
+* The RMX3085's stock software boots into Android upon connection of a USB cable while powered off, but crDroid's bootloader doesn't do that, unless the `/system/etc/init/hw/init.rc` diff is applied (`init.rc.diff`).
+* Android <=10 would use 192.168.42.0/24 or 192.168.43.0/24, depending on the tethering technology. Since Android 11 (API 30), any kind of tethering creates a private network for clients in the 192.168.*.0/24 range. This means that one cannot reliably use any 192.168.*.* subnet nearby, if one wants to route subnets correctly. So private subnets are limited to 10.0.0.0/8 or 172.168.0.0/16. Since Android 15, these random ranges can be 192.168.*.0/24, 172.16.*.0/24 or 10.0.*.0/24, effectively rendering Androids useless as deterministic routers.
 
 ## Why an Android phone
 

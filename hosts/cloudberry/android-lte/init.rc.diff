@@ -1,0 +1,10 @@
+--- init.rc
++++ init.rc
+@@ -1297,6 +1297,7 @@
+ 
+ on charger
+     class_start charger
++    setprop sys.boot_from_charger_mode 1
+ 
+ on property:sys.boot_completed=1
+     bootchart stop
