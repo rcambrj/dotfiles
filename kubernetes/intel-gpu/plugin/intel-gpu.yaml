@@ -31,3 +31,4 @@ spec:
   createNamespace: true
   valuesContent: |-
     sharedDevNum: 99
+    bypathMode: none
