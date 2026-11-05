@@ -35,7 +35,7 @@ cp /path/to/termux-widget/usb-tether-{enable,disable}.sh ~/.shortcuts/tasks/
 chmod +x ~/.shortcuts/tasks/usb-tether-*.sh
 ```
 
-The enable and disable widgets only set the persistent preference in `~/.local/state/usb-tether/enabled` explicitly. Install Termux:Boot and copy its entry separately:
+The enable and disable widgets only set the persistent preference in `~/.local/state/usb-tether/enabled` explicitly. The Termux:Boot entry resets this preference to `enabled` on every boot, so automatic USB tether recovery is the default after reboot. Install Termux:Boot and copy its entry separately:
 
 ```sh
 mkdir -p ~/.termux/boot
