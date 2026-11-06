@@ -60,7 +60,7 @@ spec:
 
           device=/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2650375-if00
           device_id() {
-            stat --format '%t:%T' "$device" 2>/dev/null || true
+            stat --dereference --format '%t:%T' "$device" 2>/dev/null || true
           }
 
           previous="$(device_id)"
