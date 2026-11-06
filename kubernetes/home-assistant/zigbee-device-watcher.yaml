@@ -10,8 +10,7 @@ metadata:
 rules:
 - apiGroups: ["apps"]
   resources: ["deployments"]
-  resourceNames: ["home-assistant"]
-  verbs: ["patch"]
+  verbs: ["get", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -63,7 +62,8 @@ spec:
             stat --dereference --format '%t:%T' "$device" 2>/dev/null || true
           }
 
-          previous="$(device_id)"
+          # Recreate HA once when this watcher starts so its device allocation is fresh.
+          previous=""
           while sleep 1; do
             current="$(device_id)"
             if [[ "$current" != "$previous" ]]; then
